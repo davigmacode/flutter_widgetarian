@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/animation.dart';
+import 'package:widgetarian/tween.dart';
 
 enum StrokeStyle { round, sharp }
 
@@ -74,10 +74,10 @@ class AnimatedCheckmark extends ImplicitlyAnimatedWidget {
 
 class AnimatedCheckmarkState
     extends AnimatedWidgetBaseState<AnimatedCheckmark> {
-  Tween<double>? progress;
-  Tween<double>? weight;
-  Tween<double>? padding;
-  Tween<double>? size;
+  Tween<double?>? progress;
+  Tween<double?>? weight;
+  Tween<double?>? padding;
+  Tween<double?>? size;
   ColorTween? color;
   ColorTween? fill;
   ShapeBorderTween? shape;
@@ -91,26 +91,26 @@ class AnimatedCheckmarkState
           : widget.value == true
               ? 1.0
               : 0.0,
-      (dynamic value) => Tween<double>(begin: value),
-    ) as Tween<double>?;
+      (dynamic value) => Tween<double?>(begin: value),
+    ) as Tween<double?>?;
 
     weight = visitor(
       weight,
       widget.weight,
-      (dynamic value) => Tween<double>(begin: value),
-    ) as Tween<double>?;
+      (dynamic value) => Tween<double?>(begin: value),
+    ) as Tween<double?>?;
 
     padding = visitor(
       padding,
-      widget.padding ?? 0.0,
-      (dynamic value) => Tween<double>(begin: value),
-    ) as Tween<double>?;
+      widget.padding,
+      (dynamic value) => Tween<double?>(begin: value),
+    ) as Tween<double?>?;
 
     size = visitor(
       size,
       widget.size,
-      (dynamic value) => Tween<double>(begin: value),
-    ) as Tween<double>?;
+      (dynamic value) => Tween<double?>(begin: value),
+    ) as Tween<double?>?;
 
     color = visitor(
       color,
@@ -140,7 +140,7 @@ class AnimatedCheckmarkState
       weight: weight?.evaluate(animation),
       padding: padding?.evaluate(animation),
       shape: shape?.evaluate(animation),
-      size: size?.evaluate(animation) ?? widget.size,
+      size: size?.evaluate(animation),
       style: widget.style,
     );
   }
@@ -159,7 +159,7 @@ class Checkmark extends CustomPaint {
     double? size,
   }) : super(
           key: key,
-          size: size != null && size != 0 ? Size.square(size) : Size.zero,
+          size: size != null ? Size.square(size) : Size.zero,
           painter: CheckmarkPainter(
             progress: progress,
             color: color,
@@ -221,29 +221,21 @@ class CheckmarkPainter extends CustomPainter {
   }
 
   void _drawBox(Canvas canvas, Size size) {
-    const origin = Offset(0, 0);
-    final outer = Rect.fromLTWH(
-      origin.dx,
-      origin.dy,
-      size.width,
-      size.height,
-    ).deflate(-padding);
-
-    // draw border
-    shape.paint(canvas, outer);
+    final outer = (Offset.zero & size).deflate(-padding);
 
     // draw fill
     if (fill != null) {
       final paint = Paint()..color = fill!;
       canvas.drawPath(shape.getOuterPath(outer), paint);
     }
+    // draw border
+    shape.paint(canvas, outer);
   }
 
   void _drawCheck(Canvas canvas, Size size, Paint paint) {
     // As t goes from 0.0 to 1.0,
     // animate the two check mark strokes
     // from the short side to the long side.
-    const origin = Offset(0, 0);
     final path = Path();
     final start = Offset(size.width * 0.15, size.height * 0.45);
     final mid = Offset(size.width * 0.4, size.height * 0.7);
@@ -251,14 +243,14 @@ class CheckmarkPainter extends CustomPainter {
     if (progress < 0.5) {
       final strokeT = progress * 2.0;
       final drawMid = Offset.lerp(start, mid, strokeT)!;
-      path.moveTo(origin.dx + start.dx, origin.dy + start.dy);
-      path.lineTo(origin.dx + drawMid.dx, origin.dy + drawMid.dy);
+      path.moveTo(start.dx, start.dy);
+      path.lineTo(drawMid.dx, drawMid.dy);
     } else {
       final strokeT = (progress - 0.5) * 2.0;
       final drawEnd = Offset.lerp(mid, end, strokeT)!;
-      path.moveTo(origin.dx + start.dx, origin.dy + start.dy);
-      path.lineTo(origin.dx + mid.dx, origin.dy + mid.dy);
-      path.lineTo(origin.dx + drawEnd.dx, origin.dy + drawEnd.dy);
+      path.moveTo(start.dx, start.dy);
+      path.lineTo(mid.dx, mid.dy);
+      path.lineTo(drawEnd.dx, drawEnd.dy);
     }
     canvas.drawPath(path, paint);
   }
@@ -267,14 +259,13 @@ class CheckmarkPainter extends CustomPainter {
     // As t goes from 0.0 to -1.0,
     // animate the horizontal line
     // from the mid point outwards.
-    const origin = Offset(0, 0);
-    final dy = size.height * 0.5;
-    final start = Offset(size.width * 0.2, dy);
-    final mid = Offset(size.width * 0.5, dy);
-    final end = Offset(size.width * 0.8, dy);
+    final center = size.center(Offset.zero);
+    final start = Offset(size.width * 0.2, center.dy);
+    final mid = Offset(size.width * 0.5, center.dy);
+    final end = Offset(size.width * 0.8, center.dy);
     final drawStart = Offset.lerp(start, mid, 1.0 - (-progress))!;
     final drawEnd = Offset.lerp(mid, end, -progress)!;
-    canvas.drawLine(origin + drawStart, origin + drawEnd, paint);
+    canvas.drawLine(drawStart, drawEnd, paint);
   }
 
   @override
