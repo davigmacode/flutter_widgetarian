@@ -2,8 +2,8 @@ import 'package:widgetarian/event.dart';
 
 /// Interactive events that [Checkbox] can take on
 /// when receiving input from the user.
-abstract class CheckboxEvent extends WidgetEvent {
-  const CheckboxEvent._(String value) : super(value);
+abstract class SwitchEvent extends WidgetEvent {
+  const SwitchEvent._(String value) : super(value);
 
   /// The event when this widget has been selected.
   ///
@@ -36,33 +36,33 @@ abstract class CheckboxEvent extends WidgetEvent {
     return events.contains(selected);
   }
 
-  /// Checker for whether events considers [CheckboxEvent.indeterminate] to be active.
+  /// Checker for whether events considers [SwitchEvent.indeterminate] to be active.
   static bool isIndeterminate(Set<WidgetEvent> events) {
     return events.contains(indeterminate);
   }
 
-  /// Checker for whether events considers [CheckboxEvent.disabled] to be active.
+  /// Checker for whether events considers [SwitchEvent.disabled] to be active.
   static bool isDisabled(Set<WidgetEvent> events) {
     return events.contains(disabled);
   }
 
-  /// Checker for whether events considers [CheckboxEvent.hovered] to be active.
+  /// Checker for whether events considers [SwitchEvent.hovered] to be active.
   static bool isHovered(Set<WidgetEvent> events) {
     return events.contains(hovered);
   }
 
-  /// Checker for whether events considers [CheckboxEvent.focused] to be active.
+  /// Checker for whether events considers [SwitchEvent.focused] to be active.
   static bool isFocused(Set<WidgetEvent> events) {
     return events.contains(focused);
   }
 
-  /// Checker for whether events considers [CheckboxEvent.pressed] to be active.
+  /// Checker for whether events considers [SwitchEvent.pressed] to be active.
   static bool isPressed(Set<WidgetEvent> events) {
     return events.contains(pressed);
   }
 }
 
-/// Manages a set of [CheckboxEvent]s and notifies listeners of changes.
+/// Manages a set of [SwitchEvent]s and notifies listeners of changes.
 ///
 /// Used by widgets that expose their internal event
 /// for the sake of extensions that add support for additional events.
@@ -71,7 +71,7 @@ abstract class CheckboxEvent extends WidgetEvent {
 /// Listeners are notified whenever the value changes.
 /// The value should only be changed with update;
 /// it should not be modified directly.
-class CheckboxEventController extends WidgetEventController {}
+class SwitchEventController extends WidgetEventController {}
 
 /// Set of WidgetEvent
-typedef CheckboxEvents = WidgetEvents;
+typedef SwitchEvents = WidgetEvents;

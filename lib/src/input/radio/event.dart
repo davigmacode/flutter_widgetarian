@@ -1,18 +1,12 @@
 import 'package:widgetarian/event.dart';
 
-/// Interactive events that [Checkbox] can take on
+/// Interactive events that [Radio] can take on
 /// when receiving input from the user.
-abstract class CheckboxEvent extends WidgetEvent {
-  const CheckboxEvent._(String value) : super(value);
+abstract class RadioEvent extends WidgetEvent {
+  const RadioEvent._(String value) : super(value);
 
-  /// The event when this widget has been selected.
-  ///
-  /// This applies to things that can be toggled (such as chips and checkboxes)
-  /// and things that are selected from a set of options (such as tabs and radio buttons).
+  /// The state when this item has been selected.
   static const selected = WidgetEvent.selected;
-
-  /// The state when this item has been indeterminate.
-  static const indeterminate = WidgetEvent.indeterminate;
 
   /// The state when this widget is disabled and cannot be interacted with.
   ///
@@ -31,38 +25,33 @@ abstract class CheckboxEvent extends WidgetEvent {
   /// The state when the user is actively pressing down on the given widget.
   static const pressed = WidgetEvent.pressed;
 
-  /// Checker for whether events considers [CheckboxEvent.selected] to be active.
+  /// Checker for whether events considers [RadioEvent.selected] to be active.
   static bool isSelected(Set<WidgetEvent> events) {
     return events.contains(selected);
   }
 
-  /// Checker for whether events considers [CheckboxEvent.indeterminate] to be active.
-  static bool isIndeterminate(Set<WidgetEvent> events) {
-    return events.contains(indeterminate);
-  }
-
-  /// Checker for whether events considers [CheckboxEvent.disabled] to be active.
+  /// Checker for whether events considers [RadioEvent.disabled] to be active.
   static bool isDisabled(Set<WidgetEvent> events) {
     return events.contains(disabled);
   }
 
-  /// Checker for whether events considers [CheckboxEvent.hovered] to be active.
+  /// Checker for whether events considers [RadioEvent.hovered] to be active.
   static bool isHovered(Set<WidgetEvent> events) {
     return events.contains(hovered);
   }
 
-  /// Checker for whether events considers [CheckboxEvent.focused] to be active.
+  /// Checker for whether events considers [RadioEvent.focused] to be active.
   static bool isFocused(Set<WidgetEvent> events) {
     return events.contains(focused);
   }
 
-  /// Checker for whether events considers [CheckboxEvent.pressed] to be active.
+  /// Checker for whether events considers [RadioEvent.pressed] to be active.
   static bool isPressed(Set<WidgetEvent> events) {
     return events.contains(pressed);
   }
 }
 
-/// Manages a set of [CheckboxEvent]s and notifies listeners of changes.
+/// Manages a set of [RadioEvent]s and notifies listeners of changes.
 ///
 /// Used by widgets that expose their internal event
 /// for the sake of extensions that add support for additional events.
@@ -71,7 +60,7 @@ abstract class CheckboxEvent extends WidgetEvent {
 /// Listeners are notified whenever the value changes.
 /// The value should only be changed with update;
 /// it should not be modified directly.
-class CheckboxEventController extends WidgetEventController {}
+class RadioEventController extends WidgetEventController {}
 
 /// Set of WidgetEvent
-typedef CheckboxEvents = WidgetEvents;
+typedef RadioEvents = WidgetEvents;
