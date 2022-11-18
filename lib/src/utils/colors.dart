@@ -89,4 +89,14 @@ abstract class Colors {
   static Color colorWithAlpha(Color color, int? alpha) {
     return alpha != null ? color.withAlpha(alpha) : color;
   }
+
+  static Color colorWithOpacityOrAlpha(
+    Color color,
+    double? opacity,
+    int? alpha,
+  ) {
+    color = Colors.colorWithOpacity(color, opacity);
+    color = Colors.colorWithAlpha(color, alpha);
+    return color;
+  }
 }
