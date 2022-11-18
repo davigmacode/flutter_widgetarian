@@ -1,7 +1,41 @@
+import 'package:flutter/widgets.dart';
+// import 'dart:ui';
+
 import 'event.dart';
 import 'property.dart';
 
-import 'dart:ui';
+abstract class DrivenWidget extends Widget implements DrivenProperty<Widget> {
+  const DrivenWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget resolve(Set<WidgetEvent> events);
+
+  static Widget evaluate(Widget value, Set<WidgetEvent> events) {
+    return DrivenProperty.evaluate<Widget>(value, events);
+  }
+
+  static DrivenWidget by(DrivenPropertyResolver<Widget> callback) {
+    return _DrivenWidget(callback);
+  }
+
+  static DrivenWidget all(Widget value) {
+    return _DrivenWidget((events) => value);
+  }
+}
+
+class _DrivenWidget extends DrivenWidget {
+  _DrivenWidget(this._resolver) : super(key: _resolver({}).key);
+
+  final DrivenPropertyResolver<Widget> _resolver;
+
+  @override
+  Widget resolve(Set<WidgetEvent> events) => _resolver(events);
+
+  @override
+  Element createElement() {
+    throw UnimplementedError();
+  }
+}
 
 abstract class DrivenColor extends Color implements DrivenProperty<Color> {
   /// Abstract const constructor. This constructor enables subclasses to provide
