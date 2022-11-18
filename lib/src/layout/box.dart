@@ -1,151 +1,316 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'border.dart';
 
-class Box extends StatelessWidget {
-  const Box({
+class AnimatedBox extends ImplicitlyAnimatedWidget {
+  const AnimatedBox({
     Key? key,
-    required this.child,
+    Duration duration = const Duration(milliseconds: 200),
+    Curve curve = Curves.linear,
     this.width,
     this.height,
+    this.constraints,
     this.padding,
     this.margin,
+    this.alignment,
     this.color,
-    this.shape,
+    this.shadowColor,
+    this.elevation,
     this.border,
+    this.borderColor,
+    this.borderWidth,
+    this.borderStyle,
     this.borderSide,
     this.borderRadius,
-    this.shadowColor = const Color(0xFF000000),
-    this.clipBehavior = Clip.antiAlias,
-    this.elevation = 0.0,
-  }) : super(key: key);
+    this.clipBehavior,
+    this.shape,
+    required this.tooltip,
+    required this.child,
+  }) : super(
+          key: key,
+          duration: duration,
+          curve: curve,
+        );
 
-  final Widget child;
+  final Widget? child;
   final double? width;
   final double? height;
+  final BoxConstraints? constraints;
+  final AlignmentGeometry? alignment;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final Color? color;
-  final Color shadowColor;
-  final double elevation;
+  final Color? shadowColor;
+  final double? elevation;
   final ShapeBorder? border;
+  final Color? borderColor;
+  final double? borderWidth;
+  final BorderStyle? borderStyle;
   final BorderSide? borderSide;
   final BorderRadius? borderRadius;
   final BoxShape? shape;
-  final Clip clipBehavior;
+  final Clip? clipBehavior;
+  final String? tooltip;
 
-  ShapeBorder get defaultBorder {
-    return shape == BoxShape.circle
-        ? CircleBorder(
-            side: borderSide ?? BorderSide.none,
-          )
-        : RoundedRectangleBorder(
-            side: borderSide ?? BorderSide.none,
-            borderRadius: borderRadius ?? BorderRadius.zero,
-          );
+  @override
+  AnimatedBoxState createState() => AnimatedBoxState();
+}
+
+class AnimatedBoxState extends AnimatedWidgetBaseState<AnimatedBox> {
+  BorderSide get borderSide {
+    return BorderSide.none
+        .copyWith(
+          color: widget.borderSide?.color,
+          width: widget.borderSide?.width,
+          style: widget.borderSide?.style,
+        )
+        .copyWith(
+          color: widget.borderColor,
+          width: widget.borderWidth,
+          style: widget.borderStyle,
+        );
+  }
+
+  ShapeBorder get borderShape {
+    switch (widget.shape) {
+      case BoxShape.circle:
+        return CircleBorder(side: borderSide);
+      default:
+        return RoundedRectangleBorder(
+          side: borderSide,
+          borderRadius: widget.borderRadius ?? BorderRadius.zero,
+        );
+    }
+  }
+
+  ShapeBorder get border => widget.border ?? borderShape;
+
+  AlignmentGeometryTween? alignmentTween;
+  EdgeInsetsGeometryTween? paddingTween;
+  EdgeInsetsGeometryTween? marginTween;
+  ColorTween? colorTween;
+  ColorTween? shadowColorTween;
+  Tween<double?>? elevationTween;
+  ShapeBorderTween? borderTween;
+
+  @override
+  void forEachTween(TweenVisitor<dynamic> visitor) {
+    alignmentTween = visitor(
+      alignmentTween,
+      widget.alignment,
+      (dynamic value) => AlignmentGeometryTween(begin: value),
+    ) as AlignmentGeometryTween?;
+
+    paddingTween = visitor(
+      paddingTween,
+      widget.padding,
+      (value) => EdgeInsetsGeometryTween(begin: value),
+    ) as EdgeInsetsGeometryTween?;
+
+    marginTween = visitor(
+      marginTween,
+      widget.margin,
+      (value) => EdgeInsetsGeometryTween(begin: value),
+    ) as EdgeInsetsGeometryTween?;
+
+    colorTween = visitor(
+      colorTween,
+      widget.color,
+      (dynamic value) => ColorTween(begin: value),
+    ) as ColorTween?;
+
+    shadowColorTween = visitor(
+      shadowColorTween,
+      widget.shadowColor,
+      (dynamic value) => ColorTween(begin: value),
+    ) as ColorTween?;
+
+    elevationTween = visitor(
+      elevationTween,
+      widget.elevation ?? 0.0,
+      (dynamic value) => Tween<double?>(begin: value),
+    ) as Tween<double?>?;
+
+    borderTween = visitor(
+      borderTween,
+      border,
+      (dynamic value) => ShapeBorderTween(begin: value),
+    ) as ShapeBorderTween?;
   }
 
   @override
   Widget build(BuildContext context) {
-    final border = this.border ?? defaultBorder;
+    return Box(
+      width: widget.width,
+      height: widget.height,
+      constraints: widget.constraints,
+      alignment: alignmentTween?.evaluate(animation),
+      padding: paddingTween?.evaluate(animation),
+      margin: marginTween?.evaluate(animation),
+      color: colorTween?.evaluate(animation),
+      shadowColor: shadowColorTween?.evaluate(animation),
+      elevation: elevationTween?.evaluate(animation),
+      border: borderTween?.evaluate(animation),
+      clipBehavior: widget.clipBehavior,
+      tooltip: widget.tooltip,
+      child: widget.child,
+    );
+  }
+}
+
+class Box extends StatelessWidget {
+  const Box({
+    Key? key,
+    this.width,
+    this.height,
+    this.constraints,
+    this.alignment,
+    this.padding,
+    this.margin,
+    this.color,
+    this.border,
+    this.borderColor,
+    this.borderWidth,
+    this.borderStyle,
+    this.borderSide,
+    this.borderRadius,
+    this.shape,
+    this.shadowColor,
+    this.clipBehavior,
+    this.elevation,
+    this.tooltip,
+    this.child,
+  }) : super(key: key);
+
+  final Widget? child;
+  final double? width;
+  final double? height;
+  final BoxConstraints? constraints;
+  final AlignmentGeometry? alignment;
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
+  final Color? color;
+  final Color? shadowColor;
+  final double? elevation;
+  final ShapeBorder? border;
+  final Color? borderColor;
+  final double? borderWidth;
+  final BorderStyle? borderStyle;
+  final BorderSide? borderSide;
+  final BorderRadius? borderRadius;
+  final BoxShape? shape;
+  final Clip? clipBehavior;
+  final String? tooltip;
+
+  bool get hasCustomShape => border != null;
+
+  BorderSide? get effectiveBorderSide {
+    return BorderSide.none
+        .copyWith(
+          color: borderSide?.color,
+          width: borderSide?.width,
+          style: borderSide?.style,
+        )
+        .copyWith(
+          color: borderColor,
+          width: borderWidth,
+          style: borderStyle,
+        );
+  }
+
+  ShapeBorder get borderShape {
+    switch (shape) {
+      case BoxShape.circle:
+        return CircleBorder(
+          side: effectiveBorderSide ?? BorderSide.none,
+        );
+      default:
+        return RoundedRectangleBorder(
+          side: effectiveBorderSide ?? BorderSide.none,
+          borderRadius: borderRadius ?? BorderRadius.zero,
+        );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget? result = child;
+
+    final constraints = width != null || height != null
+        ? this.constraints?.tighten(width: width, height: height) ??
+            BoxConstraints.tightFor(width: width, height: height)
+        : this.constraints;
+
+    if (child == null && (constraints == null || !constraints.isTight)) {
+      result = LimitedBox(
+        maxWidth: 0.0,
+        maxHeight: 0.0,
+        child: ConstrainedBox(constraints: const BoxConstraints.expand()),
+      );
+    } else if (alignment != null) {
+      result = Align(alignment: alignment!, child: result);
+    }
+
+    if (padding != null) {
+      result = Padding(padding: padding!, child: result);
+    }
+
+    if (constraints != null) {
+      result = ConstrainedBox(constraints: constraints, child: result);
+    }
+
+    final border = this.border ?? borderShape;
     final textDirection = Directionality.maybeOf(context);
     final clipper = ShapeBorderClipper(
       textDirection: textDirection,
       shape: border,
     );
 
-    Widget contents = child;
-
-    if (padding != null) {
-      contents = Padding(padding: padding!, child: contents);
-    }
-
-    if (width != null || height != null) {
-      contents = SizedBox(
-        width: width,
-        height: height,
-        child: contents,
-      );
-    }
-
-    contents = ShapeBorderPaint(
+    result = ShapeBorderPaint(
       textDirection: textDirection,
       shape: border,
-      child: contents,
+      child: result,
     );
 
     if (color == null) {
-      contents = ClipPath(
+      result = ClipPath(
         clipper: clipper,
-        clipBehavior: clipBehavior,
-        child: contents,
+        clipBehavior: clipBehavior ?? Clip.antiAlias,
+        child: result,
       );
+    } else {
+      if (hasCustomShape) {
+        result = PhysicalShape(
+          color: color!,
+          elevation: elevation ?? 0.0,
+          shadowColor: shadowColor ?? Colors.black,
+          clipBehavior: clipBehavior ?? Clip.antiAlias,
+          clipper: clipper,
+          child: result,
+        );
+      } else {
+        result = PhysicalModel(
+          color: color!,
+          elevation: elevation ?? 0.0,
+          shadowColor: shadowColor ?? Colors.black,
+          clipBehavior: clipBehavior ?? Clip.antiAlias,
+          borderRadius: borderRadius,
+          shape: shape ?? BoxShape.rectangle,
+          child: result,
+        );
+      }
     }
-
-    if (shape != null) {
-      contents = PhysicalModel(
-        color: color!,
-        elevation: elevation,
-        shadowColor: shadowColor,
-        clipBehavior: clipBehavior,
-        borderRadius: borderRadius,
-        shape: shape!,
-        child: contents,
-      );
-    }
-
-    contents = PhysicalShape(
-      color: color!,
-      elevation: elevation,
-      shadowColor: shadowColor,
-      clipBehavior: clipBehavior,
-      clipper: clipper,
-      child: contents,
-    );
 
     if (margin != null) {
-      contents = Padding(padding: margin!, child: contents);
+      result = Padding(padding: margin!, child: result);
     }
 
-    return contents;
-  }
-}
+    if (tooltip != null) {
+      return Tooltip(
+        message: tooltip,
+        child: child,
+      );
+    }
 
-class ShapeBorderPaint extends StatelessWidget {
-  const ShapeBorderPaint({
-    Key? key,
-    required this.child,
-    required this.shape,
-    this.textDirection,
-    this.isForeground = true,
-  }) : super(key: key);
-
-  final Widget child;
-  final ShapeBorder shape;
-  final TextDirection? textDirection;
-  final bool isForeground;
-
-  @override
-  Widget build(BuildContext context) {
-    final painter = ShapeBorderPainter(shape, textDirection);
-    return CustomPaint(
-      painter: isForeground ? null : painter,
-      foregroundPainter: isForeground ? painter : null,
-      child: child,
-    );
-  }
-}
-
-class ShapeBorderPainter extends CustomPainter {
-  ShapeBorderPainter(this.shape, this.textDirection);
-  final ShapeBorder shape;
-  final TextDirection? textDirection;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    shape.paint(canvas, Offset.zero & size, textDirection: textDirection);
-  }
-
-  @override
-  bool shouldRepaint(ShapeBorderPainter oldDelegate) {
-    return oldDelegate.shape != shape;
+    return result;
   }
 }
