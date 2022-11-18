@@ -31,27 +31,27 @@ abstract class ChipEvent extends WidgetEvent {
 
   /// Checker for whether events considers [ChipEvent.selected] to be active.
   static bool isSelected(Set<WidgetEvent> events) {
-    return events.contains(ChipEvent.selected);
+    return events.contains(selected);
   }
 
   /// Checker for whether events considers [ChipEvent.disabled] to be active.
   static bool isDisabled(Set<WidgetEvent> events) {
-    return events.contains(ChipEvent.disabled);
+    return events.contains(disabled);
   }
 
   /// Checker for whether events considers [ChipEvent.hovered] to be active.
   static bool isHovered(Set<WidgetEvent> events) {
-    return events.contains(ChipEvent.hovered);
+    return events.contains(hovered);
   }
 
   /// Checker for whether events considers [ChipEvent.focused] to be active.
   static bool isFocused(Set<WidgetEvent> events) {
-    return events.contains(ChipEvent.focused);
+    return events.contains(focused);
   }
 
   /// Checker for whether events considers [ChipEvent.pressed] to be active.
   static bool isPressed(Set<WidgetEvent> events) {
-    return events.contains(ChipEvent.pressed);
+    return events.contains(pressed);
   }
 }
 

@@ -1,10 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/feedback.dart';
-import 'package:widgetarian/colors.dart';
+import 'package:widgetarian/utils.dart';
 import 'event.dart';
+import '../avatar/style.dart';
 
-typedef ChipCheckmarkStyle = CheckmarkStyle;
+export 'package:widgetarian/feedback.dart' show StrokeStyle;
 
 /// Default chip's style.
 class ChipStyle {
@@ -30,11 +31,7 @@ class ChipStyle {
     this.borderWidth,
     this.borderRadius,
     this.borderStyle,
-    this.avatarSize,
-    this.avatarForegroundStyle,
-    this.avatarForegroundColor,
-    this.avatarBackgroundColor,
-    this.avatarBorderRadius,
+    this.avatarStyle,
     this.checkmarkColor,
     this.checkmarkSize,
     this.checkmarkWeight,
@@ -67,11 +64,7 @@ class ChipStyle {
         borderWidth = other?.borderWidth,
         borderRadius = other?.borderRadius,
         borderStyle = other?.borderStyle,
-        avatarSize = other?.avatarSize,
-        avatarForegroundStyle = other?.avatarForegroundStyle,
-        avatarForegroundColor = other?.avatarForegroundColor,
-        avatarBackgroundColor = other?.avatarBackgroundColor,
-        avatarBorderRadius = other?.avatarBorderRadius,
+        avatarStyle = other?.avatarStyle,
         checkmarkColor = other?.checkmarkColor,
         checkmarkSize = other?.checkmarkSize,
         checkmarkWeight = other?.checkmarkWeight,
@@ -165,15 +158,11 @@ class ChipStyle {
     double? borderWidth = 1,
     BorderRadiusGeometry? borderRadius,
     BorderStyle? borderStyle = BorderStyle.none,
-    Size? avatarSize,
-    TextStyle? avatarForegroundStyle,
-    Color? avatarForegroundColor,
-    Color? avatarBackgroundColor,
-    BorderRadiusGeometry? avatarBorderRadius,
+    AvatarStyle? avatarStyle,
     Color? checkmarkColor,
     double? checkmarkSize,
     double? checkmarkWeight,
-    ChipCheckmarkStyle? checkmarkStyle,
+    StrokeStyle? checkmarkStyle,
     Color? iconColor,
     double? iconOpacity,
     double? iconSize,
@@ -210,11 +199,7 @@ class ChipStyle {
         borderWidth: borderWidth,
         borderRadius: borderRadius,
         borderStyle: borderStyle,
-        avatarSize: avatarSize,
-        avatarForegroundStyle: avatarForegroundStyle,
-        avatarForegroundColor: avatarForegroundColor,
-        avatarBackgroundColor: avatarBackgroundColor,
-        avatarBorderRadius: avatarBorderRadius,
+        avatarStyle: avatarStyle,
         checkmarkColor: checkmarkColor,
         checkmarkSize: checkmarkSize,
         checkmarkWeight: checkmarkWeight,
@@ -268,15 +253,11 @@ class ChipStyle {
     double? borderWidth = 0,
     BorderRadiusGeometry? borderRadius,
     BorderStyle? borderStyle = BorderStyle.none,
-    Size? avatarSize,
-    TextStyle? avatarForegroundStyle,
-    Color? avatarForegroundColor,
-    Color? avatarBackgroundColor,
-    BorderRadiusGeometry? avatarBorderRadius,
+    AvatarStyle? avatarStyle,
     Color? checkmarkColor,
     double? checkmarkSize,
     double? checkmarkWeight,
-    ChipCheckmarkStyle? checkmarkStyle,
+    StrokeStyle? checkmarkStyle,
     Color? iconColor,
     double? iconOpacity,
     double? iconSize,
@@ -315,11 +296,7 @@ class ChipStyle {
         borderWidth: borderWidth,
         borderRadius: borderRadius,
         borderStyle: borderStyle,
-        avatarSize: avatarSize,
-        avatarForegroundStyle: avatarForegroundStyle,
-        avatarForegroundColor: avatarForegroundColor,
-        avatarBackgroundColor: avatarBackgroundColor,
-        avatarBorderRadius: avatarBorderRadius,
+        avatarStyle: avatarStyle,
         checkmarkColor: checkmarkColor,
         checkmarkSize: checkmarkSize,
         checkmarkWeight: checkmarkWeight,
@@ -373,14 +350,11 @@ class ChipStyle {
     double? borderWidth = 1,
     BorderRadiusGeometry? borderRadius,
     BorderStyle? borderStyle = BorderStyle.solid,
-    Size? avatarSize,
-    TextStyle? avatarForegroundStyle,
-    Color? avatarForegroundColor,
-    BorderRadiusGeometry? avatarBorderRadius,
+    AvatarStyle? avatarStyle,
     Color? checkmarkColor,
     double? checkmarkSize,
     double? checkmarkWeight,
-    ChipCheckmarkStyle? checkmarkStyle,
+    StrokeStyle? checkmarkStyle,
     Color? iconColor,
     double? iconOpacity,
     double? iconSize,
@@ -397,7 +371,10 @@ class ChipStyle {
       enabled: ChipStyle(
         borderColor: color,
         foregroundColor: color,
-        avatarBackgroundColor: color,
+        // avatarBackgroundColor: color,
+        avatarStyle: const AvatarStyle()
+            .merge(avatarStyle)
+            .copyWith(backgroundColor: color),
         height: height,
         margin: margin,
         padding: padding,
@@ -417,10 +394,6 @@ class ChipStyle {
         borderWidth: borderWidth,
         borderRadius: borderRadius,
         borderStyle: borderStyle,
-        avatarSize: avatarSize,
-        avatarForegroundStyle: avatarForegroundStyle,
-        avatarForegroundColor: avatarForegroundColor,
-        avatarBorderRadius: avatarBorderRadius,
         checkmarkColor: checkmarkColor,
         checkmarkSize: checkmarkSize,
         checkmarkWeight: checkmarkWeight,
@@ -454,7 +427,7 @@ class ChipStyle {
   static const defaultMargin = EdgeInsets.zero;
   static const defaultPadding = EdgeInsets.symmetric(horizontal: 8);
   static const defaultPaddingWithAvatar = EdgeInsets.symmetric(horizontal: 4);
-  static const defaultAvatarSize = Size.square(24);
+  static const defaultAvatarSize = 24.0;
   static const defaultHeight = 32.0;
   static const defaultIconSize = 18.0;
   static const defaultCheckmarkWeight = 2.0;
@@ -548,26 +521,8 @@ class ChipStyle {
   /// This skips painting the border, but the border still has a [borderWidth].
   final BorderStyle? borderStyle;
 
-  /// Color to be used for the avatar's background.
-  final Color? avatarBackgroundColor;
-
-  /// Color to be used for the avatar's foreground (checkmark, or text).
-  final Color? avatarForegroundColor;
-
-  /// The style to be applied to the avatar's label.
-  ///
-  /// The default label style is [TextTheme.bodyText1] from the overall
-  /// theme's [ThemeData.textTheme].
-  //
-  /// This only has an effect on widgets that respect the [DefaultTextStyle],
-  /// such as [Text].
-  final TextStyle? avatarForegroundStyle;
-
-  /// The radii for each corner of the avatar's border.
-  final BorderRadiusGeometry? avatarBorderRadius;
-
-  /// Defaults to [ChipStyle.defaultAvatarSize].
-  final Size? avatarSize;
+  /// The style to be applied to the avatar
+  final AvatarStyle? avatarStyle;
 
   /// The Color to be apply to the checkmark.
   ///
@@ -583,7 +538,7 @@ class ChipStyle {
   final double? checkmarkWeight;
 
   /// Defaults to [ChipCheckmarkStyle.sharp].
-  final ChipCheckmarkStyle? checkmarkStyle;
+  final StrokeStyle? checkmarkStyle;
 
   /// Color to be used for the icon's inside the chip.
   final Color? iconColor;
@@ -652,15 +607,11 @@ class ChipStyle {
     double? borderWidth,
     BorderRadiusGeometry? borderRadius,
     BorderStyle? borderStyle,
-    Size? avatarSize,
-    TextStyle? avatarForegroundStyle,
-    Color? avatarForegroundColor,
-    Color? avatarBackgroundColor,
-    BorderRadiusGeometry? avatarBorderRadius,
+    AvatarStyle? avatarStyle,
     Color? checkmarkColor,
     double? checkmarkSize,
     double? checkmarkWeight,
-    ChipCheckmarkStyle? checkmarkStyle,
+    StrokeStyle? checkmarkStyle,
     Color? iconColor,
     double? iconOpacity,
     double? iconSize,
@@ -697,14 +648,8 @@ class ChipStyle {
       borderWidth: borderWidth ?? this.borderWidth,
       borderRadius: borderRadius ?? this.borderRadius,
       borderStyle: borderStyle ?? this.borderStyle,
-      avatarSize: avatarSize ?? this.avatarSize,
-      avatarForegroundStyle:
-          avatarForegroundStyle ?? this.avatarForegroundStyle,
-      avatarForegroundColor:
-          avatarForegroundColor ?? this.avatarForegroundColor,
-      avatarBackgroundColor:
-          avatarBackgroundColor ?? this.avatarBackgroundColor,
-      avatarBorderRadius: avatarBorderRadius ?? this.avatarBorderRadius,
+      avatarStyle:
+          const AvatarStyle().merge(this.avatarStyle).merge(avatarStyle),
       checkmarkColor: checkmarkColor ?? this.checkmarkColor,
       checkmarkSize: checkmarkSize ?? this.checkmarkSize,
       checkmarkWeight: checkmarkWeight ?? this.checkmarkWeight,
@@ -753,11 +698,7 @@ class ChipStyle {
       borderWidth: other.borderWidth,
       borderRadius: other.borderRadius,
       borderStyle: other.borderStyle,
-      avatarSize: other.avatarSize,
-      avatarForegroundStyle: other.avatarForegroundStyle,
-      avatarForegroundColor: other.avatarForegroundColor,
-      avatarBackgroundColor: other.avatarBackgroundColor,
-      avatarBorderRadius: other.avatarBorderRadius,
+      avatarStyle: other.avatarStyle,
       checkmarkColor: other.checkmarkColor,
       checkmarkSize: other.checkmarkSize,
       checkmarkWeight: other.checkmarkWeight,
