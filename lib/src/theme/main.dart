@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'controller.dart';
-import 'provider.dart';
-import 'consumer.dart';
 import 'data.dart';
 import 'model.dart';
 
@@ -76,5 +74,35 @@ class ThemePatrol extends StatelessWidget {
       controller: controller,
       child: ThemeConsumer(builder: builder),
     );
+  }
+}
+
+class ThemeProvider extends InheritedNotifier<ThemeController> {
+  const ThemeProvider({
+    Key? key,
+    required ThemeController controller,
+    required Widget child,
+  }) : super(key: key, notifier: controller, child: child);
+
+  static ThemeController of(BuildContext context) {
+    final ThemeProvider? result =
+        context.dependOnInheritedWidgetOfExactType<ThemeProvider>();
+    assert(result != null, 'No ThemePatrol found in context');
+    return result!.notifier!;
+  }
+}
+
+class ThemeConsumer extends StatelessWidget {
+  const ThemeConsumer({
+    Key? key,
+    required this.builder,
+  }) : super(key: key);
+
+  /// Builder that gets called when the theme changes
+  final ThemeBuilder builder;
+
+  @override
+  Widget build(BuildContext context) {
+    return builder(context, ThemeProvider.of(context));
   }
 }
