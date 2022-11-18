@@ -1,32 +1,27 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart'
-    show
-        Theme,
-        ThemeData,
-        Material,
-        MaterialType,
-        MaterialStateMouseCursor,
-        MaterialStateProperty,
-        InteractiveInkFeatureFactory,
-        ShapeBorderTween,
-        InkWell,
-        Tooltip;
+    show Theme, ThemeData, InteractiveInkFeatureFactory;
 
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/layout.dart';
-import 'package:widgetarian/colors.dart';
+import 'package:widgetarian/utils.dart';
+import 'package:widgetarian/anchor.dart';
+import 'package:widgetarian/animation.dart';
 import 'style.dart';
+import 'theme.dart';
 import 'event.dart';
 
 /// Chip widget with smooth animation, event driven style, and many more.
 class Button extends StatelessWidget {
   const Button({
     Key? key,
-    required this.label,
+    required this.child,
     this.leading,
     this.trailing,
     this.tooltip,
     this.style,
+    this.checked,
+    this.loading = false,
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
@@ -41,17 +36,20 @@ class Button extends StatelessWidget {
   /// The primary content of the chip.
   ///
   /// Typically a [Text] widget.
-  final Widget label;
+  final Widget child;
 
-  /// A custom widget to display prior to the chip's [label].
+  /// A custom widget to display prior to the chip's [child].
   final Widget? leading;
 
-  /// A custom widget to display next to the chip's [label].
+  /// A custom widget to display next to the chip's [child].
   final Widget? trailing;
 
-  /// Tooltip string to be used for the body area (where the label and avatar
-  /// are) of the chip.
+  /// Tooltip string to be used for the body area of the button.
   final String? tooltip;
+
+  final bool? checked;
+
+  final bool loading;
 
   /// Whether or not this chip is disabled for input.
   ///
@@ -147,11 +145,10 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _ButtonRender(
-      label: label,
-      leading: leading,
-      trailing: trailing,
-      tooltip: tooltip,
-      style: style,
+      theme: Theme.of(context),
+      style: style ?? ButtonTheme.of(context),
+      checked: checked,
+      loading: loading,
       disabled: disabled,
       autofocus: autofocus,
       focusNode: focusNode,
@@ -159,7 +156,10 @@ class Button extends StatelessWidget {
       splashFactory: splashFactory,
       onPressed: onPressed,
       eventsController: eventsController,
-      theme: Theme.of(context),
+      leading: leading,
+      trailing: trailing,
+      tooltip: tooltip,
+      child: child,
     );
   }
 }
@@ -168,11 +168,13 @@ class Button extends StatelessWidget {
 class _ButtonRender extends ImplicitlyAnimatedWidget {
   const _ButtonRender({
     Key? key,
-    required this.label,
+    required this.child,
     this.leading,
     this.trailing,
     this.tooltip,
-    this.style,
+    required this.style,
+    this.checked,
+    this.loading = false,
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
@@ -189,21 +191,23 @@ class _ButtonRender extends ImplicitlyAnimatedWidget {
           curve: curve,
         );
 
-  final Widget label;
+  final Widget child;
   final Widget? leading;
   final Widget? trailing;
   final String? tooltip;
+  final bool? checked;
+  final bool loading;
   final bool disabled;
   final bool autofocus;
   final FocusNode? focusNode;
   final Color? splashColor;
   final InteractiveInkFeatureFactory? splashFactory;
   final VoidCallback? onPressed;
-  final ButtonStyle? style;
+  final ButtonStyle style;
   final ButtonEventController? eventsController;
   final ThemeData theme;
 
-  bool get enabled => !disabled;
+  bool get enabled => !disabled && !loading;
 
   bool get canTap => enabled && hasCallback;
 
@@ -221,7 +225,7 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
 
   @protected
   void setStyle() {
-    final style = widget.style ?? ButtonStyle.toned();
+    final style = widget.style;
     final resolved = ButtonStyle.evaluate(style, widgetEvents.value);
     final result = ButtonStyle.from(resolved);
     this.style = result;
@@ -269,8 +273,20 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
     return style.clipBehavior ?? ButtonStyle.defaultClipBehavior;
   }
 
+  double? get containerWidth {
+    return style.shape == BoxShape.circle
+        ? ButtonStyle.defaultHeight
+        : style.width;
+  }
+
+  double get containerHeight {
+    return style.height ?? ButtonStyle.defaultHeight;
+  }
+
   EdgeInsetsGeometry get containerPadding {
-    const defaultPadding = ButtonStyle.defaultPadding;
+    final defaultPadding = style.shape == BoxShape.circle
+        ? EdgeInsets.zero
+        : ButtonStyle.defaultPadding;
     final padding = style.padding ?? defaultPadding;
     return padding.clamp(
       EdgeInsets.only(right: hasTrailing ? 8 : 0),
@@ -282,29 +298,28 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
     return style.margin ?? ButtonStyle.defaultMargin;
   }
 
-  BorderRadiusGeometry get containerRadius {
-    return style.borderRadius ?? ButtonStyle.defaultBorderRadius;
-  }
-
   Color get containerShadowColor {
     return style.shadowColor ?? widget.theme.colorScheme.shadow;
   }
 
-  ShapeBorder get containerBorder {
-    return RoundedRectangleBorder(
-      borderRadius: containerRadius,
-      side: BorderSide(
-        color: borderColor,
-        width: style.borderWidth ?? ButtonStyle.defaultBorderWidth,
-        style: style.borderStyle ?? ButtonStyle.defaultBorderStyle,
-      ),
+  BoxShape get containerShape {
+    return style.shape ?? BoxShape.rectangle;
+  }
+
+  BorderRadius get containerBorderRadius {
+    return style.borderRadius ?? ButtonStyle.defaultBorderRadius;
+  }
+
+  BorderSide get containerBorderSide {
+    return BorderSide(
+      color: borderColor,
+      width: style.borderWidth ?? ButtonStyle.defaultBorderWidth,
+      style: style.borderStyle ?? ButtonStyle.defaultBorderStyle,
     );
   }
 
   TextStyle get foregroundStyle {
     return const TextStyle()
-        .merge(widget.theme.chipTheme.labelStyle)
-        // .merge(defaultTheme.labelStyle)
         .copyWith(color: foregroundColor)
         .merge(style.foregroundStyle);
   }
@@ -313,21 +328,8 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
     return style.iconColor ?? foregroundColor;
   }
 
-  Tween<double>? _containerHeightTween;
-  double get animatedContainerHeight {
-    return _containerHeightTween?.evaluate(animation) ??
-        ButtonStyle.defaultHeight;
-  }
-
-  ColorTween? _containerColorTween;
-  Color get animatedContainerColor {
-    return _containerColorTween?.evaluate(animation) ?? backgroundColor;
-  }
-
-  ColorTween? _containerShadowColorTween;
-  Color get animatedContainerShadowColor {
-    return _containerShadowColorTween?.evaluate(animation) ??
-        containerShadowColor;
+  double get iconSize {
+    return style.iconSize ?? ButtonStyle.defaultIconSize;
   }
 
   ColorTween? _containerOverlayColorTween;
@@ -336,34 +338,9 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
         style.overlayColor;
   }
 
-  Tween<double>? _containerElevationTween;
-  double get animatedContainerElevation {
-    return _containerElevationTween?.evaluate(animation) ?? 0.0;
-  }
-
-  BorderRadiusTween? _containerRadiusTween;
-  BorderRadiusGeometry? get animatedContainerRadius {
-    return _containerRadiusTween?.evaluate(animation);
-  }
-
-  ShapeBorderTween? _containerBorderTween;
-  ShapeBorder get animatedContainerBorder {
-    return _containerBorderTween?.evaluate(animation) ?? containerBorder;
-  }
-
   EdgeInsetsGeometryTween? _containerPaddingTween;
   EdgeInsetsGeometry get animatedContainerPadding {
     return _containerPaddingTween?.evaluate(animation) ?? containerPadding;
-  }
-
-  EdgeInsetsGeometryTween? _containerMarginTween;
-  EdgeInsetsGeometry get animatedContainerMargin {
-    return _containerMarginTween?.evaluate(animation) ?? containerMargin;
-  }
-
-  ColorTween? _foregroundColorTween;
-  Color? get animatedForegroundColor {
-    return _foregroundColorTween?.evaluate(animation);
   }
 
   Tween<double>? _foregroundSpacingTween;
@@ -372,36 +349,8 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
         ButtonStyle.defaultForegroundSpacing;
   }
 
-  TextStyleTween? _foregroundStyleTween;
-  TextStyle get animatedForegroundStyle {
-    return const TextStyle().merge(_foregroundStyleTween?.evaluate(animation));
-  }
-
-  ColorTween? _iconColorTween;
-  Color get animatedIconColor {
-    return _iconColorTween?.evaluate(animation) ?? iconColor;
-  }
-
-  Tween<double>? _iconSizeTween;
-  double get animatedIconSize {
-    return _iconSizeTween?.evaluate(animation) ?? ButtonStyle.defaultIconSize;
-  }
-
-  Tween<double>? _iconOpacityTween;
-  double? get animatedIconOpacity {
-    return _iconOpacityTween?.evaluate(animation);
-  }
-
   bool get hasLeading => widget.leading != null;
   bool get hasTrailing => widget.trailing != null;
-
-  Widget get label {
-    return Baseline(
-      baseline: foregroundStyle.fontSize ?? 14,
-      baselineType: TextBaseline.alphabetic,
-      child: widget.label,
-    );
-  }
 
   void onTap() {
     widgetEvents.toggle(ButtonEvent.pressed, false);
@@ -427,6 +376,9 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
   @override
   void initState() {
     initWidgetEvents(widget.eventsController);
+    widgetEvents.toggle(ButtonEvent.indeterminate, widget.checked == null);
+    widgetEvents.toggle(ButtonEvent.selected, widget.checked == true);
+    widgetEvents.toggle(ButtonEvent.loading, widget.loading);
     widgetEvents.toggle(ButtonEvent.disabled, widget.disabled);
     setStyle();
     super.initState();
@@ -436,6 +388,9 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
   void didUpdateWidget(_ButtonRender oldWidget) {
     if (mounted) {
       updateWidgetEvents(oldWidget.eventsController, widget.eventsController);
+      widgetEvents.toggle(ButtonEvent.indeterminate, widget.checked == null);
+      widgetEvents.toggle(ButtonEvent.selected, widget.checked == true);
+      widgetEvents.toggle(ButtonEvent.loading, widget.loading);
       widgetEvents.toggle(ButtonEvent.disabled, widget.disabled);
       setStyle();
       super.didUpdateWidget(oldWidget);
@@ -444,63 +399,15 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
 
   @override
   void forEachTween(visitor) {
-    _containerHeightTween = visitor(
-      _containerHeightTween,
-      style.height ?? ButtonStyle.defaultHeight,
-      (value) => Tween<double>(begin: value),
-    ) as Tween<double>;
-
-    _containerRadiusTween = visitor(
-      _containerRadiusTween,
-      containerRadius,
-      (value) => BorderRadiusTween(begin: value),
-    ) as BorderRadiusTween?;
-
     _containerPaddingTween = visitor(
       _containerPaddingTween,
       containerPadding,
       (value) => EdgeInsetsGeometryTween(begin: value),
     ) as EdgeInsetsGeometryTween?;
 
-    _containerMarginTween = visitor(
-      _containerMarginTween,
-      containerMargin,
-      (value) => EdgeInsetsGeometryTween(begin: value),
-    ) as EdgeInsetsGeometryTween?;
-
-    _containerBorderTween = visitor(
-      _containerBorderTween,
-      containerBorder,
-      (value) => ShapeBorderTween(begin: value),
-    ) as ShapeBorderTween?;
-
-    _containerColorTween = visitor(
-      _containerColorTween,
-      backgroundColor,
-      (value) => ColorTween(begin: value),
-    ) as ColorTween?;
-
-    _containerShadowColorTween = visitor(
-      _containerShadowColorTween,
-      containerShadowColor,
-      (value) => ColorTween(begin: value),
-    ) as ColorTween?;
-
     _containerOverlayColorTween = visitor(
       _containerOverlayColorTween,
       style.overlayColor,
-      (value) => ColorTween(begin: value),
-    ) as ColorTween?;
-
-    _containerElevationTween = visitor(
-      _containerElevationTween,
-      style.elevation ?? 0.0,
-      (value) => Tween<double>(begin: value),
-    ) as Tween<double>;
-
-    _foregroundColorTween = visitor(
-      _foregroundColorTween,
-      foregroundColor,
       (value) => ColorTween(begin: value),
     ) as ColorTween?;
 
@@ -509,36 +416,11 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
       style.foregroundSpacing ?? ButtonStyle.defaultForegroundSpacing,
       (value) => Tween<double>(begin: value),
     ) as Tween<double>?;
-
-    _foregroundStyleTween = visitor(
-      _foregroundStyleTween,
-      foregroundStyle,
-      (value) => TextStyleTween(begin: value),
-    ) as TextStyleTween?;
-
-    _iconColorTween = visitor(
-      _iconColorTween,
-      iconColor,
-      (value) => ColorTween(begin: value),
-    ) as ColorTween?;
-
-    _iconSizeTween = visitor(
-      _iconSizeTween,
-      style.iconSize ?? ButtonStyle.defaultIconSize,
-      (value) => Tween<double>(begin: value),
-    ) as Tween<double>?;
-
-    _iconOpacityTween = visitor(
-      _iconOpacityTween,
-      style.iconOpacity,
-      (value) => Tween<double>(begin: value),
-    ) as Tween<double>?;
   }
 
   @override
   void didChangeWidgetEvents() {
     super.didChangeWidgetEvents();
-    // print('${widget.label.toString()} ${widgetEvents.value.toString()}');
     didUpdateWidget(widget);
   }
 
@@ -548,176 +430,67 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
       container: true,
       button: widget.canTap,
       enabled: widget.enabled,
-      child: _Tooltip(
-        message: widget.tooltip,
-        enabled: widget.canTap,
-        child: Padding(
-          padding: animatedContainerMargin,
-          child: Box(
-            color: animatedContainerColor,
-            clipBehavior: containerClipBehavior,
-            shape: animatedContainerBorder,
-            shadowColor: animatedContainerShadowColor,
-            elevation: animatedContainerElevation,
-            height: animatedContainerHeight,
-            child: _ButtonEvent(
-              enabled: widget.canTap,
-              autofocus: widget.autofocus,
-              focusNode: widget.focusNode,
-              splashFactory: widget.splashFactory,
-              overlayColor: animatedContainerOverlayColor,
-              splashColor: widget.splashColor,
-              onTap: onTap,
-              onTapCancel: onTapCancel,
-              onTapDown: onTapDown,
-              onHover: onHover,
-              onFocus: onFocus,
-              child: _ButtonForeground(
-                textStyle: animatedForegroundStyle,
-                iconTheme: IconThemeData(
-                  color: animatedIconColor,
-                  size: animatedIconSize,
-                  opacity: animatedIconOpacity,
-                ),
-                padding: animatedContainerPadding,
+      child: AnimatedBox(
+        curve: widget.curve,
+        duration: widget.duration,
+        tooltip: widget.canTap ? widget.tooltip : null,
+        color: backgroundColor,
+        clipBehavior: containerClipBehavior,
+        shape: containerShape,
+        borderSide: containerBorderSide,
+        borderRadius: containerBorderRadius,
+        shadowColor: containerShadowColor,
+        elevation: style.elevation,
+        margin: containerMargin,
+        width: containerWidth,
+        height: containerHeight,
+        child: Anchor(
+          padding: animatedContainerPadding,
+          disabled: !widget.canTap,
+          autofocus: widget.autofocus,
+          focusNode: widget.focusNode,
+          overlayColor: animatedContainerOverlayColor,
+          splashFactory: widget.splashFactory,
+          splashColor: widget.splashColor,
+          onTap: onTap,
+          onTapDown: onTapDown,
+          onTapCancel: onTapCancel,
+          onHover: onHover,
+          onFocus: onFocus,
+          child: AnimatedDefaultTextStyle(
+            curve: widget.curve,
+            duration: widget.duration,
+            style: foregroundStyle,
+            child: AnimatedIconTheme(
+              data: IconThemeData(
+                color: iconColor,
+                size: style.iconSize,
+                opacity: style.iconOpacity,
+              ),
+              child: Tile(
+                expanded: containerWidth == double.infinity,
                 spacing: animatedForegroundSpacing,
-                label: label,
-                leading: widget.leading,
-                trailing: widget.trailing,
+                leading: widget.leading != null
+                    ? DrivenWidget.evaluate(
+                        widget.leading!,
+                        widgetEvents.value,
+                      )
+                    : null,
+                trailing: widget.trailing != null
+                    ? DrivenWidget.evaluate(
+                        widget.trailing!,
+                        widgetEvents.value,
+                      )
+                    : null,
+                child: DrivenWidget.evaluate(
+                  widget.child,
+                  widgetEvents.value,
+                ),
               ),
             ),
           ),
         ),
       ),
     );
-  }
-}
-
-class _ButtonEvent extends StatelessWidget {
-  const _ButtonEvent({
-    Key? key,
-    required this.child,
-    required this.onTap,
-    required this.onTapDown,
-    required this.onTapCancel,
-    required this.onHover,
-    required this.onFocus,
-    this.overlayColor,
-    this.splashColor,
-    this.splashFactory,
-    this.focusNode,
-    this.autofocus = false,
-    this.enabled = true,
-  }) : super(key: key);
-
-  final Widget child;
-  final bool enabled;
-  final bool autofocus;
-  final FocusNode? focusNode;
-  final Color? overlayColor;
-  final Color? splashColor;
-  final InteractiveInkFeatureFactory? splashFactory;
-  final GestureTapCallback onTap;
-  final GestureTapCancelCallback onTapCancel;
-  final GestureTapDownCallback onTapDown;
-  final ValueChanged<bool> onHover;
-  final ValueChanged<bool> onFocus;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      type: MaterialType.transparency,
-      child: InkWell(
-        mouseCursor: MaterialStateMouseCursor.clickable,
-        overlayColor: MaterialStateProperty.all<Color?>(overlayColor),
-        canRequestFocus: enabled,
-        autofocus: autofocus,
-        focusNode: focusNode,
-        splashColor: splashColor,
-        splashFactory: splashFactory,
-        onTap: enabled ? onTap : null,
-        onTapCancel: enabled ? onTapCancel : null,
-        onTapDown: enabled ? onTapDown : null,
-        onHover: onHover,
-        onFocusChange: onFocus,
-        child: child,
-      ),
-    );
-  }
-}
-
-class _ButtonForeground extends StatelessWidget {
-  const _ButtonForeground({
-    Key? key,
-    required this.padding,
-    required this.textStyle,
-    required this.iconTheme,
-    required this.label,
-    this.leading,
-    this.trailing,
-    this.spacing = 0.0,
-  }) : super(key: key);
-
-  final EdgeInsetsGeometry padding;
-  final TextStyle textStyle;
-  final IconThemeData iconTheme;
-  final Widget label;
-  final Widget? leading;
-  final Widget? trailing;
-  final double spacing;
-
-  @override
-  Widget build(BuildContext context) {
-    // to keep the wrap spacing
-    const placeholder = SizedBox.square(dimension: 0);
-    return DefaultTextStyle(
-      style: textStyle,
-      overflow: TextOverflow.fade,
-      textAlign: TextAlign.start,
-      softWrap: false,
-      maxLines: 1,
-      child: IconTheme(
-        data: iconTheme,
-        child: Padding(
-          padding: padding,
-          child: Wrap(
-            direction: Axis.horizontal,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            alignment: WrapAlignment.center,
-            runAlignment: WrapAlignment.center,
-            spacing: spacing,
-            children: [
-              leading ?? placeholder,
-              label,
-              trailing ?? placeholder,
-            ].whereType<Widget>().toList(growable: false),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _Tooltip extends StatelessWidget {
-  const _Tooltip({
-    Key? key,
-    this.message,
-    this.enabled = true,
-    required this.child,
-  }) : super(key: key);
-
-  final String? message;
-  final bool enabled;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    if (enabled && message != null) {
-      return Tooltip(
-        message: message,
-        child: child,
-      );
-    }
-    return child;
   }
 }

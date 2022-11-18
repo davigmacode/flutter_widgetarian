@@ -5,6 +5,12 @@ import 'package:widgetarian/event.dart';
 abstract class ButtonEvent extends WidgetEvent {
   const ButtonEvent(String value) : super(value);
 
+  /// The event when this widget has been selected.
+  static const selected = WidgetEvent.selected;
+
+  /// The state when this item has been indeterminate.
+  static const indeterminate = WidgetEvent.indeterminate;
+
   /// The state when this widget is disabled and cannot be interacted with.
   ///
   /// Disabled widgets should not respond to hover, focus, press, or drag
@@ -23,24 +29,42 @@ abstract class ButtonEvent extends WidgetEvent {
   /// The state when the user is actively pressing down on the given widget.
   static const pressed = WidgetEvent.pressed;
 
+  /// The state when the user is actively pressing down on the given widget.
+  static const loading = WidgetEvent.loading;
+
   /// Checker for whether events considers [ButtonEvent.disabled] to be active.
   static bool isDisabled(Set<WidgetEvent> events) {
-    return events.contains(ButtonEvent.disabled);
+    return events.contains(disabled);
   }
 
   /// Checker for whether events considers [ButtonEvent.hovered] to be active.
   static bool isHovered(Set<WidgetEvent> events) {
-    return events.contains(ButtonEvent.hovered);
+    return events.contains(hovered);
   }
 
   /// Checker for whether events considers [ButtonEvent.focused] to be active.
   static bool isFocused(Set<WidgetEvent> events) {
-    return events.contains(ButtonEvent.focused);
+    return events.contains(focused);
   }
 
   /// Checker for whether events considers [ButtonEvent.pressed] to be active.
   static bool isPressed(Set<WidgetEvent> events) {
-    return events.contains(ButtonEvent.pressed);
+    return events.contains(pressed);
+  }
+
+  /// Checker for whether events considers [ButtonEvent.loading] to be active.
+  static bool isLoading(Set<WidgetEvent> events) {
+    return events.contains(loading);
+  }
+
+  /// Checker for whether events considers [ButtonEvent.selected] to be active.
+  static bool isSelected(Set<WidgetEvent> events) {
+    return events.contains(selected);
+  }
+
+  /// Checker for whether events considers [ButtonEvent.indeterminate] to be active.
+  static bool isIndeterminate(Set<WidgetEvent> events) {
+    return events.contains(indeterminate);
   }
 }
 

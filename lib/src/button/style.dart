@@ -1,11 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/event.dart';
-import 'package:widgetarian/colors.dart';
+import 'package:widgetarian/utils.dart';
 import 'event.dart';
 
 /// Default button's style.
 class ButtonStyle {
   const ButtonStyle({
+    this.width,
     this.height,
     this.margin,
     this.padding,
@@ -27,6 +28,7 @@ class ButtonStyle {
     this.borderWidth,
     this.borderRadius,
     this.borderStyle,
+    this.shape,
     this.iconColor,
     this.iconOpacity,
     this.iconSize,
@@ -34,7 +36,8 @@ class ButtonStyle {
 
   /// Create a button's style from another style
   ButtonStyle.from(ButtonStyle? other)
-      : height = other?.height,
+      : width = other?.width,
+        height = other?.height,
         margin = other?.margin,
         padding = other?.padding,
         clipBehavior = other?.clipBehavior,
@@ -55,6 +58,7 @@ class ButtonStyle {
         borderWidth = other?.borderWidth,
         borderRadius = other?.borderRadius,
         borderStyle = other?.borderStyle,
+        shape = other?.shape,
         iconColor = other?.iconColor,
         iconOpacity = other?.iconOpacity,
         iconSize = other?.iconSize;
@@ -91,19 +95,19 @@ class ButtonStyle {
   }) {
     return ButtonStyle.driven((events) {
       return (enabled ?? const ButtonStyle())
-          .merge(ButtonEvent.isDisabled(events)
-              ? evaluate(disabled, events)
-              : null)
           .merge(
               ButtonEvent.isFocused(events) ? evaluate(focused, events) : null)
           .merge(
               ButtonEvent.isHovered(events) ? evaluate(hovered, events) : null)
           .merge(
-              ButtonEvent.isPressed(events) ? evaluate(pressed, events) : null);
+              ButtonEvent.isPressed(events) ? evaluate(pressed, events) : null)
+          .merge(ButtonEvent.isDisabled(events)
+              ? evaluate(disabled, events)
+              : null);
     });
   }
 
-  /// Create button's style with default value for toned style.
+  /// Create button's style with default value for flat style.
   ///
   /// The [disabledStyle] style to be merged,
   /// when events includes [ButtonEvent.disabled].
@@ -116,7 +120,8 @@ class ButtonStyle {
   ///
   /// The [pressedStyle] style to be merged,
   /// when events includes [ButtonEvent.pressed].
-  factory ButtonStyle.toned({
+  factory ButtonStyle.flat({
+    double? width,
     double? height,
     EdgeInsetsGeometry? margin,
     EdgeInsetsGeometry? padding,
@@ -130,21 +135,20 @@ class ButtonStyle {
     int? foregroundAlpha,
     double? foregroundSpacing,
     Color? backgroundColor,
-    double? backgroundOpacity = .12,
+    double? backgroundOpacity = 0,
     int? backgroundAlpha,
     Color? borderColor,
-    double? borderOpacity = 1,
+    double? borderOpacity,
     int? borderAlpha,
-    double? borderWidth = 1,
-    BorderRadiusGeometry? borderRadius,
+    double? borderWidth,
+    BorderRadius? borderRadius,
     BorderStyle? borderStyle = BorderStyle.none,
+    BoxShape? shape,
     Color? iconColor,
     double? iconOpacity,
     double? iconSize,
     ButtonStyle? disabledStyle = const ButtonStyle(
       foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
-      backgroundAlpha: ButtonStyle.disabledBackgroundAlpha,
-      borderAlpha: ButtonStyle.disabledBorderAlpha,
     ),
     ButtonStyle? hoveredStyle,
     ButtonStyle? focusedStyle,
@@ -152,6 +156,7 @@ class ButtonStyle {
   }) {
     return ButtonStyle.when(
       enabled: ButtonStyle(
+        width: width,
         height: height,
         margin: margin,
         padding: padding,
@@ -173,6 +178,92 @@ class ButtonStyle {
         borderWidth: borderWidth,
         borderRadius: borderRadius,
         borderStyle: borderStyle,
+        shape: shape,
+        iconColor: iconColor,
+        iconOpacity: iconOpacity,
+        iconSize: iconSize,
+      ),
+      disabled: disabledStyle,
+      hovered: hoveredStyle,
+      focused: focusedStyle,
+      pressed: pressedStyle,
+    );
+  }
+
+  /// Create button's style with default value for toned style.
+  ///
+  /// The [disabledStyle] style to be merged,
+  /// when events includes [ButtonEvent.disabled].
+  ///
+  /// The [hoveredStyle] style to be merged,
+  /// when events includes [ButtonEvent.hovered].
+  ///
+  /// The [focusedStyle] style to be merged,
+  /// when events includes [ButtonEvent.focused].
+  ///
+  /// The [pressedStyle] style to be merged,
+  /// when events includes [ButtonEvent.pressed].
+  factory ButtonStyle.toned({
+    double? width,
+    double? height,
+    EdgeInsetsGeometry? margin,
+    EdgeInsetsGeometry? padding,
+    Clip? clipBehavior,
+    Color? overlayColor,
+    Color? shadowColor,
+    double? elevation,
+    TextStyle? foregroundStyle,
+    Color? foregroundColor,
+    double? foregroundOpacity,
+    int? foregroundAlpha,
+    double? foregroundSpacing,
+    Color? backgroundColor,
+    double? backgroundOpacity = .12,
+    int? backgroundAlpha,
+    Color? borderColor,
+    double? borderOpacity = 1,
+    int? borderAlpha,
+    double? borderWidth = 1,
+    BorderRadius? borderRadius,
+    BorderStyle? borderStyle = BorderStyle.none,
+    BoxShape? shape,
+    Color? iconColor,
+    double? iconOpacity,
+    double? iconSize,
+    ButtonStyle? disabledStyle = const ButtonStyle(
+      foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
+      backgroundAlpha: ButtonStyle.disabledBackgroundAlpha,
+      borderAlpha: ButtonStyle.disabledBorderAlpha,
+    ),
+    ButtonStyle? hoveredStyle,
+    ButtonStyle? focusedStyle,
+    ButtonStyle? pressedStyle,
+  }) {
+    return ButtonStyle.when(
+      enabled: ButtonStyle(
+        width: width,
+        height: height,
+        margin: margin,
+        padding: padding,
+        clipBehavior: clipBehavior,
+        overlayColor: overlayColor,
+        shadowColor: shadowColor,
+        elevation: elevation,
+        foregroundStyle: foregroundStyle,
+        foregroundColor: foregroundColor,
+        foregroundOpacity: foregroundOpacity,
+        foregroundAlpha: foregroundAlpha,
+        foregroundSpacing: foregroundSpacing,
+        backgroundColor: backgroundColor,
+        backgroundOpacity: backgroundOpacity,
+        backgroundAlpha: backgroundAlpha,
+        borderColor: borderColor,
+        borderOpacity: borderOpacity,
+        borderAlpha: borderAlpha,
+        borderWidth: borderWidth,
+        borderRadius: borderRadius,
+        borderStyle: borderStyle,
+        shape: shape,
         iconColor: iconColor,
         iconOpacity: iconOpacity,
         iconSize: iconSize,
@@ -199,6 +290,7 @@ class ButtonStyle {
   /// when events includes [ButtonEvent.pressed].
   factory ButtonStyle.filled({
     Color? color,
+    double? width,
     double? height,
     EdgeInsetsGeometry? margin,
     EdgeInsetsGeometry? padding,
@@ -216,8 +308,9 @@ class ButtonStyle {
     double? borderOpacity = 0,
     int? borderAlpha,
     double? borderWidth = 0,
-    BorderRadiusGeometry? borderRadius,
+    BorderRadius? borderRadius,
     BorderStyle? borderStyle = BorderStyle.none,
+    BoxShape? shape,
     Color? iconColor,
     double? iconOpacity,
     double? iconSize,
@@ -236,6 +329,7 @@ class ButtonStyle {
       enabled: ButtonStyle(
         backgroundColor: color,
         borderColor: color,
+        width: width,
         height: height,
         margin: margin,
         padding: padding,
@@ -255,6 +349,7 @@ class ButtonStyle {
         borderWidth: borderWidth,
         borderRadius: borderRadius,
         borderStyle: borderStyle,
+        shape: shape,
         iconColor: iconColor,
         iconOpacity: iconOpacity,
         iconSize: iconSize,
@@ -281,6 +376,7 @@ class ButtonStyle {
   /// when events includes [ButtonEvent.pressed].
   factory ButtonStyle.outlined({
     Color? color,
+    double? width,
     double? height,
     EdgeInsetsGeometry? margin,
     EdgeInsetsGeometry? padding,
@@ -298,8 +394,9 @@ class ButtonStyle {
     double? borderOpacity = 1,
     int? borderAlpha,
     double? borderWidth = 1,
-    BorderRadiusGeometry? borderRadius,
+    BorderRadius? borderRadius,
     BorderStyle? borderStyle = BorderStyle.solid,
+    BoxShape? shape,
     Color? iconColor,
     double? iconOpacity,
     double? iconSize,
@@ -315,6 +412,7 @@ class ButtonStyle {
       enabled: ButtonStyle(
         borderColor: color,
         foregroundColor: color,
+        width: width,
         height: height,
         margin: margin,
         padding: padding,
@@ -334,6 +432,7 @@ class ButtonStyle {
         borderWidth: borderWidth,
         borderRadius: borderRadius,
         borderStyle: borderStyle,
+        shape: shape,
         iconColor: iconColor,
         iconOpacity: iconOpacity,
         iconSize: iconSize,
@@ -370,6 +469,9 @@ class ButtonStyle {
   static const colorTransparent = Color(0x00000000);
   static const colorBlack = Color(0xFF000000);
   static const colorWhite = Color(0xFFFFFFFF);
+
+  /// If non-null, requires the child to have exactly this width.
+  final double? width;
 
   /// Defaults to [ButtonStyle.defaultHeight]
   final double? height;
@@ -445,13 +547,16 @@ class ButtonStyle {
   final double? borderWidth;
 
   /// The radii for each corner of the button's border.
-  final BorderRadiusGeometry? borderRadius;
+  final BorderRadius? borderRadius;
 
   /// The style of this side of the button's border.
   ///
   /// To omit a side, set [borderStyle] to [BorderStyle.none].
   /// This skips painting the border, but the border still has a [borderWidth].
   final BorderStyle? borderStyle;
+
+  /// The type of shape.
+  final BoxShape? shape;
 
   /// Color to be used for the icon's inside the button.
   final Color? iconColor;
@@ -499,6 +604,7 @@ class ButtonStyle {
   /// Creates a copy of this [ButtonStyle] but with
   /// the given fields replaced with the new values.
   ButtonStyle copyWith({
+    double? width,
     double? height,
     EdgeInsetsGeometry? margin,
     EdgeInsetsGeometry? padding,
@@ -518,8 +624,9 @@ class ButtonStyle {
     double? borderOpacity,
     int? borderAlpha,
     double? borderWidth,
-    BorderRadiusGeometry? borderRadius,
+    BorderRadius? borderRadius,
     BorderStyle? borderStyle,
+    BoxShape? shape,
     Color? iconColor,
     double? iconOpacity,
     double? iconSize,
@@ -533,6 +640,7 @@ class ButtonStyle {
         focusedStyle != null ||
         pressedStyle != null;
     final style = ButtonStyle(
+      width: width ?? this.width,
       height: height ?? this.height,
       margin: margin ?? this.margin,
       padding: padding ?? this.padding,
@@ -554,6 +662,7 @@ class ButtonStyle {
       borderWidth: borderWidth ?? this.borderWidth,
       borderRadius: borderRadius ?? this.borderRadius,
       borderStyle: borderStyle ?? this.borderStyle,
+      shape: shape ?? this.shape,
       iconColor: iconColor ?? this.iconColor,
       iconOpacity: iconOpacity ?? this.iconOpacity,
       iconSize: iconSize ?? this.iconSize,
@@ -576,6 +685,7 @@ class ButtonStyle {
     if (other == null) return this;
 
     return copyWith(
+      width: other.width,
       height: other.height,
       margin: other.margin,
       padding: other.padding,
@@ -597,6 +707,7 @@ class ButtonStyle {
       borderWidth: other.borderWidth,
       borderRadius: other.borderRadius,
       borderStyle: other.borderStyle,
+      shape: other.shape,
       iconColor: other.iconColor,
       iconOpacity: other.iconOpacity,
       iconSize: other.iconSize,
