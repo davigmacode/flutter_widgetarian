@@ -45,19 +45,28 @@ class _AvatarGroupUsageState extends State<AvatarGroupUsage> {
                       width: _width,
                       child: StackedGroup(
                         minCoverage: 0.5,
-                        maxCoverage: 0.9,
+                        maxCoverage: 0.8,
                         align: StackedAlign.center,
+                        itemLead: 3,
                         itemSize: const Size.square(44),
-                        itemMax: 10,
-                        itemLength: 50,
+                        // itemLimit: 10,
+                        itemLength: 15,
                         itemBuilder: (context, i) {
                           return Box(
                             shape: BoxShape.circle,
                             color: Colors.white,
                             padding: const EdgeInsets.all(2.0),
                             child: Avatar(
+                              style: const AvatarStyle(
+                                size: 40,
+                                foregroundStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
                               image:
                                   NetworkImage('https://i.pravatar.cc/50?u=$i'),
+                              child: Text(i.toString()),
                             ),
                           );
                         },
@@ -81,11 +90,15 @@ class _AvatarGroupUsageState extends State<AvatarGroupUsage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Slider(
-                      value: _width,
-                      min: _minWidth,
-                      max: _maxWidth,
-                      onChanged: _setWidth,
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Slider(
+                          value: _width,
+                          min: constraints.minWidth,
+                          max: constraints.maxWidth,
+                          onChanged: _setWidth,
+                        );
+                      },
                     )
                   ],
                 ),

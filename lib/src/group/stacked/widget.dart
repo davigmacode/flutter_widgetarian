@@ -15,7 +15,8 @@ class StackedGroup extends StatelessWidget {
     this.align = StackedAlign.center,
     this.minCoverage = .5,
     this.maxCoverage = .9,
-    this.itemMax,
+    this.itemLead = -1,
+    this.itemLimit,
     required this.itemSize,
     required this.itemLength,
     required this.itemBuilder,
@@ -28,14 +29,31 @@ class StackedGroup extends StatelessWidget {
   final StackedAlign align;
   final double minCoverage;
   final double maxCoverage;
+  final int itemLead;
+  final int? itemLimit;
   final Size itemSize;
-  final int? itemMax;
   final int itemLength;
   final IndexedWidgetBuilder itemBuilder;
   final StackedInfoBuilder? infoBuilder;
 
   bool get isHorizontal => direction == Axis.horizontal;
   bool get isVertical => !isHorizontal;
+
+  List<Widget> _itemLayering(List<Widget> items, int lastIndex) {
+    // last on top
+    if (itemLead == -1 || itemLead >= lastIndex) return items;
+
+    // first on top
+    if (itemLead == 0) return items.reversed.toList();
+
+    // middle on top
+    final leftSide = items.getRange(0, itemLead);
+    final rightSide = items.getRange(itemLead, lastIndex);
+    return [
+      ...leftSide.toList(),
+      ...rightSide.toList().reversed.toList(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +72,9 @@ class StackedGroup extends StatelessWidget {
               isHorizontal ? constraints.maxWidth : constraints.maxHeight;
           final double allowedExtent = maxExtent - itemTrailExtent;
           final int itemAllowed = allowedExtent ~/ itemExtentMin;
-          final int itemLimit = itemMax ?? itemLength;
+          final int itemMax = itemLimit ?? itemLength;
           final int itemDisplay =
-              [itemAllowed, itemLength, itemLimit].reduce(min);
+              [itemAllowed, itemLength, itemMax].reduce(min);
           final int itemRemaining = itemLength - itemDisplay;
 
           final double takenSpace = itemDisplay * itemExtentMin;
@@ -74,10 +92,6 @@ class StackedGroup extends StatelessWidget {
                   ? freeSpaceAdjusted
                   : 0;
 
-          // print(maxExtent);
-          // print(takenSpaceAgain);
-          // print(itemSpace);
-
           final bool hasInfo = itemRemaining > 0 && infoBuilder != null;
           if (itemDisplay <= 0) return const SizedBox();
 
@@ -93,7 +107,7 @@ class StackedGroup extends StatelessWidget {
             growable: false,
           );
 
-          return Stack(children: children);
+          return Stack(children: _itemLayering(children, itemDisplay));
         },
       ),
     );
