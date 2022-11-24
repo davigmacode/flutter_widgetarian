@@ -1,9 +1,41 @@
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/tween.dart';
 
-class AnimatedIconTheme extends ImplicitlyAnimatedWidget {
-  /// Creates a widget that animates the icon theme data implicitly.
+class AnimatedIconTheme extends StatelessWidget {
   const AnimatedIconTheme({
+    Key? key,
+    this.curve = Curves.linear,
+    this.duration = const Duration(milliseconds: 200),
+    this.data,
+    required this.child,
+  }) : super(key: key);
+
+  /// The curve to apply when animating the parameters of this widget.
+  final Curve curve;
+
+  /// The duration over which to animate the parameters of this widget.
+  final Duration duration;
+
+  /// The color, opacity, and size to use for icons in this subtree.
+  final IconThemeData? data;
+
+  /// The widget below this widget in the tree.
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return _AnimatedIconTheme(
+      curve: curve,
+      duration: duration,
+      data: IconTheme.of(context).merge(data),
+      child: child,
+    );
+  }
+}
+
+class _AnimatedIconTheme extends ImplicitlyAnimatedWidget {
+  /// Creates a widget that animates the icon theme data implicitly.
+  const _AnimatedIconTheme({
     Key? key,
     Curve curve = Curves.linear,
     Duration duration = const Duration(milliseconds: 200),
@@ -17,19 +49,16 @@ class AnimatedIconTheme extends ImplicitlyAnimatedWidget {
           onEnd: onEnd,
         );
 
-  /// The widget below this widget in the tree.
+  final IconThemeData data;
   final Widget child;
 
-  /// The color, opacity, and size to use for icons in this subtree.
-  final IconThemeData data;
-
   @override
-  AnimatedWidgetBaseState<AnimatedIconTheme> createState() =>
+  AnimatedWidgetBaseState<_AnimatedIconTheme> createState() =>
       _AnimatedIconThemeState();
 }
 
 class _AnimatedIconThemeState
-    extends AnimatedWidgetBaseState<AnimatedIconTheme> {
+    extends AnimatedWidgetBaseState<_AnimatedIconTheme> {
   IconThemeDataTween? _dataTween;
 
   @override

@@ -6,6 +6,7 @@ class AnimatedTransform extends ImplicitlyAnimatedWidget {
     Key? key,
     Duration duration = const Duration(milliseconds: 200),
     Curve curve = Curves.linear,
+    this.scale,
     this.rotation,
     this.flipX = false,
     this.flipY = false,
@@ -17,6 +18,7 @@ class AnimatedTransform extends ImplicitlyAnimatedWidget {
         );
 
   final Widget child;
+  final double? scale;
   final double? rotation;
   final bool flipX;
   final bool flipY;
@@ -27,41 +29,65 @@ class AnimatedTransform extends ImplicitlyAnimatedWidget {
 
 class AnimatedTransformState
     extends AnimatedWidgetBaseState<AnimatedTransform> {
-  ColorTween? color;
-  Tween<double?>? size;
-  Tween<double>? rotateZ;
-  Tween<double>? rotateX;
-  Tween<double>? rotateY;
+  Tween<double>? tweenScale;
+  Tween<double>? tweenRotateX;
+  Tween<double>? tweenRotateY;
+  Tween<double>? tweenRotateZ;
 
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
-    rotateZ = visitor(
-      rotateZ,
-      widget.rotation ?? 0.0,
+    tweenScale = visitor(
+      tweenScale,
+      widget.scale ?? 1.0,
       (dynamic value) => Tween<double>(begin: value),
     ) as Tween<double>?;
 
-    rotateX = visitor(
-      rotateX,
+    tweenRotateX = visitor(
+      tweenRotateX,
       widget.flipY ? math.pi : 0.0,
       (dynamic value) => Tween<double>(begin: value),
     ) as Tween<double>?;
 
-    rotateY = visitor(
-      rotateY,
+    tweenRotateY = visitor(
+      tweenRotateY,
       widget.flipX ? math.pi : 0.0,
+      (dynamic value) => Tween<double>(begin: value),
+    ) as Tween<double>?;
+
+    tweenRotateZ = visitor(
+      tweenRotateZ,
+      widget.rotation ?? 0.0,
       (dynamic value) => Tween<double>(begin: value),
     ) as Tween<double>?;
   }
 
   @override
   Widget build(BuildContext context) {
+    final transform = Matrix4.identity();
+    final scale = tweenScale?.evaluate(animation);
+    final rotateX = tweenRotateX?.evaluate(animation);
+    final rotateY = tweenRotateY?.evaluate(animation);
+    final rotateZ = tweenRotateZ?.evaluate(animation);
+
+    if (scale != null) {
+      transform.scale(scale);
+    }
+
+    if (rotateX != null) {
+      transform.rotateX(rotateX);
+    }
+
+    if (rotateY != null) {
+      transform.rotateY(rotateY);
+    }
+
+    if (rotateZ != null) {
+      transform.rotateZ(radians(rotateZ));
+    }
+
     return Transform(
       alignment: Alignment.center,
-      transform: Matrix4.identity()
-        ..rotateX(rotateX?.evaluate(animation) ?? 0)
-        ..rotateY(rotateY?.evaluate(animation) ?? 0)
-        ..rotateZ(radians(rotateZ?.evaluate(animation) ?? 0)),
+      transform: transform,
       child: widget.child,
     );
   }
