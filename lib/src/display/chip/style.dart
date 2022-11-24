@@ -111,12 +111,11 @@ class ChipStyle {
       return (enabled ?? const ChipStyle())
           .merge(
               ChipEvent.isSelected(events) ? evaluate(selected, events) : null)
-          .merge(
-              ChipEvent.isDisabled(events) ? evaluate(disabled, events) : null)
-          .merge(ChipEvent.isHovered(events) ? evaluate(hovered, events) : null)
           .merge(ChipEvent.isFocused(events) ? evaluate(focused, events) : null)
+          .merge(ChipEvent.isHovered(events) ? evaluate(hovered, events) : null)
+          .merge(ChipEvent.isPressed(events) ? evaluate(pressed, events) : null)
           .merge(
-              ChipEvent.isPressed(events) ? evaluate(pressed, events) : null);
+              ChipEvent.isDisabled(events) ? evaluate(disabled, events) : null);
     });
   }
 

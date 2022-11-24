@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart'
-    show Theme, ThemeData, InteractiveInkFeatureFactory, Brightness;
+import 'package:flutter/material.dart' show Theme, ThemeData, Brightness;
 
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/feedback.dart';
@@ -23,8 +22,6 @@ class Checkbox extends StatelessWidget {
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
-    this.splashColor,
-    this.splashFactory,
     this.eventsController,
     this.curve = defaultCurve,
     this.duration = defaultDuration,
@@ -121,15 +118,6 @@ class Checkbox extends StatelessWidget {
   /// will attach/detach and reparent the node when needed.
   final FocusNode? focusNode;
 
-  /// The splash color of the ink response. If this property is null then the
-  /// splash color of the theme, [ThemeData.splashColor], will be used.
-  final Color? splashColor;
-
-  /// Defines the appearance of the splash.
-  ///
-  /// Defaults to the value of the theme's splash factory: [ThemeData.splashFactory].
-  final InteractiveInkFeatureFactory? splashFactory;
-
   /// The style to be applied to the chip.
   ///
   /// If [style] is an event driven [CheckboxStyle]
@@ -179,6 +167,8 @@ class Checkbox extends StatelessWidget {
         backgroundColor: color,
         borderStyle: BorderStyle.none,
       ),
+      hovered: const CheckboxStyle(overlayRadius: 20.0),
+      pressed: const CheckboxStyle(overlayRadius: 0.0),
       disabled: const CheckboxStyle(
         backgroundAlpha: CheckboxStyle.disabledBackgroundAlpha,
         borderAlpha: CheckboxStyle.disabledBorderAlpha,
@@ -197,8 +187,6 @@ class Checkbox extends StatelessWidget {
       disabled: disabled,
       autofocus: autofocus,
       focusNode: focusNode,
-      splashColor: splashColor,
-      splashFactory: splashFactory,
       eventsController: eventsController,
       duration: duration,
       curve: curve,
@@ -219,8 +207,6 @@ class _CheckboxRender extends StatefulWidget {
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
-    this.splashColor,
-    this.splashFactory,
     this.onChanged,
     this.eventsController,
     this.duration = Checkbox.defaultDuration,
@@ -236,8 +222,6 @@ class _CheckboxRender extends StatefulWidget {
   final bool disabled;
   final bool autofocus;
   final FocusNode? focusNode;
-  final Color? splashColor;
-  final InteractiveInkFeatureFactory? splashFactory;
   final ValueChanged<bool>? onChanged;
   final CheckboxEventController? eventsController;
   final Duration duration;
@@ -391,9 +375,12 @@ class _CheckboxRenderState extends State<_CheckboxRender>
 
     return Anchor(
       shape: BoxShape.circle,
-      useMaterial: false,
-      radius: 20,
+      overlayColor: style.overlayColor,
+      radius: style.overlayRadius,
       onTap: onTap,
+      onTapDown: onTapDown,
+      onTapCancel: onTapCancel,
+      onHover: onHover,
       child: checkmark,
     );
   }

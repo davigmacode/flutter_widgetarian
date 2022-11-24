@@ -1,12 +1,11 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart'
-    show Theme, ThemeData, InteractiveInkFeatureFactory, Brightness;
+import 'package:flutter/material.dart' show Theme, ThemeData, Brightness;
 
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/feedback.dart';
 import 'package:widgetarian/utils.dart';
 import 'package:widgetarian/button.dart';
-import 'package:widgetarian/src/anchor/widget.dart';
+import 'package:widgetarian/anchor.dart';
 import 'style.dart';
 import 'event.dart';
 
@@ -21,8 +20,6 @@ class Radio extends StatelessWidget {
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
-    this.splashColor,
-    this.splashFactory,
     this.onChanged,
     this.eventsController,
     this.curve = Radio.defaultCurve,
@@ -68,15 +65,6 @@ class Radio extends StatelessWidget {
   /// on the focus node when it is done with it, but this widget
   /// will attach/detach and reparent the node when needed.
   final FocusNode? focusNode;
-
-  /// The splash color of the ink response. If this property is null then the
-  /// splash color of the theme, [ThemeData.splashColor], will be used.
-  final Color? splashColor;
-
-  /// Defines the appearance of the splash.
-  ///
-  /// Defaults to the value of the theme's splash factory: [ThemeData.splashFactory].
-  final InteractiveInkFeatureFactory? splashFactory;
 
   /// Called when the chip should change between selected and de-selected
   /// states.
@@ -161,18 +149,21 @@ class Radio extends StatelessWidget {
         isDark ? theme.colorScheme.inversePrimary : theme.colorScheme.primary;
     return RadioStyle.when(
       enabled: const RadioStyle(
-          size: RadioStyle.defaultSize,
-          padding: 1,
-          thumbColor: Colors.transparent,
-          borderWidth: RadioStyle.defaultBorderWidth,
-          borderStyle: RadioStyle.defaultBorderStyle,
-          borderRadius: RadioStyle.defaultBorderRadius,
-          borderShape: BoxShape.circle),
+        padding: 1,
+        size: RadioStyle.defaultSize,
+        thumbColor: Colors.transparent,
+        borderWidth: RadioStyle.defaultBorderWidth,
+        borderStyle: RadioStyle.defaultBorderStyle,
+        borderRadius: RadioStyle.defaultBorderRadius,
+        borderShape: BoxShape.circle,
+      ),
       selected: RadioStyle(
         borderColor: color,
         thumbColor: color,
         padding: .45,
       ),
+      hovered: const RadioStyle(overlayRadius: 20.0),
+      pressed: const RadioStyle(overlayRadius: 0.0),
       disabled: const RadioStyle(
         fillAlpha: RadioStyle.disabledBackgroundAlpha,
         borderAlpha: RadioStyle.disabledBorderAlpha,
@@ -190,8 +181,6 @@ class Radio extends StatelessWidget {
       disabled: disabled,
       autofocus: autofocus,
       focusNode: focusNode,
-      splashColor: splashColor,
-      splashFactory: splashFactory,
       eventsController: eventsController,
       duration: duration,
       curve: curve,
@@ -212,8 +201,6 @@ class _RadioRender extends StatefulWidget {
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
-    this.splashColor,
-    this.splashFactory,
     this.eventsController,
     this.duration = Radio.defaultDuration,
     this.curve = Radio.defaultCurve,
@@ -227,8 +214,6 @@ class _RadioRender extends StatefulWidget {
   final bool disabled;
   final bool autofocus;
   final FocusNode? focusNode;
-  final Color? splashColor;
-  final InteractiveInkFeatureFactory? splashFactory;
   final ValueChanged<bool>? onChanged;
   final RadioEventController? eventsController;
   final Duration duration;
@@ -379,9 +364,12 @@ class _RadioRenderState extends State<_RadioRender>
 
     return Anchor(
       shape: BoxShape.circle,
-      useMaterial: false,
-      radius: 20,
+      overlayColor: style.overlayColor,
+      radius: style.overlayRadius,
       onTap: onTap,
+      onTapDown: onTapDown,
+      onTapCancel: onTapCancel,
+      onHover: onHover,
       child: radiomark,
     );
   }

@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/button.dart';
 import 'package:widgetarian/event.dart';
-import 'package:widgetarian/feedback.dart';
 import 'event.dart';
 
 /// Default radio's style.
@@ -22,6 +21,8 @@ class RadioStyle {
     this.thumbColor,
     this.thumbOpacity,
     this.thumbAlpha,
+    this.overlayColor,
+    this.overlayRadius,
     this.buttonStyle,
   });
 
@@ -42,6 +43,8 @@ class RadioStyle {
         thumbColor = other?.thumbColor,
         thumbOpacity = other?.thumbOpacity,
         thumbAlpha = other?.thumbAlpha,
+        overlayColor = other?.overlayColor,
+        overlayRadius = other?.overlayRadius,
         buttonStyle = other?.buttonStyle;
 
   /// Create an event driven checkbox's style using [callback].
@@ -159,6 +162,10 @@ class RadioStyle {
   /// Alpha to be apply to [fillColor].
   final int? thumbAlpha;
 
+  final Color? overlayColor;
+
+  final double? overlayRadius;
+
   final ButtonStyle? buttonStyle;
 
   /// Creates a copy of this [RadioStyle] but with
@@ -179,6 +186,8 @@ class RadioStyle {
     Color? thumbColor,
     double? thumbOpacity,
     int? thumbAlpha,
+    Color? overlayColor,
+    double? overlayRadius,
     ButtonStyle? buttonStyle,
     RadioStyle? selectedStyle,
     RadioStyle? focusedStyle,
@@ -207,6 +216,8 @@ class RadioStyle {
       thumbColor: thumbColor ?? this.thumbColor,
       thumbOpacity: thumbOpacity ?? this.thumbOpacity,
       thumbAlpha: thumbAlpha ?? this.thumbAlpha,
+      overlayColor: overlayColor ?? this.overlayColor,
+      overlayRadius: overlayRadius ?? this.overlayRadius,
       buttonStyle: buttonStyle ?? this.buttonStyle,
     );
     return hasEvent
@@ -243,6 +254,8 @@ class RadioStyle {
       thumbColor: other.thumbColor,
       thumbOpacity: other.thumbOpacity,
       thumbAlpha: other.thumbAlpha,
+      overlayColor: other.overlayColor,
+      overlayRadius: other.overlayRadius,
       buttonStyle: other.buttonStyle,
       selectedStyle:
           other is _RadioStyle ? evaluate(other, {RadioEvent.selected}) : null,

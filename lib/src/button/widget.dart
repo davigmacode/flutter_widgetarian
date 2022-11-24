@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart'
-    show Theme, ThemeData, InteractiveInkFeatureFactory;
+import 'package:flutter/material.dart' show Theme, ThemeData;
 
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/layout.dart';
@@ -25,8 +24,6 @@ class Button extends StatelessWidget {
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
-    this.splashColor,
-    this.splashFactory,
     this.onPressed,
     this.eventsController,
     this.curve = Curves.linear,
@@ -79,15 +76,6 @@ class Button extends StatelessWidget {
   /// on the focus node when it is done with it, but this widget
   /// will attach/detach and reparent the node when needed.
   final FocusNode? focusNode;
-
-  /// The splash color of the ink response. If this property is null then the
-  /// splash color of the theme, [ThemeData.splashColor], will be used.
-  final Color? splashColor;
-
-  /// Defines the appearance of the splash.
-  ///
-  /// Defaults to the value of the theme's splash factory: [ThemeData.splashFactory].
-  final InteractiveInkFeatureFactory? splashFactory;
 
   /// Called when the user taps the chip.
   ///
@@ -152,8 +140,6 @@ class Button extends StatelessWidget {
       disabled: disabled,
       autofocus: autofocus,
       focusNode: focusNode,
-      splashColor: splashColor,
-      splashFactory: splashFactory,
       onPressed: onPressed,
       eventsController: eventsController,
       leading: leading,
@@ -178,8 +164,6 @@ class _ButtonRender extends ImplicitlyAnimatedWidget {
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
-    this.splashColor,
-    this.splashFactory,
     this.onPressed,
     this.eventsController,
     required this.theme,
@@ -200,8 +184,6 @@ class _ButtonRender extends ImplicitlyAnimatedWidget {
   final bool disabled;
   final bool autofocus;
   final FocusNode? focusNode;
-  final Color? splashColor;
-  final InteractiveInkFeatureFactory? splashFactory;
   final VoidCallback? onPressed;
   final ButtonStyle style;
   final ButtonEventController? eventsController;
@@ -450,8 +432,6 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
           autofocus: widget.autofocus,
           focusNode: widget.focusNode,
           overlayColor: animatedContainerOverlayColor,
-          splashFactory: widget.splashFactory,
-          splashColor: widget.splashColor,
           onTap: onTap,
           onTapDown: onTapDown,
           onTapCancel: onTapCancel,

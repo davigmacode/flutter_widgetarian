@@ -21,6 +21,8 @@ class CheckboxStyle {
     this.strokeColor,
     this.strokeWidth,
     this.strokeStyle,
+    this.overlayColor,
+    this.overlayRadius,
     this.buttonStyle,
   });
 
@@ -40,6 +42,8 @@ class CheckboxStyle {
         strokeColor = other?.strokeColor,
         strokeWidth = other?.strokeWidth,
         strokeStyle = other?.strokeStyle,
+        overlayColor = other?.overlayColor,
+        overlayRadius = other?.overlayRadius,
         buttonStyle = other?.buttonStyle;
 
   /// Create an event driven checkbox's style using [callback].
@@ -165,6 +169,10 @@ class CheckboxStyle {
   /// Defaults to [ChipCheckmarkStyle.sharp].
   final StrokeStyle? strokeStyle;
 
+  final Color? overlayColor;
+
+  final double? overlayRadius;
+
   final ButtonStyle? buttonStyle;
 
   /// Creates a copy of this [CheckboxStyle] but with
@@ -184,6 +192,8 @@ class CheckboxStyle {
     Color? strokeColor,
     double? strokeWidth,
     StrokeStyle? strokeStyle,
+    Color? overlayColor,
+    double? overlayRadius,
     ButtonStyle? buttonStyle,
     CheckboxStyle? selectedStyle,
     CheckboxStyle? indeterminateStyle,
@@ -213,6 +223,8 @@ class CheckboxStyle {
       strokeColor: strokeColor ?? this.strokeColor,
       strokeWidth: strokeWidth ?? this.strokeWidth,
       strokeStyle: strokeStyle ?? this.strokeStyle,
+      overlayColor: overlayColor ?? this.overlayColor,
+      overlayRadius: overlayRadius ?? this.overlayRadius,
       buttonStyle: buttonStyle ?? this.buttonStyle,
     );
     return hasEvent
@@ -249,6 +261,8 @@ class CheckboxStyle {
       strokeColor: other.strokeColor,
       strokeWidth: other.strokeWidth,
       strokeStyle: other.strokeStyle,
+      overlayColor: other.overlayColor,
+      overlayRadius: other.overlayRadius,
       buttonStyle: other.buttonStyle,
       selectedStyle: other is _CheckboxStyle
           ? evaluate(other, {CheckboxEvent.selected})

@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart'
-    show Theme, ThemeData, InteractiveInkFeatureFactory, Brightness;
+import 'package:flutter/material.dart' show Theme, ThemeData, Brightness;
 
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/feedback.dart';
@@ -22,8 +21,6 @@ class Switch extends StatelessWidget {
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
-    this.splashColor,
-    this.splashFactory,
     this.eventsController,
     this.curve = Curves.linear,
     this.duration = defaultDuration,
@@ -120,15 +117,6 @@ class Switch extends StatelessWidget {
   /// will attach/detach and reparent the node when needed.
   final FocusNode? focusNode;
 
-  /// The splash color of the ink response. If this property is null then the
-  /// splash color of the theme, [ThemeData.splashColor], will be used.
-  final Color? splashColor;
-
-  /// Defines the appearance of the splash.
-  ///
-  /// Defaults to the value of the theme's splash factory: [ThemeData.splashFactory].
-  final InteractiveInkFeatureFactory? splashFactory;
-
   /// The style to be applied to the chip.
   ///
   /// If [style] is an event driven [SwitchStyle]
@@ -178,6 +166,9 @@ class Switch extends StatelessWidget {
       hovered: const SwitchStyle(
         overlayRadius: 20.0,
       ),
+      pressed: const SwitchStyle(
+        overlayRadius: 0.0,
+      ),
       disabled: const SwitchStyle(
         trackAlpha: SwitchStyle.disabledBackgroundAlpha,
         thumbAlpha: SwitchStyle.disabledBorderAlpha,
@@ -196,8 +187,6 @@ class Switch extends StatelessWidget {
       disabled: disabled,
       autofocus: autofocus,
       focusNode: focusNode,
-      splashColor: splashColor,
-      splashFactory: splashFactory,
       eventsController: eventsController,
       duration: duration,
       curve: curve,
@@ -218,8 +207,6 @@ class _SwitchRender extends StatefulWidget {
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
-    this.splashColor,
-    this.splashFactory,
     this.onChanged,
     this.eventsController,
     this.duration = Switch.defaultDuration,
@@ -235,8 +222,6 @@ class _SwitchRender extends StatefulWidget {
   final bool disabled;
   final bool autofocus;
   final FocusNode? focusNode;
-  final Color? splashColor;
-  final InteractiveInkFeatureFactory? splashFactory;
   final ValueChanged<bool>? onChanged;
   final SwitchEventController? eventsController;
   final Curve curve;

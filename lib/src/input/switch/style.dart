@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/button.dart';
 import 'package:widgetarian/event.dart';
-import 'package:widgetarian/feedback.dart';
 import 'event.dart';
 
 /// Default checkbox's style.
