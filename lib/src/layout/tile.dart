@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:widgetarian/anchor.dart';
 
 class Tile extends StatelessWidget {
   const Tile({
@@ -71,12 +72,12 @@ class Tile extends StatelessWidget {
 class TextTile extends StatelessWidget {
   const TextTile({
     Key? key,
-    required this.title,
+    this.title,
     this.subtitle,
     this.spacing = 0.0,
   }) : super(key: key);
 
-  final Widget title;
+  final Widget? title;
   final Widget? subtitle;
   final double spacing;
 
@@ -110,7 +111,7 @@ class ListTileStyle {
 class ListTile extends StatelessWidget {
   const ListTile({
     Key? key,
-    required this.title,
+    this.title,
     this.subtitle,
     this.leading,
     this.trailing,
@@ -119,7 +120,7 @@ class ListTile extends StatelessWidget {
     this.onLongPress,
   }) : super(key: key);
 
-  final Widget title;
+  final Widget? title;
   final Widget? subtitle;
   final Widget? leading;
   final Widget? trailing;
@@ -151,7 +152,7 @@ class ListTile extends StatelessWidget {
     }
 
     if (onTap != null || onLongPress != null) {
-      return GestureDetector(
+      return Anchor(
         onTap: onTap,
         onLongPress: onLongPress,
         child: content,

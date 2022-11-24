@@ -23,7 +23,7 @@ class AnimatedBox extends ImplicitlyAnimatedWidget {
     this.borderRadius,
     this.clipBehavior,
     this.shape,
-    required this.tooltip,
+    this.tooltip,
     required this.child,
   }) : super(
           key: key,
