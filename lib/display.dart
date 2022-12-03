@@ -6,3 +6,5 @@ export 'src/display/avatar/style.dart';
 export 'src/display/chip/widget.dart';
 export 'src/display/chip/style.dart';
 export 'src/display/chip/event.dart';
+
+export 'src/display/spoiler/widget.dart';
