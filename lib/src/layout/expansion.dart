@@ -180,31 +180,6 @@ class ExpansionHeader extends StatelessWidget {
 
 //--------------------------------------------------------
 
-class ExpansionMenu extends StatelessWidget {
-  const ExpansionMenu({
-    Key? key,
-    this.divider,
-    required this.children,
-  }) : super(key: key);
-
-  final Widget? divider;
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: children,
-      ),
-    );
-  }
-}
-
-//--------------------------------------------------------
-
 class ExpansionScrollView extends StatelessWidget {
   const ExpansionScrollView({
     Key? key,
