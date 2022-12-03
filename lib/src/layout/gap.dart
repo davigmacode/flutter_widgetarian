@@ -35,63 +35,51 @@ import 'package:flutter/widgets.dart';
 ///    in.
 ///  * [SizedBox], to create a box with a specific size and an optional child.
 class Gap extends StatelessWidget {
-  const Gap({
+  const Gap(
+    this.size, {
     Key? key,
-    this.flex = 1,
-    this.size,
   }) : super(key: key);
-
-  const Gap.size(double value, [Key? key])
-      : size = value,
-        flex = 1,
-        super(key: key);
-
-  const Gap.flex([this.flex = 1, Key? key])
-      : size = null,
-        super(key: key);
-
-  /// The flex factor to use in determining how much space to take up.
-  ///
-  /// The amount of space the [Gap] can occupy in the main axis is determined
-  /// by dividing the free space proportionately, after placing the inflexible
-  /// children, according to the flex factors of the flexible children.
-  ///
-  /// Defaults to one.
-  final int flex;
-
-  final double? size;
-
-  @override
-  Widget build(BuildContext context) {
-    if (size != null) return _Gap(size!);
-
-    return Expanded(
-      flex: flex,
-      child: const SizedBox.shrink(),
-    );
-  }
-}
-
-class _Gap extends LeafRenderObjectWidget {
-  const _Gap(this.size, {Key? key})
-      : assert(size >= 0 && size < double.infinity),
-        super(key: key);
 
   final double size;
 
   @override
+  Widget build(BuildContext context) {
+    final scrollableState = Scrollable.of(context);
+    final direction = scrollableState?.axisDirection;
+    final axis = direction != null ? axisDirectionToAxis(direction) : null;
+    return _Gap(size, axis);
+  }
+}
+
+class _Gap extends LeafRenderObjectWidget {
+  const _Gap(
+    this.extent,
+    this.direction,
+  ) : assert(extent >= 0 && extent < double.infinity);
+
+  final double extent;
+
+  final Axis? direction;
+
+  @override
   RenderObject createRenderObject(BuildContext context) {
-    return _RenderGap(size);
+    return _RenderGap(extent, direction);
   }
 
   @override
   void updateRenderObject(BuildContext context, _RenderGap renderObject) {
-    renderObject.extent = size;
+    renderObject
+      ..extent = extent
+      ..direction = direction;
   }
 }
 
 class _RenderGap extends RenderBox {
-  _RenderGap(double extent) : _extent = extent;
+  _RenderGap(
+    double extent,
+    Axis? direction,
+  )   : _extent = extent,
+        _direction = direction;
 
   double get extent => _extent;
   double _extent;
@@ -102,19 +90,34 @@ class _RenderGap extends RenderBox {
     }
   }
 
+  Axis? get direction => _direction;
+  Axis? _direction;
+  set direction(Axis? value) {
+    if (_direction != value) {
+      _direction = value;
+      markNeedsLayout();
+    }
+  }
+
   @override
   void performLayout() {
-    final flex = parent;
-    if (flex is RenderFlex) {
-      if (flex.direction == Axis.horizontal) {
-        size = constraints.constrain(Size(extent, 0));
-      } else {
-        size = constraints.constrain(Size(0, extent));
-      }
-    } else {
+    final p = parent;
+
+    Axis? axis = direction;
+    if (p is RenderFlex) {
+      axis = p.direction;
+    }
+
+    if (axis == null) {
       throw FlutterError(
-        'A Gap widget must be placed directly inside a Flex widget',
+        'A Gap widget must be placed directly inside a Flex or Scrollable widget',
       );
+    }
+
+    if (axis == Axis.horizontal) {
+      size = constraints.constrain(Size(extent, 0));
+    } else {
+      size = constraints.constrain(Size(0, extent));
     }
   }
 }
