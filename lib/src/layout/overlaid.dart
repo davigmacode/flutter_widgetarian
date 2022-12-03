@@ -1,54 +1,57 @@
 import 'dart:math';
 import 'package:flutter/widgets.dart';
 
-typedef StackedInfoBuilder = Widget Function(
+typedef OverlaidInfoBuilder = Widget Function(
   BuildContext context,
   int remaining,
 );
 
-enum StackedAlign { start, center, end }
+enum OverlaidAlign { start, center, end }
 
-class StackedGroup extends StatelessWidget {
-  const StackedGroup({
+class Overlaid extends StatelessWidget {
+  const Overlaid({
     Key? key,
     this.direction = Axis.horizontal,
-    this.align = StackedAlign.center,
+    this.align = OverlaidAlign.center,
     this.minCoverage = .5,
     this.maxCoverage = .9,
-    this.itemLead = -1,
-    this.itemLimit,
+    this.leadIndex = -1,
+    this.infoIndex = -1,
+    this.infoBuilder,
+    this.itemLimit = -1,
     required this.itemSize,
     required this.itemLength,
     required this.itemBuilder,
-    this.infoBuilder,
   })  : assert(minCoverage > 0 && maxCoverage >= minCoverage),
         assert(itemLength >= 0),
+        assert(itemLimit <= itemLength),
         super(key: key);
 
   final Axis direction;
-  final StackedAlign align;
+  final OverlaidAlign align;
   final double minCoverage;
   final double maxCoverage;
-  final int itemLead;
-  final int? itemLimit;
+  final int leadIndex;
+  final int infoIndex;
+  final int itemLimit;
   final Size itemSize;
   final int itemLength;
   final IndexedWidgetBuilder itemBuilder;
-  final StackedInfoBuilder? infoBuilder;
+  final OverlaidInfoBuilder? infoBuilder;
 
   bool get isHorizontal => direction == Axis.horizontal;
   bool get isVertical => !isHorizontal;
 
   List<Widget> _itemLayering(List<Widget> items, int lastIndex) {
     // last on top
-    if (itemLead == -1 || itemLead >= lastIndex) return items;
+    if (leadIndex == -1 || leadIndex >= lastIndex) return items;
 
     // first on top
-    if (itemLead == 0) return items.reversed.toList();
+    if (leadIndex == 0) return items.reversed.toList();
 
     // middle on top
-    final leftSide = items.getRange(0, itemLead);
-    final rightSide = items.getRange(itemLead, lastIndex);
+    final leftSide = items.getRange(0, leadIndex);
+    final rightSide = items.getRange(leadIndex, lastIndex);
     return [
       ...leftSide.toList(),
       ...rightSide.toList().reversed.toList(),
@@ -72,7 +75,7 @@ class StackedGroup extends StatelessWidget {
               isHorizontal ? constraints.maxWidth : constraints.maxHeight;
           final double allowedExtent = maxExtent - itemTrailExtent;
           final int itemAllowed = allowedExtent ~/ itemExtentMin;
-          final int itemMax = itemLimit ?? itemLength;
+          final int itemMax = itemLimit < 0 ? itemLength : itemLimit;
           final int itemDisplay =
               [itemAllowed, itemLength, itemMax].reduce(min);
           final int itemRemaining = itemLength - itemDisplay;
@@ -86,21 +89,25 @@ class StackedGroup extends StatelessWidget {
           final double takenSpaceAdjusted =
               (itemDisplay * itemExtentFinal) + (itemExtent - itemExtentFinal);
           final double freeSpaceAdjusted = maxExtent - takenSpaceAdjusted;
-          final double firstOffset = align == StackedAlign.center
+          final double firstOffset = align == OverlaidAlign.center
               ? freeSpaceAdjusted / 2
-              : align == StackedAlign.end
+              : align == OverlaidAlign.end
                   ? freeSpaceAdjusted
                   : 0;
 
           final bool hasInfo = itemRemaining > 0 && infoBuilder != null;
           if (itemDisplay <= 0) return const SizedBox();
 
+          final lastIndex = itemDisplay - 1;
+          final infoPos =
+              infoIndex < 0 || infoIndex > lastIndex ? lastIndex : infoIndex;
+
           final List<Widget> children = List.generate(
             itemDisplay,
             (i) => Positioned(
               top: isVertical ? firstOffset + (i * itemExtentFinal) : null,
               left: isHorizontal ? firstOffset + (i * itemExtentFinal) : null,
-              child: i == itemDisplay - 1 && hasInfo
+              child: i == infoPos && hasInfo
                   ? infoBuilder!(context, itemRemaining + 1)
                   : itemBuilder(context, i),
             ),
