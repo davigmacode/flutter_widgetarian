@@ -74,7 +74,7 @@ class ThemeConfig {
   }) {
     return ThemeConfig(
       data: data ?? light ?? this.data,
-      dark: dark ?? this.darkData,
+      dark: dark ?? darkData,
       description: description ?? this.description,
     );
   }
@@ -97,23 +97,23 @@ class ThemeConfig {
   ThemeConfig toColor(Color? color) {
     return copyWith(
       data: color != null
-          ? this.data.copyWith(
+          ? data.copyWith(
+              brightness: Brightness.light,
+              colorScheme: ColorScheme.fromSeed(
                 brightness: Brightness.light,
-                colorScheme: ColorScheme.fromSeed(
-                  brightness: Brightness.light,
-                  seedColor: color,
-                ),
-              )
+                seedColor: color,
+              ),
+            )
           : null,
       dark: color != null
-          ? this.darkData.copyWith(
+          ? darkData.copyWith(
+              brightness: Brightness.dark,
+              colorScheme: ColorScheme.fromSeed(
                 brightness: Brightness.dark,
-                colorScheme: ColorScheme.fromSeed(
-                  brightness: Brightness.dark,
-                  seedColor: color,
-                ),
-                toggleableActiveColor: color,
-              )
+                seedColor: color,
+              ),
+              toggleableActiveColor: color,
+            )
           : null,
     );
   }
@@ -122,8 +122,8 @@ class ThemeConfig {
   ColorScheme colorSchemeOf(BuildContext context) {
     final Brightness brightness = Theme.of(context).brightness;
     return brightness == Brightness.dark
-        ? this.darkData.colorScheme
-        : this.data.colorScheme;
+        ? darkData.colorScheme
+        : data.colorScheme;
   }
 }
 
