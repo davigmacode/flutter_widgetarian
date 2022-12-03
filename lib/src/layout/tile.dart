@@ -132,7 +132,7 @@ class ListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final evaluatedStyle = style ?? const ListTileStyle();
 
-    final content = Tile(
+    Widget content = Tile(
       leading: leading,
       trailing: trailing,
       spacing: evaluatedStyle.spacing,
@@ -145,14 +145,14 @@ class ListTile extends StatelessWidget {
     );
 
     if (evaluatedStyle.padding != null) {
-      return Padding(
+      content = Padding(
         padding: evaluatedStyle.padding!,
         child: content,
       );
     }
 
     if (onTap != null || onLongPress != null) {
-      return Anchor(
+      content = Anchor(
         onTap: onTap,
         onLongPress: onLongPress,
         child: content,
