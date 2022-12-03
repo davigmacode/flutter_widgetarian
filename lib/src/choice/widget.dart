@@ -1,23 +1,23 @@
 import 'package:flutter/widgets.dart';
 import 'controller.dart';
 
-class ChoiceGroup<T> extends StatelessWidget {
-  const ChoiceGroup({
+class Choice<T> extends StatelessWidget {
+  const Choice({
     Key? key,
+    this.multiple = false,
+    this.mandatory = false,
     this.items = const [],
     this.value = const [],
     this.onChanged,
-    this.multiple = false,
-    this.mandatory = false,
     required this.builder,
     this.child,
   }) : super(key: key);
 
+  final bool multiple;
+  final bool mandatory;
   final List<T> items;
   final List<T> value;
   final ValueChanged<List<T>>? onChanged;
-  final bool multiple;
-  final bool mandatory;
   final ChoiceBuilder<T> builder;
   final Widget? child;
 
