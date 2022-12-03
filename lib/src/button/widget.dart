@@ -19,12 +19,13 @@ class Button extends StatelessWidget {
     this.trailing,
     this.tooltip,
     this.style,
-    this.checked,
+    this.selected = false,
     this.loading = false,
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
     this.onPressed,
+    this.onSelected,
     this.eventsController,
     this.curve = Curves.linear,
     this.duration = Button.defaultDuration,
@@ -44,7 +45,7 @@ class Button extends StatelessWidget {
   /// Tooltip string to be used for the body area of the button.
   final String? tooltip;
 
-  final bool? checked;
+  final bool selected;
 
   final bool loading;
 
@@ -105,6 +106,55 @@ class Button extends StatelessWidget {
   /// {@end-tool}
   final VoidCallback? onPressed;
 
+  /// Called when the chip should change between selected and de-selected
+  /// states.
+  ///
+  /// When the chip is tapped, then the [onSelected] callback, if set, will be
+  /// applied to `!selected` (see [selected]).
+  ///
+  /// The chip passes the new value to the callback but does not actually
+  /// change state until the parent widget rebuilds the chip with the new
+  /// value.
+  ///
+  /// The callback provided to [onSelected] should update the state of the
+  /// parent [StatefulWidget] using the [State.setState] method, so that the
+  /// parent gets rebuilt.
+  ///
+  /// The [onSelected] and [onPressed] callbacks must not
+  /// both be specified at the same time.
+  ///
+  /// {@tool snippet}
+  ///
+  /// A [StatefulWidget] that illustrates use of onSelected in an [InputChip].
+  ///
+  /// ```dart
+  /// class Wood extends StatefulWidget {
+  ///   const Wood({Key? key}) : super(key: key);
+  ///
+  ///   @override
+  ///   State<StatefulWidget> createState() => WoodState();
+  /// }
+  ///
+  /// class WoodState extends State<Wood> {
+  ///   bool _useChisel = false;
+  ///
+  ///   @override
+  ///   Widget build(BuildContext context) {
+  ///     return Chip(
+  ///       label: const Text('Use Chisel'),
+  ///       selected: _useChisel,
+  ///       onSelected: (bool newValue) {
+  ///         setState(() {
+  ///           _useChisel = newValue;
+  ///         });
+  ///       },
+  ///     );
+  ///   }
+  /// }
+  /// ```
+  /// {@end-tool}
+  final ValueChanged<bool>? onSelected;
+
   /// The style to be applied to the chip.
   ///
   /// If [style] is an event driven [ButtonStyle]
@@ -135,12 +185,13 @@ class Button extends StatelessWidget {
     return _ButtonRender(
       theme: Theme.of(context),
       style: style ?? ButtonTheme.of(context),
-      checked: checked,
+      selected: selected,
       loading: loading,
       disabled: disabled,
       autofocus: autofocus,
       focusNode: focusNode,
       onPressed: onPressed,
+      onSelected: onSelected,
       eventsController: eventsController,
       leading: leading,
       trailing: trailing,
@@ -154,21 +205,22 @@ class Button extends StatelessWidget {
 class _ButtonRender extends ImplicitlyAnimatedWidget {
   const _ButtonRender({
     Key? key,
-    required this.child,
+    Curve curve = Curves.linear,
+    Duration duration = Button.defaultDuration,
     this.leading,
     this.trailing,
     this.tooltip,
-    required this.style,
-    this.checked,
+    this.selected = false,
     this.loading = false,
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
     this.onPressed,
+    this.onSelected,
     this.eventsController,
     required this.theme,
-    Curve curve = Curves.linear,
-    Duration duration = Button.defaultDuration,
+    required this.style,
+    required this.child,
   }) : super(
           key: key,
           duration: duration,
@@ -179,12 +231,13 @@ class _ButtonRender extends ImplicitlyAnimatedWidget {
   final Widget? leading;
   final Widget? trailing;
   final String? tooltip;
-  final bool? checked;
+  final bool selected;
   final bool loading;
   final bool disabled;
   final bool autofocus;
   final FocusNode? focusNode;
   final VoidCallback? onPressed;
+  final ValueChanged<bool>? onSelected;
   final ButtonStyle style;
   final ButtonEventController? eventsController;
   final ThemeData theme;
@@ -194,7 +247,7 @@ class _ButtonRender extends ImplicitlyAnimatedWidget {
   bool get canTap => enabled && hasCallback;
 
   bool get hasCallback {
-    return onPressed != null;
+    return onPressed != null || onSelected != null;
   }
 
   @override
@@ -337,6 +390,7 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
   void onTap() {
     widgetEvents.toggle(ButtonEvent.pressed, false);
     widget.onPressed?.call();
+    widget.onSelected?.call(!widget.selected);
   }
 
   void onTapCancel() {
@@ -358,8 +412,7 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
   @override
   void initState() {
     initWidgetEvents(widget.eventsController);
-    widgetEvents.toggle(ButtonEvent.indeterminate, widget.checked == null);
-    widgetEvents.toggle(ButtonEvent.selected, widget.checked == true);
+    widgetEvents.toggle(ButtonEvent.selected, widget.selected);
     widgetEvents.toggle(ButtonEvent.loading, widget.loading);
     widgetEvents.toggle(ButtonEvent.disabled, widget.disabled);
     setStyle();
@@ -370,8 +423,7 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
   void didUpdateWidget(_ButtonRender oldWidget) {
     if (mounted) {
       updateWidgetEvents(oldWidget.eventsController, widget.eventsController);
-      widgetEvents.toggle(ButtonEvent.indeterminate, widget.checked == null);
-      widgetEvents.toggle(ButtonEvent.selected, widget.checked == true);
+      widgetEvents.toggle(ButtonEvent.selected, widget.selected);
       widgetEvents.toggle(ButtonEvent.loading, widget.loading);
       widgetEvents.toggle(ButtonEvent.disabled, widget.disabled);
       setStyle();

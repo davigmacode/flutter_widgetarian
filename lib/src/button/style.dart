@@ -88,13 +88,17 @@ class ButtonStyle {
   /// when events includes [ButtonEvent.pressed].
   factory ButtonStyle.when({
     ButtonStyle? enabled,
-    ButtonStyle? disabled,
-    ButtonStyle? hovered,
+    ButtonStyle? selected,
     ButtonStyle? focused,
+    ButtonStyle? hovered,
     ButtonStyle? pressed,
+    ButtonStyle? disabled,
   }) {
     return ButtonStyle.driven((events) {
       return (enabled ?? const ButtonStyle())
+          .merge(ButtonEvent.isSelected(events)
+              ? evaluate(selected, events)
+              : null)
           .merge(
               ButtonEvent.isFocused(events) ? evaluate(focused, events) : null)
           .merge(
@@ -147,12 +151,13 @@ class ButtonStyle {
     Color? iconColor,
     double? iconOpacity,
     double? iconSize,
+    ButtonStyle? selectedStyle,
+    ButtonStyle? focusedStyle,
+    ButtonStyle? hoveredStyle,
+    ButtonStyle? pressedStyle,
     ButtonStyle? disabledStyle = const ButtonStyle(
       foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
     ),
-    ButtonStyle? hoveredStyle,
-    ButtonStyle? focusedStyle,
-    ButtonStyle? pressedStyle,
   }) {
     return ButtonStyle.when(
       enabled: ButtonStyle(
@@ -183,10 +188,11 @@ class ButtonStyle {
         iconOpacity: iconOpacity,
         iconSize: iconSize,
       ),
-      disabled: disabledStyle,
-      hovered: hoveredStyle,
+      selected: selectedStyle,
       focused: focusedStyle,
+      hovered: hoveredStyle,
       pressed: pressedStyle,
+      disabled: disabledStyle,
     );
   }
 
@@ -230,14 +236,15 @@ class ButtonStyle {
     Color? iconColor,
     double? iconOpacity,
     double? iconSize,
+    ButtonStyle? selectedStyle,
+    ButtonStyle? focusedStyle,
+    ButtonStyle? hoveredStyle,
+    ButtonStyle? pressedStyle,
     ButtonStyle? disabledStyle = const ButtonStyle(
       foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
       backgroundAlpha: ButtonStyle.disabledBackgroundAlpha,
       borderAlpha: ButtonStyle.disabledBorderAlpha,
     ),
-    ButtonStyle? hoveredStyle,
-    ButtonStyle? focusedStyle,
-    ButtonStyle? pressedStyle,
   }) {
     return ButtonStyle.when(
       enabled: ButtonStyle(
@@ -268,10 +275,11 @@ class ButtonStyle {
         iconOpacity: iconOpacity,
         iconSize: iconSize,
       ),
-      disabled: disabledStyle,
-      hovered: hoveredStyle,
+      selected: selectedStyle,
       focused: focusedStyle,
+      hovered: hoveredStyle,
       pressed: pressedStyle,
+      disabled: disabledStyle,
     );
   }
 
@@ -314,15 +322,16 @@ class ButtonStyle {
     Color? iconColor,
     double? iconOpacity,
     double? iconSize,
+    ButtonStyle? selectedStyle,
+    ButtonStyle? focusedStyle,
+    ButtonStyle? hoveredStyle,
+    ButtonStyle? pressedStyle = const ButtonStyle(
+      elevation: 5,
+    ),
     ButtonStyle? disabledStyle = const ButtonStyle(
       foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
       backgroundAlpha: ButtonStyle.disabledBackgroundAlpha,
       borderAlpha: ButtonStyle.disabledBorderAlpha,
-    ),
-    ButtonStyle? hoveredStyle,
-    ButtonStyle? focusedStyle,
-    ButtonStyle? pressedStyle = const ButtonStyle(
-      elevation: 5,
     ),
   }) {
     return ButtonStyle.when(
@@ -354,10 +363,11 @@ class ButtonStyle {
         iconOpacity: iconOpacity,
         iconSize: iconSize,
       ),
-      disabled: disabledStyle,
-      hovered: hoveredStyle,
+      selected: selectedStyle,
       focused: focusedStyle,
+      hovered: hoveredStyle,
       pressed: pressedStyle,
+      disabled: disabledStyle,
     );
   }
 
@@ -400,13 +410,14 @@ class ButtonStyle {
     Color? iconColor,
     double? iconOpacity,
     double? iconSize,
+    ButtonStyle? selectedStyle,
+    ButtonStyle? focusedStyle,
+    ButtonStyle? hoveredStyle,
+    ButtonStyle? pressedStyle,
     ButtonStyle? disabledStyle = const ButtonStyle(
       foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
       borderAlpha: ButtonStyle.disabledBorderAlpha,
     ),
-    ButtonStyle? hoveredStyle,
-    ButtonStyle? focusedStyle,
-    ButtonStyle? pressedStyle,
   }) {
     return ButtonStyle.when(
       enabled: ButtonStyle(
@@ -437,10 +448,11 @@ class ButtonStyle {
         iconOpacity: iconOpacity,
         iconSize: iconSize,
       ),
-      disabled: disabledStyle,
-      hovered: hoveredStyle,
+      selected: selectedStyle,
       focused: focusedStyle,
+      hovered: hoveredStyle,
       pressed: pressedStyle,
+      disabled: disabledStyle,
     );
   }
 
@@ -630,12 +642,14 @@ class ButtonStyle {
     Color? iconColor,
     double? iconOpacity,
     double? iconSize,
+    ButtonStyle? selectedStyle,
     ButtonStyle? disabledStyle,
     ButtonStyle? hoveredStyle,
     ButtonStyle? focusedStyle,
     ButtonStyle? pressedStyle,
   }) {
-    final hasEvent = disabledStyle != null ||
+    final hasEvent = selectedStyle != null ||
+        disabledStyle != null ||
         hoveredStyle != null ||
         focusedStyle != null ||
         pressedStyle != null;
@@ -670,6 +684,7 @@ class ButtonStyle {
     return hasEvent
         ? ButtonStyle.when(
             enabled: style,
+            selected: selectedStyle,
             disabled: disabledStyle,
             hovered: hoveredStyle,
             focused: focusedStyle,
@@ -711,6 +726,9 @@ class ButtonStyle {
       iconColor: other.iconColor,
       iconOpacity: other.iconOpacity,
       iconSize: other.iconSize,
+      selectedStyle: other is _ButtonStyle
+          ? evaluate(other, {ButtonEvent.selected})
+          : null,
       disabledStyle: other is _ButtonStyle
           ? evaluate(other, {ButtonEvent.disabled})
           : null,
