@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../template.dart';
-import 'basic.dart';
-import 'group.dart';
+import 'single.dart';
+import 'multiple.dart';
 
-class AvatarPage extends StatefulWidget {
-  const AvatarPage({
+class ChoiceBasicPage extends StatefulWidget {
+  const ChoiceBasicPage({
     Key? key,
     required this.title,
   }) : super(key: key);
@@ -13,10 +13,10 @@ class AvatarPage extends StatefulWidget {
   final String title;
 
   @override
-  State<AvatarPage> createState() => _AvatarPageState();
+  State<ChoiceBasicPage> createState() => _ChoiceBasicPageState();
 }
 
-class _AvatarPageState extends State<AvatarPage> {
+class _ChoiceBasicPageState extends State<ChoiceBasicPage> {
   @override
   Widget build(BuildContext context) {
     return PageTemplate(
@@ -24,8 +24,8 @@ class _AvatarPageState extends State<AvatarPage> {
       body: ListView(
         padding: const EdgeInsets.all(25),
         children: const [
-          AvatarBasicUsage(),
-          AvatarGroupUsage(),
+          ChoiceBasicSingleUsage(),
+          ChoiceBasicMultipleUsage(),
         ],
       ),
     );

@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           darkTheme: theme.darkData,
           themeMode: theme.mode,
           initialRoute: '/',
-          routes: routesPage,
+          routes: routes,
         );
       },
     );

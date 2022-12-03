@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart' hide Checkbox;
-import 'package:widgetarian/typography.dart';
-import 'package:widgetarian/layout.dart';
 import 'package:widgetarian/input.dart';
 
 import '../../sample.dart';
@@ -21,33 +19,15 @@ class _CheckboxBasicUsageState extends State<CheckboxBasicUsage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 25),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const HeadlineText.large('Basic Usage'),
-          const Gap.size(15),
-          Sample(
-            script: script,
-            child: Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Center(
-                child: Wrap(
-                  spacing: 15,
-                  runSpacing: 15,
-                  children: [
-                    Checkbox(
-                      checked: _checked,
-                      onChanged: _setChecked,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return Sample(
+      title: 'Basic Usage',
+      script: script,
+      children: [
+        Checkbox(
+          checked: _checked,
+          onChanged: _setChecked,
+        ),
+      ],
     );
   }
 }

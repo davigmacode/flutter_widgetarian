@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../template.dart';
 import 'basic.dart';
-import 'group.dart';
 
-class AvatarPage extends StatefulWidget {
-  const AvatarPage({
+class SpoilerPage extends StatefulWidget {
+  const SpoilerPage({
     Key? key,
     required this.title,
   }) : super(key: key);
@@ -13,10 +12,10 @@ class AvatarPage extends StatefulWidget {
   final String title;
 
   @override
-  State<AvatarPage> createState() => _AvatarPageState();
+  State<SpoilerPage> createState() => _SpoilerPageState();
 }
 
-class _AvatarPageState extends State<AvatarPage> {
+class _SpoilerPageState extends State<SpoilerPage> {
   @override
   Widget build(BuildContext context) {
     return PageTemplate(
@@ -24,8 +23,7 @@ class _AvatarPageState extends State<AvatarPage> {
       body: ListView(
         padding: const EdgeInsets.all(25),
         children: const [
-          AvatarBasicUsage(),
-          AvatarGroupUsage(),
+          SpoilerBasicUsage(),
         ],
       ),
     );

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart' hide ButtonStyle;
-import 'package:widgetarian/typography.dart';
-import 'package:widgetarian/layout.dart';
 import 'package:widgetarian/button.dart';
 import 'package:widgetarian/event.dart';
 
@@ -31,79 +29,59 @@ class _ButtonLoadingUsageState extends State<ButtonLoadingUsage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 25),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const HeadlineText.large('Loading Button'),
-          const Gap.size(15),
-          Sample(
-            script: script,
-            child: Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Center(
-                child: Wrap(
-                  spacing: 15,
-                  runSpacing: 15,
-                  children: [
-                    Button(
-                      loading: loading,
-                      onPressed: load,
-                      style: ButtonStyle.flat(),
-                      leading: DrivenWidget.by((events) {
-                        return AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 200),
-                          child: ButtonEvent.isLoading(events)
-                              ? const CircularProgressIndicator()
-                              : Container(),
-                        );
-                      }),
-                      child: DrivenWidget.by((events) {
-                        return AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 200),
-                          child: ButtonEvent.isLoading(events)
-                              ? const Text('Loading..',
-                                  key: ValueKey('loading'))
-                              : ButtonEvent.isHovered(events)
-                                  ? const Text('Hovered',
-                                      key: ValueKey('hovered'))
-                                  : const Text(
-                                      'Enabled',
-                                      key: ValueKey('enabled'),
-                                    ),
-                        );
-                      }),
-                    ),
-                    Button(
-                      onPressed: () => {},
-                      style: ButtonStyle.toned(),
-                      trailing: const Icon(Icons.close),
-                      child: const Text('Toned Button'),
-                    ),
-                    Button(
-                      onPressed: () => {},
-                      style: ButtonStyle.outlined(),
-                      leading: const Icon(Icons.calendar_month),
-                      trailing: const Icon(Icons.close),
-                      child: const Text('Outlined Button'),
-                    ),
-                    Button(
-                      onPressed: () => {},
-                      style: ButtonStyle.filled(),
-                      leading: const SizedBox.square(
-                        dimension: 18,
-                        child: CircularProgressIndicator(),
-                      ),
-                      child: const Text('Filled Button'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+    return Sample(
+      title: 'Loading Button',
+      script: script,
+      children: [
+        Button(
+          loading: loading,
+          onPressed: load,
+          style: ButtonStyle.flat(),
+          leading: DrivenWidget.by((events) {
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: ButtonEvent.isLoading(events)
+                  ? const CircularProgressIndicator()
+                  : Container(),
+            );
+          }),
+          child: DrivenWidget.by((events) {
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: ButtonEvent.isLoading(events)
+                  ? const Text('Loading..', key: ValueKey('loading'))
+                  : ButtonEvent.isHovered(events)
+                      ? const Text('Hovered', key: ValueKey('hovered'))
+                      : const Text(
+                          'Enabled',
+                          key: ValueKey('enabled'),
+                        ),
+            );
+          }),
+        ),
+        Button(
+          onPressed: () => {},
+          style: ButtonStyle.toned(),
+          trailing: const Icon(Icons.close),
+          child: const Text('Toned Button'),
+        ),
+        Button(
+          onPressed: () => {},
+          style: ButtonStyle.outlined(),
+          leading: const Icon(Icons.calendar_month),
+          trailing: const Icon(Icons.close),
+          child: const Text('Outlined Button'),
+        ),
+        Button(
+          onPressed: () => {},
+          style: ButtonStyle.filled(),
+          leading: const SizedBox.square(
+            dimension: 18,
+            child: CircularProgressIndicator(),
           ),
-        ],
-      ),
+          child: const Text('Filled Button'),
+        ),
+      ],
     );
   }
 }

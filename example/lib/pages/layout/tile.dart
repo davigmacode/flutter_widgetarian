@@ -41,7 +41,7 @@ class _TilePageState extends State<TilePage> {
                   ],
                 ),
               ),
-              const Gap.size(10),
+              const Gap(10),
               const Box(
                 color: Colors.black12,
                 // height: 40,
@@ -66,7 +66,7 @@ class _TilePageState extends State<TilePage> {
                   ),
                 ),
               ),
-              const Gap.size(10),
+              const Gap(10),
               const Box(
                 color: Colors.black12,
                 child: ListTile(

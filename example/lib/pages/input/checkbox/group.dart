@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart' hide Checkbox;
-import 'package:widgetarian/typography.dart';
-import 'package:widgetarian/layout.dart';
 import 'package:widgetarian/input.dart';
-import 'package:widgetarian/group.dart';
+import 'package:widgetarian/choice.dart';
 
 import '../../sample.dart';
 
@@ -23,46 +21,28 @@ class _CheckboxGroupUsageState extends State<CheckboxGroupUsage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 25),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const HeadlineText.large('Grouped Usage'),
-          const Gap.size(15),
-          Sample(
-            script: script,
-            child: Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Center(
-                child: Wrap(
-                  spacing: 15,
-                  runSpacing: 15,
-                  children: [
-                    ChoiceGroup<String>(
-                      mandatory: true,
-                      value: selected,
-                      onChanged: setSelected,
-                      builder: (context, group, _) {
-                        return Wrap(
-                          children: List<Widget>.generate(
-                            choices.length,
-                            (i) => Checkbox(
-                              label: Text(choices[i]),
-                              checked: group.has(choices[i]),
-                              onChanged: group.select(choices[i]),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+    return Sample(
+      title: 'Grouped Usage',
+      script: script,
+      children: [
+        Choice<String>(
+          mandatory: true,
+          value: selected,
+          onChanged: setSelected,
+          builder: (context, group, _) {
+            return Wrap(
+              children: List<Widget>.generate(
+                choices.length,
+                (i) => Checkbox(
+                  label: Text(choices[i]),
+                  checked: group.has(choices[i]),
+                  onChanged: group.select(choices[i]),
                 ),
               ),
-            ),
-          ),
-        ],
-      ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

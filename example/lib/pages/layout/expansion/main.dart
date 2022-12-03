@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart'
     hide ListTile, ListTileStyle, Spacer, AnimatedIcon, ExpansionPanel;
 import 'package:widgetarian/layout.dart';
-import '../template.dart';
+import '../../template.dart';
 
 class ExpansionPage extends StatefulWidget {
   const ExpansionPage({
@@ -24,8 +24,8 @@ class _ExpansionPageState extends State<ExpansionPage> {
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const <Widget>[
-              Card(
+            children: <Widget>[
+              const Card(
                 child: Padding(
                   padding: EdgeInsets.all(15.0),
                   child: SizedBox(
@@ -47,8 +47,8 @@ class _ExpansionPageState extends State<ExpansionPage> {
                   ),
                 ),
               ),
-              Gap.size(10),
-              Card(
+              const Gap(10),
+              const Card(
                 child: Padding(
                   padding: EdgeInsets.all(15.0),
                   child: SizedBox(
@@ -74,8 +74,8 @@ class _ExpansionPageState extends State<ExpansionPage> {
                   ),
                 ),
               ),
-              Gap.size(10),
-              Card(
+              const Gap(10),
+              const Card(
                 child: Padding(
                   padding: EdgeInsets.all(15.0),
                   child: SizedBox(
@@ -99,46 +99,68 @@ class _ExpansionPageState extends State<ExpansionPage> {
                   ),
                 ),
               ),
-              Gap.size(10),
+              const Gap(10),
               Card(
                 child: Padding(
-                  padding: EdgeInsets.all(15.0),
+                  padding: const EdgeInsets.all(15.0),
                   child: SizedBox(
                     width: 500,
                     child: Expansion(
                       value: false,
                       // divider: Divider(),
-                      header: ExpansionHeader(
+                      header: const ExpansionHeader(
                         title: Text('Menu'),
                         trailing: ExpansionIcon(),
                       ),
-                      child: ExpansionMenu(
+                      child: ListView(
+                        shrinkWrap: true,
                         children: [
-                          ListTile(title: Text('Menu Item')),
-                          ListTile(title: Text('Menu Item')),
+                          ListTile(
+                            title: const Text('Menu Item'),
+                            onTap: () {},
+                          ),
+                          ListTile(
+                            title: const Text('Menu Item'),
+                            onTap: () {},
+                          ),
                           Expansion(
                             // divider: Divider(),
-                            header: ExpansionHeader(
+                            header: const ExpansionHeader(
                               title: Text('Nested Menu'),
                               trailing: ExpansionIcon(),
                             ),
                             child: Padding(
-                              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                              child: ExpansionMenu(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                              child: ListView(
+                                shrinkWrap: true,
                                 children: [
-                                  ListTile(title: Text('Menu Item')),
-                                  ListTile(title: Text('Menu Item')),
+                                  ListTile(
+                                    title: const Text('Menu Item'),
+                                    onTap: () {},
+                                  ),
+                                  ListTile(
+                                    title: const Text('Menu Item'),
+                                    onTap: () {},
+                                  ),
                                   Expansion(
-                                    header: ExpansionHeader(
+                                    header: const ExpansionHeader(
                                       title: Text('Nested Menu'),
                                       trailing: ExpansionIcon(),
                                     ),
                                     child: Padding(
-                                      padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                                      child: ExpansionMenu(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 0, 0, 0),
+                                      child: ListView(
+                                        shrinkWrap: true,
                                         children: [
-                                          ListTile(title: Text('Menu Item')),
-                                          ListTile(title: Text('Menu Item')),
+                                          ListTile(
+                                            title: const Text('Menu Item'),
+                                            onTap: () {},
+                                          ),
+                                          ListTile(
+                                            title: const Text('Menu Item'),
+                                            onTap: () {},
+                                          ),
                                         ],
                                       ),
                                     ),
