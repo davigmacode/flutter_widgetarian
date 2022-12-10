@@ -6,6 +6,7 @@ class AnimatedTransform extends ImplicitlyAnimatedWidget {
     Key? key,
     Duration duration = const Duration(milliseconds: 200),
     Curve curve = Curves.linear,
+    this.offset,
     this.scale,
     this.rotation,
     this.flipX = false,
@@ -18,6 +19,7 @@ class AnimatedTransform extends ImplicitlyAnimatedWidget {
         );
 
   final Widget child;
+  final Offset? offset;
   final double? scale;
   final double? rotation;
   final bool flipX;
@@ -29,6 +31,7 @@ class AnimatedTransform extends ImplicitlyAnimatedWidget {
 
 class AnimatedTransformState
     extends AnimatedWidgetBaseState<AnimatedTransform> {
+  Tween<Offset>? tweenOffset;
   Tween<double>? tweenScale;
   Tween<double>? tweenRotateX;
   Tween<double>? tweenRotateY;
@@ -36,6 +39,12 @@ class AnimatedTransformState
 
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
+    tweenOffset = visitor(
+      tweenOffset,
+      widget.offset ?? Offset.zero,
+      (dynamic value) => Tween<Offset>(begin: value),
+    ) as Tween<Offset>?;
+
     tweenScale = visitor(
       tweenScale,
       widget.scale ?? 1.0,
@@ -64,10 +73,15 @@ class AnimatedTransformState
   @override
   Widget build(BuildContext context) {
     final transform = Matrix4.identity();
+    final offset = tweenOffset?.evaluate(animation);
     final scale = tweenScale?.evaluate(animation);
     final rotateX = tweenRotateX?.evaluate(animation);
     final rotateY = tweenRotateY?.evaluate(animation);
     final rotateZ = tweenRotateZ?.evaluate(animation);
+
+    if (offset != null) {
+      transform.translate(offset.dx, offset.dy);
+    }
 
     if (scale != null) {
       transform.scale(scale);
