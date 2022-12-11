@@ -3,20 +3,22 @@ import 'package:flutter/widgets.dart';
 class ShapeBorderPaint extends StatelessWidget {
   const ShapeBorderPaint({
     Key? key,
-    required this.shape,
     this.textDirection,
     this.isForeground = true,
+    this.inflate,
+    required this.shape,
     this.child,
   }) : super(key: key);
 
-  final Widget? child;
-  final ShapeBorder shape;
   final TextDirection? textDirection;
   final bool isForeground;
+  final double? inflate;
+  final OutlinedBorder shape;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
-    final painter = ShapeBorderPainter(shape, textDirection);
+    final painter = ShapeBorderPainter(shape, textDirection, inflate);
     return CustomPaint(
       painter: isForeground ? null : painter,
       foregroundPainter: isForeground ? painter : null,
@@ -26,13 +28,21 @@ class ShapeBorderPaint extends StatelessWidget {
 }
 
 class ShapeBorderPainter extends CustomPainter {
-  ShapeBorderPainter(this.shape, this.textDirection);
-  final ShapeBorder shape;
+  ShapeBorderPainter(this.shape, this.textDirection, this.inflate);
+  final OutlinedBorder shape;
   final TextDirection? textDirection;
+  final double? inflate;
+
+  double get defaultInflate => shape.side.width / 5;
 
   @override
   void paint(Canvas canvas, Size size) {
-    shape.paint(canvas, Offset.zero & size, textDirection: textDirection);
+    final rect = Offset.zero & size;
+    shape.paint(
+      canvas,
+      rect.inflate(inflate ?? defaultInflate),
+      textDirection: textDirection,
+    );
   }
 
   @override
