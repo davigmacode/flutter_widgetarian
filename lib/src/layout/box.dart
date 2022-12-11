@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:widgetarian/tween.dart';
+import 'package:widgetarian/utils.dart';
 import 'border.dart';
 
 class AnimatedBox extends ImplicitlyAnimatedWidget {
@@ -41,7 +43,7 @@ class AnimatedBox extends ImplicitlyAnimatedWidget {
   final Color? color;
   final Color? shadowColor;
   final double? elevation;
-  final ShapeBorder? border;
+  final OutlinedBorder? border;
   final Color? borderColor;
   final double? borderWidth;
   final BorderStyle? borderStyle;
@@ -149,7 +151,7 @@ class AnimatedBoxState extends AnimatedWidgetBaseState<AnimatedBox> {
       color: colorTween?.evaluate(animation),
       shadowColor: shadowColorTween?.evaluate(animation),
       elevation: elevationTween?.evaluate(animation),
-      border: borderTween?.evaluate(animation),
+      border: borderTween?.evaluate(animation) as OutlinedBorder,
       clipBehavior: widget.clipBehavior,
       tooltip: widget.tooltip,
       child: widget.child,
@@ -191,7 +193,7 @@ class Box extends StatelessWidget {
   final Color? color;
   final Color? shadowColor;
   final double? elevation;
-  final ShapeBorder? border;
+  final OutlinedBorder? border;
   final Color? borderColor;
   final double? borderWidth;
   final BorderStyle? borderStyle;
@@ -217,7 +219,7 @@ class Box extends StatelessWidget {
         );
   }
 
-  ShapeBorder get borderShape {
+  OutlinedBorder get borderShape {
     switch (shape) {
       case BoxShape.circle:
         return CircleBorder(
@@ -304,12 +306,12 @@ class Box extends StatelessWidget {
       result = Padding(padding: margin!, child: result);
     }
 
-    if (tooltip != null) {
-      return Tooltip(
-        message: tooltip,
-        child: child,
-      );
-    }
+    // if (tooltip != null) {
+    //   return Tooltip(
+    //     message: tooltip,
+    //     child: child,
+    //   );
+    // }
 
     return result;
   }
