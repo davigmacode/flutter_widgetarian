@@ -32,3 +32,7 @@ int? lerpInt(int? a, int? b, double t) {
   assert(t.isFinite, 't must be finite when interpolating between values');
   return (a + (b - a) * t).round();
 }
+
+bool? lerpBool(bool? a, bool? b, double t) => t < 0.5 ? a : b;
+
+T? lerpEnum<T>(T? a, T? b, double t) => t < 0.5 ? a : b;
