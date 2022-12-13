@@ -2,6 +2,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/utils.dart';
 import 'style.dart';
+import 'theme.dart';
+import 'tween.dart';
 
 class AnimatedOverlay extends ImplicitlyAnimatedWidget {
   const AnimatedOverlay({
@@ -11,6 +13,7 @@ class AnimatedOverlay extends ImplicitlyAnimatedWidget {
     this.color,
     this.opacity,
     this.radius,
+    this.borderRadius,
     this.shape,
     this.style,
     this.child,
@@ -23,6 +26,7 @@ class AnimatedOverlay extends ImplicitlyAnimatedWidget {
   final Color? color;
   final double? opacity;
   final double? radius;
+  final BorderRadius? borderRadius;
   final BoxShape? shape;
   final OverlayStyle? style;
   final Widget? child;
@@ -33,47 +37,31 @@ class AnimatedOverlay extends ImplicitlyAnimatedWidget {
 }
 
 class _AnimatedOverlayState extends AnimatedWidgetBaseState<AnimatedOverlay> {
-  ColorTween? color;
-  Tween<double?>? opacity;
-  Tween<double?>? radius;
+  OverlayStyleTween? styleTween;
 
-  OverlayStyle get style {
+  OverlayStyle get effectiveStyle {
     return OverlayStyle.from(widget.style).copyWith(
       color: widget.color,
       opacity: widget.opacity,
       radius: widget.radius,
+      borderRadius: widget.borderRadius,
       shape: widget.shape,
     );
   }
 
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
-    color = visitor(
-      color,
-      style.color,
-      (dynamic value) => ColorTween(begin: value),
-    ) as ColorTween?;
-
-    opacity = visitor(
-      opacity,
-      style.opacity ?? 0.0,
-      (dynamic value) => Tween<double?>(begin: value),
-    ) as Tween<double?>?;
-
-    radius = visitor(
-      radius,
-      style.radius ?? 0.0,
-      (dynamic value) => Tween<double?>(begin: value),
-    ) as Tween<double?>?;
+    styleTween = visitor(
+      styleTween,
+      effectiveStyle,
+      (dynamic value) => OverlayStyleTween(begin: value),
+    ) as OverlayStyleTween?;
   }
 
   @override
   Widget build(BuildContext context) {
     return Overlay(
-      color: color?.evaluate(animation),
-      opacity: opacity?.evaluate(animation),
-      radius: radius?.evaluate(animation),
-      shape: style.shape,
+      style: styleTween?.evaluate(animation),
       child: widget.child,
     );
   }
@@ -85,6 +73,7 @@ class Overlay extends SingleChildRenderObjectWidget {
     this.color,
     this.opacity,
     this.radius,
+    this.borderRadius,
     this.shape,
     this.style,
     Widget? child,
@@ -93,6 +82,7 @@ class Overlay extends SingleChildRenderObjectWidget {
   final Color? color;
   final double? opacity;
   final double? radius;
+  final BorderRadius? borderRadius;
   final BoxShape? shape;
   final OverlayStyle? style;
 
@@ -101,17 +91,20 @@ class Overlay extends SingleChildRenderObjectWidget {
       color: color,
       opacity: opacity,
       radius: radius,
+      borderRadius: borderRadius,
       shape: shape,
     );
   }
 
   @override
   RenderObject createRenderObject(BuildContext context) {
+    final themedStyle = OverlayTheme.of(context).style.merge(effectiveStyle);
     return RenderOverlay(
-      color: effectiveStyle.color,
-      opacity: effectiveStyle.opacity,
-      shape: effectiveStyle.shape,
-      radius: effectiveStyle.radius,
+      color: themedStyle.color,
+      opacity: themedStyle.opacity,
+      radius: themedStyle.radius,
+      borderRadius: themedStyle.borderRadius,
+      shape: themedStyle.shape,
     );
   }
 
@@ -120,11 +113,19 @@ class Overlay extends SingleChildRenderObjectWidget {
     BuildContext context,
     RenderOverlay renderObject,
   ) {
+    final themedStyle = OverlayTheme.of(context).style.merge(effectiveStyle);
     renderObject
-      ..color = effectiveStyle.color
-      ..opacity = effectiveStyle.opacity
-      ..shape = effectiveStyle.shape
-      ..radius = effectiveStyle.radius;
+      ..color = themedStyle.color
+      ..opacity = themedStyle.opacity
+      ..radius = themedStyle.radius
+      ..borderRadius = themedStyle.borderRadius
+      ..shape = themedStyle.shape;
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    effectiveStyle.debugFillProperties(properties);
   }
 }
 
@@ -134,10 +135,12 @@ class RenderOverlay extends RenderProxyBox {
     double? opacity,
     BoxShape? shape,
     double? radius,
+    BorderRadius? borderRadius,
   })  : _color = color ?? Colors.black,
         _opacity = opacity ?? 0.0,
         _shape = shape ?? BoxShape.circle,
-        _radius = radius ?? 0.0;
+        _radius = radius ?? 0.0,
+        _borderRadius = borderRadius ?? BorderRadius.zero;
 
   @override
   bool get isRepaintBoundary => true;
@@ -178,6 +181,15 @@ class RenderOverlay extends RenderProxyBox {
     markNeedsPaint();
   }
 
+  BorderRadius get borderRadius => _borderRadius;
+  BorderRadius _borderRadius;
+  set borderRadius(BorderRadius? value) {
+    if (value == null) return;
+    if (_borderRadius == value) return;
+    _borderRadius = value;
+    markNeedsPaint();
+  }
+
   @override
   void paint(PaintingContext context, Offset offset) {
     super.paint(context, offset);
@@ -187,11 +199,15 @@ class RenderOverlay extends RenderProxyBox {
     canvas.translate(offset.dx, offset.dy);
 
     final paint = Paint()..color = color.withOpacity(opacity);
-    final origin = Offset.zero & size;
+    final rect = Offset.zero & size;
     if (shape == BoxShape.rectangle) {
-      canvas.drawRect(origin, paint);
+      if (borderRadius != BorderRadius.zero) {
+        canvas.drawRRect(borderRadius.toRRect(rect), paint);
+      } else {
+        canvas.drawRect(rect, paint);
+      }
     } else {
-      canvas.drawCircle(origin.center, radius, paint);
+      canvas.drawCircle(rect.center, radius, paint);
     }
 
     canvas.restore();

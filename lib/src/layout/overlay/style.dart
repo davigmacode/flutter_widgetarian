@@ -7,12 +7,15 @@ class OverlayStyle with Diagnosticable {
   final Color? color;
   final double? opacity;
   final double? radius;
+  final BorderRadius? borderRadius;
   final BoxShape? shape;
 
+  /// Default constructor
   const OverlayStyle({
     this.color,
     this.opacity,
     this.radius,
+    this.borderRadius,
     this.shape,
   });
 
@@ -21,13 +24,15 @@ class OverlayStyle with Diagnosticable {
       : color = other?.color,
         opacity = other?.opacity,
         radius = other?.radius,
+        borderRadius = other?.borderRadius,
         shape = other?.shape;
 
-  /// Creates an [OverlayStyle] with some reasonable default values.
+  /// An [OverlayStyle] with some reasonable default values.
   const OverlayStyle.fallback()
       : color = Colors.black,
         opacity = 0.0,
         radius = 0.0,
+        borderRadius = BorderRadius.zero,
         shape = BoxShape.circle;
 
   /// Creates a copy of this [OverlayStyle] but with
@@ -36,13 +41,15 @@ class OverlayStyle with Diagnosticable {
     Color? color,
     double? opacity,
     double? radius,
+    BorderRadius? borderRadius,
     BoxShape? shape,
   }) {
     return OverlayStyle(
-      color: color,
-      opacity: opacity,
-      radius: radius,
-      shape: shape,
+      color: color ?? this.color,
+      opacity: opacity ?? this.opacity,
+      radius: radius ?? this.radius,
+      borderRadius: borderRadius ?? this.borderRadius,
+      shape: shape ?? this.shape,
     );
   }
 
@@ -56,6 +63,7 @@ class OverlayStyle with Diagnosticable {
       color: other.color,
       opacity: other.opacity,
       radius: other.radius,
+      borderRadius: other.borderRadius,
       shape: other.shape,
     );
   }
@@ -66,6 +74,7 @@ class OverlayStyle with Diagnosticable {
       color: Color.lerp(a?.color, b?.color, t),
       opacity: lerpDouble(a?.opacity, b?.opacity, t),
       radius: lerpDouble(a?.radius, b?.radius, t),
+      borderRadius: BorderRadius.lerp(a?.borderRadius, b?.borderRadius, t),
       shape: lerpEnum(a?.shape, b?.shape, t),
     );
   }
@@ -74,6 +83,7 @@ class OverlayStyle with Diagnosticable {
         'color': color,
         'opacity': opacity,
         'radius': radius,
+        'borderRadius': borderRadius,
         'shape': shape,
       };
 
