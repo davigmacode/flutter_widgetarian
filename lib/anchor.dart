@@ -1,3 +1,3 @@
 library anchor;
 
-export 'src/anchor/widget.dart';
+export 'src/navigation/anchor/widget.dart';

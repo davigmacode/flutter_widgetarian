@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/layout.dart';
+import 'style.dart';
+import 'theme.dart';
 
 class Anchor extends StatelessWidget {
   const Anchor({
@@ -14,19 +16,22 @@ class Anchor extends StatelessWidget {
     this.onLongPress,
     this.onHover,
     this.onFocus,
+    this.overlayDisabled = false,
     this.overlayColor,
     this.overlayOpacity,
     this.mouseCursor,
+    this.borderRadius,
     this.radius,
+    this.shape = BoxShape.rectangle,
     this.padding,
     this.margin,
+    this.style,
     this.eventsController,
     this.focusNode,
     this.autofocus = false,
     this.canRequestFocus = true,
     this.disabled = false,
-    this.shape = BoxShape.rectangle,
-    required this.child,
+    this.child,
   }) : super(key: key);
 
   final VoidCallback? onTap;
@@ -37,22 +42,38 @@ class Anchor extends StatelessWidget {
   final VoidCallback? onLongPress;
   final ValueChanged<bool>? onHover;
   final ValueChanged<bool>? onFocus;
+  final MouseCursor? mouseCursor;
+  final bool overlayDisabled;
   final Color? overlayColor;
   final double? overlayOpacity;
-  final MouseCursor? mouseCursor;
+  final BorderRadius? borderRadius;
   final double? radius;
+  final BoxShape shape;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
+  final AnchorStyle? style;
   final WidgetEventController? eventsController;
   final FocusNode? focusNode;
   final bool autofocus;
   final bool canRequestFocus;
-  final BoxShape shape;
   final bool disabled;
-  final Widget child;
+  final Widget? child;
+
+  AnchorStyle get effectiveStyle {
+    return AnchorStyle.from(style).copyWith(
+      margin: margin,
+      padding: padding,
+      shape: shape,
+      radius: radius,
+      borderRadius: borderRadius,
+      overlayColor: overlayColor,
+      overlayOpacity: overlayOpacity,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final themedStyle = AnchorTheme.of(context).style.merge(effectiveStyle);
     final parentState = _AnchorProvider.of(context);
     return _Anchor(
       parentState: parentState,
@@ -64,18 +85,21 @@ class Anchor extends StatelessWidget {
       onLongPress: onLongPress,
       onHover: onHover,
       onFocus: onFocus,
-      overlayColor: overlayColor,
-      overlayOpacity: overlayOpacity,
+      overlayDisabled: overlayDisabled,
       mouseCursor: mouseCursor,
-      radius: radius,
-      padding: padding,
-      margin: margin,
+      // overlayColor: overlayColor,
+      // overlayOpacity: overlayOpacity,
+      // borderRadius: borderRadius,
+      // radius: radius,
+      // padding: padding,
+      // margin: margin,
+      // shape: shape,
       eventsController: eventsController,
       focusNode: focusNode,
       autofocus: autofocus,
       canRequestFocus: canRequestFocus,
       disabled: disabled,
-      shape: shape,
+      style: themedStyle,
       child: child,
     );
   }
@@ -93,19 +117,22 @@ class _Anchor extends StatefulWidget {
     this.onLongPress,
     this.onHover,
     this.onFocus,
-    this.overlayColor,
-    this.overlayOpacity,
     this.mouseCursor,
-    this.radius,
-    this.padding,
-    this.margin,
+    this.overlayDisabled = false,
+    required this.style,
+    // this.overlayColor,
+    // this.overlayOpacity,
+    // this.borderRadius,
+    // this.radius,
+    // this.padding,
+    // this.margin,
+    // this.shape = BoxShape.rectangle,
     this.eventsController,
     this.focusNode,
     this.autofocus = false,
     this.canRequestFocus = true,
     this.disabled = false,
-    this.shape = BoxShape.rectangle,
-    required this.child,
+    this.child,
   }) : super(key: key);
 
   final _AnchorState? parentState;
@@ -117,29 +144,35 @@ class _Anchor extends StatefulWidget {
   final VoidCallback? onLongPress;
   final ValueChanged<bool>? onHover;
   final ValueChanged<bool>? onFocus;
-  final Color? overlayColor;
-  final double? overlayOpacity;
+  final bool overlayDisabled;
   final MouseCursor? mouseCursor;
-  final double? radius;
-  final EdgeInsetsGeometry? padding;
-  final EdgeInsetsGeometry? margin;
+  // final Color? overlayColor;
+  // final double? overlayOpacity;
+  // final BorderRadius? borderRadius;
+  // final double? radius;
+  // final EdgeInsetsGeometry? padding;
+  // final EdgeInsetsGeometry? margin;
+  // final BoxShape shape;
+  final AnchorStyle style;
   final WidgetEventController? eventsController;
   final FocusNode? focusNode;
   final bool autofocus;
   final bool canRequestFocus;
-  final BoxShape shape;
   final bool disabled;
-  final Widget child;
+  final Widget? child;
 
   bool get enabled => !disabled;
 
-  bool get clickable =>
-      onTap != null ||
-      onTapUp != null ||
-      onTapDown != null ||
-      onTapCancel != null ||
-      onDoubleTap != null ||
-      onLongPress != null;
+  bool get overlayEnabled => !overlayDisabled;
+
+  bool get clickable => [
+        onTap,
+        onTapUp,
+        onTapDown,
+        onTapCancel,
+        onDoubleTap,
+        onLongPress
+      ].any((e) => e != null);
 
   MouseCursor get defaultMouseCursor =>
       clickable ? DrivenMouseCursor.clickable : MouseCursor.defer;
@@ -150,6 +183,15 @@ class _Anchor extends StatefulWidget {
 
 class _AnchorState extends State<_Anchor> with WidgetEventMixin<_Anchor> {
   bool childrenActive = false;
+
+  AnchorStyle style = const AnchorStyle();
+
+  @protected
+  void setStyle() {
+    final raw = widget.style;
+    final resolved = AnchorStyle.evaluate(raw, widgetEvents.value);
+    style = style.merge(resolved);
+  }
 
   bool get _canRequestFocus {
     final NavigationMode mode = MediaQuery.maybeOf(context)?.navigationMode ??
@@ -203,6 +245,7 @@ class _AnchorState extends State<_Anchor> with WidgetEventMixin<_Anchor> {
   @override
   void initState() {
     initWidgetEvents(widget.eventsController);
+    setStyle();
     super.initState();
   }
 
@@ -210,16 +253,28 @@ class _AnchorState extends State<_Anchor> with WidgetEventMixin<_Anchor> {
   void didUpdateWidget(_Anchor oldWidget) {
     if (mounted) {
       updateWidgetEvents(oldWidget.eventsController, widget.eventsController);
+      setStyle();
       super.didUpdateWidget(oldWidget);
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    Widget result = widget.child;
+  void didChangeWidgetEvents() {
+    if (mounted) {
+      setStyle();
+      super.didChangeWidgetEvents();
+    }
+  }
 
-    if (widget.padding != null) {
-      result = Padding(padding: widget.padding!, child: result);
+  @override
+  Widget build(BuildContext context) {
+    Widget result = _AnchorProvider(
+      state: this,
+      child: widget.child ?? const Box(),
+    );
+
+    if (style.padding != null) {
+      result = Padding(padding: style.padding!, child: result);
     }
 
     if (widget.enabled && widget.clickable) {
@@ -236,36 +291,39 @@ class _AnchorState extends State<_Anchor> with WidgetEventMixin<_Anchor> {
       );
     }
 
-    result = _AnchorProvider(
-      state: this,
-      child: AnimatedOverlay(
-        shape: widget.shape,
-        radius: widget.radius,
-        color: widget.overlayColor,
-        opacity: widgetEvents.isPressed
-            ? .1
-            : widgetEvents.isHovered
-                ? .05
-                : 0,
-        child: Focus(
-          onFocusChange: _onFocus,
-          canRequestFocus: _canRequestFocus,
-          autofocus: widget.autofocus,
-          focusNode: widget.focusNode,
-          child: MouseRegion(
-            opaque: true,
-            hitTestBehavior: HitTestBehavior.opaque,
-            cursor: widget.mouseCursor ?? widget.defaultMouseCursor,
-            onEnter: (event) => _onHover(true),
-            onExit: (event) => _onHover(false),
-            child: result,
-          ),
-        ),
+    result = Focus(
+      onFocusChange: _onFocus,
+      canRequestFocus: _canRequestFocus,
+      autofocus: widget.autofocus,
+      focusNode: widget.focusNode,
+      child: MouseRegion(
+        opaque: true,
+        hitTestBehavior: HitTestBehavior.opaque,
+        cursor: widget.mouseCursor ?? widget.defaultMouseCursor,
+        onEnter: (event) => _onHover(true),
+        onExit: (event) => _onHover(false),
+        child: result,
       ),
     );
 
-    if (widget.margin != null) {
-      result = Padding(padding: widget.margin!, child: result);
+    if (widget.overlayEnabled) {
+      result = AnimatedOverlay(
+        shape: style.shape,
+        radius: style.radius,
+        borderRadius: style.borderRadius,
+        color: style.overlayColor,
+        opacity: style.overlayOpacity,
+        // opacity: widgetEvents.isPressed
+        //     ? .1
+        //     : widgetEvents.isHovered
+        //         ? .05
+        //         : 0,
+        child: result,
+      );
+    }
+
+    if (style.margin != null) {
+      result = Padding(padding: style.margin!, child: result);
     }
 
     return result;
@@ -274,11 +332,7 @@ class _AnchorState extends State<_Anchor> with WidgetEventMixin<_Anchor> {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-
-    properties
-        .add(DiagnosticsProperty<EdgeInsetsGeometry>('margin', widget.margin));
-    properties.add(
-        DiagnosticsProperty<EdgeInsetsGeometry>('padding', widget.padding));
+    style.debugFillProperties(properties);
   }
 }
 
