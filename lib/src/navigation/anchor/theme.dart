@@ -3,16 +3,25 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/utils.dart';
 import 'style.dart';
 
+/// A Widget that controls how descendant [Anchor]s should look like.
 class AnchorTheme extends InheritedTheme {
-  /// The [AnchorStyle] to apply
+  /// The curve to apply when animating the parameters of sheet widget.
+  final Curve curve;
+
+  /// The duration over which to animate the parameters of sheet widget.
+  final Duration duration;
+
+  /// The style to apply
   final AnchorStyle style;
 
   /// Creates a theme that controls
   /// how descendant [Anchor]s should look like.
   const AnchorTheme({
     Key? key,
-    required Widget child,
+    required this.curve,
+    required this.duration,
     required this.style,
+    required Widget child,
   }) : super(key: key, child: child);
 
   /// A const-constructable [style] that provides fallback values.
@@ -21,8 +30,10 @@ class AnchorTheme extends InheritedTheme {
   ///
   /// This constructor creates a [AnchorTheme] with an invalid [child], which
   /// means the constructed value cannot be incorporated into the tree.
-  AnchorTheme.fallback({Key? key})
-      : style = AnchorStyle.defaults,
+  const AnchorTheme.fallback({Key? key})
+      : curve = Curves.linear,
+        duration = const Duration(milliseconds: 200),
+        style = AnchorStyle.defaults,
         super(key: key, child: const NullWidget());
 
   /// Creates an [AnchorTheme] that controls the style of
@@ -31,7 +42,9 @@ class AnchorTheme extends InheritedTheme {
   /// The [style] and [child] arguments must not be null.
   static Widget merge({
     Key? key,
-    required AnchorStyle style,
+    Curve? curve,
+    Duration? duration,
+    AnchorStyle? style,
     required Widget child,
   }) {
     return Builder(
@@ -39,6 +52,8 @@ class AnchorTheme extends InheritedTheme {
         final parent = AnchorTheme.of(context);
         return AnchorTheme(
           key: key,
+          curve: curve ?? parent.curve,
+          duration: duration ?? parent.duration,
           style: parent.style.merge(style),
           child: child,
         );
@@ -58,17 +73,24 @@ class AnchorTheme extends InheritedTheme {
   /// ```
   static AnchorTheme of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<AnchorTheme>() ??
-        AnchorTheme.fallback();
+        const AnchorTheme.fallback();
   }
 
   @override
   Widget wrap(BuildContext context, Widget child) {
-    return AnchorTheme(style: style, child: child);
+    return AnchorTheme(
+      curve: curve,
+      duration: duration,
+      style: style,
+      child: child,
+    );
   }
 
   @override
   bool updateShouldNotify(AnchorTheme oldWidget) {
-    return oldWidget.style != style;
+    return oldWidget.curve != curve ||
+        oldWidget.duration != duration ||
+        oldWidget.style != style;
   }
 
   @override

@@ -5,9 +5,15 @@ import 'package:widgetarian/layout.dart';
 import 'style.dart';
 import 'theme.dart';
 
+/// An area that responds to touch.
+/// Has a configurable shape and can be configured
+/// to clip overlay that extend outside its bounds or not.
 class Anchor extends StatelessWidget {
+  /// Creates an area that responds to touch.
   const Anchor({
     Key? key,
+    this.curve,
+    this.duration,
     this.onTap,
     this.onTapUp,
     this.onTapDown,
@@ -16,13 +22,13 @@ class Anchor extends StatelessWidget {
     this.onLongPress,
     this.onHover,
     this.onFocus,
-    this.overlayDisabled = false,
+    this.overlayDisabled,
     this.overlayColor,
     this.overlayOpacity,
     this.mouseCursor,
     this.borderRadius,
     this.radius,
-    this.shape = BoxShape.rectangle,
+    this.shape,
     this.padding,
     this.margin,
     this.style,
@@ -34,49 +40,109 @@ class Anchor extends StatelessWidget {
     this.child,
   }) : super(key: key);
 
+  /// The curve to apply when animating
+  /// the parameters of this widget.
+  final Curve? curve;
+
+  /// The duration over which to animate
+  /// the parameters of this widget.
+  final Duration? duration;
+
+  /// Called when the user taps
   final VoidCallback? onTap;
+
+  /// Called when the user releases a tap that was started on
   final GestureTapUpCallback? onTapUp;
+
+  /// Called when the user taps down
   final GestureTapDownCallback? onTapDown;
+
+  /// Called when the user cancels a tap that was started on
   final VoidCallback? onTapCancel;
+
+  /// Called when the user double taps
   final VoidCallback? onDoubleTap;
+
+  /// Called when the user long-presses
   final VoidCallback? onLongPress;
+
+  /// Called when a pointer enters or exits the anchor area.
   final ValueChanged<bool>? onHover;
+
+  /// Handler called when the focus changes.
   final ValueChanged<bool>? onFocus;
+
+  /// The cursor for a mouse pointer when it enters or is hovering over the widget.
   final MouseCursor? mouseCursor;
-  final bool overlayDisabled;
+
+  /// {@macro widgetarian.anchor.style.overlayDisabled}
+  final bool? overlayDisabled;
+
+  /// {@macro widgetarian.anchor.style.overlayColor}
   final Color? overlayColor;
+
+  /// {@macro widgetarian.anchor.style.overlayOpacity}
   final double? overlayOpacity;
+
+  /// {@macro widgetarian.anchor.style.borderRadius}
   final BorderRadius? borderRadius;
+
+  /// {@macro widgetarian.anchor.style.radius}
   final double? radius;
-  final BoxShape shape;
+
+  /// {@macro widgetarian.anchor.style.shape}
+  final BoxShape? shape;
+
+  /// {@macro widgetarian.anchor.style.padding}
   final EdgeInsetsGeometry? padding;
+
+  /// {@macro widgetarian.anchor.style.margin}
   final EdgeInsetsGeometry? margin;
+
+  /// The [AnchorStyle] to apply
   final AnchorStyle? style;
+
+  /// Used by widgets that expose their internal event
+  /// for the sake of extensions that add support for additional events.
   final WidgetEventController? eventsController;
+
+  /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
+
+  /// {@macro flutter.widgets.Focus.autofocus}
   final bool autofocus;
+
+  /// {@macro flutter.widgets.Focus.canRequestFocus}
   final bool canRequestFocus;
+
+  /// Whether or not this widget is disabled for interaction.
   final bool disabled;
+
+  /// The widget below this widget in the tree.
   final Widget? child;
 
   AnchorStyle get effectiveStyle {
-    return AnchorStyle.from(style).copyWith(
-      margin: margin,
-      padding: padding,
-      shape: shape,
-      radius: radius,
-      borderRadius: borderRadius,
-      overlayColor: overlayColor,
-      overlayOpacity: overlayOpacity,
-    );
+    return const AnchorStyle().merge(style).copyWith(
+          margin: margin,
+          padding: padding,
+          shape: shape,
+          radius: radius,
+          borderRadius: borderRadius,
+          overlayColor: overlayColor,
+          overlayOpacity: overlayOpacity,
+          overlayDisabled: overlayDisabled,
+        );
   }
 
   @override
   Widget build(BuildContext context) {
-    final themedStyle = AnchorTheme.of(context).style.merge(effectiveStyle);
+    final anchorTheme = AnchorTheme.of(context);
+    final themedStyle = anchorTheme.style.merge(effectiveStyle);
     final parentState = _AnchorProvider.of(context);
     return _Anchor(
       parentState: parentState,
+      curve: curve ?? anchorTheme.curve,
+      duration: duration ?? anchorTheme.duration,
       onTap: onTap,
       onTapUp: onTapUp,
       onTapDown: onTapDown,
@@ -85,15 +151,7 @@ class Anchor extends StatelessWidget {
       onLongPress: onLongPress,
       onHover: onHover,
       onFocus: onFocus,
-      overlayDisabled: overlayDisabled,
       mouseCursor: mouseCursor,
-      // overlayColor: overlayColor,
-      // overlayOpacity: overlayOpacity,
-      // borderRadius: borderRadius,
-      // radius: radius,
-      // padding: padding,
-      // margin: margin,
-      // shape: shape,
       eventsController: eventsController,
       focusNode: focusNode,
       autofocus: autofocus,
@@ -103,12 +161,42 @@ class Anchor extends StatelessWidget {
       child: child,
     );
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<bool>('disabled', disabled));
+    properties
+        .add(DiagnosticsProperty<bool>('canRequestFocus', canRequestFocus));
+    properties.add(DiagnosticsProperty<bool>('autofocus', autofocus));
+    properties.add(DiagnosticsProperty<FocusNode?>('focusNode', focusNode));
+    properties.add(DiagnosticsProperty<WidgetEventController?>(
+        'eventsController', eventsController));
+    properties.add(DiagnosticsProperty<EdgeInsetsGeometry?>('margin', margin));
+    properties
+        .add(DiagnosticsProperty<EdgeInsetsGeometry?>('padding', padding));
+    properties.add(EnumProperty<BoxShape>('shape', shape));
+    properties.add(DoubleProperty('radius', radius));
+    properties
+        .add(DiagnosticsProperty<BorderRadius?>('borderRadius', borderRadius));
+    properties.add(DoubleProperty('overlayOpacity', overlayOpacity));
+    properties.add(ColorProperty('overlayColor', overlayColor));
+    properties
+        .add(DiagnosticsProperty<bool>('overlayDisabled', overlayDisabled));
+    properties
+        .add(DiagnosticsProperty<MouseCursor?>('mouseCursor', mouseCursor));
+    properties.add(DiagnosticsProperty<AnchorStyle?>('style', style));
+    properties.add(
+        DiagnosticsProperty<AnchorStyle>('effectiveStyle', effectiveStyle));
+  }
 }
 
 class _Anchor extends StatefulWidget {
   const _Anchor({
     Key? key,
     this.parentState,
+    required this.curve,
+    required this.duration,
     this.onTap,
     this.onTapUp,
     this.onTapDown,
@@ -118,24 +206,18 @@ class _Anchor extends StatefulWidget {
     this.onHover,
     this.onFocus,
     this.mouseCursor,
-    this.overlayDisabled = false,
-    required this.style,
-    // this.overlayColor,
-    // this.overlayOpacity,
-    // this.borderRadius,
-    // this.radius,
-    // this.padding,
-    // this.margin,
-    // this.shape = BoxShape.rectangle,
     this.eventsController,
     this.focusNode,
     this.autofocus = false,
     this.canRequestFocus = true,
     this.disabled = false,
+    required this.style,
     this.child,
   }) : super(key: key);
 
   final _AnchorState? parentState;
+  final Curve curve;
+  final Duration duration;
   final VoidCallback? onTap;
   final GestureTapUpCallback? onTapUp;
   final GestureTapDownCallback? onTapDown;
@@ -144,26 +226,16 @@ class _Anchor extends StatefulWidget {
   final VoidCallback? onLongPress;
   final ValueChanged<bool>? onHover;
   final ValueChanged<bool>? onFocus;
-  final bool overlayDisabled;
   final MouseCursor? mouseCursor;
-  // final Color? overlayColor;
-  // final double? overlayOpacity;
-  // final BorderRadius? borderRadius;
-  // final double? radius;
-  // final EdgeInsetsGeometry? padding;
-  // final EdgeInsetsGeometry? margin;
-  // final BoxShape shape;
-  final AnchorStyle style;
   final WidgetEventController? eventsController;
   final FocusNode? focusNode;
   final bool autofocus;
   final bool canRequestFocus;
   final bool disabled;
+  final AnchorStyle style;
   final Widget? child;
 
   bool get enabled => !disabled;
-
-  bool get overlayEnabled => !overlayDisabled;
 
   bool get clickable => [
         onTap,
@@ -179,6 +251,12 @@ class _Anchor extends StatefulWidget {
 
   @override
   State<_Anchor> createState() => _AnchorState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('style', style));
+  }
 }
 
 class _AnchorState extends State<_Anchor> with WidgetEventMixin<_Anchor> {
@@ -189,7 +267,7 @@ class _AnchorState extends State<_Anchor> with WidgetEventMixin<_Anchor> {
   @protected
   void setStyle() {
     final raw = widget.style;
-    final resolved = AnchorStyle.evaluate(raw, widgetEvents.value);
+    final resolved = DrivenAnchorStyle.evaluate(raw, widgetEvents.value);
     style = style.merge(resolved);
   }
 
@@ -306,18 +384,15 @@ class _AnchorState extends State<_Anchor> with WidgetEventMixin<_Anchor> {
       ),
     );
 
-    if (widget.overlayEnabled) {
+    if (style.overlayEnabled) {
       result = AnimatedOverlay(
+        curve: widget.curve,
+        duration: widget.duration,
         shape: style.shape,
         radius: style.radius,
         borderRadius: style.borderRadius,
         color: style.overlayColor,
         opacity: style.overlayOpacity,
-        // opacity: widgetEvents.isPressed
-        //     ? .1
-        //     : widgetEvents.isHovered
-        //         ? .05
-        //         : 0,
         child: result,
       );
     }
@@ -332,7 +407,7 @@ class _AnchorState extends State<_Anchor> with WidgetEventMixin<_Anchor> {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    style.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('style', style));
   }
 }
 

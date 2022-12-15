@@ -2,35 +2,61 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/utils.dart';
+import 'event.dart';
 
+/// The style to be applied to [Anchor] widget
 @immutable
 class AnchorStyle with Diagnosticable {
+  /// {@template widgetarian.anchor.style.margin}
   /// Empty space to surround the outside anchor.
+  /// {@endtemplate}
   final EdgeInsetsGeometry? margin;
 
+  /// {@template widgetarian.anchor.style.padding}
   /// The padding between the contents of the anchor and the outside anchor.
   ///
   /// defaults to [AnchorStyle.defaultPadding].
+  /// {@endtemplate}
   final EdgeInsetsGeometry? padding;
 
+  /// {@template widgetarian.anchor.style.shape}
   /// The shape (e.g., circle, rectangle) to use for the overlay drawn around
   /// this part of the anchor when pressed, hovered over, or focused.
+  /// {@endtemplate}
   final BoxShape? shape;
 
+  /// {@template widgetarian.anchor.style.radius}
   /// The radius of the overlay. If the [shape] is [BoxShape.circle].
+  /// {@endtemplate}
   final double? radius;
 
+  /// {@template widgetarian.anchor.style.borderRadius}
   /// The clipping radius of the containing rect. This is effective only if
   /// the [shape] is [BoxShape.circle].
   ///
   /// If this is null, it is interpreted as [BorderRadius.zero].
+  /// {@endtemplate}
   final BorderRadius? borderRadius;
 
+  /// {@template widgetarian.anchor.style.overlayColor}
   /// The overlay color of the anchor when pressed, hovered over, or focused.
+  /// {@endtemplate}
   final Color? overlayColor;
 
+  /// {@template widgetarian.anchor.style.overlayOpacity}
   /// The overlay opacity of the anchor when pressed, hovered over, or focused.
+  /// {@endtemplate}
   final double? overlayOpacity;
+
+  /// {@template widgetarian.anchor.style.overlayDisabled}
+  /// Whether the overlay is disabled or not
+  /// {@endtemplate}
+  final bool? overlayDisabled;
+
+  /// {@template widgetarian.anchor.style.overlayEnabled}
+  /// Whether the overlay is enabled or not
+  /// {@endtemplate}
+  bool get overlayEnabled => overlayDisabled != true;
 
   /// Default [AnchorStyle] constructor.
   const AnchorStyle({
@@ -41,9 +67,10 @@ class AnchorStyle with Diagnosticable {
     this.borderRadius,
     this.overlayColor,
     this.overlayOpacity,
+    this.overlayDisabled,
   });
 
-  /// Create a anchor's style from another style
+  /// Create an [AnchorStyle] from another style
   AnchorStyle.from(AnchorStyle? other)
       : margin = other?.margin,
         padding = other?.padding,
@@ -51,90 +78,17 @@ class AnchorStyle with Diagnosticable {
         radius = other?.radius,
         borderRadius = other?.borderRadius,
         overlayColor = other?.overlayColor,
-        overlayOpacity = other?.overlayOpacity;
+        overlayOpacity = other?.overlayOpacity,
+        overlayDisabled = other?.overlayDisabled;
 
   /// An [AnchorStyle] with some reasonable default values.
-  static final defaults = AnchorStyle.when(
-    enabled: const AnchorStyle(overlayOpacity: 0),
-    hovered: const AnchorStyle(overlayOpacity: 0.05),
-    pressed: const AnchorStyle(overlayOpacity: 0.1),
+  static const defaults = DrivenAnchorStyle(
+    shape: BoxShape.rectangle,
+    overlayDisabled: false,
+    overlayOpacity: 0,
+    hovered: AnchorStyle(overlayOpacity: 0.05),
+    pressed: AnchorStyle(overlayOpacity: 0.1),
   );
-
-  /// Create an event driven [AnchorStyle] using [callback].
-  factory AnchorStyle.driven(
-    DrivenPropertyResolver<AnchorStyle?> callback,
-  ) {
-    return _DrivenAnchorStyle.by(callback);
-  }
-
-  /// Create a [AnchorStyle] when some events occurs.
-  ///
-  /// The [enabled] is base style to be applied to the anchor.
-  /// if `null` will fallback with empty [AnchorStyle]
-  ///
-  /// The [selected] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.selected].
-  ///
-  /// The [indeterminate] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.indeterminate].
-  ///
-  /// The [error] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.error].
-  ///
-  /// The [loading] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.loading].
-  ///
-  /// The [focused] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.focused].
-  ///
-  /// The [hovered] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.hovered].
-  ///
-  /// The [pressed] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.pressed].
-  ///
-  /// The [dragged] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.dragged].
-  ///
-  /// The [disabled] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.disabled].
-  factory AnchorStyle.when({
-    AnchorStyle? enabled,
-    AnchorStyle? selected,
-    AnchorStyle? indeterminate,
-    AnchorStyle? error,
-    AnchorStyle? loading,
-    AnchorStyle? focused,
-    AnchorStyle? hovered,
-    AnchorStyle? pressed,
-    AnchorStyle? dragged,
-    AnchorStyle? disabled,
-  }) {
-    return _DrivenAnchorStyle.when(
-      enabled: enabled,
-      selected: selected,
-      indeterminate: indeterminate,
-      error: error,
-      loading: loading,
-      focused: focused,
-      hovered: hovered,
-      pressed: pressed,
-      dragged: dragged,
-      disabled: disabled,
-    );
-  }
-
-  /// Resolves the value for the given set of events
-  /// if `value` is an event driven [AnchorStyle],
-  /// otherwise returns the value itself.
-  static AnchorStyle? evaluate(
-    AnchorStyle? value,
-    Set<WidgetEvent> events, {
-    bool merged = true,
-  }) {
-    return DrivenProperty.evaluate<AnchorStyle?>(value, events);
-    // return merged ? value?.merge(evaluated) : evaluated;
-  }
 
   /// Creates a copy of this [AnchorStyle] but with
   /// the given fields replaced with the new values.
@@ -146,16 +100,11 @@ class AnchorStyle with Diagnosticable {
     BorderRadius? borderRadius,
     Color? overlayColor,
     double? overlayOpacity,
-    AnchorStyle? selectedStyle,
-    AnchorStyle? indeterminateStyle,
-    AnchorStyle? errorStyle,
-    AnchorStyle? loadingStyle,
+    bool? overlayDisabled,
     AnchorStyle? focusedStyle,
     AnchorStyle? hoveredStyle,
     AnchorStyle? pressedStyle,
-    AnchorStyle? draggedStyle,
     AnchorStyle? disabledStyle,
-    DrivenPropertyResolver<AnchorStyle?>? resolverStyle,
   }) {
     final style = AnchorStyle(
       margin: margin ?? this.margin,
@@ -165,54 +114,26 @@ class AnchorStyle with Diagnosticable {
       borderRadius: borderRadius ?? this.borderRadius,
       overlayColor: overlayColor ?? this.overlayColor,
       overlayOpacity: overlayOpacity ?? this.overlayOpacity,
+      overlayDisabled: overlayDisabled ?? this.overlayDisabled,
     );
 
-    final hasEventStyle = [
-      selectedStyle,
-      indeterminateStyle,
-      errorStyle,
-      loadingStyle,
+    final hasDrivenStyle = [
       focusedStyle,
       hoveredStyle,
       pressedStyle,
-      draggedStyle,
       disabledStyle,
-      resolverStyle,
     ].any((el) => el != null);
 
-    if (hasEventStyle || this is _DrivenAnchorStyle) {
-      if (this is _DrivenAnchorStyle) {
-        final that = this as _DrivenAnchorStyle;
-        return _DrivenAnchorStyle(
-          enabled: that.enabled?.merge(style) ?? style,
-          selected: that.selected?.merge(selectedStyle) ?? selectedStyle,
-          indeterminate: that.indeterminate?.merge(indeterminateStyle) ??
-              indeterminateStyle,
-          error: that.error?.merge(errorStyle) ?? errorStyle,
-          loading: that.loading?.merge(loadingStyle) ?? loadingStyle,
-          focused: that.focused?.merge(focusedStyle) ?? focusedStyle,
-          hovered: that.hovered?.merge(hoveredStyle) ?? hoveredStyle,
-          pressed: that.pressed?.merge(pressedStyle) ?? pressedStyle,
-          dragged: that.dragged?.merge(draggedStyle) ?? draggedStyle,
-          disabled: that.disabled?.merge(disabledStyle) ?? disabledStyle,
-          resolver: resolverStyle ?? that.resolver,
-        );
-      } else {
-        return _DrivenAnchorStyle(
-          enabled: style,
-          selected: selectedStyle,
-          indeterminate: indeterminateStyle,
-          error: errorStyle,
-          loading: loadingStyle,
-          focused: focusedStyle,
-          hovered: hoveredStyle,
-          pressed: pressedStyle,
-          dragged: draggedStyle,
-          disabled: disabledStyle,
-          resolver: resolverStyle,
-        );
-      }
+    if (hasDrivenStyle) {
+      return DrivenAnchorStyle.from(
+        enabled: style,
+        focused: focusedStyle,
+        hovered: hoveredStyle,
+        pressed: pressedStyle,
+        disabled: disabledStyle,
+      );
     }
+
     return style;
   }
 
@@ -222,7 +143,7 @@ class AnchorStyle with Diagnosticable {
     // if null return current object
     if (other == null) return this;
 
-    final style = copyWith(
+    var style = copyWith(
       margin: other.margin,
       padding: other.padding,
       shape: other.shape,
@@ -230,20 +151,15 @@ class AnchorStyle with Diagnosticable {
       borderRadius: other.borderRadius,
       overlayColor: other.overlayColor,
       overlayOpacity: other.overlayOpacity,
+      overlayDisabled: other.overlayDisabled,
     );
 
-    if (other is _DrivenAnchorStyle) {
-      style.copyWith(
-        selectedStyle: other.selected,
-        indeterminateStyle: other.indeterminate,
-        errorStyle: other.error,
-        loadingStyle: other.loading,
+    if (other is DrivenAnchorStyle) {
+      style = style.copyWith(
         focusedStyle: other.focused,
         hoveredStyle: other.hovered,
         pressedStyle: other.pressed,
-        draggedStyle: other.dragged,
         disabledStyle: other.disabled,
-        resolverStyle: other.resolver,
       );
     }
 
@@ -251,7 +167,8 @@ class AnchorStyle with Diagnosticable {
   }
 
   /// Linearly interpolate between two [AnchorStyle] objects.
-  static AnchorStyle lerp(AnchorStyle? a, AnchorStyle? b, double t) {
+  static AnchorStyle? lerp(AnchorStyle? a, AnchorStyle? b, double t) {
+    if (a == null && b == null) return null;
     return AnchorStyle(
       margin: EdgeInsetsGeometry.lerp(a?.margin, b?.margin, t),
       padding: EdgeInsetsGeometry.lerp(a?.padding, b?.padding, t),
@@ -260,6 +177,7 @@ class AnchorStyle with Diagnosticable {
       borderRadius: BorderRadius.lerp(a?.borderRadius, b?.borderRadius, t),
       overlayColor: Color.lerp(a?.overlayColor, b?.overlayColor, t),
       overlayOpacity: lerpDouble(a?.overlayOpacity, b?.overlayOpacity, t),
+      overlayDisabled: lerpBool(a?.overlayDisabled, b?.overlayDisabled, t),
     );
   }
 
@@ -271,6 +189,7 @@ class AnchorStyle with Diagnosticable {
         'borderRadius': borderRadius,
         'overlayColor': overlayColor,
         'overlayOpacity': overlayOpacity,
+        'overlayDisabled': overlayDisabled,
       };
 
   @override
@@ -286,94 +205,158 @@ class AnchorStyle with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     toMap().entries.forEach((el) {
-      properties.add(DiagnosticsProperty(el.key, el.value, defaultValue: null));
+      properties.add(DiagnosticsProperty(el.key, el.value));
     });
   }
 }
 
-class _DrivenAnchorStyle extends AnchorStyle
-    implements DrivenProperty<AnchorStyle?> {
-  _DrivenAnchorStyle({
-    this.resolver,
-    this.enabled,
-    this.selected,
-    this.indeterminate,
-    this.error,
-    this.loading,
+/// Create a [AnchorStyle] when some events occurs.
+class DrivenAnchorStyle extends AnchorStyle
+    implements DrivenProperty<AnchorStyle> {
+  /// Default constructor for a driven [AnchorStyle].
+  const DrivenAnchorStyle({
+    super.margin,
+    super.padding,
+    super.shape,
+    super.radius,
+    super.borderRadius,
+    super.overlayColor,
+    super.overlayOpacity,
+    super.overlayDisabled,
     this.focused,
     this.hovered,
     this.pressed,
-    this.dragged,
     this.disabled,
-  }) : super.from(resolver?.call({})?.merge(enabled) ?? enabled);
+  });
 
-  _DrivenAnchorStyle.by(this.resolver)
-      : enabled = null,
-        selected = null,
-        indeterminate = null,
-        error = null,
-        loading = null,
-        focused = null,
-        hovered = null,
-        pressed = null,
-        dragged = null,
-        disabled = null,
-        super.from(resolver?.call({}));
-
-  _DrivenAnchorStyle.when({
-    this.enabled,
-    this.selected,
-    this.indeterminate,
-    this.error,
-    this.loading,
+  /// Create a [DrivenAnchorStyle] with value
+  /// from another [AnchorStyle].
+  DrivenAnchorStyle.from({
+    AnchorStyle? enabled,
     this.focused,
     this.hovered,
     this.pressed,
-    this.dragged,
     this.disabled,
-  })  : resolver = null,
-        super.from(enabled);
+  }) : super.from(enabled);
 
-  final DrivenPropertyResolver<AnchorStyle?>? resolver;
-  final AnchorStyle? enabled;
-  final AnchorStyle? selected;
-  final AnchorStyle? indeterminate;
-  final AnchorStyle? error;
-  final AnchorStyle? loading;
+  /// Create a [DrivenAnchorStyle] from a resolver callback
+  DrivenAnchorStyle.resolver(DrivenPropertyResolver<AnchorStyle?> resolver)
+      : focused = resolver({WidgetEvent.focused}),
+        hovered = resolver({WidgetEvent.hovered}),
+        pressed = resolver({WidgetEvent.pressed}),
+        disabled = resolver({WidgetEvent.disabled}),
+        super.from(resolver({}));
+
+  /// Create a rectangle shaped [DrivenAnchorStyle].
+  const DrivenAnchorStyle.rectangle({
+    super.margin,
+    super.padding,
+    super.borderRadius,
+    super.overlayColor,
+    super.overlayOpacity,
+    super.overlayDisabled,
+    this.focused,
+    this.hovered,
+    this.pressed,
+    this.disabled,
+  }) : super(shape: BoxShape.rectangle, radius: null);
+
+  /// Create a circle shaped [DrivenAnchorStyle].
+  const DrivenAnchorStyle.circle({
+    super.margin,
+    super.padding,
+    super.radius,
+    super.overlayColor,
+    super.overlayOpacity,
+    super.overlayDisabled,
+    this.focused,
+    this.hovered,
+    this.pressed,
+    this.disabled,
+  }) : super(shape: BoxShape.circle, borderRadius: null);
+
+  /// The style to be merged when
+  /// events includes [AnchorEvent.focused].
   final AnchorStyle? focused;
+
+  /// The style to be merged when
+  /// events includes [AnchorEvent.hovered].
   final AnchorStyle? hovered;
+
+  /// The style to be merged when
+  /// events includes [AnchorEvent.pressed].
   final AnchorStyle? pressed;
-  final AnchorStyle? dragged;
+
+  /// The style to be merged when
+  /// events includes [AnchorEvent.disabled].
   final AnchorStyle? disabled;
 
   /// Map of driven style, order matters
-  Map<WidgetEvent, AnchorStyle?> get drivenStyle => {
-        WidgetEvent.selected: selected,
-        WidgetEvent.indeterminate: indeterminate,
-        WidgetEvent.error: error,
-        WidgetEvent.loading: loading,
+  Map<WidgetEvent, AnchorStyle?> get driven => {
         WidgetEvent.focused: focused,
         WidgetEvent.hovered: hovered,
         WidgetEvent.pressed: pressed,
-        WidgetEvent.dragged: dragged,
         WidgetEvent.disabled: disabled,
       };
 
+  /// Resolves the value for the given set of events
+  /// if `value` is an event driven [AnchorStyle],
+  /// otherwise returns the value itself.
+  static AnchorStyle? evaluate(AnchorStyle? value, Set<WidgetEvent> events) {
+    return DrivenProperty.evaluate<AnchorStyle?>(value, events);
+  }
+
   @override
-  AnchorStyle? resolve(Set<WidgetEvent> events) {
-    AnchorStyle style = enabled ?? const AnchorStyle();
-
-    if (resolver != null) {
-      style = style.merge(resolver?.call(events));
-    }
-
-    for (var e in drivenStyle.entries) {
+  AnchorStyle resolve(Set<WidgetEvent> events) {
+    AnchorStyle style = this;
+    for (var e in driven.entries) {
       if (events.contains(e.key)) {
-        final evaluated = AnchorStyle.evaluate(e.value, events);
+        final evaluated = evaluate(e.value, events);
         style = style.merge(evaluated);
       }
     }
-
     return style;
+  }
+
+  /// Creates a copy of this [AnchorStyle] but with
+  /// the given fields replaced with the new values.
+  @override
+  DrivenAnchorStyle copyWith({
+    EdgeInsetsGeometry? margin,
+    EdgeInsetsGeometry? padding,
+    BoxShape? shape,
+    double? radius,
+    BorderRadius? borderRadius,
+    Color? overlayColor,
+    double? overlayOpacity,
+    bool? overlayDisabled,
+    AnchorStyle? focusedStyle,
+    AnchorStyle? hoveredStyle,
+    AnchorStyle? pressedStyle,
+    AnchorStyle? disabledStyle,
+  }) {
+    return DrivenAnchorStyle(
+      margin: margin ?? this.margin,
+      padding: padding ?? this.padding,
+      shape: shape ?? this.shape,
+      radius: radius ?? this.radius,
+      borderRadius: borderRadius ?? this.borderRadius,
+      overlayColor: overlayColor ?? this.overlayColor,
+      overlayOpacity: overlayOpacity ?? this.overlayOpacity,
+      overlayDisabled: overlayDisabled ?? this.overlayDisabled,
+      focused: focused?.merge(focusedStyle) ?? focusedStyle,
+      hovered: hovered?.merge(hoveredStyle) ?? hoveredStyle,
+      pressed: pressed?.merge(pressedStyle) ?? pressedStyle,
+      disabled: disabled?.merge(disabledStyle) ?? disabledStyle,
+    );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<AnchorStyle?>('focused', focused));
+    properties.add(DiagnosticsProperty<AnchorStyle?>('hovered', hovered));
+    properties.add(DiagnosticsProperty<AnchorStyle?>('pressed', pressed));
+    properties.add(DiagnosticsProperty<AnchorStyle?>('disabled', disabled));
   }
 }
