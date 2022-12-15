@@ -91,7 +91,8 @@ class TileStyle with Diagnosticable {
   }
 
   /// Linearly interpolate between two [TileStyle] objects.
-  static TileStyle lerp(TileStyle? a, TileStyle? b, double t) {
+  static TileStyle? lerp(TileStyle? a, TileStyle? b, double t) {
+    if (a == null && b == null) return null;
     return TileStyle(
       direction: lerpEnum(a?.direction, b?.direction, t),
       margin: EdgeInsetsGeometry.lerp(a?.margin, b?.margin, t),

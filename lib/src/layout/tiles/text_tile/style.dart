@@ -71,7 +71,8 @@ class TextTileStyle with Diagnosticable {
   }
 
   /// Linearly interpolate between two [TextTileStyle] objects.
-  static TextTileStyle lerp(TextTileStyle? a, TextTileStyle? b, double t) {
+  static TextTileStyle? lerp(TextTileStyle? a, TextTileStyle? b, double t) {
+    if (a == null && b == null) return null;
     return TextTileStyle(
       spacing: lerpDouble(a?.spacing, b?.spacing, t),
       margin: EdgeInsetsGeometry.lerp(a?.margin, b?.margin, t),

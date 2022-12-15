@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/utils.dart';
 import 'style.dart';
+import 'tween.dart';
 
 class TileTheme extends InheritedTheme {
   /// The [TileStyle] to apply
@@ -31,7 +32,7 @@ class TileTheme extends InheritedTheme {
   /// The [style] and [child] arguments must not be null.
   static Widget merge({
     Key? key,
-    required TileStyle style,
+    TileStyle? style,
     required Widget child,
   }) {
     return Builder(
@@ -75,5 +76,54 @@ class TileTheme extends InheritedTheme {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     style.debugFillProperties(properties);
+  }
+}
+
+class AnimatedTileTheme extends ImplicitlyAnimatedWidget {
+  /// The [TileStyle] to apply
+  final TileStyle style;
+
+  /// The widget below this widget in the tree.
+  final Widget child;
+
+  /// Creates a widget that animates the [style] implicitly.
+  const AnimatedTileTheme({
+    Key? key,
+    Curve curve = Curves.linear,
+    Duration duration = const Duration(milliseconds: 200),
+    VoidCallback? onEnd,
+    required this.style,
+    required this.child,
+  }) : super(
+          key: key,
+          curve: curve,
+          duration: duration,
+          onEnd: onEnd,
+        );
+
+  @override
+  AnimatedWidgetBaseState<AnimatedTileTheme> createState() =>
+      _AnimatedIconThemeState();
+}
+
+class _AnimatedIconThemeState
+    extends AnimatedWidgetBaseState<AnimatedTileTheme> {
+  TileStyleTween? _styleTween;
+
+  @override
+  void forEachTween(TweenVisitor<dynamic> visitor) {
+    _styleTween = visitor(
+      _styleTween,
+      widget.style,
+      (dynamic value) => TileStyleTween(begin: value),
+    ) as TileStyleTween?;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TileTheme.merge(
+      style: _styleTween?.evaluate(animation),
+      child: widget.child,
+    );
   }
 }

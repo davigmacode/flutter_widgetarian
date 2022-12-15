@@ -106,7 +106,8 @@ class ListTileStyle with Diagnosticable {
   }
 
   /// Linearly interpolate between two [ListTileStyle] objects.
-  static ListTileStyle lerp(ListTileStyle? a, ListTileStyle? b, double t) {
+  static ListTileStyle? lerp(ListTileStyle? a, ListTileStyle? b, double t) {
+    if (a == null && b == null) return null;
     return ListTileStyle(
       margin: EdgeInsetsGeometry.lerp(a?.margin, b?.margin, t),
       spacing: lerpDouble(a?.spacing, b?.spacing, t),
