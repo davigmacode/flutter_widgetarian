@@ -212,4 +212,15 @@ class RenderOverlay extends RenderProxyBox {
 
     canvas.restore();
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(ColorProperty('color', color));
+    properties.add(DoubleProperty('opacity', opacity));
+    properties.add(EnumProperty<BoxShape>('shape', shape));
+    properties.add(DoubleProperty('radius', radius));
+    properties
+        .add(DiagnosticsProperty<BorderRadius>('borderRadius', borderRadius));
+  }
 }

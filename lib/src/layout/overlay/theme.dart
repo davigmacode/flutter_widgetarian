@@ -22,7 +22,7 @@ class OverlayTheme extends InheritedTheme {
   /// This constructor creates a [OverlayTheme] with an invalid [child], which
   /// means the constructed value cannot be incorporated into the tree.
   const OverlayTheme.fallback({Key? key})
-      : style = const OverlayStyle.fallback(),
+      : style = OverlayStyle.defaults,
         super(key: key, child: const NullWidget());
 
   /// Creates an [OverlayTheme] that controls the style of

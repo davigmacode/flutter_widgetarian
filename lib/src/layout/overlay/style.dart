@@ -28,12 +28,13 @@ class OverlayStyle with Diagnosticable {
         shape = other?.shape;
 
   /// An [OverlayStyle] with some reasonable default values.
-  const OverlayStyle.fallback()
-      : color = Colors.black,
-        opacity = 0.0,
-        radius = 0.0,
-        borderRadius = BorderRadius.zero,
-        shape = BoxShape.circle;
+  static const defaults = OverlayStyle(
+    color: Colors.black,
+    opacity: 0.0,
+    radius: 0.0,
+    borderRadius: BorderRadius.zero,
+    shape: BoxShape.circle,
+  );
 
   /// Creates a copy of this [OverlayStyle] but with
   /// the given fields replaced with the new values.
