@@ -3,7 +3,14 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/utils.dart';
 import 'style.dart';
 
+/// A Widget that controls how descendant [Sheet]s should look like.
 class SheetTheme extends InheritedTheme {
+  /// The curve to apply when animating the parameters of sheet widget.
+  final Curve curve;
+
+  /// The duration over which to animate the parameters of sheet widget.
+  final Duration duration;
+
   /// The [SheetStyle] to apply
   final SheetStyle style;
 
@@ -11,8 +18,10 @@ class SheetTheme extends InheritedTheme {
   /// how descendant [Sheet]s should look like.
   const SheetTheme({
     Key? key,
-    required Widget child,
+    required this.curve,
+    required this.duration,
     required this.style,
+    required Widget child,
   }) : super(key: key, child: child);
 
   /// A const-constructable [style] that provides fallback values.
@@ -22,7 +31,9 @@ class SheetTheme extends InheritedTheme {
   /// This constructor creates a [SheetTheme] with an invalid [child], which
   /// means the constructed value cannot be incorporated into the tree.
   const SheetTheme.fallback({Key? key})
-      : style = const SheetStyle.fallback(),
+      : curve = Curves.linear,
+        duration = const Duration(milliseconds: 200),
+        style = SheetStyle.defaults,
         super(key: key, child: const NullWidget());
 
   /// Creates an [SheetTheme] that controls the style of
@@ -31,7 +42,9 @@ class SheetTheme extends InheritedTheme {
   /// The [style] and [child] arguments must not be null.
   static Widget merge({
     Key? key,
-    required SheetStyle style,
+    Curve? curve,
+    Duration? duration,
+    SheetStyle? style,
     required Widget child,
   }) {
     return Builder(
@@ -39,6 +52,8 @@ class SheetTheme extends InheritedTheme {
         final parent = SheetTheme.of(context);
         return SheetTheme(
           key: key,
+          curve: curve ?? parent.curve,
+          duration: duration ?? parent.duration,
           style: parent.style.merge(style),
           child: child,
         );
@@ -63,17 +78,26 @@ class SheetTheme extends InheritedTheme {
 
   @override
   Widget wrap(BuildContext context, Widget child) {
-    return SheetTheme(style: style, child: child);
+    return SheetTheme(
+      curve: curve,
+      duration: duration,
+      style: style,
+      child: child,
+    );
   }
 
   @override
   bool updateShouldNotify(SheetTheme oldWidget) {
-    return oldWidget.style != style;
+    return oldWidget.curve != curve ||
+        oldWidget.duration != duration ||
+        oldWidget.style != style;
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Curve>('curve', curve));
+    properties.add(DiagnosticsProperty<Duration>('duration', duration));
     style.debugFillProperties(properties);
   }
 }

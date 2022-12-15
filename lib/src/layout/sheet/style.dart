@@ -1,46 +1,75 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
-import 'package:widgetarian/event.dart';
 import 'package:widgetarian/utils.dart';
 
+/// The style to be applied to the sheet widget
 @immutable
 class SheetStyle with Diagnosticable {
-  /// If non-null, requires the child to have exactly this width.
+  /// {@template widgetarian.sheet.style.width}
+  /// The horizontal extent of the sheet widget.
+  /// {@endtemplate}
   final double? width;
 
-  /// Defaults to [SheetStyle.defaultHeight]
+  /// {@template widgetarian.sheet.style.height}
+  /// The vertical extent of the sheet widget.
+  /// {@endtemplate}
   final double? height;
 
+  /// {@template widgetarian.sheet.style.margin}
   /// Empty space to surround the outside sheet.
+  /// {@endtemplate}
   final EdgeInsetsGeometry? margin;
 
+  /// {@template widgetarian.sheet.style.padding}
   /// The padding between the contents of the sheet and the outside sheet.
-  ///
-  /// defaults to [SheetStyle.defaultPadding].
+  /// {@endtemplate}
   final EdgeInsetsGeometry? padding;
 
+  /// {@template widgetarian.sheet.style.alignment}
+  /// Align the [child] within the sheet.
+  ///
+  /// If non-null, the sheet will expand to fill its parent and position its
+  /// child within itself according to the given value. If the incoming
+  /// constraints are unbounded, then the child will be shrink-wrapped instead.
+  ///
+  /// Ignored if [child] is null.
+  ///
+  /// See also:
+  ///
+  ///  * [Alignment], a class with convenient constants typically used to
+  ///    specify an [AlignmentGeometry].
+  ///  * [AlignmentDirectional], like [Alignment] for specifying alignments
+  ///    relative to text direction.
+  /// {@endtemplate}
   final Alignment? alignment;
 
+  /// {@template widgetarian.sheet.style.clipBehavior}
   /// The sheet's content will be clipped (or not) according to this option.
   ///
   /// See the enum [Clip] for details of all possible options and their common use cases.
-  ///
-  /// Defaults to [SheetStyle.defaultClipBehavior]
+  /// {@endtemplate}
   final Clip? clipBehavior;
 
+  /// {@template widgetarian.sheet.style.overlayColor}
   /// Defines the ink response colors.
+  /// {@endtemplate}
   final Color? overlayColor;
 
+  /// {@template widgetarian.sheet.style.shadowColor}
   /// When [elevation] is non zero the color
   /// to use for the sheet's shadow color.
+  /// {@endtemplate}
   final Color? shadowColor;
 
+  /// {@template widgetarian.sheet.style.elevation}
   /// The sheet's z-coordinate relative to
   /// the parent at which to place this physical object.
   ///
   /// The value is non-negative.
+  /// {@endtemplate}
   final double? elevation;
 
+  /// {@template widgetarian.sheet.style.foregroundStyle}
   /// The style to be applied to the sheet's label.
   ///
   /// The default label style is [TextTheme.bodyText1] from the overall
@@ -48,62 +77,95 @@ class SheetStyle with Diagnosticable {
   //
   /// This only has an effect on widgets that respect the [DefaultTextStyle],
   /// such as [Text].
+  /// {@endtemplate}
   final TextStyle? foregroundStyle;
 
+  /// {@template widgetarian.sheet.style.foregroundColor}
   /// The color to be applied to the sheet's label, and icon
+  /// {@endtemplate}
   final Color? foregroundColor;
 
+  /// {@template widgetarian.sheet.style.foregroundOpacity}
   /// Opacity to be apply to [foregroundColor].
+  /// {@endtemplate}
   final double? foregroundOpacity;
 
+  /// {@template widgetarian.sheet.style.foregroundAlpha}
   /// Alpha to be apply to [foregroundColor].
+  /// {@endtemplate}
   final int? foregroundAlpha;
 
+  /// {@template widgetarian.sheet.style.foregroundSpacing}
   /// How much space to place between sheet's foreground widget in a run in the main axis.
+  /// {@endtemplate}
   final double? foregroundSpacing;
 
+  /// {@template widgetarian.sheet.style.backgroundColor}
   /// Color to be used for the sheet's background.
+  /// {@endtemplate}
   final Color? backgroundColor;
 
+  /// {@template widgetarian.sheet.style.backgroundOpacity}
   /// Opacity to be apply to [backgroundColor].
+  /// {@endtemplate}
   final double? backgroundOpacity;
 
+  /// {@template widgetarian.sheet.style.backgroundAlpha}
   /// Alpha to be apply to [backgroundColor].
+  /// {@endtemplate}
   final int? backgroundAlpha;
 
+  /// {@template widgetarian.sheet.style.borderColor}
   /// Color to be used for the sheet's border.
+  /// {@endtemplate}
   final Color? borderColor;
 
+  /// {@template widgetarian.sheet.style.borderOpacity}
   /// Opacity to be apply to [borderColor].
+  /// {@endtemplate}
   final double? borderOpacity;
 
+  /// {@template widgetarian.sheet.style.borderAlpha}
   /// Alpha to be apply to [borderColor].
+  /// {@endtemplate}
   final int? borderAlpha;
 
+  /// {@template widgetarian.sheet.style.borderWidth}
   /// The width of this side of the sheet's border, in logical pixels.
+  /// {@endtemplate}
   final double? borderWidth;
 
+  /// {@template widgetarian.sheet.style.borderRadius}
   /// The radii for each corner of the sheet's border.
+  /// {@endtemplate}
   final BorderRadius? borderRadius;
 
+  /// {@template widgetarian.sheet.style.borderStyle}
   /// The style of this side of the sheet's border.
   ///
   /// To omit a side, set [borderStyle] to [BorderStyle.none].
   /// This skips painting the border, but the border still has a [borderWidth].
+  /// {@endtemplate}
   final BorderStyle? borderStyle;
 
+  /// {@template widgetarian.sheet.style.shape}
   /// The type of shape.
+  /// {@endtemplate}
   final BoxShape? shape;
 
+  /// {@template widgetarian.sheet.style.iconColor}
   /// Color to be used for the icon's inside the sheet.
+  /// {@endtemplate}
   final Color? iconColor;
 
+  /// {@template widgetarian.sheet.style.iconOpacity}
   /// Opacity to be apply to [iconColor].
+  /// {@endtemplate}
   final double? iconOpacity;
 
+  /// {@template widgetarian.sheet.style.iconSize}
   /// The size of the icon's inside the sheet, in logical pixels.
-  ///
-  /// Defaults to [SheetStyle.defaultIconSize].
+  /// {@endtemplate}
   final double? iconSize;
 
   static const defaultClipBehavior = Clip.antiAlias;
@@ -182,35 +244,8 @@ class SheetStyle with Diagnosticable {
     this.iconSize,
   });
 
-  /// Create a [SheetStyle] from another style
-  const SheetStyle.fallback()
-      : width = null,
-        height = null,
-        margin = null,
-        padding = null,
-        alignment = null,
-        clipBehavior = null,
-        overlayColor = null,
-        shadowColor = null,
-        elevation = null,
-        foregroundStyle = null,
-        foregroundColor = null,
-        foregroundOpacity = null,
-        foregroundAlpha = null,
-        foregroundSpacing = null,
-        backgroundColor = null,
-        backgroundOpacity = null,
-        backgroundAlpha = null,
-        borderColor = null,
-        borderOpacity = null,
-        borderAlpha = null,
-        borderWidth = null,
-        borderRadius = null,
-        borderStyle = null,
-        shape = null,
-        iconColor = null,
-        iconOpacity = null,
-        iconSize = null;
+  /// An [SheetStyle] with some reasonable default values.
+  static const defaults = SheetStyle();
 
   /// Create a [SheetStyle] from another style
   SheetStyle.from(SheetStyle? other)
@@ -242,550 +277,129 @@ class SheetStyle with Diagnosticable {
         iconOpacity = other?.iconOpacity,
         iconSize = other?.iconSize;
 
-  /// Create an event driven [SheetStyle] using [callback].
-  factory SheetStyle.driven(
-    DrivenPropertyResolver<SheetStyle?> callback,
-  ) {
-    return _SheetStyle(callback);
-  }
-
-  /// Create a [SheetStyle] when some events occurs.
-  ///
-  /// The [enabled] is base style to be applied to the sheet.
-  /// if `null` will fallback with empty DrivenButtonStyle
-  ///
-  /// The [selected] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.selected].
-  ///
-  /// The [indeterminate] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.indeterminate].
-  ///
-  /// The [error] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.error].
-  ///
-  /// The [loading] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.loading].
-  ///
-  /// The [focused] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.focused].
-  ///
-  /// The [hovered] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.hovered].
-  ///
-  /// The [pressed] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.pressed].
-  ///
-  /// The [dragged] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.dragged].
-  ///
-  /// The [disabled] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.disabled].
-  factory SheetStyle.when({
-    SheetStyle? enabled,
-    SheetStyle? selected,
-    SheetStyle? indeterminate,
-    SheetStyle? error,
-    SheetStyle? loading,
-    SheetStyle? focused,
-    SheetStyle? hovered,
-    SheetStyle? pressed,
-    SheetStyle? dragged,
-    SheetStyle? disabled,
-  }) {
-    return SheetStyle.driven((events) {
-      return (enabled ?? const SheetStyle())
-          .merge(WidgetEvent.isSelected(events)
-              ? SheetStyle.evaluate(selected, events)
-              : null)
-          .merge(WidgetEvent.isIndeterminate(events)
-              ? evaluate(indeterminate, events)
-              : null)
-          .merge(WidgetEvent.isErrored(events)
-              ? SheetStyle.evaluate(error, events)
-              : null)
-          .merge(WidgetEvent.isLoading(events)
-              ? SheetStyle.evaluate(loading, events)
-              : null)
-          .merge(WidgetEvent.isFocused(events)
-              ? SheetStyle.evaluate(focused, events)
-              : null)
-          .merge(WidgetEvent.isHovered(events)
-              ? SheetStyle.evaluate(hovered, events)
-              : null)
-          .merge(WidgetEvent.isPressed(events)
-              ? SheetStyle.evaluate(pressed, events)
-              : null)
-          .merge(WidgetEvent.isDragged(events)
-              ? SheetStyle.evaluate(dragged, events)
-              : null)
-          .merge(WidgetEvent.isDisabled(events)
-              ? SheetStyle.evaluate(disabled, events)
-              : null);
-    });
-  }
-
-  /// Resolves the value for the given set of events
-  /// if `value` is an event driven [SheetStyle],
-  /// otherwise returns the value itself.
-  static SheetStyle? evaluate(
-    SheetStyle? value,
-    Set<WidgetEvent> events,
-  ) {
-    return value?.merge(DrivenProperty.evaluate<SheetStyle?>(value, events));
-  }
-
   /// Create [SheetStyle] with default value for flat style.
-  ///
-  /// The [selected] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.selected].
-  ///
-  /// The [indeterminate] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.indeterminate].
-  ///
-  /// The [error] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.error].
-  ///
-  /// The [loading] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.loading].
-  ///
-  /// The [focused] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.focused].
-  ///
-  /// The [hovered] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.hovered].
-  ///
-  /// The [pressed] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.pressed].
-  ///
-  /// The [dragged] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.dragged].
-  ///
-  /// The [disabled] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.disabled].
-  SheetStyle flat({
-    double? width,
-    double? height,
-    EdgeInsetsGeometry? margin,
-    EdgeInsetsGeometry? padding,
-    Alignment? alignment,
-    Clip? clipBehavior,
-    Color? overlayColor,
-    Color? shadowColor,
-    double? elevation,
-    TextStyle? foregroundStyle,
-    Color? foregroundColor,
-    double? foregroundOpacity,
-    int? foregroundAlpha,
-    double? foregroundSpacing,
-    Color? backgroundColor,
-    double? backgroundOpacity = 0,
-    int? backgroundAlpha,
-    Color? borderColor,
-    double? borderOpacity,
-    int? borderAlpha,
-    double? borderWidth,
-    BorderRadius? borderRadius,
-    BorderStyle? borderStyle = BorderStyle.none,
-    BoxShape? shape,
-    Color? iconColor,
-    double? iconOpacity,
-    double? iconSize,
-    SheetStyle? selectedStyle,
-    SheetStyle? indeterminateStyle,
-    SheetStyle? errorStyle,
-    SheetStyle? loadingStyle,
-    SheetStyle? focusedStyle,
-    SheetStyle? hoveredStyle,
-    SheetStyle? pressedStyle,
-    SheetStyle? draggedStyle,
-    SheetStyle? disabledStyle = const SheetStyle(
-      foregroundAlpha: SheetStyle.disabledForegroundAlpha,
-    ),
-  }) {
-    final style = SheetStyle.when(
-      enabled: SheetStyle(
-        width: width,
-        height: height,
-        margin: margin,
-        padding: padding,
-        alignment: alignment,
-        clipBehavior: clipBehavior,
-        overlayColor: overlayColor,
-        shadowColor: shadowColor,
-        elevation: elevation,
-        foregroundStyle: foregroundStyle,
-        foregroundColor: foregroundColor,
-        foregroundOpacity: foregroundOpacity,
-        foregroundAlpha: foregroundAlpha,
-        foregroundSpacing: foregroundSpacing,
-        backgroundColor: backgroundColor,
-        backgroundOpacity: backgroundOpacity,
-        backgroundAlpha: backgroundAlpha,
-        borderColor: borderColor,
-        borderOpacity: borderOpacity,
-        borderAlpha: borderAlpha,
-        borderWidth: borderWidth,
-        borderRadius: borderRadius,
-        borderStyle: borderStyle,
-        shape: shape,
-        iconColor: iconColor,
-        iconOpacity: iconOpacity,
-        iconSize: iconSize,
-      ),
-      selected: selectedStyle,
-      indeterminate: indeterminateStyle,
-      error: errorStyle,
-      loading: loadingStyle,
-      focused: focusedStyle,
-      hovered: hoveredStyle,
-      pressed: pressedStyle,
-      dragged: draggedStyle,
-      disabled: disabledStyle,
-    );
-
-    return merge(style);
-  }
+  const SheetStyle.flat({
+    this.width,
+    this.height,
+    this.margin,
+    this.padding,
+    this.alignment,
+    this.clipBehavior,
+    this.overlayColor,
+    this.shadowColor,
+    this.elevation,
+    this.foregroundStyle,
+    this.foregroundColor,
+    this.foregroundOpacity,
+    this.foregroundAlpha,
+    this.foregroundSpacing,
+    this.backgroundColor,
+    this.backgroundOpacity = 0,
+    this.backgroundAlpha,
+    this.borderColor,
+    this.borderOpacity,
+    this.borderAlpha,
+    this.borderWidth,
+    this.borderRadius,
+    this.borderStyle = BorderStyle.none,
+    this.shape,
+    this.iconColor,
+    this.iconOpacity,
+    this.iconSize,
+  });
 
   /// Create [SheetStyle] with default value for toned style.
-  ///
-  /// The [selected] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.selected].
-  ///
-  /// The [indeterminate] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.indeterminate].
-  ///
-  /// The [error] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.error].
-  ///
-  /// The [loading] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.loading].
-  ///
-  /// The [focused] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.focused].
-  ///
-  /// The [hovered] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.hovered].
-  ///
-  /// The [pressed] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.pressed].
-  ///
-  /// The [dragged] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.dragged].
-  ///
-  /// The [disabled] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.disabled].
-  SheetStyle toned({
-    double? width,
-    double? height,
-    EdgeInsetsGeometry? margin,
-    EdgeInsetsGeometry? padding,
-    Alignment? alignment,
-    Clip? clipBehavior,
-    Color? overlayColor,
-    Color? shadowColor,
-    double? elevation,
-    TextStyle? foregroundStyle,
-    Color? foregroundColor,
-    double? foregroundOpacity,
-    int? foregroundAlpha,
-    double? foregroundSpacing,
-    Color? backgroundColor,
-    double? backgroundOpacity = .12,
-    int? backgroundAlpha,
-    Color? borderColor,
-    double? borderOpacity = 1,
-    int? borderAlpha,
-    double? borderWidth = 1,
-    BorderRadius? borderRadius,
-    BorderStyle? borderStyle = BorderStyle.none,
-    BoxShape? shape,
-    Color? iconColor,
-    double? iconOpacity,
-    double? iconSize,
-    SheetStyle? selectedStyle,
-    SheetStyle? indeterminateStyle,
-    SheetStyle? errorStyle,
-    SheetStyle? loadingStyle,
-    SheetStyle? focusedStyle,
-    SheetStyle? hoveredStyle,
-    SheetStyle? pressedStyle,
-    SheetStyle? draggedStyle,
-    SheetStyle? disabledStyle = const SheetStyle(
-      foregroundAlpha: SheetStyle.disabledForegroundAlpha,
-      backgroundAlpha: SheetStyle.disabledBackgroundAlpha,
-      borderAlpha: SheetStyle.disabledBorderAlpha,
-    ),
-  }) {
-    final style = SheetStyle.when(
-      enabled: SheetStyle(
-        width: width,
-        height: height,
-        margin: margin,
-        padding: padding,
-        alignment: alignment,
-        clipBehavior: clipBehavior,
-        overlayColor: overlayColor,
-        shadowColor: shadowColor,
-        elevation: elevation,
-        foregroundStyle: foregroundStyle,
-        foregroundColor: foregroundColor,
-        foregroundOpacity: foregroundOpacity,
-        foregroundAlpha: foregroundAlpha,
-        foregroundSpacing: foregroundSpacing,
-        backgroundColor: backgroundColor,
-        backgroundOpacity: backgroundOpacity,
-        backgroundAlpha: backgroundAlpha,
-        borderColor: borderColor,
-        borderOpacity: borderOpacity,
-        borderAlpha: borderAlpha,
-        borderWidth: borderWidth,
-        borderRadius: borderRadius,
-        borderStyle: borderStyle,
-        shape: shape,
-        iconColor: iconColor,
-        iconOpacity: iconOpacity,
-        iconSize: iconSize,
-      ),
-      selected: selectedStyle,
-      indeterminate: indeterminateStyle,
-      error: errorStyle,
-      loading: loadingStyle,
-      focused: focusedStyle,
-      hovered: hoveredStyle,
-      pressed: pressedStyle,
-      dragged: draggedStyle,
-      disabled: disabledStyle,
-    );
-
-    return merge(style);
-  }
+  const SheetStyle.toned({
+    this.width,
+    this.height,
+    this.margin,
+    this.padding,
+    this.alignment,
+    this.clipBehavior,
+    this.overlayColor,
+    this.shadowColor,
+    this.elevation,
+    this.foregroundStyle,
+    this.foregroundColor,
+    this.foregroundOpacity,
+    this.foregroundAlpha,
+    this.foregroundSpacing,
+    this.backgroundColor,
+    this.backgroundOpacity = .12,
+    this.backgroundAlpha,
+    this.borderColor,
+    this.borderOpacity = 1,
+    this.borderAlpha,
+    this.borderWidth = 1,
+    this.borderRadius,
+    this.borderStyle = BorderStyle.none,
+    this.shape,
+    this.iconColor,
+    this.iconOpacity,
+    this.iconSize,
+  });
 
   /// Create [SheetStyle] with default value for filled style.
-  ///
-  /// The [selected] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.selected].
-  ///
-  /// The [indeterminate] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.indeterminate].
-  ///
-  /// The [error] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.error].
-  ///
-  /// The [loading] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.loading].
-  ///
-  /// The [focused] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.focused].
-  ///
-  /// The [hovered] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.hovered].
-  ///
-  /// The [pressed] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.pressed].
-  ///
-  /// The [dragged] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.dragged].
-  ///
-  /// The [disabled] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.disabled].
-  SheetStyle filled({
+  const SheetStyle.filled({
     Color? color,
-    double? width,
-    double? height,
-    EdgeInsetsGeometry? margin,
-    EdgeInsetsGeometry? padding,
-    Alignment? alignment,
-    Clip? clipBehavior,
-    Color? overlayColor,
-    Color? shadowColor,
-    double? elevation,
-    TextStyle? foregroundStyle,
-    Color? foregroundColor,
-    double? foregroundOpacity,
-    int? foregroundAlpha,
-    double? foregroundSpacing,
-    double? backgroundOpacity = .8,
-    int? backgroundAlpha,
-    double? borderOpacity = 0,
-    int? borderAlpha,
-    double? borderWidth = 0,
-    BorderRadius? borderRadius,
-    BorderStyle? borderStyle = BorderStyle.none,
-    BoxShape? shape,
-    Color? iconColor,
-    double? iconOpacity,
-    double? iconSize,
-    SheetStyle? selectedStyle,
-    SheetStyle? indeterminateStyle,
-    SheetStyle? errorStyle,
-    SheetStyle? loadingStyle,
-    SheetStyle? focusedStyle,
-    SheetStyle? hoveredStyle,
-    SheetStyle? pressedStyle = const SheetStyle(
-      elevation: 5,
-    ),
-    SheetStyle? draggedStyle,
-    SheetStyle? disabledStyle = const SheetStyle(
-      foregroundAlpha: SheetStyle.disabledForegroundAlpha,
-      backgroundAlpha: SheetStyle.disabledBackgroundAlpha,
-      borderAlpha: SheetStyle.disabledBorderAlpha,
-    ),
-  }) {
-    final style = SheetStyle.when(
-      enabled: SheetStyle(
-        backgroundColor: color,
-        borderColor: color,
-        width: width,
-        height: height,
-        margin: margin,
-        padding: padding,
-        alignment: alignment,
-        clipBehavior: clipBehavior,
-        overlayColor: overlayColor,
-        shadowColor: shadowColor,
-        elevation: elevation,
-        foregroundStyle: foregroundStyle,
-        foregroundColor: foregroundColor,
-        foregroundOpacity: foregroundOpacity,
-        foregroundAlpha: foregroundAlpha,
-        foregroundSpacing: foregroundSpacing,
-        backgroundOpacity: backgroundOpacity,
-        backgroundAlpha: backgroundAlpha,
-        borderOpacity: borderOpacity,
-        borderAlpha: borderAlpha,
-        borderWidth: borderWidth,
-        borderRadius: borderRadius,
-        borderStyle: borderStyle,
-        shape: shape,
-        iconColor: iconColor,
-        iconOpacity: iconOpacity,
-        iconSize: iconSize,
-      ),
-      selected: selectedStyle,
-      indeterminate: indeterminateStyle,
-      error: errorStyle,
-      loading: loadingStyle,
-      focused: focusedStyle,
-      hovered: hoveredStyle,
-      pressed: pressedStyle,
-      dragged: draggedStyle,
-      disabled: disabledStyle,
-    );
-
-    return merge(style);
-  }
+    this.width,
+    this.height,
+    this.margin,
+    this.padding,
+    this.alignment,
+    this.clipBehavior,
+    this.overlayColor,
+    this.shadowColor,
+    this.elevation,
+    this.foregroundStyle,
+    this.foregroundColor,
+    this.foregroundOpacity,
+    this.foregroundAlpha,
+    this.foregroundSpacing,
+    this.backgroundOpacity = .8,
+    this.backgroundAlpha,
+    this.borderOpacity = 0,
+    this.borderAlpha,
+    this.borderWidth = 0,
+    this.borderRadius,
+    this.borderStyle = BorderStyle.none,
+    this.shape,
+    this.iconColor,
+    this.iconOpacity,
+    this.iconSize,
+  })  : backgroundColor = color,
+        borderColor = color;
 
   /// Create [SheetStyle] with default value for outlined style.
-  ///
-  /// The [selected] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.selected].
-  ///
-  /// The [indeterminate] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.indeterminate].
-  ///
-  /// The [error] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.error].
-  ///
-  /// The [loading] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.loading].
-  ///
-  /// The [focused] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.focused].
-  ///
-  /// The [hovered] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.hovered].
-  ///
-  /// The [pressed] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.pressed].
-  ///
-  /// The [dragged] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.dragged].
-  ///
-  /// The [disabled] style to be merged with [enabled],
-  /// when events includes [WidgetEvent.disabled].
-  SheetStyle outlined({
+  const SheetStyle.outlined({
     Color? color,
-    double? width,
-    double? height,
-    EdgeInsetsGeometry? margin,
-    EdgeInsetsGeometry? padding,
-    Alignment? alignment,
-    Clip? clipBehavior,
-    Color? overlayColor,
-    Color? shadowColor,
-    double? elevation,
-    TextStyle? foregroundStyle,
-    double? foregroundOpacity,
-    int? foregroundAlpha,
-    double? foregroundSpacing,
-    Color? backgroundColor,
-    double? backgroundOpacity = 0,
-    int? backgroundAlpha,
-    double? borderOpacity = 1,
-    int? borderAlpha,
-    double? borderWidth = 1,
-    BorderRadius? borderRadius,
-    BorderStyle? borderStyle = BorderStyle.solid,
-    BoxShape? shape,
-    Color? iconColor,
-    double? iconOpacity,
-    double? iconSize,
-    SheetStyle? selectedStyle,
-    SheetStyle? indeterminateStyle,
-    SheetStyle? errorStyle,
-    SheetStyle? loadingStyle,
-    SheetStyle? focusedStyle,
-    SheetStyle? hoveredStyle,
-    SheetStyle? pressedStyle,
-    SheetStyle? draggedStyle,
-    SheetStyle? disabledStyle = const SheetStyle(
-      foregroundAlpha: SheetStyle.disabledForegroundAlpha,
-      borderAlpha: SheetStyle.disabledBorderAlpha,
-    ),
-  }) {
-    final style = SheetStyle.when(
-      enabled: SheetStyle(
-        borderColor: color,
-        foregroundColor: color,
-        width: width,
-        height: height,
-        margin: margin,
-        padding: padding,
-        alignment: alignment,
-        clipBehavior: clipBehavior,
-        overlayColor: overlayColor,
-        shadowColor: shadowColor,
-        elevation: elevation,
-        foregroundStyle: foregroundStyle,
-        foregroundOpacity: foregroundOpacity,
-        foregroundAlpha: foregroundAlpha,
-        foregroundSpacing: foregroundSpacing,
-        backgroundColor: backgroundColor,
-        backgroundOpacity: backgroundOpacity,
-        backgroundAlpha: backgroundAlpha,
-        borderOpacity: borderOpacity,
-        borderAlpha: borderAlpha,
-        borderWidth: borderWidth,
-        borderRadius: borderRadius,
-        borderStyle: borderStyle,
-        shape: shape,
-        iconColor: iconColor,
-        iconOpacity: iconOpacity,
-        iconSize: iconSize,
-      ),
-      selected: selectedStyle,
-      indeterminate: indeterminateStyle,
-      error: errorStyle,
-      loading: loadingStyle,
-      focused: focusedStyle,
-      hovered: hoveredStyle,
-      pressed: pressedStyle,
-      dragged: draggedStyle,
-      disabled: disabledStyle,
-    );
-
-    return merge(style);
-  }
+    this.width,
+    this.height,
+    this.margin,
+    this.padding,
+    this.alignment,
+    this.clipBehavior,
+    this.overlayColor,
+    this.shadowColor,
+    this.elevation,
+    this.foregroundStyle,
+    this.foregroundOpacity,
+    this.foregroundAlpha,
+    this.foregroundSpacing,
+    this.backgroundColor,
+    this.backgroundOpacity = 0,
+    this.backgroundAlpha,
+    this.borderOpacity = 1,
+    this.borderAlpha,
+    this.borderWidth = 1,
+    this.borderRadius,
+    this.borderStyle = BorderStyle.solid,
+    this.shape,
+    this.iconColor,
+    this.iconOpacity,
+    this.iconSize,
+  })  : borderColor = color,
+        foregroundColor = color;
 
   /// Creates a copy of this [SheetStyle] but with
   /// the given fields replaced with the new values.
@@ -817,26 +431,8 @@ class SheetStyle with Diagnosticable {
     Color? iconColor,
     double? iconOpacity,
     double? iconSize,
-    SheetStyle? selectedStyle,
-    SheetStyle? indeterminateStyle,
-    SheetStyle? errorStyle,
-    SheetStyle? loadingStyle,
-    SheetStyle? focusedStyle,
-    SheetStyle? hoveredStyle,
-    SheetStyle? pressedStyle,
-    SheetStyle? draggedStyle,
-    SheetStyle? disabledStyle,
   }) {
-    final hasEvent = selectedStyle != null ||
-        indeterminateStyle != null ||
-        errorStyle != null ||
-        loadingStyle != null ||
-        focusedStyle != null ||
-        hoveredStyle != null ||
-        pressedStyle != null ||
-        draggedStyle != null ||
-        disabledStyle != null;
-    final style = SheetStyle(
+    return SheetStyle(
       width: width ?? this.width,
       height: height ?? this.height,
       margin: margin ?? this.margin,
@@ -865,20 +461,6 @@ class SheetStyle with Diagnosticable {
       iconOpacity: iconOpacity ?? this.iconOpacity,
       iconSize: iconSize ?? this.iconSize,
     );
-    return hasEvent
-        ? SheetStyle.when(
-            enabled: style,
-            selected: selectedStyle,
-            indeterminate: indeterminateStyle,
-            error: errorStyle,
-            loading: loadingStyle,
-            focused: focusedStyle,
-            hovered: hoveredStyle,
-            pressed: pressedStyle,
-            dragged: draggedStyle,
-            disabled: disabledStyle,
-          )
-        : style;
   }
 
   /// Creates a copy of this [SheetStyle] but with
@@ -915,33 +497,6 @@ class SheetStyle with Diagnosticable {
       iconColor: other.iconColor,
       iconOpacity: other.iconOpacity,
       iconSize: other.iconSize,
-      selectedStyle: other is _SheetStyle
-          ? SheetStyle.evaluate(other, {WidgetEvent.selected})
-          : null,
-      indeterminateStyle: other is _SheetStyle
-          ? SheetStyle.evaluate(other, {WidgetEvent.indeterminate})
-          : null,
-      errorStyle: other is _SheetStyle
-          ? SheetStyle.evaluate(other, {WidgetEvent.error})
-          : null,
-      loadingStyle: other is _SheetStyle
-          ? SheetStyle.evaluate(other, {WidgetEvent.loading})
-          : null,
-      focusedStyle: other is _SheetStyle
-          ? SheetStyle.evaluate(other, {WidgetEvent.focused})
-          : null,
-      hoveredStyle: other is _SheetStyle
-          ? SheetStyle.evaluate(other, {WidgetEvent.hovered})
-          : null,
-      pressedStyle: other is _SheetStyle
-          ? SheetStyle.evaluate(other, {WidgetEvent.pressed})
-          : null,
-      draggedStyle: other is _SheetStyle
-          ? SheetStyle.evaluate(other, {WidgetEvent.dragged})
-          : null,
-      disabledStyle: other is _SheetStyle
-          ? SheetStyle.evaluate(other, {WidgetEvent.disabled})
-          : null,
     );
   }
 
@@ -1028,124 +583,4 @@ class SheetStyle with Diagnosticable {
       properties.add(DiagnosticsProperty(el.key, el.value, defaultValue: null));
     });
   }
-
-  // @override
-  // bool operator ==(Object other) {
-  //   if (other.runtimeType != runtimeType) return false;
-  //   return other is SheetStyle &&
-  //       other.shape == shape &&
-  //       other.width == width &&
-  //       other.height == height &&
-  //       other.margin == margin &&
-  //       other.padding == padding &&
-  //       other.alignment == alignment &&
-  //       other.clipBehavior == clipBehavior &&
-  //       other.overlayColor == overlayColor &&
-  //       other.shadowColor == shadowColor &&
-  //       other.elevation == elevation &&
-  //       other.foregroundStyle == foregroundStyle &&
-  //       other.foregroundColor == foregroundColor &&
-  //       other.foregroundOpacity == foregroundOpacity &&
-  //       other.foregroundAlpha == foregroundAlpha &&
-  //       other.foregroundSpacing == foregroundSpacing &&
-  //       other.backgroundColor == backgroundColor &&
-  //       other.backgroundOpacity == backgroundOpacity &&
-  //       other.backgroundAlpha == backgroundAlpha &&
-  //       other.borderColor == borderColor &&
-  //       other.borderOpacity == borderOpacity &&
-  //       other.borderAlpha == borderAlpha &&
-  //       other.borderWidth == borderWidth &&
-  //       other.borderRadius == borderRadius &&
-  //       other.borderStyle == borderStyle &&
-  //       other.iconColor == iconColor &&
-  //       other.iconOpacity == iconOpacity &&
-  //       other.iconSize == iconSize;
-  // }
-
-  // @override
-  // int get hashCode => Object.hashAll([
-  //       shape,
-  //       width,
-  //       height,
-  //       padding,
-  //       margin,
-  //       alignment,
-  //       clipBehavior,
-  //       overlayColor,
-  //       shadowColor,
-  //       elevation,
-  //       foregroundStyle,
-  //       foregroundColor,
-  //       foregroundOpacity,
-  //       foregroundAlpha,
-  //       foregroundSpacing,
-  //       backgroundColor,
-  //       backgroundOpacity,
-  //       backgroundAlpha,
-  //       borderColor,
-  //       borderOpacity,
-  //       borderAlpha,
-  //       borderWidth,
-  //       borderRadius,
-  //       borderStyle,
-  //       iconColor,
-  //       iconOpacity,
-  //       iconSize,
-  //     ]);
-
-  // @override
-  // void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  //   super.debugFillProperties(properties);
-  //   properties.add(DiagnosticsProperty('shape', shape, defaultValue: null));
-  //   properties
-  //       .add(DiagnosticsProperty<BoxShape>('shape', shape, defaultValue: null));
-  //   properties.add(DoubleProperty('width', width, defaultValue: null));
-  //   properties.add(DoubleProperty('height', height, defaultValue: null));
-  //   properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', padding,
-  //       defaultValue: null));
-  //   properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('margin', margin,
-  //       defaultValue: null));
-  //   properties.add(DiagnosticsProperty<Alignment>('alignment', alignment,
-  //       defaultValue: null));
-  //   properties.add(DiagnosticsProperty<Clip>('clipBehavior', clipBehavior,
-  //       defaultValue: null));
-  //   properties
-  //       .add(ColorProperty('overlayColor', overlayColor, defaultValue: null));
-  //   properties
-  //       .add(ColorProperty('shadowColor', shadowColor, defaultValue: null));
-  //   properties.add(DoubleProperty('elevation', elevation, defaultValue: null));
-  //   properties.add(DiagnosticsProperty<TextStyle>(
-  //       'foregroundStyle', foregroundStyle,
-  //       defaultValue: null));
-  //   properties.add(
-  //       ColorProperty('foregroundColor', foregroundColor, defaultValue: null));
-  //   properties.add(DoubleProperty('foregroundOpacity', foregroundOpacity,
-  //       defaultValue: null));
-  //   properties.add(
-  //       IntProperty('foregroundAlpha', foregroundAlpha, defaultValue: null));
-  //   properties.add(DoubleProperty('foregroundSpacing', foregroundSpacing,
-  //       defaultValue: null));
-  //   properties.add(
-  //       ColorProperty('backgroundColor', backgroundColor, defaultValue: null));
-  //   properties.add(DoubleProperty('backgroundOpacity', backgroundOpacity,
-  //       defaultValue: null));
-  //   properties.add(
-  //       IntProperty('backgroundAlpha', backgroundAlpha, defaultValue: null));
-  //   properties
-  //       .add(ColorProperty('borderColor', borderColor, defaultValue: null));
-  //   properties.add(
-  //       DoubleProperty('borderOpacity', borderOpacity, defaultValue: null));
-  //   properties.add(IntProperty('borderAlpha', borderAlpha, defaultValue: null));
-  //   properties
-  //       .add(DoubleProperty('borderWidth', borderOpacity, defaultValue: null));
-  // }
-}
-
-class _SheetStyle extends SheetStyle implements DrivenProperty<SheetStyle?> {
-  _SheetStyle(this._resolver) : super.from(_resolver({}));
-
-  final DrivenPropertyResolver<SheetStyle?> _resolver;
-
-  @override
-  SheetStyle? resolve(Set<WidgetEvent> events) => _resolver(events);
 }

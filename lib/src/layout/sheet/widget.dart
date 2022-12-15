@@ -1,139 +1,225 @@
 import 'package:flutter/material.dart' show Theme, ThemeData;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/animation.dart';
-import 'package:widgetarian/event.dart';
 import 'package:widgetarian/utils.dart';
 import '../box.dart';
 import 'style.dart';
 import 'theme.dart';
 
-/// Sheet widget with smooth animation, event driven style, and many more.
+/// The sheet widget is the baseline for numerous components.
 class Sheet extends StatelessWidget {
   const Sheet({
     Key? key,
-    this.selected,
-    this.loading = false,
-    this.disabled = false,
-    this.eventsController,
-    this.duration = Sheet.defaultDuration,
-    this.curve = Sheet.defaultCurve,
-    this.tooltip,
+    this.duration,
+    this.curve,
+    this.width,
+    this.height,
+    this.margin,
+    this.padding,
+    this.alignment,
+    this.clipBehavior,
+    this.overlayColor,
+    this.shadowColor,
+    this.elevation,
+    this.foregroundStyle,
+    this.foregroundColor,
+    this.foregroundOpacity,
+    this.foregroundAlpha,
+    this.foregroundSpacing,
+    this.backgroundColor,
+    this.backgroundOpacity,
+    this.backgroundAlpha,
+    this.borderColor,
+    this.borderOpacity,
+    this.borderAlpha,
+    this.borderWidth,
+    this.borderRadius,
+    this.borderStyle,
+    this.shape,
+    this.iconColor,
+    this.iconOpacity,
+    this.iconSize,
     this.style,
+    this.tooltip,
     this.child,
   }) : super(key: key);
+
+  /// The curve to apply when animating the parameters of this widget.
+  final Curve? curve;
+
+  /// The duration over which to animate the parameters of this widget.
+  final Duration? duration;
+
+  /// {@macro widgetarian.sheet.style.width}
+  final double? width;
+
+  /// {@macro widgetarian.sheet.style.height}
+  final double? height;
+
+  /// {@macro widgetarian.sheet.style.margin}
+  final EdgeInsetsGeometry? margin;
+
+  /// {@macro widgetarian.sheet.style.padding}
+  final EdgeInsetsGeometry? padding;
+
+  /// {@macro widgetarian.sheet.style.alignment}
+  final Alignment? alignment;
+
+  /// {@macro widgetarian.sheet.style.clipBehavior}
+  final Clip? clipBehavior;
+
+  /// {@macro widgetarian.sheet.style.overlayColor}
+  final Color? overlayColor;
+
+  /// {@macro widgetarian.sheet.style.shadowColor}
+  final Color? shadowColor;
+
+  /// {@macro widgetarian.sheet.style.elevation}
+  final double? elevation;
+
+  /// {@macro widgetarian.sheet.style.foregroundStyle}
+  final TextStyle? foregroundStyle;
+
+  /// {@macro widgetarian.sheet.style.foregroundColor}
+  final Color? foregroundColor;
+
+  /// {@macro widgetarian.sheet.style.foregroundOpacity}
+  final double? foregroundOpacity;
+
+  /// {@macro widgetarian.sheet.style.foregroundAlpha}
+  final int? foregroundAlpha;
+
+  /// {@macro widgetarian.sheet.style.foregroundSpacing}
+  final double? foregroundSpacing;
+
+  /// {@macro widgetarian.sheet.style.backgroundColor}
+  final Color? backgroundColor;
+
+  /// {@macro widgetarian.sheet.style.backgroundOpacity}
+  final double? backgroundOpacity;
+
+  /// {@macro widgetarian.sheet.style.backgroundAlpha}
+  final int? backgroundAlpha;
+
+  /// {@macro widgetarian.sheet.style.borderColor}
+  final Color? borderColor;
+
+  /// {@macro widgetarian.sheet.style.borderOpacity}
+  final double? borderOpacity;
+
+  /// {@macro widgetarian.sheet.style.borderAlpha}
+  final int? borderAlpha;
+
+  /// {@macro widgetarian.sheet.style.borderWidth}
+  final double? borderWidth;
+
+  /// {@macro widgetarian.sheet.style.borderRadius}
+  final BorderRadius? borderRadius;
+
+  /// {@macro widgetarian.sheet.style.borderStyle}
+  final BorderStyle? borderStyle;
+
+  /// {@macro widgetarian.sheet.style.shape}
+  final BoxShape? shape;
+
+  /// {@macro widgetarian.sheet.style.iconColor}
+  final Color? iconColor;
+
+  /// {@macro widgetarian.sheet.style.iconOpacity}
+  final double? iconOpacity;
+
+  /// {@macro widgetarian.sheet.style.iconSize}
+  final double? iconSize;
+
+  /// The style to be applied to the sheet.
+  final SheetStyle? style;
 
   /// Tooltip string to be used for the body area of the button.
   final String? tooltip;
 
-  /// The primary content of the chip.
-  ///
-  /// Typically a [Text] widget.
+  /// The widget below this widget in the tree.
   final Widget? child;
 
-  final bool? selected;
-
-  final bool loading;
-
-  /// Whether or not this chip is disabled for input.
-  ///
-  /// Defaults to false. Cannot be null.
-  final bool disabled;
-
-  /// The style to be applied to the chip.
-  ///
-  /// If [style] is an event driven [SheetStyle]
-  /// by [DrivenSheetStyle.driven], then [SheetStyle.evaluate]
-  /// is used for the following [WidgetEvent]s:
-  ///
-  ///  * [WidgetEvent.selected].
-  ///  * [WidgetEvent.indeterminate].
-  ///  * [WidgetEvent.error].
-  ///  * [WidgetEvent.loading].
-  ///  * [WidgetEvent.focused].
-  ///  * [WidgetEvent.hovered].
-  ///  * [WidgetEvent.pressed].
-  ///  * [WidgetEvent.dragged].
-  ///  * [WidgetEvent.disabled].
-  final SheetStyle? style;
-
-  /// Used by widgets that expose their internal event
-  /// for the sake of extensions that add support for additional events.
-  final WidgetEventController? eventsController;
-
-  /// The curve to apply when animating the parameters of this widget.
-  final Curve curve;
-
-  /// The duration over which to animate the parameters of this widget.
-  final Duration duration;
-
-  static const defaultCurve = Curves.linear;
-  static const defaultDuration = Duration(milliseconds: 200);
+  SheetStyle get effectiveStyle {
+    return SheetStyle.from(style).copyWith(
+      width: width,
+      height: height,
+      margin: margin,
+      padding: padding,
+      alignment: alignment,
+      clipBehavior: clipBehavior,
+      overlayColor: overlayColor,
+      shadowColor: shadowColor,
+      elevation: elevation,
+      foregroundStyle: foregroundStyle,
+      foregroundColor: foregroundColor,
+      foregroundOpacity: foregroundOpacity,
+      foregroundAlpha: foregroundAlpha,
+      foregroundSpacing: foregroundSpacing,
+      backgroundColor: backgroundColor,
+      backgroundOpacity: backgroundOpacity,
+      backgroundAlpha: backgroundAlpha,
+      borderColor: borderColor,
+      borderOpacity: borderOpacity,
+      borderAlpha: borderAlpha,
+      borderWidth: borderWidth,
+      borderRadius: borderRadius,
+      borderStyle: borderStyle,
+      shape: shape,
+      iconColor: iconColor,
+      iconOpacity: iconOpacity,
+      iconSize: iconSize,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final sheetTheme = SheetTheme.of(context);
     return _SheetRender(
-      curve: curve,
-      duration: duration,
       theme: Theme.of(context),
-      style: style ?? SheetTheme.of(context).style,
-      selected: selected,
-      loading: loading,
-      disabled: disabled,
-      eventsController: eventsController,
+      curve: sheetTheme.curve,
+      duration: sheetTheme.duration,
+      style: sheetTheme.style.merge(effectiveStyle),
       tooltip: tooltip,
       child: child,
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<SheetStyle?>('style', style));
+    properties
+        .add(DiagnosticsProperty<SheetStyle>('effectiveStyle', effectiveStyle));
   }
 }
 
 class _SheetRender extends StatefulWidget {
   const _SheetRender({
     Key? key,
-    this.selected,
-    this.loading = false,
-    this.disabled = false,
-    this.eventsController,
-    this.curve = Sheet.defaultCurve,
-    this.duration = Sheet.defaultDuration,
     this.tooltip,
     required this.theme,
+    required this.curve,
+    required this.duration,
     required this.style,
     required this.child,
   }) : super(key: key);
 
-  final Widget? child;
-  final String? tooltip;
-  final bool? selected;
-  final bool loading;
-  final bool disabled;
-  final SheetStyle style;
-  final WidgetEventController? eventsController;
   final ThemeData theme;
-
-  /// The curve to apply when animating the parameters of this widget.
   final Curve curve;
-
-  /// The duration over which to animate the parameters of this widget.
   final Duration duration;
-
-  bool get enabled => !disabled && !loading;
+  final SheetStyle style;
+  final String? tooltip;
+  final Widget? child;
 
   @override
   State<_SheetRender> createState() => _SheetRenderState();
 }
 
-class _SheetRenderState extends State<_SheetRender>
-    with WidgetEventMixin<_SheetRender> {
-  SheetStyle style = const SheetStyle();
-
-  @protected
-  void setStyle() {
-    final raw = widget.style;
-    final resolved = SheetStyle.evaluate(raw, widgetEvents.value);
-    style = SheetStyle.from(resolved);
-    setState(() {});
-  }
+class _SheetRenderState extends State<_SheetRender> {
+  SheetStyle get style => widget.style;
 
   Color get defaultBackgroundColor {
     return style.isOutlined
@@ -227,40 +313,16 @@ class _SheetRenderState extends State<_SheetRender>
   }
 
   @override
-  void initState() {
-    initWidgetEvents(widget.eventsController);
-    widgetEvents.toggle(WidgetEvent.indeterminate, widget.selected == null);
-    widgetEvents.toggle(WidgetEvent.selected, widget.selected == true);
-    widgetEvents.toggle(WidgetEvent.loading, widget.loading);
-    widgetEvents.toggle(WidgetEvent.disabled, widget.disabled);
-    setStyle();
-    super.initState();
-  }
-
-  @override
   void didUpdateWidget(_SheetRender oldWidget) {
     if (mounted) {
-      updateWidgetEvents(oldWidget.eventsController, widget.eventsController);
-      widgetEvents.toggle(WidgetEvent.indeterminate, widget.selected == null);
-      widgetEvents.toggle(WidgetEvent.selected, widget.selected == true);
-      widgetEvents.toggle(WidgetEvent.loading, widget.loading);
-      widgetEvents.toggle(WidgetEvent.disabled, widget.disabled);
-      setStyle();
       super.didUpdateWidget(oldWidget);
     }
-  }
-
-  @override
-  void didChangeWidgetEvents() {
-    super.didChangeWidgetEvents();
-    didUpdateWidget(widget);
   }
 
   @override
   Widget build(BuildContext context) {
     return Semantics(
       container: true,
-      enabled: widget.enabled,
       child: AnimatedDefaultTextStyle(
         curve: widget.curve,
         duration: widget.duration,
@@ -292,5 +354,32 @@ class _SheetRenderState extends State<_SheetRender>
         ),
       ),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+        .add(ColorProperty('defaultBackgroundColor', defaultBackgroundColor));
+    properties.add(ColorProperty('defaultBorderColor', defaultBorderColor));
+    properties
+        .add(ColorProperty('defaultForegroundColor', defaultForegroundColor));
+    properties.add(ColorProperty('backgroundColor', backgroundColor));
+    properties.add(ColorProperty('borderColor', borderColor));
+    properties.add(ColorProperty('foregroundColor', foregroundColor));
+    properties.add(EnumProperty<Clip>('clipBehavior', clipBehavior));
+    properties.add(DoubleProperty('width', width));
+    properties.add(DoubleProperty('height', height));
+    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', padding));
+    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('margin', margin));
+    properties.add(ColorProperty('shadowColor', shadowColor));
+    properties.add(EnumProperty<BoxShape>('shape', shape));
+    properties
+        .add(DiagnosticsProperty<BorderRadius>('borderRadius', borderRadius));
+    properties.add(DiagnosticsProperty<BorderSide>('borderSide', borderSide));
+    properties.add(
+        DiagnosticsProperty<TextStyle>('foregroundStyle', foregroundStyle));
+    properties.add(ColorProperty('iconColor', iconColor));
+    properties.add(DoubleProperty('iconSize', iconSize));
   }
 }
