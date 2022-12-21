@@ -1,87 +1,56 @@
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/event.dart';
 import 'package:widgetarian/layout.dart';
+import 'style.dart';
+import 'theme.dart';
 
-/// Sheet widget with smooth animation, event driven style, and many more.
+/// Attract user attention with important static message
 class Alert extends StatelessWidget {
   const Alert({
     Key? key,
-    this.eventsController,
-    this.duration = Alert.defaultDuration,
-    this.curve = Alert.defaultCurve,
-    this.style,
+    this.title,
+    this.message,
     this.icon,
     this.action,
-    this.title,
-    this.child,
+    this.style,
+    this.curve,
+    this.duration,
   }) : super(key: key);
 
-  /// The primary content of the chip.
-  ///
-  /// Typically a [Text] widget.
-  final Widget? icon;
-
-  /// The primary content of the chip.
-  ///
-  /// Typically a [Text] widget.
-  final Widget? action;
-
-  /// The primary content of the chip.
+  /// The primary content of the [Alert].
   ///
   /// Typically a [Text] widget.
   final Widget? title;
 
-  /// The primary content of the chip.
-  ///
-  /// Typically a [Text] widget.
-  final Widget? child;
+  /// The text to display below the [title]
+  final Widget? message;
 
-  /// The style to be applied to the chip.
-  ///
-  /// If [style] is an event driven [SheetStyle]
-  /// by [DrivenSheetStyle.driven], then [SheetStyle.evaluate]
-  /// is used for the following [WidgetEvent]s:
-  ///
-  ///  * [WidgetEvent.selected].
-  ///  * [WidgetEvent.indeterminate].
-  ///  * [WidgetEvent.error].
-  ///  * [WidgetEvent.loading].
-  ///  * [WidgetEvent.focused].
-  ///  * [WidgetEvent.hovered].
-  ///  * [WidgetEvent.pressed].
-  ///  * [WidgetEvent.dragged].
-  ///  * [WidgetEvent.disabled].
-  final SheetStyle? style;
+  /// Icon displayed prior to [title]
+  final Widget? icon;
 
-  /// Used by widgets that expose their internal event
-  /// for the sake of extensions that add support for additional events.
-  final WidgetEventController? eventsController;
+  /// Widget displayed next to [title]
+  final Widget? action;
+
+  /// The style to be applied to the alert.
+  final AlertStyle? style;
 
   /// The curve to apply when animating the parameters of this widget.
-  final Curve curve;
+  final Curve? curve;
 
   /// The duration over which to animate the parameters of this widget.
-  final Duration duration;
-
-  static const defaultCurve = Curves.linear;
-  static const defaultDuration = Duration(milliseconds: 200);
+  final Duration? duration;
 
   @override
   Widget build(BuildContext context) {
+    final alertTheme = AlertTheme.of(context);
     return Sheet(
-      curve: curve,
-      duration: duration,
-      style: style ?? SheetTheme.of(context),
-      eventsController: eventsController,
+      curve: curve ?? alertTheme.curve,
+      duration: duration ?? alertTheme.duration,
+      style: alertTheme.style.merge(style),
       child: ListTile(
-        style: const ListTileStyle(
-          alignItems: CrossAxisAlignment.start,
-          spacing: 15,
-        ),
         leading: icon,
         trailing: action,
         title: title,
-        subtitle: child,
+        subtitle: message,
       ),
     );
   }
