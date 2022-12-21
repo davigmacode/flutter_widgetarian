@@ -1,77 +1,22 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/utils.dart' as utils;
+import 'package:widgetarian/utils.dart';
 
-/// Default avatar's style.
-class AvatarStyle {
-  const AvatarStyle({
-    this.shape,
-    this.size,
-    this.margin,
-    this.clipBehavior,
-    this.shadowColor,
-    this.elevation,
-    this.foregroundStyle,
-    this.foregroundColor,
-    this.foregroundOpacity,
-    this.foregroundAlpha,
-    this.foregroundSpacing,
-    this.backgroundColor,
-    this.backgroundOpacity,
-    this.backgroundAlpha,
-    this.borderColor,
-    this.borderOpacity,
-    this.borderAlpha,
-    this.borderWidth,
-    this.borderRadius,
-    this.borderStyle,
-  });
-
-  /// Create a avatar's style from another style
-  AvatarStyle.from(AvatarStyle? other)
-      : size = other?.size,
-        shape = other?.shape,
-        margin = other?.margin,
-        clipBehavior = other?.clipBehavior,
-        shadowColor = other?.shadowColor,
-        elevation = other?.elevation,
-        foregroundStyle = other?.foregroundStyle,
-        foregroundColor = other?.foregroundColor,
-        foregroundOpacity = other?.foregroundOpacity,
-        foregroundAlpha = other?.foregroundAlpha,
-        foregroundSpacing = other?.foregroundSpacing,
-        backgroundColor = other?.backgroundColor,
-        backgroundOpacity = other?.backgroundOpacity,
-        backgroundAlpha = other?.backgroundAlpha,
-        borderColor = other?.borderColor,
-        borderOpacity = other?.borderOpacity,
-        borderAlpha = other?.borderAlpha,
-        borderWidth = other?.borderWidth,
-        borderRadius = other?.borderRadius,
-        borderStyle = other?.borderStyle;
-
-  static const defaultSize = 40.0;
-  static const defaultShape = BoxShape.circle;
-  static const defaultClipBehavior = Clip.antiAlias;
-  static const defaultBorderWidth = 1.0;
-  static const defaultBorderStyle = BorderStyle.none;
-  static const defaultBorderRadius = BorderRadius.all(Radius.circular(8));
-  static const disabledForegroundAlpha = 0x61; // 38%
-  static const disabledBackgroundAlpha = 0x0c; // 38% * 12% = 5%
-  static const disabledBorderAlpha = 0x0c; // 38% * 12% = 5%
-
+/// The style to be applied to avatar widget
+@immutable
+class AvatarStyle with Diagnosticable {
+  /// The type of avatar's shape.
   final BoxShape? shape;
 
-  /// Defaults to [AvatarStyle.defaultHeight]
+  /// The size of the avatar
   final double? size;
 
-  /// Empty space to surround the outside avatar.
+  /// Empty space to surround the outside avatar widget.
   final EdgeInsetsGeometry? margin;
 
   /// The avatar's content will be clipped (or not) according to this option.
   ///
   /// See the enum [Clip] for details of all possible options and their common use cases.
-  ///
-  /// Defaults to [AvatarStyle.defaultClipBehavior]
   final Clip? clipBehavior;
 
   /// When [elevation] is non zero the color to use for the avatar's shadow color.
@@ -133,67 +78,129 @@ class AvatarStyle {
   /// This skips painting the border, but the border still has a [borderWidth].
   final BorderStyle? borderStyle;
 
+  /// A square [Size] from [size] dimension
+  Size get effectiveSize => Size.square(size ?? defaults.size!);
+
+  /// Computed background color with opacity and alpha
   Color? get effectiveBackgroundColor {
     return backgroundColor != null
-        ? utils.Colors.colorWithOpacityOrAlpha(
+        ? Colors.withTransparency(
             backgroundColor!,
-            backgroundOpacity,
-            backgroundAlpha,
+            opacity: backgroundOpacity,
+            alpha: backgroundAlpha,
           )
-        : null;
+        : Colors.transparent;
   }
 
+  /// Computed border color with opacity and alpha
   Color? get effectiveBorderColor {
     return borderColor != null
-        ? utils.Colors.colorWithOpacityOrAlpha(
+        ? Colors.withTransparency(
             borderColor!,
-            borderOpacity,
-            borderAlpha,
+            opacity: borderOpacity,
+            alpha: borderAlpha,
           )
         : null;
   }
 
+  /// Computed foreground color with opacity and alpha
   Color? get effectiveForegroundColor {
     return foregroundColor != null
-        ? utils.Colors.colorWithOpacityOrAlpha(
+        ? Colors.withTransparency(
             foregroundColor!,
-            foregroundOpacity,
-            foregroundAlpha,
+            opacity: foregroundOpacity,
+            alpha: foregroundAlpha,
           )
         : null;
   }
 
+  /// Computed foreground text style with foreground color
   TextStyle get effectiveForegroundStyle {
-    return const TextStyle()
-        .copyWith(color: foregroundColor)
-        .merge(foregroundStyle);
+    return TextStyle(color: foregroundColor).merge(foregroundStyle);
   }
+
+  /// Create a raw avatar's style
+  const AvatarStyle({
+    this.size,
+    this.shape,
+    this.margin,
+    this.clipBehavior,
+    this.shadowColor,
+    this.elevation,
+    this.foregroundStyle,
+    this.foregroundColor,
+    this.foregroundOpacity,
+    this.foregroundAlpha,
+    this.foregroundSpacing,
+    this.backgroundColor,
+    this.backgroundOpacity,
+    this.backgroundAlpha,
+    this.borderColor,
+    this.borderOpacity,
+    this.borderAlpha,
+    this.borderWidth,
+    this.borderRadius,
+    this.borderStyle,
+  });
+
+  /// Create a avatar's style from another style
+  AvatarStyle.from(AvatarStyle? other)
+      : size = other?.size,
+        shape = other?.shape,
+        margin = other?.margin,
+        clipBehavior = other?.clipBehavior,
+        shadowColor = other?.shadowColor,
+        elevation = other?.elevation,
+        foregroundStyle = other?.foregroundStyle,
+        foregroundColor = other?.foregroundColor,
+        foregroundOpacity = other?.foregroundOpacity,
+        foregroundAlpha = other?.foregroundAlpha,
+        foregroundSpacing = other?.foregroundSpacing,
+        backgroundColor = other?.backgroundColor,
+        backgroundOpacity = other?.backgroundOpacity,
+        backgroundAlpha = other?.backgroundAlpha,
+        borderColor = other?.borderColor,
+        borderOpacity = other?.borderOpacity,
+        borderAlpha = other?.borderAlpha,
+        borderWidth = other?.borderWidth,
+        borderRadius = other?.borderRadius,
+        borderStyle = other?.borderStyle;
+
+  /// An [AvatarStyle] with some reasonable default values.
+  static const defaults = AvatarStyle(
+    size: 40.0,
+    shape: BoxShape.circle,
+    clipBehavior: Clip.antiAlias,
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+    borderStyle: BorderStyle.none,
+    borderWidth: 1.0,
+  );
 
   /// Linearly interpolate between two icon theme data objects.
   static AvatarStyle lerp(AvatarStyle? a, AvatarStyle? b, double t) {
     return AvatarStyle(
-      size: utils.lerpDouble(a?.size, b?.size, t),
+      size: lerpDouble(a?.size, b?.size, t),
       shape: t < 0.5 ? a?.shape : b?.shape,
       margin: EdgeInsetsGeometry.lerp(a?.margin, b?.margin, t),
       clipBehavior: t < 0.5 ? a?.clipBehavior : b?.clipBehavior,
       shadowColor: Color.lerp(a?.shadowColor, b?.shadowColor, t),
-      elevation: utils.lerpDouble(a?.elevation, b?.elevation, t),
+      elevation: lerpDouble(a?.elevation, b?.elevation, t),
       foregroundStyle:
           TextStyle.lerp(a?.foregroundStyle, b?.foregroundStyle, t),
       foregroundColor: Color.lerp(a?.foregroundColor, b?.foregroundColor, t),
       foregroundOpacity:
-          utils.lerpDouble(a?.foregroundOpacity, b?.foregroundOpacity, t),
-      foregroundAlpha: utils.lerpInt(a?.foregroundAlpha, b?.foregroundAlpha, t),
+          lerpDouble(a?.foregroundOpacity, b?.foregroundOpacity, t),
+      foregroundAlpha: lerpInt(a?.foregroundAlpha, b?.foregroundAlpha, t),
       foregroundSpacing:
-          utils.lerpDouble(a?.foregroundSpacing, b?.foregroundSpacing, t),
+          lerpDouble(a?.foregroundSpacing, b?.foregroundSpacing, t),
       backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t),
       backgroundOpacity:
-          utils.lerpDouble(a?.backgroundOpacity, b?.backgroundOpacity, t),
-      backgroundAlpha: utils.lerpInt(a?.backgroundAlpha, b?.backgroundAlpha, t),
+          lerpDouble(a?.backgroundOpacity, b?.backgroundOpacity, t),
+      backgroundAlpha: lerpInt(a?.backgroundAlpha, b?.backgroundAlpha, t),
       borderColor: Color.lerp(a?.borderColor, b?.borderColor, t),
-      borderOpacity: utils.lerpDouble(a?.borderOpacity, b?.borderOpacity, t),
-      borderAlpha: utils.lerpInt(a?.borderAlpha, b?.borderAlpha, t),
-      borderWidth: utils.lerpDouble(a?.borderWidth, b?.borderWidth, t),
+      borderOpacity: lerpDouble(a?.borderOpacity, b?.borderOpacity, t),
+      borderAlpha: lerpInt(a?.borderAlpha, b?.borderAlpha, t),
+      borderWidth: lerpDouble(a?.borderWidth, b?.borderWidth, t),
       borderRadius: BorderRadius.lerp(a?.borderRadius, b?.borderRadius, t),
       borderStyle: t < 0.5 ? a?.borderStyle : b?.borderStyle,
     );
@@ -275,5 +282,45 @@ class AvatarStyle {
       borderRadius: other.borderRadius,
       borderStyle: other.borderStyle,
     );
+  }
+
+  Map<String, dynamic> toMap() => {
+        'size': size,
+        'shape': shape,
+        'margin': margin,
+        'clipBehavior': clipBehavior,
+        'shadowColor': shadowColor,
+        'elevation': elevation,
+        'foregroundStyle': foregroundStyle,
+        'foregroundColor': foregroundColor,
+        'foregroundOpacity': foregroundOpacity,
+        'foregroundAlpha': foregroundAlpha,
+        'foregroundSpacing': foregroundSpacing,
+        'backgroundColor': backgroundColor,
+        'backgroundOpacity': backgroundOpacity,
+        'backgroundAlpha': backgroundAlpha,
+        'borderColor': borderColor,
+        'borderOpacity': borderOpacity,
+        'borderAlpha': borderAlpha,
+        'borderWidth': borderWidth,
+        'borderRadius': borderRadius,
+        'borderStyle': borderStyle,
+      };
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) return false;
+    return other is AvatarStyle && mapEquals(other.toMap(), toMap());
+  }
+
+  @override
+  int get hashCode => Object.hashAll(toMap().values);
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    toMap().entries.forEach((el) {
+      properties.add(DiagnosticsProperty(el.key, el.value, defaultValue: null));
+    });
   }
 }

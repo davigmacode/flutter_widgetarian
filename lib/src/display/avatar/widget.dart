@@ -1,15 +1,17 @@
-import 'package:flutter/material.dart' show Theme;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/utils.dart';
 import 'package:widgetarian/layout.dart';
 import 'package:widgetarian/animation.dart';
+import 'theme.dart';
 import 'style.dart';
 
+/// Display user profile image, initials or fallback icon
 class Avatar extends StatefulWidget {
+  /// Create an avatar widget
   const Avatar({
     Key? key,
-    this.curve = Curves.linear,
-    this.duration = const Duration(milliseconds: 200),
+    this.curve,
+    this.duration,
     this.style,
     this.tooltip,
     this.onImageError,
@@ -19,10 +21,10 @@ class Avatar extends StatefulWidget {
   }) : super(key: key);
 
   /// The curve to apply when animating the parameters of this widget.
-  final Curve curve;
+  final Curve? curve;
 
   /// The duration over which to animate the parameters of this widget.
-  final Duration duration;
+  final Duration? duration;
 
   /// The style to be applied to the avatar.
   final AvatarStyle? style;
@@ -48,16 +50,21 @@ class Avatar extends StatefulWidget {
 
   @override
   State<Avatar> createState() => _AvatarState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<AvatarStyle?>('style', style));
+  }
 }
 
 class _AvatarState extends State<Avatar> {
-  AvatarStyle get style => const AvatarStyle().merge(widget.style);
-
-  Size get size => Size.square(style.size ?? AvatarStyle.defaultSize);
-
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = AvatarTheme.of(context);
+    final style = theme.style.merge(widget.style);
+    final curve = widget.curve ?? theme.curve;
+    final duration = widget.duration ?? theme.duration;
     Widget? result = widget.child;
 
     if (result != null) {
@@ -67,16 +74,16 @@ class _AvatarState extends State<Avatar> {
           // text doesn't escape the avatar when the textScaleFactor is large.
           data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
           child: AnimatedDefaultTextStyle(
-            curve: widget.curve,
-            duration: widget.duration,
+            curve: curve,
+            duration: duration,
             style: style.effectiveForegroundStyle,
-            child: AnimatedIconTheme(
-              data: theme.iconTheme.copyWith(
+            child: AnimatedIconTheme.merge(
+              data: IconThemeData(
                 color: style.effectiveForegroundStyle.color,
                 size: style.effectiveForegroundStyle.fontSize,
               ),
-              curve: widget.curve,
-              duration: widget.duration,
+              curve: curve,
+              duration: duration,
               child: result,
             ),
           ),
@@ -98,20 +105,20 @@ class _AvatarState extends State<Avatar> {
     }
 
     return AnimatedBox(
-      curve: widget.curve,
-      duration: widget.duration,
-      width: size.width,
-      height: size.height,
+      curve: curve,
+      duration: duration,
+      width: style.effectiveSize.width,
+      height: style.effectiveSize.height,
       margin: style.margin,
-      clipBehavior: style.clipBehavior ?? AvatarStyle.defaultClipBehavior,
+      clipBehavior: style.clipBehavior,
       shadowColor: style.shadowColor,
       elevation: style.elevation,
-      color: style.effectiveBackgroundColor ?? Colors.transparent,
-      shape: style.shape ?? AvatarStyle.defaultShape,
+      color: style.effectiveBackgroundColor,
+      shape: style.shape,
       borderColor: style.effectiveBorderColor,
-      borderWidth: style.borderWidth ?? AvatarStyle.defaultBorderWidth,
-      borderStyle: style.borderStyle ?? AvatarStyle.defaultBorderStyle,
-      borderRadius: style.borderRadius ?? AvatarStyle.defaultBorderRadius,
+      borderWidth: style.borderWidth,
+      borderStyle: style.borderStyle,
+      borderRadius: style.borderRadius,
       tooltip: widget.tooltip,
       child: result,
     );
