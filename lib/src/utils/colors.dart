@@ -66,7 +66,7 @@ abstract class Colors {
   }
 
   /// Estimate foreground color on surface
-  static Color? colorOnSurface(
+  static Color? onSurface(
     Color? surface, [
     Color? onLight = black,
     Color? onDark = white,
@@ -79,24 +79,43 @@ abstract class Colors {
   /// Returns a new color that matches this color
   /// with the alpha channel replaced with
   /// the given opacity (which ranges from 0.0 to 1.0).
-  static Color colorWithOpacity(Color color, double? opacity) {
-    return opacity != null ? color.withOpacity(opacity) : color;
+  static Color? withOpacity(Color? color, double? opacity) {
+    return opacity != null ? color?.withOpacity(opacity) : color;
   }
 
   /// Returns a new color that matches this color
   /// with the alpha channel replaced
   /// with a (which ranges from 0 to 255).
-  static Color colorWithAlpha(Color color, int? alpha) {
-    return alpha != null ? color.withAlpha(alpha) : color;
+  static Color? withAlpha(Color? color, int? alpha) {
+    return alpha != null ? color?.withAlpha(alpha) : color;
   }
 
-  static Color colorWithOpacityOrAlpha(
-    Color color,
+  /// Returns a new color that matches this color
+  /// with the alpha channel replaced with the given opacity (which ranges from 0.0 to 1.0),
+  /// and/or with the alpha channel replaced with a (which ranges from 0 to 255).
+  static Color? withTransparency(
+    Color? color, {
     double? opacity,
     int? alpha,
-  ) {
-    color = Colors.colorWithOpacity(color, opacity);
-    color = Colors.colorWithAlpha(color, alpha);
+  }) {
+    color = Colors.withOpacity(color, opacity);
+    color = Colors.withAlpha(color, alpha);
     return color;
   }
+}
+
+extension BrightnessFlag on Brightness {
+  /// Whether or not this is light
+  ///
+  /// ```dart
+  /// final isLight = Theme.of(context).brightness.isLight;
+  /// ```
+  bool get isLight => this == Brightness.light;
+
+  /// Whether or not this is dark
+  ///
+  /// ```dart
+  /// final isDark = Theme.of(context).brightness.isDark;
+  /// ```
+  bool get isDark => this == Brightness.dark;
 }
