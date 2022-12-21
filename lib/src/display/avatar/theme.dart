@@ -10,13 +10,13 @@ import 'style.dart';
 /// can be customized with [AvatarThemeData.copyWith] or [AvatarThemeData.merge].
 @immutable
 class AvatarThemeData with Diagnosticable {
-  /// The curve to apply when animating the parameters of sheet widget.
+  /// The curve to apply when animating the parameters of avatar widget.
   final Curve curve;
 
-  /// The duration over which to animate the parameters of sheet widget.
+  /// The duration over which to animate the parameters of avatar widget.
   final Duration duration;
 
-  /// The [AvatarStyle] to be applied to the sheet widget
+  /// The [AvatarStyle] to be applied to the avatar widget
   final AvatarStyle style;
 
   /// Creates a theme data that can be used for [AvatarTheme].
@@ -39,7 +39,6 @@ class AvatarThemeData with Diagnosticable {
     Curve? curve,
     Duration? duration,
     AvatarStyle? style,
-    AvatarStyle? fallback,
   }) {
     return AvatarThemeData(
       curve: curve ?? this.curve,
@@ -135,12 +134,12 @@ class AvatarTheme extends InheritedTheme {
   /// AvatarTheme theme = AvatarTheme.of(context);
   /// ```
   static AvatarThemeData of(BuildContext context) {
-    final sheetTheme =
+    final parentTheme =
         context.dependOnInheritedWidgetOfExactType<AvatarTheme>();
-    if (sheetTheme != null) return sheetTheme.data;
+    if (parentTheme != null) return parentTheme.data;
 
-    final theme = Theme.of(context);
-    final globalTheme = theme.extension<AvatarThemeData?>();
+    final appTheme = Theme.of(context);
+    final globalTheme = appTheme.extension<AvatarThemeData?>();
     return AvatarThemeData.defaults.merge(globalTheme);
   }
 

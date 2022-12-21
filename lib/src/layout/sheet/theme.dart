@@ -136,7 +136,7 @@ class SheetTheme extends InheritedTheme {
     );
   }
 
-  /// The [style] from the closest instance of
+  /// The [data] from the closest instance of
   /// this class that encloses the given context.
   ///
   /// Typical usage is as follows:
@@ -145,18 +145,19 @@ class SheetTheme extends InheritedTheme {
   /// SheetThemeData theme = SheetTheme.of(context);
   /// ```
   static SheetThemeData of(BuildContext context) {
-    final sheetTheme = context.dependOnInheritedWidgetOfExactType<SheetTheme>();
-    if (sheetTheme != null) return sheetTheme.data;
+    final parentTheme =
+        context.dependOnInheritedWidgetOfExactType<SheetTheme>();
+    if (parentTheme != null) return parentTheme.data;
 
-    final theme = Theme.of(context);
-    final globalTheme = theme.extension<SheetThemeData?>();
+    final appTheme = Theme.of(context);
+    final globalTheme = appTheme.extension<SheetThemeData?>();
     return SheetThemeData.defaults
         .copyWith(
           fallback: SheetStyle(
-            foregroundColor: theme.colorScheme.onSurface,
-            backgroundColor: theme.unselectedWidgetColor,
-            borderColor: theme.colorScheme.outline,
-            shadowColor: theme.colorScheme.shadow,
+            foregroundColor: appTheme.colorScheme.onSurface,
+            backgroundColor: appTheme.unselectedWidgetColor,
+            borderColor: appTheme.colorScheme.outline,
+            shadowColor: appTheme.colorScheme.shadow,
           ),
         )
         .merge(globalTheme);

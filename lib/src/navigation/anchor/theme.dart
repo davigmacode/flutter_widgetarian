@@ -134,12 +134,12 @@ class AnchorTheme extends InheritedTheme {
   /// AnchorThemeData theme = AnchorTheme.of(context);
   /// ```
   static AnchorThemeData of(BuildContext context) {
-    final sheetTheme =
+    final parentTheme =
         context.dependOnInheritedWidgetOfExactType<AnchorTheme>();
-    if (sheetTheme != null) return sheetTheme.data;
+    if (parentTheme != null) return parentTheme.data;
 
-    final theme = Theme.of(context);
-    final globalTheme = theme.extension<AnchorThemeData?>();
+    final appTheme = Theme.of(context);
+    final globalTheme = appTheme.extension<AnchorThemeData?>();
     return AnchorThemeData.defaults.merge(globalTheme);
   }
 
