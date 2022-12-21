@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart' show Theme, ThemeData;
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/animation.dart';
 import 'package:widgetarian/utils.dart';
 import '../box.dart';
+import '../tiles/tile/style.dart';
+import '../tiles/tile/theme.dart';
 import 'style.dart';
 import 'theme.dart';
 
@@ -178,10 +178,10 @@ class Sheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final sheetTheme = SheetTheme.of(context);
     return _SheetRender(
-      theme: Theme.of(context),
-      curve: sheetTheme.curve,
-      duration: sheetTheme.duration,
+      curve: curve ?? sheetTheme.curve,
+      duration: duration ?? sheetTheme.duration,
       style: sheetTheme.style.merge(effectiveStyle),
+      theme: sheetTheme,
       tooltip: tooltip,
       child: child,
     );
@@ -200,17 +200,17 @@ class _SheetRender extends StatefulWidget {
   const _SheetRender({
     Key? key,
     this.tooltip,
-    required this.theme,
     required this.curve,
     required this.duration,
     required this.style,
+    required this.theme,
     required this.child,
   }) : super(key: key);
 
-  final ThemeData theme;
   final Curve curve;
   final Duration duration;
   final SheetStyle style;
+  final SheetThemeData theme;
   final String? tooltip;
   final Widget? child;
 
@@ -220,82 +220,50 @@ class _SheetRender extends StatefulWidget {
 
 class _SheetRenderState extends State<_SheetRender> {
   SheetStyle get style => widget.style;
+  SheetStyle get fallback => widget.theme.fallback;
 
-  Color get defaultBackgroundColor {
-    return style.isOutlined
-        ? widget.theme.colorScheme.surface
-        : widget.theme.unselectedWidgetColor;
+  Color? get defaultBackgroundColor {
+    return style.isOutlined ? Colors.transparent : fallback.backgroundColor;
   }
 
-  Color get defaultBorderColor {
-    return widget.theme.colorScheme.outline;
+  Color? get defaultBorderColor {
+    return fallback.borderColor;
   }
 
-  Color get defaultForegroundColor {
+  Color? get defaultForegroundColor {
     return style.isFilled
-        ? Colors.colorOnSurface(backgroundColor)!
-        : widget.theme.colorScheme.onSurface;
+        ? Colors.onSurface(backgroundColor)!
+        : fallback.foregroundColor;
   }
 
-  Color get backgroundColor => Colors.colorWithOpacityOrAlpha(
+  Color? get defaultShadowColor {
+    return fallback.borderColor;
+  }
+
+  Color? get backgroundColor => Colors.withTransparency(
         style.backgroundColor ?? defaultBackgroundColor,
-        style.backgroundOpacity,
-        style.backgroundAlpha,
+        opacity: style.backgroundOpacity,
+        alpha: style.backgroundAlpha,
       );
 
-  Color get borderColor => Colors.colorWithOpacityOrAlpha(
+  Color? get borderColor => Colors.withTransparency(
         style.borderColor ?? defaultBorderColor,
-        style.borderOpacity,
-        style.borderAlpha,
+        opacity: style.borderOpacity,
+        alpha: style.borderAlpha,
       );
 
-  Color get foregroundColor => Colors.colorWithOpacityOrAlpha(
+  Color? get foregroundColor => Colors.withTransparency(
         style.foregroundColor ?? defaultForegroundColor,
-        style.foregroundOpacity,
-        style.foregroundAlpha,
+        opacity: style.foregroundOpacity,
+        alpha: style.foregroundAlpha,
       );
 
-  Clip get clipBehavior {
-    return style.clipBehavior ?? SheetStyle.defaultClipBehavior;
+  Color? get shadowColor {
+    return style.shadowColor ?? defaultShadowColor;
   }
 
-  double? get width {
-    return style.shape == BoxShape.circle ? height : style.width;
-  }
-
-  double? get height {
-    return style.height;
-  }
-
-  EdgeInsetsGeometry get padding {
-    final defaultPadding = style.shape == BoxShape.circle
-        ? EdgeInsets.zero
-        : SheetStyle.defaultPadding;
-    return style.padding ?? defaultPadding;
-  }
-
-  EdgeInsetsGeometry get margin {
-    return style.margin ?? SheetStyle.defaultMargin;
-  }
-
-  Color get shadowColor {
-    return style.shadowColor ?? widget.theme.colorScheme.shadow;
-  }
-
-  BoxShape get shape {
-    return style.shape ?? BoxShape.rectangle;
-  }
-
-  BorderRadius get borderRadius {
-    return style.borderRadius ?? SheetStyle.defaultBorderRadius;
-  }
-
-  BorderSide get borderSide {
-    return BorderSide(
-      color: borderColor,
-      width: style.borderWidth ?? SheetStyle.defaultBorderWidth,
-      style: style.borderStyle ?? SheetStyle.defaultBorderStyle,
-    );
+  Color? get iconColor {
+    return style.iconColor ?? foregroundColor;
   }
 
   TextStyle get foregroundStyle {
@@ -304,12 +272,8 @@ class _SheetRenderState extends State<_SheetRender> {
         .merge(style.foregroundStyle);
   }
 
-  Color get iconColor {
-    return style.iconColor ?? foregroundColor;
-  }
-
-  double get iconSize {
-    return style.iconSize ?? SheetStyle.defaultIconSize;
+  double? get width {
+    return style.shape == BoxShape.circle ? style.height : style.width;
   }
 
   @override
@@ -328,28 +292,43 @@ class _SheetRenderState extends State<_SheetRender> {
         duration: widget.duration,
         style: foregroundStyle,
         child: AnimatedIconTheme(
+          curve: widget.curve,
+          duration: widget.duration,
           data: IconThemeData(
             color: iconColor,
             size: style.iconSize,
             opacity: style.iconOpacity,
           ),
-          child: AnimatedBox(
+          child: AnimatedTileTheme(
             curve: widget.curve,
             duration: widget.duration,
-            tooltip: widget.tooltip,
-            color: backgroundColor,
-            clipBehavior: clipBehavior,
-            shape: shape,
-            borderSide: borderSide,
-            borderRadius: borderRadius,
-            shadowColor: shadowColor,
-            elevation: style.elevation,
-            padding: padding,
-            margin: margin,
-            width: width,
-            height: height,
-            alignment: style.alignment,
-            child: widget.child,
+            style: TileStyle(
+              childExpanded: style.foregroundExpanded,
+              crossAxisAlignment: style.foregroundAlign,
+              mainAxisAlignment: style.foregroundJustify,
+              mainAxisExpanded: width == double.infinity,
+              spacing: style.foregroundSpacing,
+            ),
+            child: AnimatedBox(
+              curve: widget.curve,
+              duration: widget.duration,
+              tooltip: widget.tooltip,
+              color: backgroundColor,
+              shadowColor: shadowColor,
+              borderColor: borderColor,
+              borderRadius: style.borderRadius,
+              borderWidth: style.borderWidth,
+              borderStyle: style.borderStyle,
+              elevation: style.elevation,
+              alignment: style.alignment,
+              clipBehavior: style.clipBehavior,
+              shape: style.shape,
+              padding: style.padding,
+              margin: style.margin,
+              height: style.height,
+              width: width,
+              child: widget.child,
+            ),
           ),
         ),
       ),
@@ -367,19 +346,10 @@ class _SheetRenderState extends State<_SheetRender> {
     properties.add(ColorProperty('backgroundColor', backgroundColor));
     properties.add(ColorProperty('borderColor', borderColor));
     properties.add(ColorProperty('foregroundColor', foregroundColor));
-    properties.add(EnumProperty<Clip>('clipBehavior', clipBehavior));
-    properties.add(DoubleProperty('width', width));
-    properties.add(DoubleProperty('height', height));
-    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('padding', padding));
-    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('margin', margin));
     properties.add(ColorProperty('shadowColor', shadowColor));
-    properties.add(EnumProperty<BoxShape>('shape', shape));
-    properties
-        .add(DiagnosticsProperty<BorderRadius>('borderRadius', borderRadius));
-    properties.add(DiagnosticsProperty<BorderSide>('borderSide', borderSide));
+    properties.add(ColorProperty('iconColor', iconColor));
     properties.add(
         DiagnosticsProperty<TextStyle>('foregroundStyle', foregroundStyle));
-    properties.add(ColorProperty('iconColor', iconColor));
-    properties.add(DoubleProperty('iconSize', iconSize));
+    properties.add(DoubleProperty('width', width));
   }
 }

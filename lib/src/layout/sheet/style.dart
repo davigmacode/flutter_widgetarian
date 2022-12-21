@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
 import 'package:widgetarian/utils.dart';
 
 /// The style to be applied to the sheet widget
@@ -100,6 +100,21 @@ class SheetStyle with Diagnosticable {
   /// {@endtemplate}
   final double? foregroundSpacing;
 
+  /// {@template widgetarian.sheet.style.foregroundExpanded}
+  /// Whether the foreground widget is expanded or not
+  /// {@endtemplate}
+  final bool? foregroundExpanded;
+
+  /// {@template widgetarian.sheet.style.foregroundAlign}
+  /// Cross axis alignment of the foreground widget
+  /// {@endtemplate}
+  final CrossAxisAlignment? foregroundAlign;
+
+  /// {@template widgetarian.sheet.style.foregroundJustify}
+  /// Main axis alignment of the foreground widget
+  /// {@endtemplate}
+  final MainAxisAlignment? foregroundJustify;
+
   /// {@template widgetarian.sheet.style.backgroundColor}
   /// Color to be used for the sheet's background.
   /// {@endtemplate}
@@ -168,18 +183,20 @@ class SheetStyle with Diagnosticable {
   /// {@endtemplate}
   final double? iconSize;
 
-  static const defaultClipBehavior = Clip.antiAlias;
-  static const defaultBorderWidth = 1.0;
-  static const defaultBorderStyle = BorderStyle.solid;
-  static const defaultBorderRadius = BorderRadius.all(Radius.circular(8));
-  static const defaultMargin = EdgeInsets.zero;
-  static const defaultPadding = EdgeInsets.symmetric(horizontal: 16);
-  static const defaultHeight = 40.0;
-  static const defaultIconSize = 18.0;
-  static const defaultForegroundSpacing = 8.0;
-  static const disabledForegroundAlpha = 0x61; // 38%
-  static const disabledBackgroundAlpha = 0x0c; // 38% * 12% = 5%
-  static const disabledBorderAlpha = 0x0c; // 38% * 12% = 5%
+  /// An [SheetStyle] with some reasonable default values.
+  static const defaults = SheetStyle(
+    shape: BoxShape.rectangle,
+    clipBehavior: Clip.antiAlias,
+    borderStyle: BorderStyle.solid,
+    borderWidth: 1.0,
+  );
+
+  /// An [SheetStyle] with some reasonable disabled values.
+  static const disabled = SheetStyle(
+    foregroundAlpha: 0x61, // 38%
+    backgroundAlpha: 0x0c, // 38% * 12% = 5%
+    borderAlpha: 0x0c, // 38% * 12% = 5%
+  );
 
   /// Whether the sheet's has outline or not
   bool get isOutlined {
@@ -197,8 +214,7 @@ class SheetStyle with Diagnosticable {
     const kAlphaThreshold = 102;
 
     if (color != null) {
-      color = Colors.colorWithOpacity(color, opacity);
-      color = Colors.colorWithAlpha(color, alpha);
+      color = Colors.withTransparency(color, opacity: opacity, alpha: alpha)!;
       final colorIsNotTransparent = color != Colors.transparent;
       final colorIsSolid = color.opacity > kOpacityThreshold;
       return colorIsNotTransparent && colorIsSolid;
@@ -229,6 +245,9 @@ class SheetStyle with Diagnosticable {
     this.foregroundOpacity,
     this.foregroundAlpha,
     this.foregroundSpacing,
+    this.foregroundExpanded,
+    this.foregroundAlign,
+    this.foregroundJustify,
     this.backgroundColor,
     this.backgroundOpacity,
     this.backgroundAlpha,
@@ -243,9 +262,6 @@ class SheetStyle with Diagnosticable {
     this.iconOpacity,
     this.iconSize,
   });
-
-  /// An [SheetStyle] with some reasonable default values.
-  static const defaults = SheetStyle();
 
   /// Create a [SheetStyle] from another style
   SheetStyle.from(SheetStyle? other)
@@ -263,6 +279,9 @@ class SheetStyle with Diagnosticable {
         foregroundOpacity = other?.foregroundOpacity,
         foregroundAlpha = other?.foregroundAlpha,
         foregroundSpacing = other?.foregroundSpacing,
+        foregroundExpanded = other?.foregroundExpanded,
+        foregroundAlign = other?.foregroundAlign,
+        foregroundJustify = other?.foregroundJustify,
         backgroundColor = other?.backgroundColor,
         backgroundOpacity = other?.backgroundOpacity,
         backgroundAlpha = other?.backgroundAlpha,
@@ -277,39 +296,8 @@ class SheetStyle with Diagnosticable {
         iconOpacity = other?.iconOpacity,
         iconSize = other?.iconSize;
 
-  /// Create [SheetStyle] with default value for flat style.
-  const SheetStyle.flat({
-    this.width,
-    this.height,
-    this.margin,
-    this.padding,
-    this.alignment,
-    this.clipBehavior,
-    this.overlayColor,
-    this.shadowColor,
-    this.elevation,
-    this.foregroundStyle,
-    this.foregroundColor,
-    this.foregroundOpacity,
-    this.foregroundAlpha,
-    this.foregroundSpacing,
-    this.backgroundColor,
-    this.backgroundOpacity = 0,
-    this.backgroundAlpha,
-    this.borderColor,
-    this.borderOpacity,
-    this.borderAlpha,
-    this.borderWidth,
-    this.borderRadius,
-    this.borderStyle = BorderStyle.none,
-    this.shape,
-    this.iconColor,
-    this.iconOpacity,
-    this.iconSize,
-  });
-
   /// Create [SheetStyle] with default value for toned style.
-  const SheetStyle.toned({
+  const SheetStyle.tonal({
     this.width,
     this.height,
     this.margin,
@@ -324,6 +312,9 @@ class SheetStyle with Diagnosticable {
     this.foregroundOpacity,
     this.foregroundAlpha,
     this.foregroundSpacing,
+    this.foregroundExpanded,
+    this.foregroundAlign,
+    this.foregroundJustify,
     this.backgroundColor,
     this.backgroundOpacity = .12,
     this.backgroundAlpha,
@@ -356,6 +347,9 @@ class SheetStyle with Diagnosticable {
     this.foregroundOpacity,
     this.foregroundAlpha,
     this.foregroundSpacing,
+    this.foregroundExpanded,
+    this.foregroundAlign,
+    this.foregroundJustify,
     this.backgroundOpacity = .8,
     this.backgroundAlpha,
     this.borderOpacity = 0,
@@ -386,6 +380,9 @@ class SheetStyle with Diagnosticable {
     this.foregroundOpacity,
     this.foregroundAlpha,
     this.foregroundSpacing,
+    this.foregroundExpanded,
+    this.foregroundAlign,
+    this.foregroundJustify,
     this.backgroundColor,
     this.backgroundOpacity = 0,
     this.backgroundAlpha,
@@ -418,6 +415,9 @@ class SheetStyle with Diagnosticable {
     double? foregroundOpacity,
     int? foregroundAlpha,
     double? foregroundSpacing,
+    bool? foregroundExpanded,
+    CrossAxisAlignment? foregroundAlign,
+    MainAxisAlignment? foregroundJustify,
     Color? backgroundColor,
     double? backgroundOpacity,
     int? backgroundAlpha,
@@ -447,6 +447,9 @@ class SheetStyle with Diagnosticable {
       foregroundOpacity: foregroundOpacity ?? this.foregroundOpacity,
       foregroundAlpha: foregroundAlpha ?? this.foregroundAlpha,
       foregroundSpacing: foregroundSpacing ?? this.foregroundSpacing,
+      foregroundExpanded: foregroundExpanded ?? this.foregroundExpanded,
+      foregroundAlign: foregroundAlign ?? this.foregroundAlign,
+      foregroundJustify: foregroundJustify ?? this.foregroundJustify,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       backgroundOpacity: backgroundOpacity ?? this.backgroundOpacity,
       backgroundAlpha: backgroundAlpha ?? this.backgroundAlpha,
@@ -484,6 +487,9 @@ class SheetStyle with Diagnosticable {
       foregroundOpacity: other.foregroundOpacity,
       foregroundAlpha: other.foregroundAlpha,
       foregroundSpacing: other.foregroundSpacing,
+      foregroundExpanded: other.foregroundExpanded,
+      foregroundAlign: other.foregroundAlign,
+      foregroundJustify: other.foregroundJustify,
       backgroundColor: other.backgroundColor,
       backgroundOpacity: other.backgroundOpacity,
       backgroundAlpha: other.backgroundAlpha,
@@ -501,7 +507,8 @@ class SheetStyle with Diagnosticable {
   }
 
   /// Linearly interpolate between two [SheetStyle] objects.
-  static SheetStyle lerp(SheetStyle? a, SheetStyle? b, double t) {
+  static SheetStyle? lerp(SheetStyle? a, SheetStyle? b, double t) {
+    if (a == null && b == null) return null;
     return SheetStyle(
       shape: lerpEnum(a?.shape, b?.shape, t),
       width: lerpDouble(a?.width, b?.width, t),
@@ -521,6 +528,11 @@ class SheetStyle with Diagnosticable {
       foregroundAlpha: lerpInt(a?.foregroundAlpha, b?.foregroundAlpha, t),
       foregroundSpacing:
           lerpDouble(a?.foregroundSpacing, b?.foregroundSpacing, t),
+      foregroundExpanded:
+          lerpBool(a?.foregroundExpanded, b?.foregroundExpanded, t),
+      foregroundAlign: lerpEnum(a?.foregroundAlign, b?.foregroundAlign, t),
+      foregroundJustify:
+          lerpEnum(a?.foregroundJustify, b?.foregroundJustify, t),
       backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t),
       backgroundOpacity:
           lerpDouble(a?.backgroundOpacity, b?.backgroundOpacity, t),
@@ -553,6 +565,9 @@ class SheetStyle with Diagnosticable {
         'foregroundOpacity': foregroundOpacity,
         'foregroundAlpha': foregroundAlpha,
         'foregroundSpacing': foregroundSpacing,
+        'foregroundExpanded': foregroundExpanded,
+        'foregroundAlign': foregroundAlign,
+        'foregroundJustify': foregroundJustify,
         'backgroundColor': backgroundColor,
         'backgroundOpacity': backgroundOpacity,
         'backgroundAlpha': backgroundAlpha,
