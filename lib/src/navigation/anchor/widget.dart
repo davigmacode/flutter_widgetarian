@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/event.dart';
-import 'package:widgetarian/layout.dart';
+import 'overlay/widget.dart';
 import 'style.dart';
 import 'theme.dart';
 
@@ -348,7 +348,7 @@ class _AnchorState extends State<_Anchor> with WidgetEventMixin<_Anchor> {
   Widget build(BuildContext context) {
     Widget result = _AnchorProvider(
       state: this,
-      child: widget.child ?? const Box(),
+      child: widget.child,
     );
 
     if (style.padding != null) {
@@ -414,8 +414,8 @@ class _AnchorState extends State<_Anchor> with WidgetEventMixin<_Anchor> {
 class _AnchorProvider extends InheritedWidget {
   const _AnchorProvider({
     required this.state,
-    required Widget child,
-  }) : super(child: child);
+    required Widget? child,
+  }) : super(child: child ?? const _AnchorPlaceholder());
 
   final _AnchorState state;
 
@@ -425,5 +425,18 @@ class _AnchorProvider extends InheritedWidget {
 
   static _AnchorState? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<_AnchorProvider>()?.state;
+  }
+}
+
+class _AnchorPlaceholder extends StatelessWidget {
+  const _AnchorPlaceholder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return LimitedBox(
+      maxWidth: 0.0,
+      maxHeight: 0.0,
+      child: ConstrainedBox(constraints: const BoxConstraints.expand()),
+    );
   }
 }

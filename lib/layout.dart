@@ -21,10 +21,6 @@ export 'src/layout/tiles/list_tile/theme.dart';
 export 'src/layout/tiles/list_tile/tween.dart';
 export 'src/layout/tiles/list_tile/widget.dart';
 
-export 'src/layout/overlay/style.dart';
-export 'src/layout/overlay/theme.dart';
-export 'src/layout/overlay/widget.dart';
-
 export 'src/layout/sheet/style.dart';
 export 'src/layout/sheet/theme.dart';
 export 'src/layout/sheet/widget.dart';
