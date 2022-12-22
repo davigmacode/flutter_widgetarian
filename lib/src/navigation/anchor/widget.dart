@@ -323,6 +323,7 @@ class _AnchorState extends State<_Anchor> with WidgetEventMixin<_Anchor> {
   @override
   void initState() {
     initWidgetEvents(widget.eventsController);
+    widgetEvents.toggle(WidgetEvent.disabled, widget.disabled);
     setStyle();
     super.initState();
   }
@@ -331,6 +332,7 @@ class _AnchorState extends State<_Anchor> with WidgetEventMixin<_Anchor> {
   void didUpdateWidget(_Anchor oldWidget) {
     if (mounted) {
       updateWidgetEvents(oldWidget.eventsController, widget.eventsController);
+      widgetEvents.toggle(WidgetEvent.disabled, widget.disabled);
       setStyle();
       super.didUpdateWidget(oldWidget);
     }
@@ -369,6 +371,8 @@ class _AnchorState extends State<_Anchor> with WidgetEventMixin<_Anchor> {
       );
     }
 
+    final rawMouse = widget.mouseCursor ?? widget.defaultMouseCursor;
+    final resMouse = DrivenProperty.evaluate(rawMouse, widgetEvents.value);
     result = Focus(
       onFocusChange: _onFocus,
       canRequestFocus: _canRequestFocus,
@@ -377,14 +381,14 @@ class _AnchorState extends State<_Anchor> with WidgetEventMixin<_Anchor> {
       child: MouseRegion(
         opaque: true,
         hitTestBehavior: HitTestBehavior.opaque,
-        cursor: widget.mouseCursor ?? widget.defaultMouseCursor,
+        cursor: resMouse,
         onEnter: (event) => _onHover(true),
         onExit: (event) => _onHover(false),
         child: result,
       ),
     );
 
-    if (style.overlayEnabled) {
+    if (style.overlayEnabled && widget.enabled && widget.clickable) {
       result = AnimatedOverlay(
         curve: widget.curve,
         duration: widget.duration,
