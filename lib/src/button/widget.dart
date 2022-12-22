@@ -1,88 +1,130 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart' show Theme, ThemeData;
 
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/layout.dart';
-import 'package:widgetarian/utils.dart';
 import 'package:widgetarian/anchor.dart';
-import 'package:widgetarian/animation.dart';
+import 'package:widgetarian/utils.dart';
 import 'style.dart';
 import 'theme.dart';
 import 'event.dart';
 
-/// Chip widget with smooth animation, event driven style, and many more.
+/// Buttons allow users to take actions, and make choices, with a single tap
 class Button extends StatelessWidget {
+  /// Create a button
   const Button({
     Key? key,
-    required this.child,
-    this.leading,
-    this.trailing,
-    this.tooltip,
-    this.style,
-    this.selected = false,
     this.loading = false,
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
     this.onPressed,
-    this.onSelected,
     this.eventsController,
-    this.curve = Curves.linear,
-    this.duration = Button.defaultDuration,
-  }) : super(key: key);
+    this.curve,
+    this.duration,
+    this.style,
+    this.tooltip,
+    this.leading,
+    this.trailing,
+    required this.child,
+  })  : _postStyle = null,
+        super(key: key);
 
-  /// The primary content of the chip.
-  ///
-  /// Typically a [Text] widget.
+  /// Create a block button
+  Button.block({
+    Key? key,
+    CrossAxisAlignment? alignChildren,
+    MainAxisAlignment? justifyChildren,
+    bool expanded = true,
+    this.loading = false,
+    this.disabled = false,
+    this.autofocus = false,
+    this.focusNode,
+    this.onPressed,
+    this.eventsController,
+    this.curve,
+    this.duration,
+    this.style,
+    this.tooltip,
+    this.leading,
+    this.trailing,
+    required this.child,
+  })  : _postStyle = const ButtonStyle().block(
+          alignChildren: alignChildren,
+          justifyChildren: justifyChildren,
+          expanded: expanded,
+        ),
+        super(key: key);
+
+  /// Create an icon button
+  Button.icon({
+    Key? key,
+    BoxShape shape = BoxShape.circle,
+    double? size,
+    this.loading = false,
+    this.disabled = false,
+    this.autofocus = false,
+    this.focusNode,
+    this.onPressed,
+    this.eventsController,
+    this.curve,
+    this.duration,
+    this.style,
+    this.tooltip,
+    this.leading,
+    this.trailing,
+    required this.child,
+  })  : _postStyle = const ButtonStyle().icon(
+          shape: shape,
+          size: size,
+        ),
+        super(key: key);
+
+  /// {@template widgetarian.button.child}
+  /// The widget below this widget in the tree.
+  /// {@endtemplate}
   final Widget child;
 
-  /// A custom widget to display prior to the chip's [child].
+  /// {@template widgetarian.button.leading}
+  /// A custom widget to display prior to the button's [child].
+  /// {@endtemplate}
   final Widget? leading;
 
-  /// A custom widget to display next to the chip's [child].
+  /// {@template widgetarian.button.trailing}
+  /// A custom widget to display next to the button's [child].
+  /// {@endtemplate}
   final Widget? trailing;
 
+  /// {@template widgetarian.button.tooltip}
   /// Tooltip string to be used for the body area of the button.
+  /// {@endtemplate}
   final String? tooltip;
 
-  final bool selected;
-
-  final bool loading;
-
-  /// Whether or not this chip is disabled for input.
-  ///
-  /// Defaults to false. Cannot be null.
-  final bool disabled;
-
-  /// True if this widget will be selected as the initial focus
-  /// when no other node in its scope is currently focused.
-  ///
-  /// Ideally, there is only one widget with autofocus set in each [FocusScope].
-  /// If there is more than one widget with autofocus set,
-  /// then the first one added to the tree will get focus.
+  /// {@template widgetarian.button.loading}
+  /// Whether or not this button is in loading state.
   ///
   /// Must not be null. Defaults to false.
+  /// {@endtemplate}
+  final bool loading;
+
+  /// {@template widgetarian.button.disabled}
+  /// Whether or not this button is disabled for input.
+  ///
+  /// Defaults to false. Cannot be null.
+  /// {@endtemplate}
+  final bool disabled;
+
+  /// {@macro flutter.widgets.Focus.autofocus}
   final bool autofocus;
 
-  /// An optional focus node to use as the focus node for this widget.
-  ///
-  /// If one is not supplied, then one will be automatically allocated, owned,
-  /// and managed by this widget. The widget will be focusable even if a [focusNode] is not supplied.
-  /// If supplied, the given focusNode will be hosted by this widget, but not owned.
-  /// See [FocusNode] for more information on what being hosted and/or owned implies.
-  ///
-  /// Supplying a focus node is sometimes useful if an ancestor
-  /// to this widget wants to control when this widget has the focus.
-  /// The owner will be responsible for calling [FocusNode.dispose]
-  /// on the focus node when it is done with it, but this widget
-  /// will attach/detach and reparent the node when needed.
+  /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
-  /// Called when the user taps the chip.
+  /// {@template widgetarian.button.onPressed}
+  /// Called when the user taps the button.
   ///
   /// If [onPressed] is set, then this callback will be called when the user
-  /// taps on the label or avatar parts of the chip. If [onPressed] is null,
-  /// then the chip will be disabled.
+  /// taps on the button area. If [onPressed] is null, then the button will be disabled.
   ///
   /// {@tool snippet}
   ///
@@ -96,24 +138,195 @@ class Button extends StatelessWidget {
   ///
   ///   @override
   ///   Widget build(BuildContext context) {
-  ///     return DrivenButton(
-  ///       label: const Text('Apply Hammer'),
+  ///     return Button(
+  ///       child: const Text('Apply Hammer'),
   ///       onPressed: startHammering,
   ///     );
   ///   }
   /// }
   /// ```
   /// {@end-tool}
+  /// {@endtemplate}
   final VoidCallback? onPressed;
 
-  /// Called when the chip should change between selected and de-selected
-  /// states.
+  /// {@template widgetarian.button.style}
+  /// The style to be applied to the chip.
   ///
-  /// When the chip is tapped, then the [onSelected] callback, if set, will be
+  /// If [style] is an event driven [ButtonStyle]
+  /// by [DrivenButtonStyle], then [ButtonStyle.evaluate]
+  /// is used for the following [ButtonEvent]s:
+  ///
+  ///  * [ButtonEvent.selected].
+  ///  * [ButtonEvent.focused].
+  ///  * [ButtonEvent.hovered].
+  ///  * [ButtonEvent.pressed].
+  ///  * [ButtonEvent.disabled].
+  /// {@endtemplate}
+  final ButtonStyle? style;
+
+  /// {@template widgetarian.button.eventsController}
+  /// Used by widgets that expose their internal event
+  /// for the sake of extensions that add support for additional events.
+  /// {@endtemplate}
+  final ButtonEventController? eventsController;
+
+  /// {@template widgetarian.button.curve}
+  /// The curve to apply when animating the parameters of this widget.
+  /// {@endtemplate}
+  final Curve? curve;
+
+  /// {@template widgetarian.button.duration}
+  /// The duration over which to animate the parameters of this widget.
+  /// {@endtemplate}
+  final Duration? duration;
+
+  /// Internally use, style to be merge to style to create icon or block button.
+  final ButtonStyle? _postStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    final buttonTheme = ButtonTheme.of(context);
+    final buttonStyle = style ?? buttonTheme.style;
+    return _ButtonRender(
+      curve: curve ?? buttonTheme.curve,
+      duration: duration ?? buttonTheme.duration,
+      theme: buttonTheme,
+      style: buttonStyle.merge(_postStyle),
+      selected: false,
+      loading: loading,
+      disabled: disabled,
+      autofocus: autofocus,
+      focusNode: focusNode,
+      onPressed: onPressed,
+      onSelected: null,
+      eventsController: eventsController,
+      leading: leading,
+      trailing: trailing,
+      tooltip: tooltip,
+      child: child,
+    );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<bool>('loading', loading));
+    properties.add(DiagnosticsProperty<bool>('disabled', disabled));
+    properties.add(DiagnosticsProperty<bool>('autofocus', autofocus));
+    properties.add(DiagnosticsProperty<ButtonStyle?>('style', style));
+  }
+}
+
+/// A Toggle Button can be used to group related options.
+class ToggleButton extends StatelessWidget {
+  /// Create a toggle button
+  const ToggleButton({
+    Key? key,
+    this.selected = false,
+    this.loading = false,
+    this.disabled = false,
+    this.autofocus = false,
+    this.focusNode,
+    this.onSelected,
+    this.eventsController,
+    this.curve,
+    this.duration,
+    this.style,
+    this.tooltip,
+    this.leading,
+    this.trailing,
+    required this.child,
+  })  : _postStyle = null,
+        super(key: key);
+
+  /// Create a block toggle button
+  ToggleButton.block({
+    Key? key,
+    CrossAxisAlignment? alignChildren,
+    MainAxisAlignment? justifyChildren,
+    bool expanded = true,
+    this.selected = false,
+    this.loading = false,
+    this.disabled = false,
+    this.autofocus = false,
+    this.focusNode,
+    this.onSelected,
+    this.eventsController,
+    this.curve,
+    this.duration,
+    this.style,
+    this.tooltip,
+    this.leading,
+    this.trailing,
+    required this.child,
+  })  : _postStyle = const ButtonStyle().block(
+          alignChildren: alignChildren,
+          justifyChildren: justifyChildren,
+          expanded: expanded,
+        ),
+        super(key: key);
+
+  /// Create an icon toggle button
+  ToggleButton.icon({
+    Key? key,
+    BoxShape shape = BoxShape.circle,
+    double? size,
+    this.selected = false,
+    this.loading = false,
+    this.disabled = false,
+    this.autofocus = false,
+    this.focusNode,
+    this.onSelected,
+    this.eventsController,
+    this.curve,
+    this.duration,
+    this.style,
+    this.tooltip,
+    this.leading,
+    this.trailing,
+    required this.child,
+  })  : _postStyle = const ButtonStyle().icon(
+          shape: shape,
+          size: size,
+        ),
+        super(key: key);
+
+  /// {@macro widgetarian.button.child}
+  final Widget child;
+
+  /// {@macro widgetarian.button.leading}
+  final Widget? leading;
+
+  /// {@macro widgetarian.button.trailing}
+  final Widget? trailing;
+
+  /// {@macro widgetarian.button.tooltip}
+  final String? tooltip;
+
+  /// Whether or not this button is selected.
+  ///
+  /// Must not be null. Defaults to false.
+  final bool selected;
+
+  /// {@macro widgetarian.button.loading}
+  final bool loading;
+
+  /// {@macro widgetarian.button.disabled}
+  final bool disabled;
+
+  /// {@macro flutter.widgets.Focus.autofocus}
+  final bool autofocus;
+
+  /// {@macro flutter.widgets.Focus.focusNode}
+  final FocusNode? focusNode;
+
+  /// Called when the button should change between selected and de-selected states.
+  ///
+  /// When the button is tapped, then the [onSelected] callback, if set, will be
   /// applied to `!selected` (see [selected]).
   ///
-  /// The chip passes the new value to the callback but does not actually
-  /// change state until the parent widget rebuilds the chip with the new
+  /// The button passes the new value to the callback but does not actually
+  /// change state until the parent widget rebuilds the button with the new
   /// value.
   ///
   /// The callback provided to [onSelected] should update the state of the
@@ -140,8 +353,8 @@ class Button extends StatelessWidget {
   ///
   ///   @override
   ///   Widget build(BuildContext context) {
-  ///     return Chip(
-  ///       label: const Text('Use Chisel'),
+  ///     return Button.toggle(
+  ///       child: const Text('Use Chisel'),
   ///       selected: _useChisel,
   ///       onSelected: (bool newValue) {
   ///         setState(() {
@@ -155,42 +368,36 @@ class Button extends StatelessWidget {
   /// {@end-tool}
   final ValueChanged<bool>? onSelected;
 
-  /// The style to be applied to the chip.
-  ///
-  /// If [style] is an event driven [ButtonStyle]
-  /// by [DrivenButtonStyle.driven], then [ButtonStyle.evaluate]
-  /// is used for the following [ButtonEvent]s:
-  ///
-  ///  * [ButtonEvent.disabled].
-  ///  * [ButtonEvent.selected].
-  ///  * [ButtonEvent.hovered].
-  ///  * [ButtonEvent.focused].
-  ///  * [ButtonEvent.pressed].
+  /// {@macro widgetarian.button.style}
   final ButtonStyle? style;
 
-  /// Used by widgets that expose their internal event
-  /// for the sake of extensions that add support for additional events.
+  /// {@macro widgetarian.button.eventsController}
   final ButtonEventController? eventsController;
 
-  /// The curve to apply when animating the parameters of this widget.
-  final Curve curve;
+  /// {@macro widgetarian.button.curve}
+  final Curve? curve;
 
-  /// The duration over which to animate the parameters of this widget.
-  final Duration duration;
+  /// {@macro widgetarian.button.duration}
+  final Duration? duration;
 
-  static const defaultDuration = Duration(milliseconds: 200);
+  /// Internally use, style to be merge to style to create icon or block button.
+  final ButtonStyle? _postStyle;
 
   @override
   Widget build(BuildContext context) {
+    final buttonTheme = ButtonTheme.of(context);
+    final buttonStyle = buttonTheme.style.merge(style);
     return _ButtonRender(
-      theme: Theme.of(context),
-      style: style ?? ButtonTheme.of(context),
+      curve: curve ?? buttonTheme.curve,
+      duration: duration ?? buttonTheme.duration,
+      theme: buttonTheme,
+      style: buttonStyle.merge(_postStyle),
       selected: selected,
       loading: loading,
       disabled: disabled,
       autofocus: autofocus,
       focusNode: focusNode,
-      onPressed: onPressed,
+      onPressed: null,
       onSelected: onSelected,
       eventsController: eventsController,
       leading: leading,
@@ -199,14 +406,21 @@ class Button extends StatelessWidget {
       child: child,
     );
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<bool>('selected', selected));
+    properties.add(DiagnosticsProperty<bool>('loading', loading));
+    properties.add(DiagnosticsProperty<bool>('disabled', disabled));
+    properties.add(DiagnosticsProperty<bool>('autofocus', autofocus));
+    properties.add(DiagnosticsProperty<ButtonStyle?>('style', style));
+  }
 }
 
-/// Chip widget with smooth animation, event driven style, and many more.
-class _ButtonRender extends ImplicitlyAnimatedWidget {
+class _ButtonRender extends StatefulWidget {
   const _ButtonRender({
     Key? key,
-    Curve curve = Curves.linear,
-    Duration duration = Button.defaultDuration,
     this.leading,
     this.trailing,
     this.tooltip,
@@ -218,14 +432,12 @@ class _ButtonRender extends ImplicitlyAnimatedWidget {
     this.onPressed,
     this.onSelected,
     this.eventsController,
+    required this.curve,
+    required this.duration,
     required this.theme,
     required this.style,
     required this.child,
-  }) : super(
-          key: key,
-          duration: duration,
-          curve: curve,
-        );
+  }) : super(key: key);
 
   final Widget child;
   final Widget? leading;
@@ -238,9 +450,11 @@ class _ButtonRender extends ImplicitlyAnimatedWidget {
   final FocusNode? focusNode;
   final VoidCallback? onPressed;
   final ValueChanged<bool>? onSelected;
-  final ButtonStyle style;
   final ButtonEventController? eventsController;
-  final ThemeData theme;
+  final Curve curve;
+  final Duration duration;
+  final ButtonStyle style;
+  final ButtonThemeData theme;
 
   bool get enabled => !disabled && !loading;
 
@@ -254,134 +468,67 @@ class _ButtonRender extends ImplicitlyAnimatedWidget {
   _ButtonRenderState createState() => _ButtonRenderState();
 }
 
-class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
+class _ButtonRenderState extends State<_ButtonRender>
     with WidgetEventMixin<_ButtonRender> {
   ButtonStyle style = const ButtonStyle();
+  ButtonStyle fallback = const ButtonStyle();
 
   @protected
   void setStyle() {
-    final style = widget.style;
-    final resolved = ButtonStyle.evaluate(style, widgetEvents.value);
-    final result = ButtonStyle.from(resolved);
-    this.style = result;
+    final rawStyle = ButtonStyle.defaults.merge(widget.style);
+    final resStyle = DrivenButtonStyle.evaluate(rawStyle, widgetEvents.value);
+    style = ButtonStyle.from(resStyle);
+
+    final rawFallback = widget.theme.fallback;
+    final resFallback =
+        DrivenButtonStyle.evaluate(rawFallback, widgetEvents.value);
+    fallback = ButtonStyle.from(resFallback);
     setState(() {});
   }
 
-  Color get defaultBackgroundColor {
-    return style.isOutlined
-        ? widget.theme.colorScheme.surface
-        : widget.theme.unselectedWidgetColor;
+  Color? get defaultBackgroundColor {
+    return style.isOutlined ? Colors.transparent : fallback.backgroundColor;
   }
 
-  Color get defaultBorderColor {
-    return widget.theme.colorScheme.outline;
+  Color? get defaultBorderColor {
+    return fallback.borderColor;
   }
 
-  Color get defaultForegroundColor {
+  Color? get defaultForegroundColor {
     return style.isFilled
-        ? Colors.colorOnSurface(backgroundColor)!
-        : widget.theme.colorScheme.onSurface;
+        ? widget.selected && widget.disabled
+            ? backgroundColor
+            : Colors.onSurface(backgroundColor)
+        : fallback.foregroundColor;
   }
 
-  Color get backgroundColor {
-    Color color = style.backgroundColor ?? defaultBackgroundColor;
-    color = Colors.colorWithOpacity(color, style.backgroundOpacity);
-    color = Colors.colorWithAlpha(color, style.backgroundAlpha);
-    return color;
-  }
+  Color? get backgroundColor => Colors.withTransparency(
+        style.backgroundColor ?? defaultBackgroundColor,
+        opacity: style.backgroundOpacity,
+        alpha: style.backgroundAlpha,
+      );
 
-  Color get borderColor {
-    Color color = style.borderColor ?? defaultBorderColor;
-    color = Colors.colorWithOpacity(color, style.borderOpacity);
-    color = Colors.colorWithAlpha(color, style.borderAlpha);
-    return color;
-  }
+  Color? get borderColor => Colors.withTransparency(
+        style.borderColor ?? defaultBorderColor,
+        opacity: style.borderOpacity,
+        alpha: style.borderAlpha,
+      );
 
-  Color get foregroundColor {
-    Color color = style.foregroundColor ?? defaultForegroundColor;
-    color = Colors.colorWithOpacity(color, style.foregroundOpacity);
-    color = Colors.colorWithAlpha(color, style.foregroundAlpha);
-    return color;
-  }
+  Color? get foregroundColor => Colors.withTransparency(
+        style.foregroundColor ?? defaultForegroundColor,
+        opacity: style.foregroundOpacity,
+        alpha: style.foregroundAlpha,
+      );
 
-  Clip get containerClipBehavior {
-    return style.clipBehavior ?? ButtonStyle.defaultClipBehavior;
-  }
-
-  double? get containerWidth {
-    return style.shape == BoxShape.circle
-        ? ButtonStyle.defaultHeight
-        : style.width;
-  }
-
-  double get containerHeight {
-    return style.height ?? ButtonStyle.defaultHeight;
-  }
-
-  EdgeInsetsGeometry get containerPadding {
+  EdgeInsetsGeometry get padding {
     final defaultPadding = style.shape == BoxShape.circle
         ? EdgeInsets.zero
-        : ButtonStyle.defaultPadding;
+        : ButtonStyle.defaults.padding!;
     final padding = style.padding ?? defaultPadding;
     return padding.clamp(
       EdgeInsets.only(right: hasTrailing ? 8 : 0),
       EdgeInsetsGeometry.infinity,
     );
-  }
-
-  EdgeInsetsGeometry get containerMargin {
-    return style.margin ?? ButtonStyle.defaultMargin;
-  }
-
-  Color get containerShadowColor {
-    return style.shadowColor ?? widget.theme.colorScheme.shadow;
-  }
-
-  BoxShape get containerShape {
-    return style.shape ?? BoxShape.rectangle;
-  }
-
-  BorderRadius get containerBorderRadius {
-    return style.borderRadius ?? ButtonStyle.defaultBorderRadius;
-  }
-
-  BorderSide get containerBorderSide {
-    return BorderSide(
-      color: borderColor,
-      width: style.borderWidth ?? ButtonStyle.defaultBorderWidth,
-      style: style.borderStyle ?? ButtonStyle.defaultBorderStyle,
-    );
-  }
-
-  TextStyle get foregroundStyle {
-    return const TextStyle()
-        .copyWith(color: foregroundColor)
-        .merge(style.foregroundStyle);
-  }
-
-  Color get iconColor {
-    return style.iconColor ?? foregroundColor;
-  }
-
-  double get iconSize {
-    return style.iconSize ?? ButtonStyle.defaultIconSize;
-  }
-
-  ColorTween? _containerOverlayColorTween;
-  Color? get animatedContainerOverlayColor {
-    return _containerOverlayColorTween?.evaluate(animation) ??
-        style.overlayColor;
-  }
-
-  EdgeInsetsGeometryTween? _containerPaddingTween;
-  EdgeInsetsGeometry get animatedContainerPadding {
-    return _containerPaddingTween?.evaluate(animation) ?? containerPadding;
-  }
-
-  Tween<double>? _foregroundSpacingTween;
-  double get animatedForegroundSpacing {
-    return _foregroundSpacingTween?.evaluate(animation) ??
-        ButtonStyle.defaultForegroundSpacing;
   }
 
   bool get hasLeading => widget.leading != null;
@@ -432,27 +579,6 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
   }
 
   @override
-  void forEachTween(visitor) {
-    _containerPaddingTween = visitor(
-      _containerPaddingTween,
-      containerPadding,
-      (value) => EdgeInsetsGeometryTween(begin: value),
-    ) as EdgeInsetsGeometryTween?;
-
-    _containerOverlayColorTween = visitor(
-      _containerOverlayColorTween,
-      style.overlayColor,
-      (value) => ColorTween(begin: value),
-    ) as ColorTween?;
-
-    _foregroundSpacingTween = visitor(
-      _foregroundSpacingTween,
-      style.foregroundSpacing ?? ButtonStyle.defaultForegroundSpacing,
-      (value) => Tween<double>(begin: value),
-    ) as Tween<double>?;
-  }
-
-  @override
   void didChangeWidgetEvents() {
     super.didChangeWidgetEvents();
     didUpdateWidget(widget);
@@ -464,60 +590,44 @@ class _ButtonRenderState extends AnimatedWidgetBaseState<_ButtonRender>
       container: true,
       button: widget.canTap,
       enabled: widget.enabled,
-      child: AnimatedBox(
+      child: Sheet(
         curve: widget.curve,
         duration: widget.duration,
-        tooltip: widget.canTap ? widget.tooltip : null,
-        color: backgroundColor,
-        clipBehavior: containerClipBehavior,
-        shape: containerShape,
-        borderSide: containerBorderSide,
-        borderRadius: containerBorderRadius,
-        shadowColor: containerShadowColor,
-        elevation: style.elevation,
-        margin: containerMargin,
-        width: containerWidth,
-        height: containerHeight,
+        style: style,
+        foregroundColor: foregroundColor,
+        backgroundColor: backgroundColor,
+        borderColor: borderColor,
+        padding: EdgeInsets.zero,
         child: Anchor(
-          padding: animatedContainerPadding,
           disabled: !widget.canTap,
           autofocus: widget.autofocus,
           focusNode: widget.focusNode,
-          overlayColor: animatedContainerOverlayColor,
+          overlayColor: style.overlayColor,
           onTap: onTap,
           onTapDown: onTapDown,
           onTapCancel: onTapCancel,
           onHover: onHover,
           onFocus: onFocus,
-          child: AnimatedDefaultTextStyle(
+          child: AnimatedPadding(
             curve: widget.curve,
             duration: widget.duration,
-            style: foregroundStyle,
-            child: AnimatedIconTheme(
-              data: IconThemeData(
-                color: iconColor,
-                size: style.iconSize,
-                opacity: style.iconOpacity,
-              ),
-              child: Tile(
-                expanded: containerWidth == double.infinity,
-                spacing: animatedForegroundSpacing,
-                leading: widget.leading != null
-                    ? DrivenWidget.evaluate(
-                        widget.leading!,
-                        widgetEvents.value,
-                      )
-                    : null,
-                trailing: widget.trailing != null
-                    ? DrivenWidget.evaluate(
-                        widget.trailing!,
-                        widgetEvents.value,
-                      )
-                    : null,
-                child: DrivenWidget.evaluate(
-                  widget.child,
-                  widgetEvents.value,
-                ),
+            padding: padding,
+            child: Tile(
+              leading: widget.leading != null
+                  ? DrivenWidget.evaluate(
+                      widget.leading!,
+                      widgetEvents.value,
+                    )
+                  : null,
+              trailing: widget.trailing != null
+                  ? DrivenWidget.evaluate(
+                      widget.trailing!,
+                      widgetEvents.value,
+                    )
+                  : null,
+              child: DrivenWidget.evaluate(
+                widget.child,
+                widgetEvents.value,
               ),
             ),
           ),

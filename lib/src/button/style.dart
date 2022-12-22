@@ -1,625 +1,134 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/utils.dart';
+import '../layout/sheet/style.dart';
 import 'event.dart';
 
-/// Default button's style.
-class ButtonStyle {
+/// The style to be applied to button widget
+@immutable
+class ButtonStyle extends SheetStyle {
+  /// Create a raw button's style
   const ButtonStyle({
-    this.width,
-    this.height,
-    this.margin,
-    this.padding,
-    this.clipBehavior,
-    this.overlayColor,
-    this.shadowColor,
-    this.elevation,
-    this.foregroundStyle,
-    this.foregroundColor,
-    this.foregroundOpacity,
-    this.foregroundAlpha,
-    this.foregroundSpacing,
-    this.backgroundColor,
-    this.backgroundOpacity,
-    this.backgroundAlpha,
-    this.borderColor,
-    this.borderOpacity,
-    this.borderAlpha,
-    this.borderWidth,
-    this.borderRadius,
-    this.borderStyle,
-    this.shape,
-    this.iconColor,
-    this.iconOpacity,
-    this.iconSize,
+    super.width,
+    super.height,
+    super.margin,
+    super.padding,
+    super.clipBehavior,
+    super.overlayColor,
+    super.shadowColor,
+    super.elevation,
+    super.foregroundStyle,
+    super.foregroundColor,
+    super.foregroundOpacity,
+    super.foregroundAlpha,
+    super.foregroundSpacing,
+    super.foregroundExpanded,
+    super.foregroundAlign,
+    super.foregroundJustify,
+    super.backgroundColor,
+    super.backgroundOpacity,
+    super.backgroundAlpha,
+    super.borderColor,
+    super.borderOpacity,
+    super.borderAlpha,
+    super.borderWidth,
+    super.borderRadius,
+    super.borderStyle,
+    super.shape,
+    super.iconColor,
+    super.iconOpacity,
+    super.iconSize,
   });
 
   /// Create a button's style from another style
   ButtonStyle.from(ButtonStyle? other)
-      : width = other?.width,
-        height = other?.height,
-        margin = other?.margin,
-        padding = other?.padding,
-        clipBehavior = other?.clipBehavior,
-        overlayColor = other?.overlayColor,
-        shadowColor = other?.shadowColor,
-        elevation = other?.elevation,
-        foregroundStyle = other?.foregroundStyle,
-        foregroundColor = other?.foregroundColor,
-        foregroundOpacity = other?.foregroundOpacity,
-        foregroundAlpha = other?.foregroundAlpha,
-        foregroundSpacing = other?.foregroundSpacing,
-        backgroundColor = other?.backgroundColor,
-        backgroundOpacity = other?.backgroundOpacity,
-        backgroundAlpha = other?.backgroundAlpha,
-        borderColor = other?.borderColor,
-        borderOpacity = other?.borderOpacity,
-        borderAlpha = other?.borderAlpha,
-        borderWidth = other?.borderWidth,
-        borderRadius = other?.borderRadius,
-        borderStyle = other?.borderStyle,
-        shape = other?.shape,
-        iconColor = other?.iconColor,
-        iconOpacity = other?.iconOpacity,
-        iconSize = other?.iconSize;
+      : super(
+          width: other?.width,
+          height: other?.height,
+          margin: other?.margin,
+          padding: other?.padding,
+          clipBehavior: other?.clipBehavior,
+          overlayColor: other?.overlayColor,
+          shadowColor: other?.shadowColor,
+          elevation: other?.elevation,
+          foregroundStyle: other?.foregroundStyle,
+          foregroundColor: other?.foregroundColor,
+          foregroundOpacity: other?.foregroundOpacity,
+          foregroundAlpha: other?.foregroundAlpha,
+          foregroundSpacing: other?.foregroundSpacing,
+          foregroundExpanded: other?.foregroundExpanded,
+          foregroundAlign: other?.foregroundAlign,
+          foregroundJustify: other?.foregroundJustify,
+          backgroundColor: other?.backgroundColor,
+          backgroundOpacity: other?.backgroundOpacity,
+          backgroundAlpha: other?.backgroundAlpha,
+          borderColor: other?.borderColor,
+          borderOpacity: other?.borderOpacity,
+          borderAlpha: other?.borderAlpha,
+          borderWidth: other?.borderWidth,
+          borderRadius: other?.borderRadius,
+          borderStyle: other?.borderStyle,
+          shape: other?.shape,
+          iconColor: other?.iconColor,
+          iconOpacity: other?.iconOpacity,
+          iconSize: other?.iconSize,
+        );
 
-  /// Create an event driven button's style using [callback].
-  factory ButtonStyle.driven(
-    DrivenPropertyResolver<ButtonStyle?> callback,
-  ) {
-    return _ButtonStyle(callback);
-  }
+  static const defaults = ButtonStyle(
+    clipBehavior: Clip.antiAlias,
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+    margin: EdgeInsets.zero,
+    padding: EdgeInsets.symmetric(horizontal: 16),
+    height: 40.0,
+    iconSize: 18.0,
+    foregroundSpacing: 8.0,
+    foregroundJustify: MainAxisAlignment.center,
+    foregroundStyle: TextStyle(height: 1),
+  );
 
-  /// Create a button's style when some events occurs.
-  ///
-  /// The [enabled] is base style to be applied to the button.
-  /// if `null` will fallback with empty DrivenButtonStyle
-  ///
-  /// The [disabled] style to be merged with [enabled],
-  /// when events includes [ButtonEvent.disabled].
-  ///
-  /// The [hovered] style to be merged with [enabled],
-  /// when events includes [ButtonEvent.hovered].
-  ///
-  /// The [focused] style to be merged with [enabled],
-  /// when events includes [ButtonEvent.focused].
-  ///
-  /// The [pressed] style to be merged with [enabled],
-  /// when events includes [ButtonEvent.pressed].
-  factory ButtonStyle.when({
-    ButtonStyle? enabled,
-    ButtonStyle? selected,
-    ButtonStyle? focused,
-    ButtonStyle? hovered,
-    ButtonStyle? pressed,
-    ButtonStyle? disabled,
-  }) {
-    return ButtonStyle.driven((events) {
-      return (enabled ?? const ButtonStyle())
-          .merge(ButtonEvent.isSelected(events)
-              ? evaluate(selected, events)
-              : null)
-          .merge(
-              ButtonEvent.isFocused(events) ? evaluate(focused, events) : null)
-          .merge(
-              ButtonEvent.isHovered(events) ? evaluate(hovered, events) : null)
-          .merge(
-              ButtonEvent.isPressed(events) ? evaluate(pressed, events) : null)
-          .merge(ButtonEvent.isDisabled(events)
-              ? evaluate(disabled, events)
-              : null);
-    });
-  }
-
-  /// Create button's style with default value for flat style.
-  ///
-  /// The [disabledStyle] style to be merged,
-  /// when events includes [ButtonEvent.disabled].
-  ///
-  /// The [hoveredStyle] style to be merged,
-  /// when events includes [ButtonEvent.hovered].
-  ///
-  /// The [focusedStyle] style to be merged,
-  /// when events includes [ButtonEvent.focused].
-  ///
-  /// The [pressedStyle] style to be merged,
-  /// when events includes [ButtonEvent.pressed].
-  factory ButtonStyle.flat({
-    double? width,
-    double? height,
-    EdgeInsetsGeometry? margin,
-    EdgeInsetsGeometry? padding,
-    Clip? clipBehavior,
-    Color? overlayColor,
-    Color? shadowColor,
-    double? elevation,
-    TextStyle? foregroundStyle,
-    Color? foregroundColor,
-    double? foregroundOpacity,
-    int? foregroundAlpha,
-    double? foregroundSpacing,
-    Color? backgroundColor,
-    double? backgroundOpacity = 0,
-    int? backgroundAlpha,
-    Color? borderColor,
-    double? borderOpacity,
-    int? borderAlpha,
-    double? borderWidth,
-    BorderRadius? borderRadius,
-    BorderStyle? borderStyle = BorderStyle.none,
-    BoxShape? shape,
-    Color? iconColor,
-    double? iconOpacity,
-    double? iconSize,
-    ButtonStyle? selectedStyle,
-    ButtonStyle? focusedStyle,
-    ButtonStyle? hoveredStyle,
-    ButtonStyle? pressedStyle,
-    ButtonStyle? disabledStyle = const ButtonStyle(
-      foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
-    ),
-  }) {
-    return ButtonStyle.when(
-      enabled: ButtonStyle(
-        width: width,
-        height: height,
-        margin: margin,
-        padding: padding,
-        clipBehavior: clipBehavior,
-        overlayColor: overlayColor,
-        shadowColor: shadowColor,
-        elevation: elevation,
-        foregroundStyle: foregroundStyle,
-        foregroundColor: foregroundColor,
-        foregroundOpacity: foregroundOpacity,
-        foregroundAlpha: foregroundAlpha,
-        foregroundSpacing: foregroundSpacing,
-        backgroundColor: backgroundColor,
-        backgroundOpacity: backgroundOpacity,
-        backgroundAlpha: backgroundAlpha,
-        borderColor: borderColor,
-        borderOpacity: borderOpacity,
-        borderAlpha: borderAlpha,
-        borderWidth: borderWidth,
-        borderRadius: borderRadius,
-        borderStyle: borderStyle,
-        shape: shape,
-        iconColor: iconColor,
-        iconOpacity: iconOpacity,
-        iconSize: iconSize,
-      ),
-      selected: selectedStyle,
-      focused: focusedStyle,
-      hovered: hoveredStyle,
-      pressed: pressedStyle,
-      disabled: disabledStyle,
-    );
-  }
-
-  /// Create button's style with default value for toned style.
-  ///
-  /// The [disabledStyle] style to be merged,
-  /// when events includes [ButtonEvent.disabled].
-  ///
-  /// The [hoveredStyle] style to be merged,
-  /// when events includes [ButtonEvent.hovered].
-  ///
-  /// The [focusedStyle] style to be merged,
-  /// when events includes [ButtonEvent.focused].
-  ///
-  /// The [pressedStyle] style to be merged,
-  /// when events includes [ButtonEvent.pressed].
-  factory ButtonStyle.toned({
-    double? width,
-    double? height,
-    EdgeInsetsGeometry? margin,
-    EdgeInsetsGeometry? padding,
-    Clip? clipBehavior,
-    Color? overlayColor,
-    Color? shadowColor,
-    double? elevation,
-    TextStyle? foregroundStyle,
-    Color? foregroundColor,
-    double? foregroundOpacity,
-    int? foregroundAlpha,
-    double? foregroundSpacing,
-    Color? backgroundColor,
-    double? backgroundOpacity = .12,
-    int? backgroundAlpha,
-    Color? borderColor,
-    double? borderOpacity = 1,
-    int? borderAlpha,
-    double? borderWidth = 1,
-    BorderRadius? borderRadius,
-    BorderStyle? borderStyle = BorderStyle.none,
-    BoxShape? shape,
-    Color? iconColor,
-    double? iconOpacity,
-    double? iconSize,
-    ButtonStyle? selectedStyle,
-    ButtonStyle? focusedStyle,
-    ButtonStyle? hoveredStyle,
-    ButtonStyle? pressedStyle,
-    ButtonStyle? disabledStyle = const ButtonStyle(
-      foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
-      backgroundAlpha: ButtonStyle.disabledBackgroundAlpha,
-      borderAlpha: ButtonStyle.disabledBorderAlpha,
-    ),
-  }) {
-    return ButtonStyle.when(
-      enabled: ButtonStyle(
-        width: width,
-        height: height,
-        margin: margin,
-        padding: padding,
-        clipBehavior: clipBehavior,
-        overlayColor: overlayColor,
-        shadowColor: shadowColor,
-        elevation: elevation,
-        foregroundStyle: foregroundStyle,
-        foregroundColor: foregroundColor,
-        foregroundOpacity: foregroundOpacity,
-        foregroundAlpha: foregroundAlpha,
-        foregroundSpacing: foregroundSpacing,
-        backgroundColor: backgroundColor,
-        backgroundOpacity: backgroundOpacity,
-        backgroundAlpha: backgroundAlpha,
-        borderColor: borderColor,
-        borderOpacity: borderOpacity,
-        borderAlpha: borderAlpha,
-        borderWidth: borderWidth,
-        borderRadius: borderRadius,
-        borderStyle: borderStyle,
-        shape: shape,
-        iconColor: iconColor,
-        iconOpacity: iconOpacity,
-        iconSize: iconSize,
-      ),
-      selected: selectedStyle,
-      focused: focusedStyle,
-      hovered: hoveredStyle,
-      pressed: pressedStyle,
-      disabled: disabledStyle,
-    );
-  }
-
-  /// Create button's style with default value for filled style.
-  ///
-  /// The [disabledStyle] style to be merged,
-  /// when events includes [ButtonEvent.disabled].
-  ///
-  /// The [hoveredStyle] style to be merged,
-  /// when events includes [ButtonEvent.hovered].
-  ///
-  /// The [focusedStyle] style to be merged,
-  /// when events includes [ButtonEvent.focused].
-  ///
-  /// The [pressedStyle] style to be merged,
-  /// when events includes [ButtonEvent.pressed].
-  factory ButtonStyle.filled({
-    Color? color,
-    double? width,
-    double? height,
-    EdgeInsetsGeometry? margin,
-    EdgeInsetsGeometry? padding,
-    Clip? clipBehavior,
-    Color? overlayColor,
-    Color? shadowColor,
-    double? elevation,
-    TextStyle? foregroundStyle,
-    Color? foregroundColor,
-    double? foregroundOpacity,
-    int? foregroundAlpha,
-    double? foregroundSpacing,
-    double? backgroundOpacity = .8,
-    int? backgroundAlpha,
-    double? borderOpacity = 0,
-    int? borderAlpha,
-    double? borderWidth = 0,
-    BorderRadius? borderRadius,
-    BorderStyle? borderStyle = BorderStyle.none,
-    BoxShape? shape,
-    Color? iconColor,
-    double? iconOpacity,
-    double? iconSize,
-    ButtonStyle? selectedStyle,
-    ButtonStyle? focusedStyle,
-    ButtonStyle? hoveredStyle,
-    ButtonStyle? pressedStyle = const ButtonStyle(
-      elevation: 5,
-    ),
-    ButtonStyle? disabledStyle = const ButtonStyle(
-      foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
-      backgroundAlpha: ButtonStyle.disabledBackgroundAlpha,
-      borderAlpha: ButtonStyle.disabledBorderAlpha,
-    ),
-  }) {
-    return ButtonStyle.when(
-      enabled: ButtonStyle(
-        backgroundColor: color,
-        borderColor: color,
-        width: width,
-        height: height,
-        margin: margin,
-        padding: padding,
-        clipBehavior: clipBehavior,
-        overlayColor: overlayColor,
-        shadowColor: shadowColor,
-        elevation: elevation,
-        foregroundStyle: foregroundStyle,
-        foregroundColor: foregroundColor,
-        foregroundOpacity: foregroundOpacity,
-        foregroundAlpha: foregroundAlpha,
-        foregroundSpacing: foregroundSpacing,
-        backgroundOpacity: backgroundOpacity,
-        backgroundAlpha: backgroundAlpha,
-        borderOpacity: borderOpacity,
-        borderAlpha: borderAlpha,
-        borderWidth: borderWidth,
-        borderRadius: borderRadius,
-        borderStyle: borderStyle,
-        shape: shape,
-        iconColor: iconColor,
-        iconOpacity: iconOpacity,
-        iconSize: iconSize,
-      ),
-      selected: selectedStyle,
-      focused: focusedStyle,
-      hovered: hoveredStyle,
-      pressed: pressedStyle,
-      disabled: disabledStyle,
-    );
-  }
-
-  /// Create button's style with default value for outlined style.
-  ///
-  /// The [disabled] style to be merged,
-  /// when events includes [ButtonEvent.disabled].
-  ///
-  /// The [hovered] style to be merged,
-  /// when events includes [ButtonEvent.hovered].
-  ///
-  /// The [focused] style to be merged,
-  /// when events includes [ButtonEvent.focused].
-  ///
-  /// The [pressed] style to be merged,
-  /// when events includes [ButtonEvent.pressed].
-  factory ButtonStyle.outlined({
-    Color? color,
-    double? width,
-    double? height,
-    EdgeInsetsGeometry? margin,
-    EdgeInsetsGeometry? padding,
-    Clip? clipBehavior,
-    Color? overlayColor,
-    Color? shadowColor,
-    double? elevation,
-    TextStyle? foregroundStyle,
-    double? foregroundOpacity,
-    int? foregroundAlpha,
-    double? foregroundSpacing,
-    Color? backgroundColor,
-    double? backgroundOpacity = 0,
-    int? backgroundAlpha,
-    double? borderOpacity = 1,
-    int? borderAlpha,
-    double? borderWidth = 1,
-    BorderRadius? borderRadius,
-    BorderStyle? borderStyle = BorderStyle.solid,
-    BoxShape? shape,
-    Color? iconColor,
-    double? iconOpacity,
-    double? iconSize,
-    ButtonStyle? selectedStyle,
-    ButtonStyle? focusedStyle,
-    ButtonStyle? hoveredStyle,
-    ButtonStyle? pressedStyle,
-    ButtonStyle? disabledStyle = const ButtonStyle(
-      foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
-      borderAlpha: ButtonStyle.disabledBorderAlpha,
-    ),
-  }) {
-    return ButtonStyle.when(
-      enabled: ButtonStyle(
-        borderColor: color,
-        foregroundColor: color,
-        width: width,
-        height: height,
-        margin: margin,
-        padding: padding,
-        clipBehavior: clipBehavior,
-        overlayColor: overlayColor,
-        shadowColor: shadowColor,
-        elevation: elevation,
-        foregroundStyle: foregroundStyle,
-        foregroundOpacity: foregroundOpacity,
-        foregroundAlpha: foregroundAlpha,
-        foregroundSpacing: foregroundSpacing,
-        backgroundColor: backgroundColor,
-        backgroundOpacity: backgroundOpacity,
-        backgroundAlpha: backgroundAlpha,
-        borderOpacity: borderOpacity,
-        borderAlpha: borderAlpha,
-        borderWidth: borderWidth,
-        borderRadius: borderRadius,
-        borderStyle: borderStyle,
-        shape: shape,
-        iconColor: iconColor,
-        iconOpacity: iconOpacity,
-        iconSize: iconSize,
-      ),
-      selected: selectedStyle,
-      focused: focusedStyle,
-      hovered: hoveredStyle,
-      pressed: pressedStyle,
-      disabled: disabledStyle,
-    );
-  }
-
-  /// Resolves the value for the given set of events
-  /// if `value` is an event driven [ButtonStyle],
-  /// otherwise returns the value itself.
-  static ButtonStyle? evaluate(
-    ButtonStyle? value,
-    Set<WidgetEvent> events,
-  ) {
-    return value?.merge(DrivenProperty.evaluate<ButtonStyle?>(value, events));
-  }
-
-  static const defaultClipBehavior = Clip.antiAlias;
-  static const defaultBorderWidth = 1.0;
-  static const defaultBorderStyle = BorderStyle.solid;
-  static const defaultBorderRadius = BorderRadius.all(Radius.circular(8));
-  static const defaultMargin = EdgeInsets.zero;
-  static const defaultPadding = EdgeInsets.symmetric(horizontal: 16);
-  static const defaultHeight = 40.0;
-  static const defaultIconSize = 18.0;
-  static const defaultForegroundSpacing = 8.0;
   static const disabledForegroundAlpha = 0x61; // 38%
   static const disabledBackgroundAlpha = 0x0c; // 38% * 12% = 5%
   static const disabledBorderAlpha = 0x0c; // 38% * 12% = 5%
-  static const colorTransparent = Color(0x00000000);
-  static const colorBlack = Color(0xFF000000);
-  static const colorWhite = Color(0xFFFFFFFF);
 
-  /// If non-null, requires the child to have exactly this width.
-  final double? width;
-
-  /// Defaults to [ButtonStyle.defaultHeight]
-  final double? height;
-
-  /// Empty space to surround the outside button.
-  final EdgeInsetsGeometry? margin;
-
-  /// The padding between the contents of the button and the outside button.
-  ///
-  /// defaults to [ButtonStyle.defaultPadding].
-  final EdgeInsetsGeometry? padding;
-
-  /// The button's content will be clipped (or not) according to this option.
-  ///
-  /// See the enum [Clip] for details of all possible options and their common use cases.
-  ///
-  /// Defaults to [ButtonStyle.defaultClipBehavior]
-  final Clip? clipBehavior;
-
-  /// Defines the ink response colors.
-  final Color? overlayColor;
-
-  /// When [elevation] is non zero the color
-  /// to use for the button's shadow color.
-  final Color? shadowColor;
-
-  /// The button's z-coordinate relative to
-  /// the parent at which to place this physical object.
-  ///
-  /// The value is non-negative.
-  final double? elevation;
-
-  /// The style to be applied to the button's label.
-  ///
-  /// The default label style is [TextTheme.bodyText1] from the overall
-  /// theme's [ThemeData.textTheme].
-  //
-  /// This only has an effect on widgets that respect the [DefaultTextStyle],
-  /// such as [Text].
-  final TextStyle? foregroundStyle;
-
-  /// The color to be applied to the button's label, and icon
-  final Color? foregroundColor;
-
-  /// Opacity to be apply to [foregroundColor].
-  final double? foregroundOpacity;
-
-  /// Alpha to be apply to [foregroundColor].
-  final int? foregroundAlpha;
-
-  /// How much space to place between button's foreground widget in a run in the main axis.
-  final double? foregroundSpacing;
-
-  /// Color to be used for the button's background.
-  final Color? backgroundColor;
-
-  /// Opacity to be apply to [backgroundColor].
-  final double? backgroundOpacity;
-
-  /// Alpha to be apply to [backgroundColor].
-  final int? backgroundAlpha;
-
-  /// Color to be used for the button's border.
-  final Color? borderColor;
-
-  /// Opacity to be apply to [borderColor].
-  final double? borderOpacity;
-
-  /// Alpha to be apply to [borderColor].
-  final int? borderAlpha;
-
-  /// The width of this side of the button's border, in logical pixels.
-  final double? borderWidth;
-
-  /// The radii for each corner of the button's border.
-  final BorderRadius? borderRadius;
-
-  /// The style of this side of the button's border.
-  ///
-  /// To omit a side, set [borderStyle] to [BorderStyle.none].
-  /// This skips painting the border, but the border still has a [borderWidth].
-  final BorderStyle? borderStyle;
-
-  /// The type of shape.
-  final BoxShape? shape;
-
-  /// Color to be used for the icon's inside the button.
-  final Color? iconColor;
-
-  /// Opacity to be apply to [iconColor].
-  final double? iconOpacity;
-
-  /// The size of the icon's inside the button, in logical pixels.
-  ///
-  /// Defaults to [ButtonStyle.defaultIconSize].
-  final double? iconSize;
-
-  /// Whether the button's has outline or not
-  bool get isOutlined {
-    final width = borderWidth;
-    return borderStyle == BorderStyle.solid && width != null && width >= 1;
+  /// Creates a copy of this [ButtonStyle] but with
+  /// [padding] is [EdgeInsets.zero] and squared size.
+  ButtonStyle icon({
+    BoxShape shape = BoxShape.circle,
+    double? size,
+  }) {
+    return copyWith(
+      shape: shape,
+      width: size ?? defaults.height,
+      height: size ?? defaults.height,
+      padding: EdgeInsets.zero,
+    );
   }
 
-  /// Whether the button's has solid background color or not
-  bool get isFilled {
-    Color? color = backgroundColor;
-    final opacity = backgroundOpacity;
-    final alpha = backgroundAlpha;
-
-    const kOpacityThreshold = 0.4;
-    const kAlphaThreshold = 102;
-
-    if (color != null) {
-      color = Colors.colorWithOpacity(color, opacity);
-      color = Colors.colorWithAlpha(color, alpha);
-      final colorIsNotTransparent = color != colorTransparent;
-      final colorIsSolid = color.opacity > kOpacityThreshold;
-      return colorIsNotTransparent && colorIsSolid;
-    }
-
-    final isSolidByOpacity = opacity != null && opacity > kOpacityThreshold;
-    final isSolidByAlpha = alpha != null && alpha > kAlphaThreshold;
-
-    return isSolidByOpacity || isSolidByAlpha;
+  /// Creates a copy of this [ButtonStyle] but with
+  /// the [width] replaced with [double.infinity].
+  ButtonStyle block({
+    bool? expanded,
+    CrossAxisAlignment? alignChildren,
+    MainAxisAlignment? justifyChildren,
+  }) {
+    return copyWith(
+      width: double.infinity,
+      foregroundExpanded: expanded,
+      foregroundAlign: alignChildren,
+      foregroundJustify: justifyChildren,
+    );
   }
-
-  /// Whether the button's has toned background color or not
-  bool get isToned => !isFilled;
 
   /// Creates a copy of this [ButtonStyle] but with
   /// the given fields replaced with the new values.
+  @override
   ButtonStyle copyWith({
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,
     EdgeInsetsGeometry? padding,
+    Alignment? alignment,
     Clip? clipBehavior,
     Color? overlayColor,
     Color? shadowColor,
@@ -629,6 +138,9 @@ class ButtonStyle {
     double? foregroundOpacity,
     int? foregroundAlpha,
     double? foregroundSpacing,
+    bool? foregroundExpanded,
+    CrossAxisAlignment? foregroundAlign,
+    MainAxisAlignment? foregroundJustify,
     Color? backgroundColor,
     double? backgroundOpacity,
     int? backgroundAlpha,
@@ -642,17 +154,13 @@ class ButtonStyle {
     Color? iconColor,
     double? iconOpacity,
     double? iconSize,
+    bool? mergeResolved,
     ButtonStyle? selectedStyle,
     ButtonStyle? disabledStyle,
     ButtonStyle? hoveredStyle,
     ButtonStyle? focusedStyle,
     ButtonStyle? pressedStyle,
   }) {
-    final hasEvent = selectedStyle != null ||
-        disabledStyle != null ||
-        hoveredStyle != null ||
-        focusedStyle != null ||
-        pressedStyle != null;
     final style = ButtonStyle(
       width: width ?? this.width,
       height: height ?? this.height,
@@ -667,6 +175,9 @@ class ButtonStyle {
       foregroundOpacity: foregroundOpacity ?? this.foregroundOpacity,
       foregroundAlpha: foregroundAlpha ?? this.foregroundAlpha,
       foregroundSpacing: foregroundSpacing ?? this.foregroundSpacing,
+      foregroundExpanded: foregroundExpanded ?? this.foregroundExpanded,
+      foregroundAlign: foregroundAlign ?? this.foregroundAlign,
+      foregroundJustify: foregroundJustify ?? this.foregroundJustify,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       backgroundOpacity: backgroundOpacity ?? this.backgroundOpacity,
       backgroundAlpha: backgroundAlpha ?? this.backgroundAlpha,
@@ -681,25 +192,38 @@ class ButtonStyle {
       iconOpacity: iconOpacity ?? this.iconOpacity,
       iconSize: iconSize ?? this.iconSize,
     );
-    return hasEvent
-        ? ButtonStyle.when(
-            enabled: style,
-            selected: selectedStyle,
-            disabled: disabledStyle,
-            hovered: hoveredStyle,
-            focused: focusedStyle,
-            pressed: pressedStyle,
-          )
-        : style;
+
+    final hasDrivenStyle = [
+      mergeResolved,
+      selectedStyle,
+      focusedStyle,
+      hoveredStyle,
+      pressedStyle,
+      disabledStyle,
+    ].any((el) => el != null);
+
+    if (hasDrivenStyle) {
+      return DrivenButtonStyle.from(
+        style,
+        selectedStyle: selectedStyle,
+        disabledStyle: disabledStyle,
+        hoveredStyle: hoveredStyle,
+        focusedStyle: focusedStyle,
+        pressedStyle: pressedStyle,
+        mergeResolved: mergeResolved,
+      );
+    }
+    return style;
   }
 
   /// Creates a copy of this [ButtonStyle] but with
   /// the given fields replaced with the new values.
-  ButtonStyle merge(ButtonStyle? other) {
+  @override
+  ButtonStyle merge(covariant ButtonStyle? other) {
     // if null return current object
     if (other == null) return this;
 
-    return copyWith(
+    var style = copyWith(
       width: other.width,
       height: other.height,
       margin: other.margin,
@@ -713,6 +237,9 @@ class ButtonStyle {
       foregroundOpacity: other.foregroundOpacity,
       foregroundAlpha: other.foregroundAlpha,
       foregroundSpacing: other.foregroundSpacing,
+      foregroundExpanded: other.foregroundExpanded,
+      foregroundAlign: other.foregroundAlign,
+      foregroundJustify: other.foregroundJustify,
       backgroundColor: other.backgroundColor,
       backgroundOpacity: other.backgroundOpacity,
       backgroundAlpha: other.backgroundAlpha,
@@ -726,27 +253,447 @@ class ButtonStyle {
       iconColor: other.iconColor,
       iconOpacity: other.iconOpacity,
       iconSize: other.iconSize,
-      selectedStyle: other is _ButtonStyle
-          ? evaluate(other, {ButtonEvent.selected})
-          : null,
-      disabledStyle: other is _ButtonStyle
-          ? evaluate(other, {ButtonEvent.disabled})
-          : null,
-      hoveredStyle:
-          other is _ButtonStyle ? evaluate(other, {ButtonEvent.hovered}) : null,
-      focusedStyle:
-          other is _ButtonStyle ? evaluate(other, {ButtonEvent.focused}) : null,
-      pressedStyle:
-          other is _ButtonStyle ? evaluate(other, {ButtonEvent.pressed}) : null,
+    );
+
+    if (other is DrivenButtonStyle) {
+      style = style.copyWith(
+        mergeResolved: other.mergeResolved,
+        selectedStyle: other.selectedStyle,
+        focusedStyle: other.focusedStyle,
+        hoveredStyle: other.hoveredStyle,
+        pressedStyle: other.pressedStyle,
+        disabledStyle: other.disabledStyle,
+      );
+    }
+
+    return style;
+  }
+
+  /// Linearly interpolate between two [ButtonStyle] objects.
+  static ButtonStyle lerp(ButtonStyle? a, ButtonStyle? b, double t) {
+    return ButtonStyle(
+      shape: lerpEnum(a?.shape, b?.shape, t),
+      width: lerpDouble(a?.width, b?.width, t),
+      height: lerpDouble(a?.height, b?.height, t),
+      margin: EdgeInsetsGeometry.lerp(a?.margin, b?.margin, t),
+      padding: EdgeInsetsGeometry.lerp(a?.padding, b?.padding, t),
+      clipBehavior: lerpEnum(a?.clipBehavior, b?.clipBehavior, t),
+      overlayColor: Color.lerp(a?.overlayColor, b?.overlayColor, t),
+      shadowColor: Color.lerp(a?.shadowColor, b?.overlayColor, t),
+      elevation: lerpDouble(a?.elevation, b?.elevation, t),
+      foregroundStyle:
+          TextStyle.lerp(a?.foregroundStyle, b?.foregroundStyle, t),
+      foregroundColor: Color.lerp(a?.foregroundColor, b?.foregroundColor, t),
+      foregroundOpacity:
+          lerpDouble(a?.foregroundOpacity, b?.foregroundOpacity, t),
+      foregroundAlpha: lerpInt(a?.foregroundAlpha, b?.foregroundAlpha, t),
+      foregroundSpacing:
+          lerpDouble(a?.foregroundSpacing, b?.foregroundSpacing, t),
+      foregroundExpanded:
+          lerpBool(a?.foregroundExpanded, b?.foregroundExpanded, t),
+      foregroundAlign: lerpEnum(a?.foregroundAlign, b?.foregroundAlign, t),
+      foregroundJustify:
+          lerpEnum(a?.foregroundJustify, b?.foregroundJustify, t),
+      backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t),
+      backgroundOpacity:
+          lerpDouble(a?.backgroundOpacity, b?.backgroundOpacity, t),
+      backgroundAlpha: lerpInt(a?.backgroundAlpha, b?.backgroundAlpha, t),
+      borderColor: Color.lerp(a?.borderColor, b?.backgroundColor, t),
+      borderOpacity: lerpDouble(a?.borderOpacity, b?.borderOpacity, t),
+      borderAlpha: lerpInt(a?.borderAlpha, b?.borderAlpha, t),
+      borderWidth: lerpDouble(a?.borderWidth, b?.borderWidth, t),
+      borderRadius: BorderRadius.lerp(a?.borderRadius, b?.borderRadius, t),
+      borderStyle: lerpEnum(a?.borderStyle, b?.borderStyle, t),
+      iconColor: Color.lerp(a?.iconColor, b?.iconColor, t),
+      iconOpacity: lerpDouble(a?.iconOpacity, b?.iconOpacity, t),
+      iconSize: lerpDouble(a?.iconSize, b?.iconSize, t),
     );
   }
 }
 
-class _ButtonStyle extends ButtonStyle implements DrivenProperty<ButtonStyle?> {
-  _ButtonStyle(this._resolver) : super.from(_resolver({}));
+/// Create a [ButtonStyle] when some events occurs
+class DrivenButtonStyle extends ButtonStyle
+    implements DrivenProperty<ButtonStyle?> {
+  /// Whether the resolved style is merged to
+  /// the previous resolved style or not
+  final bool? mergeResolved;
 
-  final DrivenPropertyResolver<ButtonStyle?> _resolver;
+  /// The style to be resolved when
+  /// events includes [ButtonEvent.selected].
+  final ButtonStyle? selectedStyle;
+
+  /// The style to be resolved when
+  /// events includes [ButtonEvent.focused].
+  final ButtonStyle? focusedStyle;
+
+  /// The style to be resolved when
+  /// events includes [ButtonEvent.hovered].
+  final ButtonStyle? hoveredStyle;
+
+  /// The style to be resolved when
+  /// events includes [ButtonEvent.pressed].
+  final ButtonStyle? pressedStyle;
+
+  /// The style to be resolved when
+  /// events includes [ButtonEvent.disabled].
+  final ButtonStyle? disabledStyle;
+
+  /// Map of driven style, order matters
+  Map<WidgetEvent, ButtonStyle?> get driven => {
+        WidgetEvent.selected: selectedStyle,
+        WidgetEvent.focused: focusedStyle,
+        WidgetEvent.hovered: hoveredStyle,
+        WidgetEvent.pressed: pressedStyle,
+        WidgetEvent.disabled: disabledStyle,
+      };
+
+  /// Create a raw [DrivenButtonStyle].
+  const DrivenButtonStyle({
+    super.width,
+    super.height,
+    super.margin,
+    super.padding,
+    super.clipBehavior,
+    super.overlayColor,
+    super.shadowColor,
+    super.elevation,
+    super.foregroundStyle,
+    super.foregroundColor,
+    super.foregroundOpacity,
+    super.foregroundAlpha,
+    super.foregroundSpacing,
+    super.foregroundExpanded,
+    super.foregroundAlign,
+    super.foregroundJustify,
+    super.backgroundColor,
+    super.backgroundOpacity,
+    super.backgroundAlpha,
+    super.borderColor,
+    super.borderOpacity,
+    super.borderAlpha,
+    super.borderWidth,
+    super.borderRadius,
+    super.borderStyle,
+    super.shape,
+    super.iconColor,
+    super.iconOpacity,
+    super.iconSize,
+    this.selectedStyle,
+    this.disabledStyle,
+    this.hoveredStyle,
+    this.focusedStyle,
+    this.pressedStyle,
+    this.mergeResolved,
+  });
+
+  /// Create a [DrivenButtonStyle] with value
+  /// from another [ButtonStyle].
+  DrivenButtonStyle.from(
+    ButtonStyle? enabled, {
+    this.selectedStyle,
+    this.focusedStyle,
+    this.hoveredStyle,
+    this.pressedStyle,
+    this.disabledStyle,
+    this.mergeResolved,
+  }) : super.from(enabled);
+
+  /// Create a [DrivenButtonStyle] with default value for text style.
+  DrivenButtonStyle.text({
+    super.width,
+    super.height,
+    super.margin,
+    super.padding,
+    super.clipBehavior,
+    super.overlayColor,
+    super.shadowColor,
+    super.elevation,
+    super.foregroundStyle,
+    super.foregroundColor,
+    super.foregroundOpacity,
+    super.foregroundAlpha,
+    super.foregroundSpacing,
+    super.foregroundExpanded,
+    super.foregroundAlign,
+    super.foregroundJustify,
+    super.backgroundColor,
+    super.backgroundOpacity = 0,
+    super.backgroundAlpha,
+    super.borderColor,
+    super.borderOpacity,
+    super.borderAlpha,
+    super.borderWidth,
+    super.borderRadius,
+    super.borderStyle = BorderStyle.none,
+    super.shape,
+    super.iconColor,
+    super.iconOpacity,
+    super.iconSize,
+    this.selectedStyle,
+    ButtonStyle? disabledStyle,
+    this.hoveredStyle,
+    this.focusedStyle,
+    this.pressedStyle,
+    this.mergeResolved,
+  }) : disabledStyle = const ButtonStyle(
+          foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
+        ).merge(disabledStyle);
+
+  /// Create a [DrivenButtonStyle] with default value for tonal style.
+  DrivenButtonStyle.tonal({
+    super.width,
+    super.height,
+    super.margin,
+    super.padding,
+    super.clipBehavior,
+    super.overlayColor,
+    super.shadowColor,
+    super.elevation,
+    super.foregroundStyle,
+    super.foregroundColor,
+    super.foregroundOpacity,
+    super.foregroundAlpha,
+    super.foregroundSpacing,
+    super.foregroundExpanded,
+    super.foregroundAlign,
+    super.foregroundJustify,
+    super.backgroundColor,
+    super.backgroundOpacity = .12,
+    super.backgroundAlpha,
+    super.borderColor,
+    super.borderOpacity = 1,
+    super.borderAlpha,
+    super.borderWidth = 1,
+    super.borderRadius,
+    super.borderStyle = BorderStyle.none,
+    super.shape,
+    super.iconColor,
+    super.iconOpacity,
+    super.iconSize,
+    this.selectedStyle,
+    ButtonStyle? disabledStyle,
+    this.hoveredStyle,
+    this.focusedStyle,
+    this.pressedStyle,
+    this.mergeResolved,
+  }) : disabledStyle = const ButtonStyle(
+          foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
+          backgroundAlpha: ButtonStyle.disabledBackgroundAlpha,
+          borderAlpha: ButtonStyle.disabledBorderAlpha,
+        ).merge(disabledStyle);
+
+  /// Create a [DrivenButtonStyle] with default value for filled style.
+  DrivenButtonStyle.filled({
+    Color? color,
+    super.width,
+    super.height,
+    super.margin,
+    super.padding,
+    super.clipBehavior,
+    super.overlayColor,
+    super.shadowColor,
+    super.elevation,
+    super.foregroundStyle,
+    super.foregroundColor,
+    super.foregroundOpacity,
+    super.foregroundAlpha,
+    super.foregroundSpacing,
+    super.foregroundExpanded,
+    super.foregroundAlign,
+    super.foregroundJustify,
+    super.backgroundOpacity = .8,
+    super.backgroundAlpha,
+    super.borderOpacity = 0,
+    super.borderAlpha,
+    super.borderWidth = 0,
+    super.borderRadius,
+    super.borderStyle = BorderStyle.none,
+    super.shape,
+    super.iconColor,
+    super.iconOpacity,
+    super.iconSize,
+    this.selectedStyle,
+    ButtonStyle? disabledStyle,
+    this.hoveredStyle,
+    this.focusedStyle,
+    ButtonStyle? pressedStyle,
+    this.mergeResolved,
+  })  : disabledStyle = const ButtonStyle(
+          foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
+          backgroundAlpha: ButtonStyle.disabledBackgroundAlpha,
+          borderAlpha: ButtonStyle.disabledBorderAlpha,
+        ).merge(disabledStyle),
+        pressedStyle = const ButtonStyle(elevation: 5).merge(pressedStyle),
+        super(
+          backgroundColor: color,
+          borderColor: color,
+        );
+
+  /// Create a [DrivenButtonStyle] with default value for outlined style.
+  DrivenButtonStyle.outlined({
+    Color? color,
+    super.width,
+    super.height,
+    super.margin,
+    super.padding,
+    super.clipBehavior,
+    super.overlayColor,
+    super.shadowColor,
+    super.elevation,
+    super.foregroundStyle,
+    super.foregroundOpacity,
+    super.foregroundAlpha,
+    super.foregroundSpacing,
+    super.foregroundExpanded,
+    super.foregroundAlign,
+    super.foregroundJustify,
+    super.backgroundColor,
+    super.backgroundOpacity = 0,
+    super.backgroundAlpha,
+    super.borderOpacity = 1,
+    super.borderAlpha,
+    super.borderWidth = 1,
+    super.borderRadius,
+    super.borderStyle = BorderStyle.solid,
+    super.shape,
+    super.iconColor,
+    super.iconOpacity,
+    super.iconSize,
+    this.selectedStyle,
+    ButtonStyle? disabledStyle,
+    this.hoveredStyle,
+    this.focusedStyle,
+    this.pressedStyle,
+    this.mergeResolved,
+  })  : disabledStyle = const ButtonStyle(
+          foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
+          borderAlpha: ButtonStyle.disabledBorderAlpha,
+        ).merge(disabledStyle),
+        super(
+          foregroundColor: color,
+          borderColor: color,
+        );
+
+  /// Create a [DrivenButtonStyle] from a resolver callback
+  DrivenButtonStyle.resolver(
+    DrivenPropertyResolver<ButtonStyle?> resolver, {
+    this.mergeResolved = false,
+  })  : selectedStyle = resolver({WidgetEvent.selected}),
+        focusedStyle = resolver({WidgetEvent.focused}),
+        hoveredStyle = resolver({WidgetEvent.hovered}),
+        pressedStyle = resolver({WidgetEvent.pressed}),
+        disabledStyle = resolver({WidgetEvent.disabled}),
+        super.from(resolver({}));
+
+  /// Resolves the value for the given set of events
+  /// if `value` is an event driven [ButtonStyle],
+  /// otherwise returns the value itself.
+  static ButtonStyle? evaluate(ButtonStyle? value, Set<WidgetEvent> events) {
+    return DrivenProperty.evaluate<ButtonStyle?>(value, events);
+  }
 
   @override
-  ButtonStyle? resolve(Set<WidgetEvent> events) => _resolver(events);
+  ButtonStyle resolve(Set<WidgetEvent> events) {
+    ButtonStyle style = this;
+    for (var e in driven.entries) {
+      if (events.contains(e.key)) {
+        final evaluated = evaluate(e.value, events);
+        style = mergeResolved != false
+            ? style.merge(evaluated)
+            : ButtonStyle.from(evaluated);
+      }
+    }
+    return style;
+  }
+
+  /// Creates a copy of this [DrivenButtonStyle] but with
+  /// the given fields replaced with the new values.
+  @override
+  DrivenButtonStyle copyWith({
+    double? width,
+    double? height,
+    EdgeInsetsGeometry? margin,
+    EdgeInsetsGeometry? padding,
+    Alignment? alignment,
+    Clip? clipBehavior,
+    Color? overlayColor,
+    Color? shadowColor,
+    double? elevation,
+    TextStyle? foregroundStyle,
+    Color? foregroundColor,
+    double? foregroundOpacity,
+    int? foregroundAlpha,
+    double? foregroundSpacing,
+    bool? foregroundExpanded,
+    CrossAxisAlignment? foregroundAlign,
+    MainAxisAlignment? foregroundJustify,
+    Color? backgroundColor,
+    double? backgroundOpacity,
+    int? backgroundAlpha,
+    Color? borderColor,
+    double? borderOpacity,
+    int? borderAlpha,
+    double? borderWidth,
+    BorderRadius? borderRadius,
+    BorderStyle? borderStyle,
+    BoxShape? shape,
+    Color? iconColor,
+    double? iconOpacity,
+    double? iconSize,
+    bool? mergeResolved,
+    ButtonStyle? selectedStyle,
+    ButtonStyle? disabledStyle,
+    ButtonStyle? hoveredStyle,
+    ButtonStyle? focusedStyle,
+    ButtonStyle? pressedStyle,
+  }) {
+    return DrivenButtonStyle(
+      width: width ?? this.width,
+      height: height ?? this.height,
+      margin: margin ?? this.margin,
+      padding: padding ?? this.padding,
+      clipBehavior: clipBehavior ?? this.clipBehavior,
+      overlayColor: overlayColor ?? this.overlayColor,
+      shadowColor: shadowColor ?? this.shadowColor,
+      elevation: elevation ?? this.elevation,
+      foregroundStyle: foregroundStyle ?? this.foregroundStyle,
+      foregroundColor: foregroundColor ?? this.foregroundColor,
+      foregroundOpacity: foregroundOpacity ?? this.foregroundOpacity,
+      foregroundAlpha: foregroundAlpha ?? this.foregroundAlpha,
+      foregroundSpacing: foregroundSpacing ?? this.foregroundSpacing,
+      foregroundExpanded: foregroundExpanded ?? this.foregroundExpanded,
+      foregroundAlign: foregroundAlign ?? this.foregroundAlign,
+      foregroundJustify: foregroundJustify ?? this.foregroundJustify,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      backgroundOpacity: backgroundOpacity ?? this.backgroundOpacity,
+      backgroundAlpha: backgroundAlpha ?? this.backgroundAlpha,
+      borderColor: borderColor ?? this.borderColor,
+      borderOpacity: borderOpacity ?? this.borderOpacity,
+      borderAlpha: borderAlpha ?? this.borderAlpha,
+      borderWidth: borderWidth ?? this.borderWidth,
+      borderRadius: borderRadius ?? this.borderRadius,
+      borderStyle: borderStyle ?? this.borderStyle,
+      shape: shape ?? this.shape,
+      iconColor: iconColor ?? this.iconColor,
+      iconOpacity: iconOpacity ?? this.iconOpacity,
+      iconSize: iconSize ?? this.iconSize,
+      mergeResolved: mergeResolved ?? this.mergeResolved,
+      selectedStyle: this.selectedStyle?.merge(selectedStyle) ?? selectedStyle,
+      focusedStyle: this.focusedStyle?.merge(focusedStyle) ?? focusedStyle,
+      hoveredStyle: this.hoveredStyle?.merge(hoveredStyle) ?? hoveredStyle,
+      pressedStyle: this.pressedStyle?.merge(pressedStyle) ?? pressedStyle,
+      disabledStyle: this.disabledStyle?.merge(disabledStyle) ?? disabledStyle,
+    );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('mergeResolved', mergeResolved));
+    properties.add(DiagnosticsProperty('selectedStyle', selectedStyle));
+    properties.add(DiagnosticsProperty('focusedStyle', focusedStyle));
+    properties.add(DiagnosticsProperty('hoveredStyle', hoveredStyle));
+    properties.add(DiagnosticsProperty('pressedStyle', pressedStyle));
+    properties.add(DiagnosticsProperty('disabledStyle', disabledStyle));
+  }
 }
