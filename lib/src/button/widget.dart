@@ -150,11 +150,10 @@ class Button extends StatelessWidget {
   final VoidCallback? onPressed;
 
   /// {@template widgetarian.button.style}
-  /// The style to be applied to the chip.
+  /// The style to be applied to the button.
   ///
-  /// If [style] is an event driven [ButtonStyle]
-  /// by [DrivenButtonStyle], then [ButtonStyle.evaluate]
-  /// is used for the following [ButtonEvent]s:
+  /// If [style] is an event driven [DrivenButtonStyle],
+  /// then [DrivenButtonStyle.evaluate] is used for the following [ButtonEvent]s:
   ///
   ///  * [ButtonEvent.selected].
   ///  * [ButtonEvent.focused].

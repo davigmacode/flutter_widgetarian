@@ -6,13 +6,14 @@ import 'package:widgetarian/feedback.dart';
 import 'package:widgetarian/layout.dart';
 import 'package:widgetarian/utils.dart';
 import 'package:widgetarian/anchor.dart';
-import 'package:widgetarian/animation.dart';
 import '../avatar/style.dart';
+import '../avatar/theme.dart';
 import '../avatar/widget.dart';
 import 'style.dart';
+import 'theme.dart';
 import 'event.dart';
 
-/// Chip widget with smooth animation, event driven style, and many more.
+/// Chips are compact elements that represent an input, attribute, or action.
 class Chip extends StatelessWidget {
   const Chip({
     Key? key,
@@ -34,8 +35,8 @@ class Chip extends StatelessWidget {
     this.onDeleted,
     this.onSelected,
     this.eventsController,
-    this.curve = Curves.linear,
-    this.duration = Chip.defaultDuration,
+    this.curve,
+    this.duration,
   }) : super(key: key);
 
   /// The primary content of the chip.
@@ -78,9 +79,6 @@ class Chip extends StatelessWidget {
   final String? deleteTooltip;
 
   /// Whether or not this chip is selected.
-  ///
-  /// If [onSelected] is not null, this value will be used to determine if the
-  /// select checkmark will be shown or not.
   ///
   /// Must not be null. Defaults to false.
   final bool selected;
@@ -206,9 +204,8 @@ class Chip extends StatelessWidget {
 
   /// The style to be applied to the chip.
   ///
-  /// If [style] is an event driven [ChipStyle]
-  /// by [ChipStyle.driven], then [ChipStyle.evaluate]
-  /// is used for the following [ChipEvent]s:
+  /// If [style] is an event driven [DrivenChipStyle],
+  /// then [DrivenChipStyle.evaluate] is used for the following [ChipEvent]s:
   ///
   ///  * [ChipEvent.disabled].
   ///  * [ChipEvent.selected].
@@ -222,12 +219,10 @@ class Chip extends StatelessWidget {
   final ChipEventController? eventsController;
 
   /// The curve to apply when animating the parameters of this widget.
-  final Curve curve;
+  final Curve? curve;
 
   /// The duration over which to animate the parameters of this widget.
-  final Duration duration;
-
-  static const defaultDuration = Duration(milliseconds: 200);
+  final Duration? duration;
 
   bool get enabled => !disabled;
 
@@ -241,7 +236,12 @@ class Chip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final chipTheme = ChipTheme.of(context);
     return _ChipRender(
+      curve: curve ?? chipTheme.curve,
+      duration: duration ?? chipTheme.duration,
+      style: chipTheme.style.merge(style),
+      theme: chipTheme,
       label: label,
       avatarImage: avatarImage,
       avatarText: avatarText,
@@ -259,8 +259,6 @@ class Chip extends StatelessWidget {
       onDeleted: onDeleted,
       onSelected: onSelected,
       eventsController: eventsController,
-      style: style,
-      theme: Theme.of(context),
     );
   }
 }
@@ -288,8 +286,8 @@ class _ChipRender extends ImplicitlyAnimatedWidget {
     this.onSelected,
     this.eventsController,
     required this.theme,
-    Curve curve = Curves.linear,
-    Duration duration = Chip.defaultDuration,
+    required Curve curve,
+    required Duration duration,
   }) : super(
           key: key,
           duration: duration,
@@ -314,7 +312,7 @@ class _ChipRender extends ImplicitlyAnimatedWidget {
   final ValueChanged<bool>? onSelected;
   final ChipStyle? style;
   final ChipEventController? eventsController;
-  final ThemeData theme;
+  final ChipThemeData theme;
 
   bool get enabled => !disabled;
 
@@ -333,173 +331,97 @@ class _ChipRender extends ImplicitlyAnimatedWidget {
 class _ChipRenderState extends AnimatedWidgetBaseState<_ChipRender>
     with WidgetEventMixin<_ChipRender> {
   ChipStyle style = const ChipStyle();
+  ChipStyle fallback = const ChipStyle();
 
   @protected
   void setStyle() {
-    final style = widget.style ?? ChipStyle.toned();
-    final resolved = ChipStyle.evaluate(style, widgetEvents.value);
-    final result = ChipStyle.from(resolved);
-    this.style = result;
+    final rawStyle = ChipStyle.defaults.merge(widget.style);
+    final resStyle = DrivenChipStyle.evaluate(rawStyle, widgetEvents.value);
+    style = ChipStyle.from(resStyle);
+
+    final rawFallback = widget.theme.fallback;
+    final resFallback =
+        DrivenChipStyle.evaluate(rawFallback, widgetEvents.value);
+    fallback = ChipStyle.from(resFallback);
     setState(() {});
   }
 
-  Color get defaultBackgroundColor {
-    return widget.selected
-        ? widget.theme.brightness == Brightness.light
-            ? widget.theme.colorScheme.primary
-            : widget.theme.colorScheme.inversePrimary
-        : style.isOutlined
-            ? widget.theme.colorScheme.surface
-            : widget.theme.unselectedWidgetColor;
+  Color? get defaultBackgroundColor {
+    return style.isOutlined ? Colors.transparent : fallback.backgroundColor;
   }
 
-  Color get defaultBorderColor {
-    return widget.selected
-        ? widget.theme.colorScheme.primary
-        : widget.theme.colorScheme.outline;
+  Color? get defaultBorderColor {
+    return fallback.borderColor;
   }
 
-  Color get defaultForegroundColor {
+  Color? get defaultForegroundColor {
     return style.isFilled
         ? widget.selected && widget.disabled
-            ? widget.theme.colorScheme.primary
-            : Colors.colorOnSurface(backgroundColor)!
-        : widget.selected
-            ? widget.theme.colorScheme.primary
-            : widget.theme.colorScheme.onSurface;
+            ? backgroundColor
+            : Colors.onSurface(backgroundColor)
+        : fallback.foregroundColor;
   }
 
-  Color get backgroundColor => Colors.colorWithOpacityOrAlpha(
+  Color? get backgroundColor => Colors.withTransparency(
         style.backgroundColor ?? defaultBackgroundColor,
-        style.backgroundOpacity,
-        style.backgroundAlpha,
+        opacity: style.backgroundOpacity,
+        alpha: style.backgroundAlpha,
       );
 
-  Color get borderColor => Colors.colorWithOpacityOrAlpha(
+  Color? get borderColor => Colors.withTransparency(
         style.borderColor ?? defaultBorderColor,
-        style.borderOpacity,
-        style.borderAlpha,
+        opacity: style.borderOpacity,
+        alpha: style.borderAlpha,
       );
 
-  Color get foregroundColor => Colors.colorWithOpacityOrAlpha(
+  Color? get foregroundColor => Colors.withTransparency(
         style.foregroundColor ?? defaultForegroundColor,
-        style.foregroundOpacity,
-        style.foregroundAlpha,
+        opacity: style.foregroundOpacity,
+        alpha: style.foregroundAlpha,
       );
 
-  double get containerHeight {
-    return style.height ?? ChipStyle.defaultHeight;
-  }
-
-  Clip get clipBehavior {
-    return style.clipBehavior ?? ChipStyle.defaultClipBehavior;
-  }
-
-  EdgeInsetsGeometry get containerPadding {
-    final defaultPadding = hasAvatar
+  EdgeInsetsGeometry get padding {
+    final fallback = hasAvatar
         ? ChipStyle.defaultPaddingWithAvatar
         : ChipStyle.defaultPadding;
-    final padding = style.padding ?? defaultPadding;
+    final padding = style.padding ?? fallback;
     return padding.clamp(
       EdgeInsets.only(right: hasTrailing ? 8 : 0),
       EdgeInsetsGeometry.infinity,
     );
   }
 
-  EdgeInsetsGeometry get containerMargin {
-    return style.margin ?? ChipStyle.defaultMargin;
-  }
-
-  BorderRadiusGeometry get containerRadius {
-    return style.borderRadius ?? ChipStyle.defaultBorderRadius;
-  }
-
-  Color get containerShadowColor {
-    return style.shadowColor ?? widget.theme.colorScheme.shadow;
-  }
-
-  ShapeBorder get containerBorder {
-    return RoundedRectangleBorder(
-      borderRadius: containerRadius,
-      side: BorderSide(
-        color: borderColor,
-        width: style.borderWidth ?? ChipStyle.defaultBorderWidth,
-        style: style.borderStyle ?? ChipStyle.defaultBorderStyle,
-      ),
-    );
-  }
-
   TextStyle get foregroundStyle {
-    return const TextStyle()
-        .merge(widget.theme.chipTheme.labelStyle)
-        .copyWith(color: foregroundColor)
-        .merge(style.foregroundStyle);
+    return TextStyle(color: foregroundColor).merge(style.foregroundStyle);
   }
 
-  Color get avatarBackgroundColor {
+  Color? get avatarBackgroundColor {
     final color = style.avatarStyle?.backgroundColor ?? foregroundColor;
-    return style.isFilled ? foregroundColor.withOpacity(.7) : color;
+    return style.isFilled ? foregroundColor?.withOpacity(.7) : color;
   }
 
-  Color get avatarForegroundColor {
-    return style.avatarStyle?.foregroundColor ??
-        (style.isFilled
-            ? backgroundColor
-            : Colors.colorOnSurface(avatarBackgroundColor)) ??
-        foregroundColor;
-  }
-
-  TextStyle get avatarForegroundStyle {
-    return const TextStyle(
-      height: 1,
-      fontSize: 12,
-    )
-        .copyWith(color: avatarForegroundColor)
-        .merge(style.avatarStyle?.foregroundStyle);
+  Color? get avatarForegroundColor {
+    final byType = style.isFilled
+        ? backgroundColor
+        : Colors.onSurface(avatarBackgroundColor);
+    return style.avatarStyle?.foregroundColor ?? byType ?? foregroundColor;
   }
 
   AvatarStyle get avatarStyle {
-    return const AvatarStyle(size: ChipStyle.defaultAvatarSize)
-        .merge(style.avatarStyle)
-        .copyWith(
-          backgroundColor: avatarBackgroundColor,
-          foregroundColor: avatarForegroundColor,
-          foregroundStyle: avatarForegroundStyle,
-        );
+    return AvatarStyle.from(style.avatarStyle).copyWith(
+      backgroundColor: avatarBackgroundColor,
+      foregroundColor: avatarForegroundColor,
+      foregroundStyle: style.avatarStyle?.foregroundStyle,
+    );
   }
 
-  Color get checkmarkColor {
-    return style.checkmarkColor ??
-        (hasAvatar ? avatarForegroundColor : foregroundColor);
-  }
-
-  Color get iconColor {
-    return style.iconColor ?? foregroundColor;
-  }
-
-  double get iconSize {
-    return style.iconSize ?? ChipStyle.defaultIconSize;
-  }
-
-  ColorTween? _containerOverlayColorTween;
-  Color? get animatedContainerOverlayColor {
-    return _containerOverlayColorTween?.evaluate(animation) ??
-        style.overlayColor;
-  }
-
-  EdgeInsetsGeometryTween? _containerPaddingTween;
-  EdgeInsetsGeometry get animatedContainerPadding {
-    return _containerPaddingTween?.evaluate(animation) ?? containerPadding;
-  }
-
-  Tween<double>? _foregroundSpacingTween;
-  double get animatedForegroundSpacing {
-    return _foregroundSpacingTween?.evaluate(animation) ??
-        ChipStyle.defaultForegroundSpacing;
+  Color? get checkmarkColor {
+    final fallback = hasAvatar ? avatarForegroundColor : foregroundColor;
+    return style.checkmarkColor ?? fallback;
   }
 
   ColorTween? _checkmarkColorTween;
-  Color get animatedCheckmarkColor {
+  Color? get animatedCheckmarkColor {
     return _checkmarkColorTween?.evaluate(animation) ?? checkmarkColor;
   }
 
@@ -509,15 +431,13 @@ class _ChipRenderState extends AnimatedWidgetBaseState<_ChipRender>
   }
 
   Tween<double>? _checkmarkSizeTween;
-  double get animatedCheckmarkSize {
-    return _checkmarkSizeTween?.evaluate(animation) ??
-        ChipStyle.defaultCheckmarkSize;
+  double? get animatedCheckmarkSize {
+    return _checkmarkSizeTween?.evaluate(animation);
   }
 
   Tween<double>? _checkmarkWeightTween;
-  double get animatedCheckmarkWeight {
-    return _checkmarkWeightTween?.evaluate(animation) ??
-        ChipStyle.defaultCheckmarkWeight;
+  double? get animatedCheckmarkWeight {
+    return _checkmarkWeightTween?.evaluate(animation);
   }
 
   bool get hasCheckmark => widget.checkmark && animatedCheckmarkProgress > 0;
@@ -536,7 +456,6 @@ class _ChipRenderState extends AnimatedWidgetBaseState<_ChipRender>
   Widget? get leading {
     final withAvatar = hasAvatar
         ? Avatar(
-            style: avatarStyle,
             image: widget.avatarImage,
             child: checkmark ?? widget.avatarText,
           )
@@ -561,13 +480,14 @@ class _ChipRenderState extends AnimatedWidgetBaseState<_ChipRender>
         : null;
   }
 
+  // TODO: delete button tooltip,
   Widget? get deleteButton {
     return widget.canDelete
-        ? ChipButton(
-            radius: containerHeight * .35,
-            tooltip: widget.deleteTooltip,
+        ? Anchor(
+            radius: style.height! * .35,
+            // tooltip: widget.deleteTooltip,
             disabled: !widget.canDelete || widget.disabled,
-            onPressed: widget.onDeleted!,
+            onTap: widget.onDeleted!,
             child: widget.deleteIcon ?? const Icon(Icons.close),
           )
         : null;
@@ -623,24 +543,6 @@ class _ChipRenderState extends AnimatedWidgetBaseState<_ChipRender>
 
   @override
   void forEachTween(visitor) {
-    _containerPaddingTween = visitor(
-      _containerPaddingTween,
-      containerPadding,
-      (value) => EdgeInsetsGeometryTween(begin: value),
-    ) as EdgeInsetsGeometryTween?;
-
-    _containerOverlayColorTween = visitor(
-      _containerOverlayColorTween,
-      style.overlayColor,
-      (value) => ColorTween(begin: value),
-    ) as ColorTween?;
-
-    _foregroundSpacingTween = visitor(
-      _foregroundSpacingTween,
-      style.foregroundSpacing ?? ChipStyle.defaultForegroundSpacing,
-      (value) => Tween<double>(begin: value),
-    ) as Tween<double>?;
-
     _checkmarkColorTween = visitor(
       _checkmarkColorTween,
       checkmarkColor,
@@ -655,13 +557,13 @@ class _ChipRenderState extends AnimatedWidgetBaseState<_ChipRender>
 
     _checkmarkSizeTween = visitor(
       _checkmarkSizeTween,
-      style.checkmarkSize ?? ChipStyle.defaultCheckmarkSize,
+      style.checkmarkSize!,
       (value) => Tween<double>(begin: value),
     ) as Tween<double>?;
 
     _checkmarkWeightTween = visitor(
       _checkmarkWeightTween,
-      style.checkmarkWeight ?? ChipStyle.defaultCheckmarkWeight,
+      style.checkmarkWeight!,
       (value) => Tween<double>(begin: value),
     ) as Tween<double>?;
   }
@@ -679,82 +581,48 @@ class _ChipRenderState extends AnimatedWidgetBaseState<_ChipRender>
       button: widget.canTap,
       enabled: widget.enabled,
       selected: widget.selected,
-      child: AnimatedBox(
+      child: Sheet(
         curve: widget.curve,
         duration: widget.duration,
+        style: style,
+        padding: EdgeInsets.zero,
+        foregroundColor: foregroundColor,
+        backgroundColor: backgroundColor,
+        borderColor: borderColor,
         tooltip: widget.canTap ? widget.tooltip : null,
-        margin: containerMargin,
-        color: backgroundColor,
-        clipBehavior: clipBehavior,
-        border: containerBorder,
-        shadowColor: containerShadowColor,
-        elevation: style.elevation,
-        height: containerHeight,
         child: Anchor(
-          padding: animatedContainerPadding,
           disabled: !widget.canTap,
           autofocus: widget.autofocus,
           focusNode: widget.focusNode,
-          overlayColor: animatedContainerOverlayColor,
+          overlayColor: style.overlayColor,
           onTap: onTap,
           onTapDown: onTapDown,
           onTapCancel: onTapCancel,
           onHover: onHover,
           onFocus: onFocus,
-          child: AnimatedDefaultTextStyle(
+          child: AnimatedPadding(
             curve: widget.curve,
             duration: widget.duration,
-            style: foregroundStyle,
-            child: AnimatedIconTheme(
-              data: IconThemeData(
-                color: iconColor,
-                size: iconSize,
-                opacity: style.iconOpacity,
+            padding: padding,
+            child: AnchorTheme.merge(
+              curve: widget.curve,
+              duration: widget.duration,
+              style: AnchorStyle(
+                radius: style.height! * .35,
+                shape: BoxShape.circle,
               ),
-              child: Tile(
-                spacing: animatedForegroundSpacing,
-                leading: leading,
-                trailing: trailing,
-                child: label,
+              child: AvatarTheme.merge(
+                curve: widget.curve,
+                duration: widget.duration,
+                style: avatarStyle,
+                child: Tile(
+                  leading: leading,
+                  trailing: trailing,
+                  child: label,
+                ),
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class ChipButton extends StatelessWidget {
-  const ChipButton({
-    Key? key,
-    this.tooltip,
-    this.disabled = false,
-    this.radius = ChipStyle.defaultHeight * .35,
-    required this.onPressed,
-    required this.child,
-  }) : super(key: key);
-
-  final String? tooltip;
-  final bool disabled;
-  final double radius;
-  final VoidCallback onPressed;
-  final Widget child;
-
-  bool get enabled => !disabled;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      container: true,
-      button: true,
-      child: Anchor(
-        radius: radius,
-        onTap: enabled ? onPressed : null,
-        shape: BoxShape.circle,
-        child: Box(
-          tooltip: enabled ? tooltip : null,
-          child: child,
         ),
       ),
     );

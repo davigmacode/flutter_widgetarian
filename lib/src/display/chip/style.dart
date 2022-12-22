@@ -1,531 +1,20 @@
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/feedback.dart';
-import 'package:widgetarian/utils.dart';
-import 'event.dart';
 import '../avatar/style.dart';
+import '../../layout/sheet/style.dart';
 
 export 'package:widgetarian/feedback.dart' show StrokeStyle;
 
-/// Default chip's style.
-class ChipStyle {
-  const ChipStyle({
-    this.height,
-    this.margin,
-    this.padding,
-    this.clipBehavior,
-    this.overlayColor,
-    this.shadowColor,
-    this.elevation,
-    this.foregroundStyle,
-    this.foregroundColor,
-    this.foregroundOpacity,
-    this.foregroundAlpha,
-    this.foregroundSpacing,
-    this.backgroundColor,
-    this.backgroundOpacity,
-    this.backgroundAlpha,
-    this.borderColor,
-    this.borderOpacity,
-    this.borderAlpha,
-    this.borderWidth,
-    this.borderRadius,
-    this.borderStyle,
-    this.avatarStyle,
-    this.checkmarkColor,
-    this.checkmarkSize,
-    this.checkmarkWeight,
-    this.checkmarkStyle,
-    this.iconColor,
-    this.iconOpacity,
-    this.iconSize,
-  });
-
-  /// Create a chip's style from another style
-  ChipStyle.from(ChipStyle? other)
-      : height = other?.height,
-        margin = other?.margin,
-        padding = other?.padding,
-        clipBehavior = other?.clipBehavior,
-        overlayColor = other?.overlayColor,
-        shadowColor = other?.shadowColor,
-        elevation = other?.elevation,
-        foregroundStyle = other?.foregroundStyle,
-        foregroundColor = other?.foregroundColor,
-        foregroundOpacity = other?.foregroundOpacity,
-        foregroundAlpha = other?.foregroundAlpha,
-        foregroundSpacing = other?.foregroundSpacing,
-        backgroundColor = other?.backgroundColor,
-        backgroundOpacity = other?.backgroundOpacity,
-        backgroundAlpha = other?.backgroundAlpha,
-        borderColor = other?.borderColor,
-        borderOpacity = other?.borderOpacity,
-        borderAlpha = other?.borderAlpha,
-        borderWidth = other?.borderWidth,
-        borderRadius = other?.borderRadius,
-        borderStyle = other?.borderStyle,
-        avatarStyle = other?.avatarStyle,
-        checkmarkColor = other?.checkmarkColor,
-        checkmarkSize = other?.checkmarkSize,
-        checkmarkWeight = other?.checkmarkWeight,
-        checkmarkStyle = other?.checkmarkStyle,
-        iconColor = other?.iconColor,
-        iconOpacity = other?.iconOpacity,
-        iconSize = other?.iconSize;
-
-  /// Create an event driven chip's style using [callback].
-  factory ChipStyle.driven(
-    DrivenPropertyResolver<ChipStyle?> callback,
-  ) {
-    return _ChipStyle(callback);
-  }
-
-  /// Create a chip's style when some events occurs.
-  ///
-  /// The [enabled] is base style to be applied to the chip.
-  /// if `null` will fallback with empty ChipStyle
-  ///
-  /// The [selected] is style to be merged with [enabled],
-  /// when events includes [ChipEvent.selected].
-  ///
-  /// The [disabled] style to be merged with [enabled],
-  /// when events includes [ChipEvent.disabled].
-  ///
-  /// The [hovered] style to be merged with [enabled],
-  /// when events includes [ChipEvent.hovered].
-  ///
-  /// The [focused] style to be merged with [enabled],
-  /// when events includes [ChipEvent.focused].
-  ///
-  /// The [pressed] style to be merged with [enabled],
-  /// when events includes [ChipEvent.pressed].
-  factory ChipStyle.when({
-    ChipStyle? enabled,
-    ChipStyle? selected,
-    ChipStyle? disabled,
-    ChipStyle? hovered,
-    ChipStyle? focused,
-    ChipStyle? pressed,
-  }) {
-    return ChipStyle.driven((events) {
-      return (enabled ?? const ChipStyle())
-          .merge(
-              ChipEvent.isSelected(events) ? evaluate(selected, events) : null)
-          .merge(ChipEvent.isFocused(events) ? evaluate(focused, events) : null)
-          .merge(ChipEvent.isHovered(events) ? evaluate(hovered, events) : null)
-          .merge(ChipEvent.isPressed(events) ? evaluate(pressed, events) : null)
-          .merge(
-              ChipEvent.isDisabled(events) ? evaluate(disabled, events) : null);
-    });
-  }
-
-  /// Create chip's style with default value for toned style.
-  ///
-  /// The [selectedStyle] is style to be merged,
-  /// when events includes [ChipEvent.selected].
-  ///
-  /// The [disabledStyle] style to be merged,
-  /// when events includes [ChipEvent.disabled].
-  ///
-  /// The [hoveredStyle] style to be merged,
-  /// when events includes [ChipEvent.hovered].
-  ///
-  /// The [focusedStyle] style to be merged,
-  /// when events includes [ChipEvent.focused].
-  ///
-  /// The [pressedStyle] style to be merged,
-  /// when events includes [ChipEvent.pressed].
-  factory ChipStyle.toned({
-    double? height,
-    EdgeInsetsGeometry? margin,
-    EdgeInsetsGeometry? padding,
-    Clip? clipBehavior,
-    Color? overlayColor,
-    Color? shadowColor,
-    double? elevation,
-    TextStyle? foregroundStyle,
-    Color? foregroundColor,
-    double? foregroundOpacity,
-    int? foregroundAlpha,
-    double? foregroundSpacing,
-    Color? backgroundColor,
-    double? backgroundOpacity = .12,
-    int? backgroundAlpha,
-    Color? borderColor,
-    double? borderOpacity = 1,
-    int? borderAlpha,
-    double? borderWidth = 1,
-    BorderRadiusGeometry? borderRadius,
-    BorderStyle? borderStyle = BorderStyle.none,
-    AvatarStyle? avatarStyle,
-    Color? checkmarkColor,
-    double? checkmarkSize,
-    double? checkmarkWeight,
-    StrokeStyle? checkmarkStyle,
-    Color? iconColor,
-    double? iconOpacity,
-    double? iconSize,
-    ChipStyle? selectedStyle,
-    ChipStyle? disabledStyle = const ChipStyle(
-      foregroundAlpha: ChipStyle.disabledForegroundAlpha,
-      backgroundAlpha: ChipStyle.disabledBackgroundAlpha,
-      borderAlpha: ChipStyle.disabledBorderAlpha,
-    ),
-    ChipStyle? hoveredStyle,
-    ChipStyle? focusedStyle,
-    ChipStyle? pressedStyle,
-  }) {
-    return ChipStyle.when(
-      enabled: ChipStyle(
-        height: height,
-        margin: margin,
-        padding: padding,
-        clipBehavior: clipBehavior,
-        overlayColor: overlayColor,
-        shadowColor: shadowColor,
-        elevation: elevation,
-        foregroundStyle: foregroundStyle,
-        foregroundColor: foregroundColor,
-        foregroundOpacity: foregroundOpacity,
-        foregroundAlpha: foregroundAlpha,
-        foregroundSpacing: foregroundSpacing,
-        backgroundColor: backgroundColor,
-        backgroundOpacity: backgroundOpacity,
-        backgroundAlpha: backgroundAlpha,
-        borderColor: borderColor,
-        borderOpacity: borderOpacity,
-        borderAlpha: borderAlpha,
-        borderWidth: borderWidth,
-        borderRadius: borderRadius,
-        borderStyle: borderStyle,
-        avatarStyle: avatarStyle,
-        checkmarkColor: checkmarkColor,
-        checkmarkSize: checkmarkSize,
-        checkmarkWeight: checkmarkWeight,
-        checkmarkStyle: checkmarkStyle,
-        iconColor: iconColor,
-        iconOpacity: iconOpacity,
-        iconSize: iconSize,
-      ),
-      selected: selectedStyle,
-      disabled: disabledStyle,
-      hovered: hoveredStyle,
-      focused: focusedStyle,
-      pressed: pressedStyle,
-    );
-  }
-
-  /// Create chip's style with default value for filled style.
-  ///
-  /// The [selectedStyle] is style to be merged,
-  /// when events includes [ChipEvent.selected].
-  ///
-  /// The [disabledStyle] style to be merged,
-  /// when events includes [ChipEvent.disabled].
-  ///
-  /// The [hoveredStyle] style to be merged,
-  /// when events includes [ChipEvent.hovered].
-  ///
-  /// The [focusedStyle] style to be merged,
-  /// when events includes [ChipEvent.focused].
-  ///
-  /// The [pressedStyle] style to be merged,
-  /// when events includes [ChipEvent.pressed].
-  factory ChipStyle.filled({
-    Color? color,
-    double? height,
-    EdgeInsetsGeometry? margin,
-    EdgeInsetsGeometry? padding,
-    Clip? clipBehavior,
-    Color? overlayColor,
-    Color? shadowColor,
-    double? elevation,
-    TextStyle? foregroundStyle,
-    Color? foregroundColor,
-    double? foregroundOpacity,
-    int? foregroundAlpha,
-    double? foregroundSpacing,
-    double? backgroundOpacity = .8,
-    int? backgroundAlpha,
-    double? borderOpacity = 0,
-    int? borderAlpha,
-    double? borderWidth = 0,
-    BorderRadiusGeometry? borderRadius,
-    BorderStyle? borderStyle = BorderStyle.none,
-    AvatarStyle? avatarStyle,
-    Color? checkmarkColor,
-    double? checkmarkSize,
-    double? checkmarkWeight,
-    StrokeStyle? checkmarkStyle,
-    Color? iconColor,
-    double? iconOpacity,
-    double? iconSize,
-    ChipStyle? selectedStyle,
-    ChipStyle? disabledStyle = const ChipStyle(
-      foregroundAlpha: ChipStyle.disabledForegroundAlpha,
-      backgroundAlpha: ChipStyle.disabledBackgroundAlpha,
-      borderAlpha: ChipStyle.disabledBorderAlpha,
-    ),
-    ChipStyle? hoveredStyle,
-    ChipStyle? focusedStyle,
-    ChipStyle? pressedStyle = const ChipStyle(
-      elevation: 5,
-    ),
-  }) {
-    return ChipStyle.when(
-      enabled: ChipStyle(
-        backgroundColor: color,
-        borderColor: color,
-        height: height,
-        margin: margin,
-        padding: padding,
-        clipBehavior: clipBehavior,
-        overlayColor: overlayColor,
-        shadowColor: shadowColor,
-        elevation: elevation,
-        foregroundStyle: foregroundStyle,
-        foregroundColor: foregroundColor,
-        foregroundOpacity: foregroundOpacity,
-        foregroundAlpha: foregroundAlpha,
-        foregroundSpacing: foregroundSpacing,
-        backgroundOpacity: backgroundOpacity,
-        backgroundAlpha: backgroundAlpha,
-        borderOpacity: borderOpacity,
-        borderAlpha: borderAlpha,
-        borderWidth: borderWidth,
-        borderRadius: borderRadius,
-        borderStyle: borderStyle,
-        avatarStyle: avatarStyle,
-        checkmarkColor: checkmarkColor,
-        checkmarkSize: checkmarkSize,
-        checkmarkWeight: checkmarkWeight,
-        checkmarkStyle: checkmarkStyle,
-        iconColor: iconColor,
-        iconOpacity: iconOpacity,
-        iconSize: iconSize,
-      ),
-      selected: selectedStyle,
-      disabled: disabledStyle,
-      hovered: hoveredStyle,
-      focused: focusedStyle,
-      pressed: pressedStyle,
-    );
-  }
-
-  /// Create chip's style with default value for outlined style.
-  ///
-  /// The [selected] is style to be merged,
-  /// when events includes [ChipEvent.selected].
-  ///
-  /// The [disabled] style to be merged,
-  /// when events includes [ChipEvent.disabled].
-  ///
-  /// The [hovered] style to be merged,
-  /// when events includes [ChipEvent.hovered].
-  ///
-  /// The [focused] style to be merged,
-  /// when events includes [ChipEvent.focused].
-  ///
-  /// The [pressed] style to be merged,
-  /// when events includes [ChipEvent.pressed].
-  factory ChipStyle.outlined({
-    Color? color,
-    double? height,
-    EdgeInsetsGeometry? margin,
-    EdgeInsetsGeometry? padding,
-    Clip? clipBehavior,
-    Color? overlayColor,
-    Color? shadowColor,
-    double? elevation,
-    TextStyle? foregroundStyle,
-    double? foregroundOpacity,
-    int? foregroundAlpha,
-    double? foregroundSpacing,
-    Color? backgroundColor,
-    double? backgroundOpacity = 0,
-    int? backgroundAlpha,
-    double? borderOpacity = 1,
-    int? borderAlpha,
-    double? borderWidth = 1,
-    BorderRadiusGeometry? borderRadius,
-    BorderStyle? borderStyle = BorderStyle.solid,
-    AvatarStyle? avatarStyle,
-    Color? checkmarkColor,
-    double? checkmarkSize,
-    double? checkmarkWeight,
-    StrokeStyle? checkmarkStyle,
-    Color? iconColor,
-    double? iconOpacity,
-    double? iconSize,
-    ChipStyle? selectedStyle,
-    ChipStyle? disabledStyle = const ChipStyle(
-      foregroundAlpha: ChipStyle.disabledForegroundAlpha,
-      borderAlpha: ChipStyle.disabledBorderAlpha,
-    ),
-    ChipStyle? hoveredStyle,
-    ChipStyle? focusedStyle,
-    ChipStyle? pressedStyle,
-  }) {
-    return ChipStyle.when(
-      enabled: ChipStyle(
-        borderColor: color,
-        foregroundColor: color,
-        // avatarBackgroundColor: color,
-        avatarStyle: const AvatarStyle()
-            .merge(avatarStyle)
-            .copyWith(backgroundColor: color),
-        height: height,
-        margin: margin,
-        padding: padding,
-        clipBehavior: clipBehavior,
-        overlayColor: overlayColor,
-        shadowColor: shadowColor,
-        elevation: elevation,
-        foregroundStyle: foregroundStyle,
-        foregroundOpacity: foregroundOpacity,
-        foregroundAlpha: foregroundAlpha,
-        foregroundSpacing: foregroundSpacing,
-        backgroundColor: backgroundColor,
-        backgroundOpacity: backgroundOpacity,
-        backgroundAlpha: backgroundAlpha,
-        borderOpacity: borderOpacity,
-        borderAlpha: borderAlpha,
-        borderWidth: borderWidth,
-        borderRadius: borderRadius,
-        borderStyle: borderStyle,
-        checkmarkColor: checkmarkColor,
-        checkmarkSize: checkmarkSize,
-        checkmarkWeight: checkmarkWeight,
-        checkmarkStyle: checkmarkStyle,
-        iconColor: iconColor,
-        iconOpacity: iconOpacity,
-        iconSize: iconSize,
-      ),
-      selected: selectedStyle,
-      disabled: disabledStyle,
-      hovered: hoveredStyle,
-      focused: focusedStyle,
-      pressed: pressedStyle,
-    );
-  }
-
-  /// Resolves the value for the given set of events
-  /// if `value` is an event driven [ChipStyle],
-  /// otherwise returns the value itself.
-  static ChipStyle? evaluate(
-    ChipStyle? value,
-    Set<WidgetEvent> events,
-  ) {
-    return value?.merge(DrivenProperty.evaluate<ChipStyle?>(value, events));
-  }
-
-  static const defaultClipBehavior = Clip.antiAlias;
-  static const defaultBorderWidth = 1.0;
-  static const defaultBorderStyle = BorderStyle.solid;
-  static const defaultBorderRadius = BorderRadius.all(Radius.circular(8));
-  static const defaultMargin = EdgeInsets.zero;
-  static const defaultPadding = EdgeInsets.symmetric(horizontal: 8);
-  static const defaultPaddingWithAvatar = EdgeInsets.symmetric(horizontal: 4);
-  static const defaultAvatarSize = 24.0;
-  static const defaultHeight = 32.0;
-  static const defaultIconSize = 18.0;
-  static const defaultCheckmarkWeight = 2.0;
-  static const defaultCheckmarkSize = 18.0;
-  static const defaultForegroundSpacing = 8.0;
-  static const disabledForegroundAlpha = 0x61; // 38%
-  static const disabledBackgroundAlpha = 0x0c; // 38% * 12% = 5%
-  static const disabledBorderAlpha = 0x0c; // 38% * 12% = 5%
-  static const colorTransparent = Color(0x00000000);
-  static const colorBlack = Color(0xFF000000);
-  static const colorWhite = Color(0xFFFFFFFF);
-
-  /// Defaults to [ChipStyle.defaultHeight]
-  final double? height;
-
-  /// Empty space to surround the outside chip.
-  final EdgeInsetsGeometry? margin;
-
-  /// The padding between the contents of the chip and the outside chip.
-  ///
-  /// If chip has avatar defaults to [ChipStyle.defaultPaddingWithAvatar],
-  /// else defaults to [ChipStyle.defaultPadding].
-  final EdgeInsetsGeometry? padding;
-
-  /// The chip's content will be clipped (or not) according to this option.
-  ///
-  /// See the enum [Clip] for details of all possible options and their common use cases.
-  ///
-  /// Defaults to [ChipStyle.defaultClipBehavior]
-  final Clip? clipBehavior;
-
-  /// Defines the ink response colors.
-  final Color? overlayColor;
-
-  /// When [elevation] is non zero the color to use for the chip's shadow color.
-  final Color? shadowColor;
-
-  /// The chip's z-coordinate relative to the parent at which to place this physical object.
-  ///
-  /// The value is non-negative.
-  final double? elevation;
-
-  /// The style to be applied to the chip's label.
-  ///
-  /// The default label style is [TextTheme.bodyText1] from the overall
-  /// theme's [ThemeData.textTheme].
-  //
-  /// This only has an effect on widgets that respect the [DefaultTextStyle],
-  /// such as [Text].
-  final TextStyle? foregroundStyle;
-
-  /// The color to be applied to the chip's label, icon, and checkmark
-  final Color? foregroundColor;
-
-  /// Opacity to be apply to [foregroundColor].
-  final double? foregroundOpacity;
-
-  /// Alpha to be apply to [foregroundColor].
-  final int? foregroundAlpha;
-
-  /// How much space to place between chip's foreground widget in a run in the main axis.
-  final double? foregroundSpacing;
-
-  /// Color to be used for the chip's background.
-  final Color? backgroundColor;
-
-  /// Opacity to be apply to [backgroundColor].
-  final double? backgroundOpacity;
-
-  /// Alpha to be apply to [backgroundColor].
-  final int? backgroundAlpha;
-
-  /// Color to be used for the chip's border.
-  final Color? borderColor;
-
-  /// Opacity to be apply to [borderColor].
-  final double? borderOpacity;
-
-  /// Alpha to be apply to [borderColor].
-  final int? borderAlpha;
-
-  /// The width of this side of the chip's border, in logical pixels.
-  final double? borderWidth;
-
-  /// The radii for each corner of the chip's border.
-  final BorderRadiusGeometry? borderRadius;
-
-  /// The style of this side of the chip's border.
-  ///
-  /// To omit a side, set [borderStyle] to [BorderStyle.none].
-  /// This skips painting the border, but the border still has a [borderWidth].
-  final BorderStyle? borderStyle;
-
+/// The style to be applied to chip widget
+@immutable
+class ChipStyle extends SheetStyle {
   /// The style to be applied to the avatar
   final AvatarStyle? avatarStyle;
 
   /// The Color to be apply to the checkmark.
   ///
-  /// If null fallback to [avatarForegroundColor] or [foregroundColor].
+  /// If null fallback to [avatarStyle] or [foregroundColor].
   final Color? checkmarkColor;
 
   /// Defaults to [ChipStyle.defaultCheckmarkSize].
@@ -539,55 +28,116 @@ class ChipStyle {
   /// Defaults to [ChipCheckmarkStyle.sharp].
   final StrokeStyle? checkmarkStyle;
 
-  /// Color to be used for the icon's inside the chip.
-  final Color? iconColor;
+  /// Create a raw chip's style
+  const ChipStyle({
+    super.height,
+    super.margin,
+    super.padding,
+    super.clipBehavior,
+    super.overlayColor,
+    super.shadowColor,
+    super.elevation,
+    super.foregroundStyle,
+    super.foregroundColor,
+    super.foregroundOpacity,
+    super.foregroundAlpha,
+    super.foregroundSpacing,
+    super.foregroundExpanded,
+    super.foregroundAlign,
+    super.foregroundJustify,
+    super.backgroundColor,
+    super.backgroundOpacity,
+    super.backgroundAlpha,
+    super.borderColor,
+    super.borderOpacity,
+    super.borderAlpha,
+    super.borderWidth,
+    super.borderRadius,
+    super.borderStyle,
+    super.iconColor,
+    super.iconOpacity,
+    super.iconSize,
+    this.checkmarkColor,
+    this.checkmarkSize,
+    this.checkmarkWeight,
+    this.checkmarkStyle,
+    this.avatarStyle,
+  });
 
-  /// Opacity to be apply to [iconColor].
-  final double? iconOpacity;
+  /// Create a chip's style from another style
+  ChipStyle.from(ChipStyle? other)
+      : checkmarkColor = other?.checkmarkColor,
+        checkmarkSize = other?.checkmarkSize,
+        checkmarkWeight = other?.checkmarkWeight,
+        checkmarkStyle = other?.checkmarkStyle,
+        avatarStyle = other?.avatarStyle,
+        super(
+          height: other?.height,
+          margin: other?.margin,
+          padding: other?.padding,
+          clipBehavior: other?.clipBehavior,
+          overlayColor: other?.overlayColor,
+          shadowColor: other?.shadowColor,
+          elevation: other?.elevation,
+          foregroundStyle: other?.foregroundStyle,
+          foregroundColor: other?.foregroundColor,
+          foregroundOpacity: other?.foregroundOpacity,
+          foregroundAlpha: other?.foregroundAlpha,
+          foregroundSpacing: other?.foregroundSpacing,
+          foregroundExpanded: other?.foregroundExpanded,
+          foregroundAlign: other?.foregroundAlign,
+          foregroundJustify: other?.foregroundJustify,
+          backgroundColor: other?.backgroundColor,
+          backgroundOpacity: other?.backgroundOpacity,
+          backgroundAlpha: other?.backgroundAlpha,
+          borderColor: other?.borderColor,
+          borderOpacity: other?.borderOpacity,
+          borderAlpha: other?.borderAlpha,
+          borderWidth: other?.borderWidth,
+          borderRadius: other?.borderRadius,
+          borderStyle: other?.borderStyle,
+          iconColor: other?.iconColor,
+          iconOpacity: other?.iconOpacity,
+          iconSize: other?.iconSize,
+        );
 
-  /// The size of the icon's inside the chip, in logical pixels.
-  ///
-  /// Defaults to [ChipStyle.defaultIconSize].
-  final double? iconSize;
+  static const defaults = ChipStyle(
+    height: 32.0,
+    margin: EdgeInsets.zero,
+    clipBehavior: Clip.antiAlias,
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+    borderStyle: BorderStyle.solid,
+    borderWidth: 1.0,
+    foregroundSpacing: 8.0,
+    foregroundJustify: MainAxisAlignment.center,
+    foregroundStyle: TextStyle(height: 1),
+    checkmarkWeight: 2.0,
+    checkmarkSize: 18.0,
+    iconSize: 18.0,
+    avatarStyle: AvatarStyle(
+      size: 24.0,
+      foregroundStyle: TextStyle(
+        height: 1,
+        fontSize: 12,
+      ),
+    ),
+  );
 
-  /// Whether the chip's has outline or not
-  bool get isOutlined {
-    final width = borderWidth;
-    return borderStyle == BorderStyle.solid && width != null && width >= 1;
-  }
-
-  /// Whether the chip's has solid background color or not
-  bool get isFilled {
-    Color? color = backgroundColor;
-    final opacity = backgroundOpacity;
-    final alpha = backgroundAlpha;
-
-    const kOpacityThreshold = 0.4;
-    const kAlphaThreshold = 102;
-
-    if (color != null) {
-      color = Colors.colorWithOpacity(color, opacity);
-      color = Colors.colorWithAlpha(color, alpha);
-      final colorIsNotTransparent = color != colorTransparent;
-      final colorIsSolid = color.opacity > kOpacityThreshold;
-      return colorIsNotTransparent && colorIsSolid;
-    }
-
-    final isSolidByOpacity = opacity != null && opacity > kOpacityThreshold;
-    final isSolidByAlpha = alpha != null && alpha > kAlphaThreshold;
-
-    return isSolidByOpacity || isSolidByAlpha;
-  }
-
-  /// Whether the chip's has toned background color or not
-  bool get isToned => !isFilled;
+  static const defaultPadding = EdgeInsets.symmetric(horizontal: 8);
+  static const defaultPaddingWithAvatar = EdgeInsets.symmetric(horizontal: 4);
+  static const disabledForegroundAlpha = 0x61; // 38%
+  static const disabledBackgroundAlpha = 0x0c; // 38% * 12% = 5%
+  static const disabledBorderAlpha = 0x0c; // 38% * 12% = 5%
 
   /// Creates a copy of this [ChipStyle] but with
   /// the given fields replaced with the new values.
+  @override
   ChipStyle copyWith({
+    double? width,
     double? height,
     EdgeInsetsGeometry? margin,
     EdgeInsetsGeometry? padding,
+    Alignment? alignment,
     Clip? clipBehavior,
     Color? overlayColor,
     Color? shadowColor,
@@ -597,6 +147,9 @@ class ChipStyle {
     double? foregroundOpacity,
     int? foregroundAlpha,
     double? foregroundSpacing,
+    bool? foregroundExpanded,
+    CrossAxisAlignment? foregroundAlign,
+    MainAxisAlignment? foregroundJustify,
     Color? backgroundColor,
     double? backgroundOpacity,
     int? backgroundAlpha,
@@ -604,27 +157,24 @@ class ChipStyle {
     double? borderOpacity,
     int? borderAlpha,
     double? borderWidth,
-    BorderRadiusGeometry? borderRadius,
+    BorderRadius? borderRadius,
     BorderStyle? borderStyle,
+    BoxShape? shape,
+    Color? iconColor,
+    double? iconOpacity,
+    double? iconSize,
     AvatarStyle? avatarStyle,
     Color? checkmarkColor,
     double? checkmarkSize,
     double? checkmarkWeight,
     StrokeStyle? checkmarkStyle,
-    Color? iconColor,
-    double? iconOpacity,
-    double? iconSize,
+    bool? mergeResolved,
     ChipStyle? selectedStyle,
     ChipStyle? disabledStyle,
     ChipStyle? hoveredStyle,
     ChipStyle? focusedStyle,
     ChipStyle? pressedStyle,
   }) {
-    final hasEvent = selectedStyle != null ||
-        disabledStyle != null ||
-        hoveredStyle != null ||
-        focusedStyle != null ||
-        pressedStyle != null;
     final style = ChipStyle(
       height: height ?? this.height,
       margin: margin ?? this.margin,
@@ -638,6 +188,9 @@ class ChipStyle {
       foregroundOpacity: foregroundOpacity ?? this.foregroundOpacity,
       foregroundAlpha: foregroundAlpha ?? this.foregroundAlpha,
       foregroundSpacing: foregroundSpacing ?? this.foregroundSpacing,
+      foregroundExpanded: foregroundExpanded ?? this.foregroundExpanded,
+      foregroundAlign: foregroundAlign ?? this.foregroundAlign,
+      foregroundJustify: foregroundJustify ?? this.foregroundJustify,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       backgroundOpacity: backgroundOpacity ?? this.backgroundOpacity,
       backgroundAlpha: backgroundAlpha ?? this.backgroundAlpha,
@@ -647,8 +200,7 @@ class ChipStyle {
       borderWidth: borderWidth ?? this.borderWidth,
       borderRadius: borderRadius ?? this.borderRadius,
       borderStyle: borderStyle ?? this.borderStyle,
-      avatarStyle:
-          const AvatarStyle().merge(this.avatarStyle).merge(avatarStyle),
+      avatarStyle: AvatarStyle.from(this.avatarStyle).merge(avatarStyle),
       checkmarkColor: checkmarkColor ?? this.checkmarkColor,
       checkmarkSize: checkmarkSize ?? this.checkmarkSize,
       checkmarkWeight: checkmarkWeight ?? this.checkmarkWeight,
@@ -657,25 +209,38 @@ class ChipStyle {
       iconOpacity: iconOpacity ?? this.iconOpacity,
       iconSize: iconSize ?? this.iconSize,
     );
-    return hasEvent
-        ? ChipStyle.when(
-            enabled: style,
-            selected: selectedStyle,
-            disabled: disabledStyle,
-            hovered: hoveredStyle,
-            focused: focusedStyle,
-            pressed: pressedStyle,
-          )
-        : style;
+
+    final hasDrivenStyle = [
+      mergeResolved,
+      selectedStyle,
+      focusedStyle,
+      hoveredStyle,
+      pressedStyle,
+      disabledStyle,
+    ].any((el) => el != null);
+
+    if (hasDrivenStyle) {
+      return DrivenChipStyle.from(
+        style,
+        selectedStyle: selectedStyle,
+        disabledStyle: disabledStyle,
+        hoveredStyle: hoveredStyle,
+        focusedStyle: focusedStyle,
+        pressedStyle: pressedStyle,
+        mergeResolved: mergeResolved,
+      );
+    }
+    return style;
   }
 
   /// Creates a copy of this [ChipStyle] but with
   /// the given fields replaced with the new values.
-  ChipStyle merge(ChipStyle? other) {
+  @override
+  ChipStyle merge(covariant ChipStyle? other) {
     // if null return current object
     if (other == null) return this;
 
-    return copyWith(
+    var style = copyWith(
       height: other.height,
       margin: other.margin,
       padding: other.padding,
@@ -688,6 +253,9 @@ class ChipStyle {
       foregroundOpacity: other.foregroundOpacity,
       foregroundAlpha: other.foregroundAlpha,
       foregroundSpacing: other.foregroundSpacing,
+      foregroundExpanded: other.foregroundExpanded,
+      foregroundAlign: other.foregroundAlign,
+      foregroundJustify: other.foregroundJustify,
       backgroundColor: other.backgroundColor,
       backgroundOpacity: other.backgroundOpacity,
       backgroundAlpha: other.backgroundAlpha,
@@ -705,25 +273,395 @@ class ChipStyle {
       iconColor: other.iconColor,
       iconOpacity: other.iconOpacity,
       iconSize: other.iconSize,
-      selectedStyle:
-          other is _ChipStyle ? evaluate(other, {ChipEvent.selected}) : null,
-      disabledStyle:
-          other is _ChipStyle ? evaluate(other, {ChipEvent.disabled}) : null,
-      hoveredStyle:
-          other is _ChipStyle ? evaluate(other, {ChipEvent.hovered}) : null,
-      focusedStyle:
-          other is _ChipStyle ? evaluate(other, {ChipEvent.focused}) : null,
-      pressedStyle:
-          other is _ChipStyle ? evaluate(other, {ChipEvent.pressed}) : null,
     );
+
+    if (other is DrivenChipStyle) {
+      style = style.copyWith(
+        mergeResolved: other.mergeResolved,
+        selectedStyle: other.selectedStyle,
+        focusedStyle: other.focusedStyle,
+        hoveredStyle: other.hoveredStyle,
+        pressedStyle: other.pressedStyle,
+        disabledStyle: other.disabledStyle,
+      );
+    }
+    return style;
   }
-}
-
-class _ChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
-  _ChipStyle(this._resolver) : super.from(_resolver({}));
-
-  final DrivenPropertyResolver<ChipStyle?> _resolver;
 
   @override
-  ChipStyle? resolve(Set<WidgetEvent> events) => _resolver(events);
+  Map<String, dynamic> toMap() => super.toMap()
+    ..addAll({
+      'avatarStyle': avatarStyle,
+      'checkmarkColor': checkmarkColor,
+      'checkmarkSize': checkmarkSize,
+      'checkmarkWeight': checkmarkWeight,
+      'checkmarkStyle': checkmarkStyle,
+    });
+}
+
+/// Create a [ChipStyle] when some events occurs
+class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
+  /// Whether the resolved style is merged to
+  /// the previous resolved style or not
+  final bool? mergeResolved;
+
+  /// The style to be resolved when
+  /// events includes [WidgetEvent.selected].
+  final ChipStyle? selectedStyle;
+
+  /// The style to be resolved when
+  /// events includes [WidgetEvent.focused].
+  final ChipStyle? focusedStyle;
+
+  /// The style to be resolved when
+  /// events includes [WidgetEvent.hovered].
+  final ChipStyle? hoveredStyle;
+
+  /// The style to be resolved when
+  /// events includes [WidgetEvent.pressed].
+  final ChipStyle? pressedStyle;
+
+  /// The style to be resolved when
+  /// events includes [WidgetEvent.disabled].
+  final ChipStyle? disabledStyle;
+
+  /// Map of driven style, order matters
+  Map<WidgetEvent, ChipStyle?> get driven => {
+        WidgetEvent.selected: selectedStyle,
+        WidgetEvent.focused: focusedStyle,
+        WidgetEvent.hovered: hoveredStyle,
+        WidgetEvent.pressed: pressedStyle,
+        WidgetEvent.disabled: disabledStyle,
+      };
+
+  /// Create a raw [DrivenChipStyle].
+  const DrivenChipStyle({
+    super.height,
+    super.margin,
+    super.padding,
+    super.clipBehavior,
+    super.overlayColor,
+    super.shadowColor,
+    super.elevation,
+    super.foregroundStyle,
+    super.foregroundColor,
+    super.foregroundOpacity,
+    super.foregroundAlpha,
+    super.foregroundSpacing,
+    super.foregroundExpanded,
+    super.foregroundAlign,
+    super.foregroundJustify,
+    super.backgroundColor,
+    super.backgroundOpacity,
+    super.backgroundAlpha,
+    super.borderColor,
+    super.borderOpacity,
+    super.borderAlpha,
+    super.borderWidth,
+    super.borderRadius,
+    super.borderStyle,
+    super.iconColor,
+    super.iconOpacity,
+    super.iconSize,
+    super.checkmarkColor,
+    super.checkmarkSize,
+    super.checkmarkWeight,
+    super.checkmarkStyle,
+    super.avatarStyle,
+    this.selectedStyle,
+    this.disabledStyle,
+    this.hoveredStyle,
+    this.focusedStyle,
+    this.pressedStyle,
+    this.mergeResolved,
+  });
+
+  /// Create a [DrivenChipStyle] with value
+  /// from another [ButtonStyle].
+  DrivenChipStyle.from(
+    ChipStyle? enabled, {
+    this.selectedStyle,
+    this.focusedStyle,
+    this.hoveredStyle,
+    this.pressedStyle,
+    this.disabledStyle,
+    this.mergeResolved,
+  }) : super.from(enabled);
+
+  /// Create a [DrivenChipStyle] with default value for toned style.
+  DrivenChipStyle.tonal({
+    super.height,
+    super.margin,
+    super.padding,
+    super.clipBehavior,
+    super.overlayColor,
+    super.shadowColor,
+    super.elevation,
+    super.foregroundStyle,
+    super.foregroundColor,
+    super.foregroundOpacity,
+    super.foregroundAlpha,
+    super.foregroundSpacing,
+    super.foregroundExpanded,
+    super.foregroundAlign,
+    super.foregroundJustify,
+    super.backgroundColor,
+    super.backgroundOpacity = .12,
+    super.backgroundAlpha,
+    super.borderColor,
+    super.borderOpacity = 1,
+    super.borderAlpha,
+    super.borderWidth = 1,
+    super.borderRadius,
+    super.borderStyle = BorderStyle.none,
+    super.iconColor,
+    super.iconOpacity,
+    super.iconSize,
+    super.checkmarkColor,
+    super.checkmarkSize,
+    super.checkmarkWeight,
+    super.checkmarkStyle,
+    super.avatarStyle,
+    this.selectedStyle,
+    ChipStyle? disabledStyle,
+    this.hoveredStyle,
+    this.focusedStyle,
+    this.pressedStyle,
+    this.mergeResolved,
+  }) : disabledStyle = const ChipStyle(
+          foregroundAlpha: ChipStyle.disabledForegroundAlpha,
+          backgroundAlpha: ChipStyle.disabledBackgroundAlpha,
+          borderAlpha: ChipStyle.disabledBorderAlpha,
+        ).merge(disabledStyle);
+
+  /// Create a [DrivenChipStyle] with default value for filled style.
+  DrivenChipStyle.filled({
+    Color? color,
+    super.height,
+    super.margin,
+    super.padding,
+    super.clipBehavior,
+    super.overlayColor,
+    super.shadowColor,
+    super.elevation,
+    super.foregroundStyle,
+    super.foregroundColor,
+    super.foregroundOpacity,
+    super.foregroundAlpha,
+    super.foregroundSpacing,
+    super.foregroundExpanded,
+    super.foregroundAlign,
+    super.foregroundJustify,
+    super.backgroundOpacity = .8,
+    super.backgroundAlpha,
+    super.borderOpacity = 0,
+    super.borderAlpha,
+    super.borderWidth = 0,
+    super.borderRadius,
+    super.borderStyle = BorderStyle.none,
+    super.iconColor,
+    super.iconOpacity,
+    super.iconSize,
+    super.checkmarkColor,
+    super.checkmarkSize,
+    super.checkmarkWeight,
+    super.checkmarkStyle,
+    super.avatarStyle,
+    this.selectedStyle,
+    ChipStyle? disabledStyle,
+    this.hoveredStyle,
+    this.focusedStyle,
+    ChipStyle? pressedStyle,
+    this.mergeResolved,
+  })  : disabledStyle = const ChipStyle(
+          foregroundAlpha: ChipStyle.disabledForegroundAlpha,
+          backgroundAlpha: ChipStyle.disabledBackgroundAlpha,
+          borderAlpha: ChipStyle.disabledBorderAlpha,
+        ).merge(disabledStyle),
+        pressedStyle = const ChipStyle(elevation: 5).merge(pressedStyle),
+        super(
+          backgroundColor: color,
+          borderColor: color,
+        );
+
+  /// Create a [DrivenChipStyle] with default value for outlined style.
+  DrivenChipStyle.outlined({
+    Color? color,
+    super.height,
+    super.margin,
+    super.padding,
+    super.clipBehavior,
+    super.overlayColor,
+    super.shadowColor,
+    super.elevation,
+    super.foregroundStyle,
+    super.foregroundOpacity,
+    super.foregroundAlpha,
+    super.foregroundSpacing,
+    super.foregroundExpanded,
+    super.foregroundAlign,
+    super.foregroundJustify,
+    super.backgroundColor,
+    super.backgroundOpacity = 0,
+    super.backgroundAlpha,
+    super.borderOpacity = 1,
+    super.borderAlpha,
+    super.borderWidth = 1,
+    super.borderRadius,
+    super.borderStyle = BorderStyle.solid,
+    super.iconColor,
+    super.iconOpacity,
+    super.iconSize,
+    super.checkmarkColor,
+    super.checkmarkSize,
+    super.checkmarkWeight,
+    super.checkmarkStyle,
+    AvatarStyle? avatarStyle,
+    this.selectedStyle,
+    ChipStyle? disabledStyle,
+    this.hoveredStyle,
+    this.focusedStyle,
+    this.pressedStyle,
+    this.mergeResolved,
+  })  : disabledStyle = const ChipStyle(
+          foregroundAlpha: ChipStyle.disabledForegroundAlpha,
+          borderAlpha: ChipStyle.disabledBorderAlpha,
+        ).merge(disabledStyle),
+        super(
+          foregroundColor: color,
+          borderColor: color,
+          avatarStyle:
+              AvatarStyle.from(avatarStyle).copyWith(backgroundColor: color),
+        );
+
+  /// Create a [DrivenChipStyle] from a resolver callback
+  DrivenChipStyle.resolver(
+    DrivenPropertyResolver<ChipStyle?> resolver, {
+    this.mergeResolved = false,
+  })  : selectedStyle = resolver({WidgetEvent.selected}),
+        focusedStyle = resolver({WidgetEvent.focused}),
+        hoveredStyle = resolver({WidgetEvent.hovered}),
+        pressedStyle = resolver({WidgetEvent.pressed}),
+        disabledStyle = resolver({WidgetEvent.disabled}),
+        super.from(resolver({}));
+
+  /// Resolves the value for the given set of events
+  /// if `value` is an event driven [ChipStyle],
+  /// otherwise returns the value itself.
+  static ChipStyle? evaluate(ChipStyle? value, Set<WidgetEvent> events) {
+    return DrivenProperty.evaluate<ChipStyle?>(value, events);
+  }
+
+  @override
+  ChipStyle resolve(Set<WidgetEvent> events) {
+    ChipStyle style = this;
+    for (var e in driven.entries) {
+      if (events.contains(e.key)) {
+        final evaluated = evaluate(e.value, events);
+        style = mergeResolved != false
+            ? style.merge(evaluated)
+            : ChipStyle.from(evaluated);
+      }
+    }
+    return style;
+  }
+
+  /// Creates a copy of this [DrivenChipStyle] but with
+  /// the given fields replaced with the new values.
+  @override
+  DrivenChipStyle copyWith({
+    double? width,
+    double? height,
+    EdgeInsetsGeometry? margin,
+    EdgeInsetsGeometry? padding,
+    Alignment? alignment,
+    Clip? clipBehavior,
+    Color? overlayColor,
+    Color? shadowColor,
+    double? elevation,
+    TextStyle? foregroundStyle,
+    Color? foregroundColor,
+    double? foregroundOpacity,
+    int? foregroundAlpha,
+    double? foregroundSpacing,
+    bool? foregroundExpanded,
+    CrossAxisAlignment? foregroundAlign,
+    MainAxisAlignment? foregroundJustify,
+    Color? backgroundColor,
+    double? backgroundOpacity,
+    int? backgroundAlpha,
+    Color? borderColor,
+    double? borderOpacity,
+    int? borderAlpha,
+    double? borderWidth,
+    BorderRadius? borderRadius,
+    BorderStyle? borderStyle,
+    BoxShape? shape,
+    Color? iconColor,
+    double? iconOpacity,
+    double? iconSize,
+    AvatarStyle? avatarStyle,
+    Color? checkmarkColor,
+    double? checkmarkSize,
+    double? checkmarkWeight,
+    StrokeStyle? checkmarkStyle,
+    bool? mergeResolved,
+    ChipStyle? selectedStyle,
+    ChipStyle? disabledStyle,
+    ChipStyle? hoveredStyle,
+    ChipStyle? focusedStyle,
+    ChipStyle? pressedStyle,
+  }) {
+    return DrivenChipStyle(
+      height: height ?? this.height,
+      margin: margin ?? this.margin,
+      padding: padding ?? this.padding,
+      clipBehavior: clipBehavior ?? this.clipBehavior,
+      overlayColor: overlayColor ?? this.overlayColor,
+      shadowColor: shadowColor ?? this.shadowColor,
+      elevation: elevation ?? this.elevation,
+      foregroundStyle: foregroundStyle ?? this.foregroundStyle,
+      foregroundColor: foregroundColor ?? this.foregroundColor,
+      foregroundOpacity: foregroundOpacity ?? this.foregroundOpacity,
+      foregroundAlpha: foregroundAlpha ?? this.foregroundAlpha,
+      foregroundSpacing: foregroundSpacing ?? this.foregroundSpacing,
+      foregroundExpanded: foregroundExpanded ?? this.foregroundExpanded,
+      foregroundAlign: foregroundAlign ?? this.foregroundAlign,
+      foregroundJustify: foregroundJustify ?? this.foregroundJustify,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      backgroundOpacity: backgroundOpacity ?? this.backgroundOpacity,
+      backgroundAlpha: backgroundAlpha ?? this.backgroundAlpha,
+      borderColor: borderColor ?? this.borderColor,
+      borderOpacity: borderOpacity ?? this.borderOpacity,
+      borderAlpha: borderAlpha ?? this.borderAlpha,
+      borderWidth: borderWidth ?? this.borderWidth,
+      borderRadius: borderRadius ?? this.borderRadius,
+      borderStyle: borderStyle ?? this.borderStyle,
+      iconColor: iconColor ?? this.iconColor,
+      iconOpacity: iconOpacity ?? this.iconOpacity,
+      iconSize: iconSize ?? this.iconSize,
+      avatarStyle: AvatarStyle.from(this.avatarStyle).merge(avatarStyle),
+      checkmarkColor: checkmarkColor ?? this.checkmarkColor,
+      checkmarkSize: checkmarkSize ?? this.checkmarkSize,
+      checkmarkWeight: checkmarkWeight ?? this.checkmarkWeight,
+      checkmarkStyle: checkmarkStyle ?? this.checkmarkStyle,
+      mergeResolved: mergeResolved ?? this.mergeResolved,
+      selectedStyle: this.selectedStyle?.merge(selectedStyle) ?? selectedStyle,
+      focusedStyle: this.focusedStyle?.merge(focusedStyle) ?? focusedStyle,
+      hoveredStyle: this.hoveredStyle?.merge(hoveredStyle) ?? hoveredStyle,
+      pressedStyle: this.pressedStyle?.merge(pressedStyle) ?? pressedStyle,
+      disabledStyle: this.disabledStyle?.merge(disabledStyle) ?? disabledStyle,
+    );
+  }
+
+  @override
+  Map<String, dynamic> toMap() => super.toMap()
+    ..addAll({
+      'mergeResolved': mergeResolved,
+      'selectedStyle': selectedStyle,
+      'focusedStyle': focusedStyle,
+      'hoveredStyle': hoveredStyle,
+      'pressedStyle': pressedStyle,
+      'disabledStyle': disabledStyle,
+    });
 }
