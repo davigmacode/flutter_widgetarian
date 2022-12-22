@@ -25,6 +25,11 @@ class AnimatedSpinState extends State<AnimatedSpin>
   late AnimationController controller;
   late Animation<double> animation;
 
+  final Tween<double> reverseTween = Tween<double>(
+    begin: 1,
+    end: 0,
+  );
+
   @protected
   void initController(Duration duration) {
     controller = AnimationController(
@@ -42,7 +47,7 @@ class AnimatedSpinState extends State<AnimatedSpin>
   }
 
   @protected
-  void startStop() {
+  void toggleAnimation() {
     if (widget.enabled) {
       controller.repeat();
     } else {
@@ -55,7 +60,7 @@ class AnimatedSpinState extends State<AnimatedSpin>
     initController(widget.duration);
     initAnimation(widget.curve);
     super.initState();
-    startStop();
+    toggleAnimation();
   }
 
   @override
@@ -72,7 +77,7 @@ class AnimatedSpinState extends State<AnimatedSpin>
     }
 
     if (oldWidget.enabled != widget.enabled) {
-      startStop();
+      toggleAnimation();
     }
   }
 
@@ -85,7 +90,7 @@ class AnimatedSpinState extends State<AnimatedSpin>
   @override
   Widget build(BuildContext context) {
     return RotationTransition(
-      turns: animation,
+      turns: widget.clockwise ? animation : reverseTween.animate(controller),
       child: widget.child,
     );
   }
