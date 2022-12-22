@@ -9,5 +9,10 @@ export 'src/feedback/alert/style.dart';
 export 'src/feedback/alert/theme.dart';
 export 'src/feedback/alert/widget.dart';
 
+export 'src/feedback/overlay/style.dart';
+export 'src/feedback/overlay/theme.dart';
+export 'src/feedback/overlay/tween.dart';
+export 'src/feedback/overlay/widget.dart';
+
 export 'src/feedback/toggle_icon/style.dart';
 export 'src/feedback/toggle_icon/widget.dart';
