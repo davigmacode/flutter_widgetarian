@@ -1,52 +1,48 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart' show Theme, ThemeData, Brightness;
+import 'package:flutter/material.dart' show Theme, ThemeData;
 
 import 'package:widgetarian/event.dart';
-import 'package:widgetarian/feedback.dart';
 import 'package:widgetarian/utils.dart';
-import 'package:widgetarian/button.dart';
+import 'package:widgetarian/feedback.dart';
 import 'package:widgetarian/anchor.dart';
 import 'style.dart';
+import 'theme.dart';
 import 'event.dart';
 
-/// Chip widget with smooth animation, event driven style, and many more.
+/// Checkboxes allow the user to select one or more items from a set.
 class Checkbox extends StatelessWidget {
+  /// Create a checkbox widget
   const Checkbox({
     Key? key,
-    this.onChanged,
-    this.label,
     this.tooltip,
     this.style,
-    this.checked = false,
+    this.onChanged,
+    this.selected = false,
     this.indeterminate = false,
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
     this.eventsController,
-    this.curve = defaultCurve,
-    this.duration = defaultDuration,
+    this.curve,
+    this.duration,
   }) : super(key: key);
 
-  /// Called when the chip should change between selected and de-selected
-  /// states.
+  /// Called when the checkbox should change
+  /// between selected and de-selected states.
   ///
-  /// When the chip is tapped, then the [onChanged] callback, if set, will be
-  /// applied to `!selected` (see [selected]).
+  /// When the checkbox is tapped, then the [onChanged] callback, if set, will be
+  /// applied to `!selected` (see [selectedStyle]).
   ///
-  /// The chip passes the new value to the callback but does not actually
-  /// change state until the parent widget rebuilds the chip with the new
-  /// value.
+  /// The checkbox passes the new value to the callback but does not actually
+  /// change state until the parent widget rebuilds the checkbox with the new value.
   ///
   /// The callback provided to [onChanged] should update the state of the
   /// parent [StatefulWidget] using the [State.setState] method, so that the
   /// parent gets rebuilt.
   ///
-  /// The [onChanged] and [onPressed] callbacks must not
-  /// both be specified at the same time.
-  ///
   /// {@tool snippet}
   ///
-  /// A [StatefulWidget] that illustrates use of onSelected in an [InputChip].
+  /// A [StatefulWidget] that illustrates use of onSelected in an [Checkbox].
   ///
   /// ```dart
   /// class Wood extends StatefulWidget {
@@ -61,7 +57,7 @@ class Checkbox extends StatelessWidget {
   ///
   ///   @override
   ///   Widget build(BuildContext context) {
-  ///     return Chip(
+  ///     return Checkbox(
   ///       label: const Text('Use Chisel'),
   ///       selected: _useChisel,
   ///       onSelected: (bool newValue) {
@@ -76,59 +72,41 @@ class Checkbox extends StatelessWidget {
   /// {@end-tool}
   final ValueChanged<bool>? onChanged;
 
-  /// The primary content of the chip.
-  ///
-  /// Typically a [Text] widget.
-  final Widget? label;
-
-  /// Tooltip string to be used for the body area (where the label and avatar
-  /// are) of the chip.
+  /// Tooltip string to be used for the body area of the checkbox.
   final String? tooltip;
 
-  final bool checked;
+  /// Whether or not this checkbox is selected.
+  ///
+  /// Must not be null. Defaults to false.
+  final bool selected;
 
+  /// Whether or not this checkbox is indeterminate.
+  ///
+  /// Must not be null. Defaults to false.
   final bool indeterminate;
 
-  /// Whether or not this chip is disabled for input.
+  /// Whether or not this checkbox is disabled for input.
   ///
   /// Defaults to false. Cannot be null.
   final bool disabled;
 
-  /// True if this widget will be selected as the initial focus
-  /// when no other node in its scope is currently focused.
-  ///
-  /// Ideally, there is only one widget with autofocus set in each [FocusScope].
-  /// If there is more than one widget with autofocus set,
-  /// then the first one added to the tree will get focus.
-  ///
-  /// Must not be null. Defaults to false.
+  /// {@macro flutter.widgets.Focus.autofocus}
   final bool autofocus;
 
-  /// An optional focus node to use as the focus node for this widget.
-  ///
-  /// If one is not supplied, then one will be automatically allocated, owned,
-  /// and managed by this widget. The widget will be focusable even if a [focusNode] is not supplied.
-  /// If supplied, the given focusNode will be hosted by this widget, but not owned.
-  /// See [FocusNode] for more information on what being hosted and/or owned implies.
-  ///
-  /// Supplying a focus node is sometimes useful if an ancestor
-  /// to this widget wants to control when this widget has the focus.
-  /// The owner will be responsible for calling [FocusNode.dispose]
-  /// on the focus node when it is done with it, but this widget
-  /// will attach/detach and reparent the node when needed.
+  /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
-  /// The style to be applied to the chip.
+  /// The style to be applied to the checkbox.
   ///
   /// If [style] is an event driven [CheckboxStyle]
-  /// by [DrivenButtonStyle.driven], then [CheckboxStyle.evaluate]
+  /// by [DrivenCheckboxStyle], then [CheckboxStyle.evaluate]
   /// is used for the following [CheckboxEvent]s:
   ///
-  ///  * [CheckboxEvent.disabled].
   ///  * [CheckboxEvent.selected].
-  ///  * [CheckboxEvent.hovered].
   ///  * [CheckboxEvent.focused].
+  ///  * [CheckboxEvent.hovered].
   ///  * [CheckboxEvent.pressed].
+  ///  * [CheckboxEvent.disabled].
   final CheckboxStyle? style;
 
   /// Used by widgets that expose their internal event
@@ -136,40 +114,29 @@ class Checkbox extends StatelessWidget {
   final CheckboxEventController? eventsController;
 
   /// The curve to apply when animating the parameters of this widget.
-  final Curve curve;
+  final Curve? curve;
 
   /// The duration over which to animate the parameters of this widget.
-  final Duration duration;
-
-  static const defaultDuration = Duration(milliseconds: 200);
-
-  static const defaultCurve = Curves.linear;
+  final Duration? duration;
 
   static CheckboxStyle defaultStyleOf(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final color =
-        isDark ? theme.colorScheme.inversePrimary : theme.colorScheme.primary;
-    return CheckboxStyle.when(
-      enabled: const CheckboxStyle(
-        size: CheckboxStyle.defaultSize,
-        strokeColor: Colors.white,
-        strokeWidth: CheckboxStyle.defaultStrokeWidth,
-        borderWidth: CheckboxStyle.defaultBorderWidth,
-        borderStyle: CheckboxStyle.defaultBorderStyle,
-        borderRadius: CheckboxStyle.defaultBorderRadius,
-      ),
-      selected: CheckboxStyle(
+    final color = theme.brightness.isDark
+        ? theme.colorScheme.inversePrimary
+        : theme.colorScheme.primary;
+    return DrivenCheckboxStyle.from(
+      CheckboxStyle.defaults,
+      selectedStyle: CheckboxStyle(
         backgroundColor: color,
         borderStyle: BorderStyle.none,
       ),
-      indeterminate: CheckboxStyle(
+      indeterminateStyle: CheckboxStyle(
         backgroundColor: color,
         borderStyle: BorderStyle.none,
       ),
-      hovered: const CheckboxStyle(overlayRadius: 20.0),
-      pressed: const CheckboxStyle(overlayRadius: 0.0),
-      disabled: const CheckboxStyle(
+      hoveredStyle: const CheckboxStyle(overlayRadius: 20.0),
+      pressedStyle: const CheckboxStyle(overlayRadius: 0.0),
+      disabledStyle: const CheckboxStyle(
         backgroundAlpha: CheckboxStyle.disabledBackgroundAlpha,
         borderAlpha: CheckboxStyle.disabledBorderAlpha,
       ),
@@ -178,46 +145,43 @@ class Checkbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final checkboxTheme = CheckboxTheme.of(context);
     return _CheckboxRender(
-      label: label,
       tooltip: tooltip,
       onChanged: onChanged,
-      checked: checked,
+      selected: selected,
       indeterminate: indeterminate,
       disabled: disabled,
       autofocus: autofocus,
       focusNode: focusNode,
       eventsController: eventsController,
-      duration: duration,
-      curve: curve,
-      style: style ?? defaultStyleOf(context),
-      theme: Theme.of(context),
+      duration: duration ?? checkboxTheme.duration,
+      curve: curve ?? checkboxTheme.curve,
+      style: checkboxTheme.style.merge(style),
+      fallback: checkboxTheme.fallback,
     );
   }
 }
 
-/// Chip widget with smooth animation, event driven style, and many more.
 class _CheckboxRender extends StatefulWidget {
   const _CheckboxRender({
     Key? key,
-    this.label,
     this.tooltip,
-    this.checked = false,
+    this.selected = false,
     this.indeterminate = false,
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
     this.onChanged,
     this.eventsController,
-    this.duration = Checkbox.defaultDuration,
-    this.curve = Checkbox.defaultCurve,
+    required this.duration,
+    required this.curve,
     required this.style,
-    required this.theme,
+    required this.fallback,
   }) : super(key: key);
 
-  final Widget? label;
   final String? tooltip;
-  final bool checked;
+  final bool selected;
   final bool indeterminate;
   final bool disabled;
   final bool autofocus;
@@ -227,7 +191,7 @@ class _CheckboxRender extends StatefulWidget {
   final Duration duration;
   final Curve curve;
   final CheckboxStyle style;
-  final ThemeData theme;
+  final CheckboxStyle fallback;
 
   bool get enabled => !disabled;
 
@@ -244,64 +208,61 @@ class _CheckboxRender extends StatefulWidget {
 class _CheckboxRenderState extends State<_CheckboxRender>
     with WidgetEventMixin<_CheckboxRender> {
   CheckboxStyle style = const CheckboxStyle();
+  CheckboxStyle fallback = const CheckboxStyle();
 
   @protected
   void setStyle() {
-    final raw = widget.style;
-    final resolved = CheckboxStyle.evaluate(raw, widgetEvents.value);
-    style = CheckboxStyle.from(resolved);
+    final rawStyle = widget.style;
+    final resStyle = DrivenCheckboxStyle.evaluate(rawStyle, widgetEvents.value);
+    style = CheckboxStyle.from(resStyle);
+
+    final rawFallback = widget.fallback;
+    final resFallback =
+        DrivenCheckboxStyle.evaluate(rawFallback, widgetEvents.value);
+    fallback = CheckboxStyle.from(resFallback);
+    setState(() {});
   }
 
-  Color get strokeColor {
-    return style.strokeColor ?? borderColor;
-  }
+  Color? get checkmarkColor => Colors.withTransparency(
+        style.checkmarkColor ?? Colors.onSurface(backgroundColor),
+        opacity: style.checkmarkOpacity,
+        alpha: style.checkmarkAlpha,
+      );
 
-  Color? get backgroundColor {
-    Color? color = style.backgroundColor;
-    if (color != null) {
-      color = Colors.colorWithOpacity(color, style.backgroundOpacity);
-      color = Colors.colorWithAlpha(color, style.backgroundAlpha);
-    }
-    return color;
-  }
-
-  ShapeBorder get border {
-    return borderShape == BoxShape.rectangle
-        ? RoundedRectangleBorder(
-            borderRadius: borderRadius,
-            side: borderSide,
-          )
-        : CircleBorder(side: borderSide);
-  }
-
-  BoxShape get borderShape {
-    return style.borderShape ?? CheckboxStyle.defaultBorderShape;
-  }
+  Color? get backgroundColor => Colors.withTransparency(
+        style.backgroundColor ?? fallback.backgroundColor,
+        opacity: style.backgroundOpacity,
+        alpha: style.backgroundAlpha,
+      );
 
   Color get borderColor {
-    Color defaultColor = widget.theme.colorScheme.outline;
-    return Colors.colorWithOpacityOrAlpha(
-      style.borderColor ?? defaultColor,
-      style.borderOpacity,
-      style.borderAlpha,
-    );
+    return Colors.withTransparency(
+      style.borderColor ?? fallback.borderColor,
+      opacity: style.borderOpacity,
+      alpha: style.borderAlpha,
+    )!;
   }
 
   BorderSide get borderSide {
     return BorderSide(
       color: borderColor,
-      width: style.borderWidth ?? CheckboxStyle.defaultBorderWidth,
-      style: style.borderStyle ?? CheckboxStyle.defaultBorderStyle,
+      width: style.borderWidth!,
+      style: style.borderStyle!,
     );
   }
 
-  BorderRadiusGeometry get borderRadius {
-    return style.borderRadius ?? CheckboxStyle.defaultBorderRadius;
+  ShapeBorder get border {
+    return style.borderShape == BoxShape.rectangle
+        ? RoundedRectangleBorder(
+            borderRadius: style.borderRadius!,
+            side: borderSide,
+          )
+        : CircleBorder(side: borderSide);
   }
 
   void onTap() {
     widgetEvents.toggle(CheckboxEvent.pressed, false);
-    widget.onChanged?.call(!widget.checked);
+    widget.onChanged?.call(!widget.selected);
   }
 
   void onTapCancel() {
@@ -324,7 +285,7 @@ class _CheckboxRenderState extends State<_CheckboxRender>
   void initState() {
     initWidgetEvents(widget.eventsController);
     widgetEvents.toggle(CheckboxEvent.indeterminate, widget.indeterminate);
-    widgetEvents.toggle(CheckboxEvent.selected, widget.checked);
+    widgetEvents.toggle(CheckboxEvent.selected, widget.selected);
     widgetEvents.toggle(CheckboxEvent.disabled, widget.disabled);
     setStyle();
     super.initState();
@@ -335,7 +296,7 @@ class _CheckboxRenderState extends State<_CheckboxRender>
     if (mounted) {
       updateWidgetEvents(oldWidget.eventsController, widget.eventsController);
       widgetEvents.toggle(CheckboxEvent.indeterminate, widget.indeterminate);
-      widgetEvents.toggle(CheckboxEvent.selected, widget.checked);
+      widgetEvents.toggle(CheckboxEvent.selected, widget.selected);
       widgetEvents.toggle(CheckboxEvent.disabled, widget.disabled);
       setStyle();
       super.didUpdateWidget(oldWidget);
@@ -352,36 +313,44 @@ class _CheckboxRenderState extends State<_CheckboxRender>
 
   @override
   Widget build(BuildContext context) {
-    final checkmark = AnimatedCheckmark(
+    Widget result = AnimatedCheckmark(
       duration: widget.duration,
       curve: widget.curve,
-      color: strokeColor,
-      weight: style.strokeWidth,
-      size: style.size,
+      color: checkmarkColor,
+      weight: style.checkmarkWeight,
+      size: style.checkmarkSize,
       fill: backgroundColor,
       shape: border,
-      value: widget.indeterminate ? null : widget.checked,
+      value: widget.indeterminate ? null : widget.selected,
     );
 
-    if (widget.label != null) {
-      return Button(
-        onPressed: onTap,
-        style: style.buttonStyle,
-        disabled: widget.disabled,
-        leading: checkmark,
-        child: widget.label!,
+    if (style.padding != null) {
+      result = Padding(
+        padding: style.padding!,
+        child: result,
       );
     }
 
-    return Anchor(
+    result = Anchor(
       shape: BoxShape.circle,
       overlayColor: style.overlayColor,
+      overlayOpacity: style.overlayOpacity,
+      overlayDisabled: style.overlayDisabled,
       radius: style.overlayRadius,
       onTap: onTap,
       onTapDown: onTapDown,
       onTapCancel: onTapCancel,
       onHover: onHover,
-      child: checkmark,
+      child: result,
     );
+
+    if (style.margin != null) {
+      result = Padding(
+        padding: style.margin!,
+        child: result,
+      );
+    }
+
+    return result;
   }
 }

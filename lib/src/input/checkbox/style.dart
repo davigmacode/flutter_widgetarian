@@ -1,128 +1,18 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/button.dart';
+import 'package:widgetarian/utils.dart';
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/feedback.dart';
 import 'event.dart';
 
-/// Default checkbox's style.
-class CheckboxStyle {
-  const CheckboxStyle({
-    this.size,
-    this.backgroundColor,
-    this.backgroundOpacity,
-    this.backgroundAlpha,
-    this.borderShape,
-    this.borderColor,
-    this.borderOpacity,
-    this.borderAlpha,
-    this.borderWidth,
-    this.borderRadius,
-    this.borderStyle,
-    this.strokeColor,
-    this.strokeWidth,
-    this.strokeStyle,
-    this.overlayColor,
-    this.overlayRadius,
-    this.buttonStyle,
-  });
+/// The style to be applied to checkbox widget
+@immutable
+class CheckboxStyle with Diagnosticable {
+  /// Empty space to surround the outside clickable area.
+  final EdgeInsetsGeometry? margin;
 
-  /// Create a checkbox's style from another style
-  CheckboxStyle.from(CheckboxStyle? other)
-      : size = other?.size,
-        backgroundColor = other?.backgroundColor,
-        backgroundOpacity = other?.backgroundOpacity,
-        backgroundAlpha = other?.backgroundAlpha,
-        borderShape = other?.borderShape,
-        borderColor = other?.borderColor,
-        borderOpacity = other?.borderOpacity,
-        borderAlpha = other?.borderAlpha,
-        borderWidth = other?.borderWidth,
-        borderRadius = other?.borderRadius,
-        borderStyle = other?.borderStyle,
-        strokeColor = other?.strokeColor,
-        strokeWidth = other?.strokeWidth,
-        strokeStyle = other?.strokeStyle,
-        overlayColor = other?.overlayColor,
-        overlayRadius = other?.overlayRadius,
-        buttonStyle = other?.buttonStyle;
-
-  /// Create an event driven checkbox's style using [callback].
-  factory CheckboxStyle.driven(
-    DrivenPropertyResolver<CheckboxStyle?> callback,
-  ) {
-    return _CheckboxStyle(callback);
-  }
-
-  /// Create a checkbox's style when some events occurs.
-  ///
-  /// The [enabled] is base style to be applied to the checkbox.
-  /// if `null` will fallback with empty DrivenButtonStyle
-  ///
-  /// The [disabled] style to be merged with [enabled],
-  /// when events includes [CheckboxEvent.disabled].
-  ///
-  /// The [hovered] style to be merged with [enabled],
-  /// when events includes [CheckboxEvent.hovered].
-  ///
-  /// The [focused] style to be merged with [enabled],
-  /// when events includes [CheckboxEvent.focused].
-  ///
-  /// The [pressed] style to be merged with [enabled],
-  /// when events includes [CheckboxEvent.pressed].
-  factory CheckboxStyle.when({
-    CheckboxStyle? enabled,
-    CheckboxStyle? selected,
-    CheckboxStyle? indeterminate,
-    CheckboxStyle? focused,
-    CheckboxStyle? hovered,
-    CheckboxStyle? pressed,
-    CheckboxStyle? disabled,
-  }) {
-    return CheckboxStyle.driven((events) {
-      return (enabled ?? const CheckboxStyle())
-          .merge(CheckboxEvent.isSelected(events)
-              ? evaluate(selected, events)
-              : null)
-          .merge(CheckboxEvent.isIndeterminate(events)
-              ? evaluate(indeterminate, events)
-              : null)
-          .merge(CheckboxEvent.isFocused(events)
-              ? evaluate(focused, events)
-              : null)
-          .merge(CheckboxEvent.isHovered(events)
-              ? evaluate(hovered, events)
-              : null)
-          .merge(CheckboxEvent.isPressed(events)
-              ? evaluate(pressed, events)
-              : null)
-          .merge(CheckboxEvent.isDisabled(events)
-              ? evaluate(disabled, events)
-              : null);
-    });
-  }
-
-  /// Resolves the value for the given set of events
-  /// if `value` is an event driven [CheckboxStyle],
-  /// otherwise returns the value itself.
-  static CheckboxStyle? evaluate(
-    CheckboxStyle? value,
-    Set<WidgetEvent> events,
-  ) {
-    return value?.merge(DrivenProperty.evaluate<CheckboxStyle?>(value, events));
-  }
-
-  static const defaultSize = 18.0;
-  static const defaultStrokeWidth = 2.0;
-  static const defaultBorderWidth = 2.0;
-  static const defaultBorderStyle = BorderStyle.solid;
-  static const defaultBorderRadius = BorderRadius.zero;
-  static const defaultBorderShape = BoxShape.rectangle;
-  static const disabledStrokeAlpha = 0x61; // 38%
-  static const disabledBackgroundAlpha = 0x0c; // 38% * 12% = 5%
-  static const disabledBorderAlpha = 0x0c; // 38% * 12% = 5%
-
-  /// Defaults to [ChipStyle.defaultCheckmarkSize].
-  final double? size;
+  /// Empty space to increase the clickable area.
+  final EdgeInsetsGeometry? padding;
 
   /// Color to be used for the checkbox's background.
   final Color? backgroundColor;
@@ -133,6 +23,7 @@ class CheckboxStyle {
   /// Alpha to be apply to [backgroundColor].
   final int? backgroundAlpha;
 
+  /// Type of the checkbox border shape.
   final BoxShape? borderShape;
 
   /// Color to be used for the checkbox's border.
@@ -148,7 +39,7 @@ class CheckboxStyle {
   final double? borderWidth;
 
   /// The radii for each corner of the checkbox's border.
-  final BorderRadiusGeometry? borderRadius;
+  final BorderRadius? borderRadius;
 
   /// The style of this side of the checkbox's border.
   ///
@@ -156,29 +47,129 @@ class CheckboxStyle {
   /// This skips painting the border, but the border still has a [borderWidth].
   final BorderStyle? borderStyle;
 
+  /// The size of the checkmark in logical pixels.
+  final double? checkmarkSize;
+
+  /// The space between the border or the edge of background
+  /// and the checkmark in logical pixels.
+  final double? checkmarkInset;
+
   /// The Color to be apply to the checkmark.
-  ///
-  /// If null fallback to [avatarForegroundColor] or [foregroundColor].
-  final Color? strokeColor;
+  final Color? checkmarkColor;
+
+  /// Opacity to be apply to [checkmarkColor].
+  final double? checkmarkOpacity;
+
+  /// Alpha to be apply to [checkmarkColor].
+  final int? checkmarkAlpha;
 
   /// Stroke width of the checkmark.
+  final double? checkmarkWeight;
+
+  /// The type of stroke style
   ///
-  /// Defaults to [ChipStyle.defaultCheckmarkWeight].
-  final double? strokeWidth;
+  /// Defaults to [StrokeStyle.sharp].
+  final StrokeStyle? checkmarkStyle;
 
-  /// Defaults to [ChipCheckmarkStyle.sharp].
-  final StrokeStyle? strokeStyle;
-
+  /// The overlay color when pressed, hovered over, or focused.
   final Color? overlayColor;
 
+  /// The overlay opacity when pressed, hovered over, or focused.
+  final double? overlayOpacity;
+
+  /// Whether the overlay is disabled or not,
+  /// when the checkbox has a label.
+  final bool? overlayDisabled;
+
+  /// The radius of the overlay.
+  /// If the checkbox doesn't have a label.
   final double? overlayRadius;
 
-  final ButtonStyle? buttonStyle;
+  static const defaults = DrivenCheckboxStyle(
+    padding: EdgeInsets.all(9),
+    borderShape: BoxShape.rectangle,
+    borderRadius: BorderRadius.all(Radius.circular(2)),
+    borderStyle: BorderStyle.solid,
+    borderWidth: 2.0,
+    checkmarkSize: 18.0,
+    checkmarkWeight: 2.0,
+    selectedStyle: CheckboxStyle(
+      borderStyle: BorderStyle.none,
+    ),
+    indeterminateStyle: CheckboxStyle(
+      borderStyle: BorderStyle.none,
+    ),
+    hoveredStyle: CheckboxStyle(overlayRadius: 20.0),
+    pressedStyle: CheckboxStyle(overlayRadius: 0.0),
+    disabledStyle: CheckboxStyle(
+      checkmarkAlpha: CheckboxStyle.disabledCheckmarkAlpha,
+      backgroundAlpha: CheckboxStyle.disabledBackgroundAlpha,
+      borderAlpha: CheckboxStyle.disabledBorderAlpha,
+    ),
+  );
+
+  static const disabledCheckmarkAlpha = 0x61; // 38%
+  static const disabledBackgroundAlpha = 0x0c; // 38% * 12% = 5%
+  static const disabledBorderAlpha = 0x0c; // 38% * 12% = 5%
+
+  /// Create a raw style of checkbox widget
+  const CheckboxStyle({
+    this.margin,
+    this.padding,
+    this.backgroundColor,
+    this.backgroundOpacity,
+    this.backgroundAlpha,
+    this.borderShape,
+    this.borderColor,
+    this.borderOpacity,
+    this.borderAlpha,
+    this.borderWidth,
+    this.borderRadius,
+    this.borderStyle,
+    this.checkmarkSize,
+    this.checkmarkInset,
+    this.checkmarkColor,
+    this.checkmarkOpacity,
+    this.checkmarkAlpha,
+    this.checkmarkWeight,
+    this.checkmarkStyle,
+    this.overlayColor,
+    this.overlayOpacity,
+    this.overlayDisabled,
+    this.overlayRadius,
+  });
+
+  /// Create a checkbox's style from another style
+  CheckboxStyle.from(CheckboxStyle? other)
+      : margin = other?.margin,
+        padding = other?.padding,
+        backgroundColor = other?.backgroundColor,
+        backgroundOpacity = other?.backgroundOpacity,
+        backgroundAlpha = other?.backgroundAlpha,
+        borderShape = other?.borderShape,
+        borderColor = other?.borderColor,
+        borderOpacity = other?.borderOpacity,
+        borderAlpha = other?.borderAlpha,
+        borderWidth = other?.borderWidth,
+        borderRadius = other?.borderRadius,
+        borderStyle = other?.borderStyle,
+        checkmarkSize = other?.checkmarkSize,
+        checkmarkInset = other?.checkmarkInset,
+        checkmarkColor = other?.checkmarkColor,
+        checkmarkOpacity = other?.checkmarkOpacity,
+        checkmarkAlpha = other?.checkmarkAlpha,
+        checkmarkWeight = other?.checkmarkWeight,
+        checkmarkStyle = other?.checkmarkStyle,
+        overlayColor = other?.overlayColor,
+        overlayOpacity = other?.overlayOpacity,
+        overlayDisabled = other?.overlayDisabled,
+        overlayRadius = other?.overlayRadius;
 
   /// Creates a copy of this [CheckboxStyle] but with
   /// the given fields replaced with the new values.
   CheckboxStyle copyWith({
-    double? size,
+    EdgeInsetsGeometry? margin,
+    EdgeInsetsGeometry? padding,
     Color? backgroundColor,
     double? backgroundOpacity,
     int? backgroundAlpha,
@@ -187,14 +178,20 @@ class CheckboxStyle {
     double? borderOpacity,
     int? borderAlpha,
     double? borderWidth,
-    BorderRadiusGeometry? borderRadius,
+    BorderRadius? borderRadius,
     BorderStyle? borderStyle,
-    Color? strokeColor,
-    double? strokeWidth,
-    StrokeStyle? strokeStyle,
+    double? checkmarkSize,
+    double? checkmarkInset,
+    Color? checkmarkColor,
+    double? checkmarkOpacity,
+    int? checkmarkAlpha,
+    double? checkmarkWeight,
+    StrokeStyle? checkmarkStyle,
     Color? overlayColor,
+    double? overlayOpacity,
+    bool? overlayDisabled,
     double? overlayRadius,
-    ButtonStyle? buttonStyle,
+    bool? mergeResolved,
     CheckboxStyle? selectedStyle,
     CheckboxStyle? indeterminateStyle,
     CheckboxStyle? focusedStyle,
@@ -202,14 +199,9 @@ class CheckboxStyle {
     CheckboxStyle? pressedStyle,
     CheckboxStyle? disabledStyle,
   }) {
-    final hasEvent = selectedStyle != null ||
-        indeterminateStyle != null ||
-        focusedStyle != null ||
-        hoveredStyle != null ||
-        pressedStyle != null ||
-        disabledStyle != null;
     final style = CheckboxStyle(
-      size: size ?? this.size,
+      margin: margin ?? this.margin,
+      padding: padding ?? this.padding,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       backgroundOpacity: backgroundOpacity ?? this.backgroundOpacity,
       backgroundAlpha: backgroundAlpha ?? this.backgroundAlpha,
@@ -220,24 +212,42 @@ class CheckboxStyle {
       borderWidth: borderWidth ?? this.borderWidth,
       borderRadius: borderRadius ?? this.borderRadius,
       borderStyle: borderStyle ?? this.borderStyle,
-      strokeColor: strokeColor ?? this.strokeColor,
-      strokeWidth: strokeWidth ?? this.strokeWidth,
-      strokeStyle: strokeStyle ?? this.strokeStyle,
+      checkmarkSize: checkmarkSize ?? this.checkmarkSize,
+      checkmarkInset: checkmarkInset ?? this.checkmarkInset,
+      checkmarkColor: checkmarkColor ?? this.checkmarkColor,
+      checkmarkOpacity: checkmarkOpacity ?? this.checkmarkOpacity,
+      checkmarkAlpha: checkmarkAlpha ?? this.checkmarkAlpha,
+      checkmarkWeight: checkmarkWeight ?? this.checkmarkWeight,
+      checkmarkStyle: checkmarkStyle ?? this.checkmarkStyle,
       overlayColor: overlayColor ?? this.overlayColor,
+      overlayOpacity: overlayOpacity ?? this.overlayOpacity,
+      overlayDisabled: overlayDisabled ?? this.overlayDisabled,
       overlayRadius: overlayRadius ?? this.overlayRadius,
-      buttonStyle: buttonStyle ?? this.buttonStyle,
     );
-    return hasEvent
-        ? CheckboxStyle.when(
-            enabled: style,
-            selected: selectedStyle,
-            indeterminate: indeterminateStyle,
-            focused: focusedStyle,
-            hovered: hoveredStyle,
-            pressed: pressedStyle,
-            disabled: disabledStyle,
-          )
-        : style;
+
+    final hasDrivenStyle = [
+      mergeResolved,
+      selectedStyle,
+      indeterminateStyle,
+      focusedStyle,
+      hoveredStyle,
+      pressedStyle,
+      disabledStyle,
+    ].any((el) => el != null);
+
+    if (hasDrivenStyle) {
+      return DrivenCheckboxStyle.from(
+        style,
+        selectedStyle: selectedStyle,
+        indeterminateStyle: indeterminateStyle,
+        focusedStyle: focusedStyle,
+        hoveredStyle: hoveredStyle,
+        pressedStyle: pressedStyle,
+        disabledStyle: disabledStyle,
+        mergeResolved: mergeResolved,
+      );
+    }
+    return style;
   }
 
   /// Creates a copy of this [CheckboxStyle] but with
@@ -246,8 +256,9 @@ class CheckboxStyle {
     // if null return current object
     if (other == null) return this;
 
-    return copyWith(
-      size: other.size,
+    var style = copyWith(
+      margin: other.margin,
+      padding: other.padding,
       backgroundColor: other.backgroundColor,
       backgroundOpacity: other.backgroundOpacity,
       backgroundAlpha: other.backgroundAlpha,
@@ -258,40 +269,311 @@ class CheckboxStyle {
       borderWidth: other.borderWidth,
       borderRadius: other.borderRadius,
       borderStyle: other.borderStyle,
-      strokeColor: other.strokeColor,
-      strokeWidth: other.strokeWidth,
-      strokeStyle: other.strokeStyle,
+      checkmarkSize: other.checkmarkSize,
+      checkmarkInset: other.checkmarkInset,
+      checkmarkColor: other.checkmarkColor,
+      checkmarkOpacity: other.checkmarkOpacity,
+      checkmarkAlpha: other.checkmarkAlpha,
+      checkmarkWeight: other.checkmarkWeight,
+      checkmarkStyle: other.checkmarkStyle,
       overlayColor: other.overlayColor,
+      overlayOpacity: other.overlayOpacity,
+      overlayDisabled: other.overlayDisabled,
       overlayRadius: other.overlayRadius,
-      buttonStyle: other.buttonStyle,
-      selectedStyle: other is _CheckboxStyle
-          ? evaluate(other, {CheckboxEvent.selected})
-          : null,
-      indeterminateStyle: other is _CheckboxStyle
-          ? evaluate(other, {CheckboxEvent.indeterminate})
-          : null,
-      focusedStyle: other is _CheckboxStyle
-          ? evaluate(other, {CheckboxEvent.focused})
-          : null,
-      hoveredStyle: other is _CheckboxStyle
-          ? evaluate(other, {CheckboxEvent.hovered})
-          : null,
-      pressedStyle: other is _CheckboxStyle
-          ? evaluate(other, {CheckboxEvent.pressed})
-          : null,
-      disabledStyle: other is _CheckboxStyle
-          ? evaluate(other, {CheckboxEvent.disabled})
-          : null,
     );
+
+    if (other is DrivenCheckboxStyle) {
+      style = style.copyWith(
+        selectedStyle: other.selectedStyle,
+        indeterminateStyle: other.indeterminateStyle,
+        focusedStyle: other.focusedStyle,
+        hoveredStyle: other.hoveredStyle,
+        pressedStyle: other.pressedStyle,
+        disabledStyle: other.disabledStyle,
+        mergeResolved: other.mergeResolved,
+      );
+    }
+
+    return style;
+  }
+
+  /// Linearly interpolate between two [CheckboxStyle] objects.
+  static CheckboxStyle? lerp(CheckboxStyle? a, CheckboxStyle? b, double t) {
+    if (a == null && b == null) return null;
+    return CheckboxStyle(
+      margin: EdgeInsetsGeometry.lerp(a?.margin, b?.margin, t),
+      padding: EdgeInsetsGeometry.lerp(a?.padding, b?.padding, t),
+      backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t),
+      backgroundOpacity:
+          lerpDouble(a?.backgroundOpacity, b?.backgroundOpacity, t),
+      backgroundAlpha: lerpInt(a?.backgroundAlpha, b?.backgroundAlpha, t),
+      borderShape: lerpEnum(a?.borderShape, b?.borderShape, t),
+      borderColor: Color.lerp(a?.borderColor, b?.borderColor, t),
+      borderOpacity: lerpDouble(a?.borderOpacity, b?.borderOpacity, t),
+      borderAlpha: lerpInt(a?.borderAlpha, b?.borderAlpha, t),
+      borderWidth: lerpDouble(a?.borderWidth, b?.borderWidth, t),
+      borderRadius: BorderRadius.lerp(a?.borderRadius, b?.borderRadius, t),
+      borderStyle: lerpEnum(a?.borderStyle, b?.borderStyle, t),
+      checkmarkSize: lerpDouble(a?.checkmarkSize, b?.checkmarkSize, t),
+      checkmarkInset: lerpDouble(a?.checkmarkInset, b?.checkmarkInset, t),
+      checkmarkColor: Color.lerp(a?.checkmarkColor, b?.checkmarkColor, t),
+      checkmarkWeight: lerpDouble(a?.checkmarkWeight, b?.checkmarkWeight, t),
+      checkmarkStyle: lerpEnum(a?.checkmarkStyle, b?.checkmarkStyle, t),
+      overlayColor: Color.lerp(a?.overlayColor, b?.overlayColor, t),
+      overlayOpacity: lerpDouble(a?.overlayOpacity, b?.overlayOpacity, t),
+      overlayDisabled: lerpBool(a?.overlayDisabled, b?.overlayDisabled, t),
+      overlayRadius: lerpDouble(a?.overlayRadius, b?.overlayRadius, t),
+    );
+  }
+
+  Map<String, dynamic> toMap() => {
+        'margin': margin,
+        'padding': padding,
+        'backgroundColor': backgroundColor,
+        'backgroundOpacity': backgroundOpacity,
+        'backgroundAlpha': backgroundAlpha,
+        'borderShape': borderShape,
+        'borderColor': borderColor,
+        'borderOpacity': borderOpacity,
+        'borderAlpha': borderAlpha,
+        'borderWidth': borderWidth,
+        'borderRadius': borderRadius,
+        'borderStyle': borderStyle,
+        'checkmarkSize': checkmarkSize,
+        'checkmarkInset': checkmarkInset,
+        'checkmarkColor': checkmarkColor,
+        'checkmarkOpacity': checkmarkOpacity,
+        'checkmarkAlpha': checkmarkAlpha,
+        'checkmarkWeight': checkmarkWeight,
+        'checkmarkStyle': checkmarkStyle,
+        'overlayColor': overlayColor,
+        'overlayOpacity': overlayOpacity,
+        'overlayDisabled': overlayDisabled,
+        'overlayRadius': overlayRadius,
+      };
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) return false;
+    return other is CheckboxStyle && mapEquals(other.toMap(), toMap());
+  }
+
+  @override
+  int get hashCode => Object.hashAll(toMap().values);
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    toMap().entries.forEach((el) {
+      properties.add(DiagnosticsProperty(el.key, el.value));
+    });
   }
 }
 
-class _CheckboxStyle extends CheckboxStyle
+/// Create a [CheckboxStyle] that handle the widget events
+class DrivenCheckboxStyle extends CheckboxStyle
     implements DrivenProperty<CheckboxStyle?> {
-  _CheckboxStyle(this._resolver) : super.from(_resolver({}));
+  /// Whether the resolved style is merged to
+  /// the previous resolved style or not
+  final bool? mergeResolved;
 
-  final DrivenPropertyResolver<CheckboxStyle?> _resolver;
+  /// The style to be resolved when
+  /// events includes [CheckboxEvent.selected].
+  final CheckboxStyle? selectedStyle;
+
+  /// The style to be resolved when
+  /// events includes [CheckboxEvent.indeterminate].
+  final CheckboxStyle? indeterminateStyle;
+
+  /// The style to be resolved when
+  /// events includes [CheckboxEvent.focused].
+  final CheckboxStyle? focusedStyle;
+
+  /// The style to be resolved when
+  /// events includes [CheckboxEvent.hovered].
+  final CheckboxStyle? hoveredStyle;
+
+  /// The style to be resolved when
+  /// events includes [CheckboxEvent.pressed].
+  final CheckboxStyle? pressedStyle;
+
+  /// The style to be resolved when
+  /// events includes [CheckboxEvent.disabled].
+  final CheckboxStyle? disabledStyle;
+
+  /// Map of driven style, order matters
+  Map<WidgetEvent, CheckboxStyle?> get driven => {
+        WidgetEvent.selected: selectedStyle,
+        WidgetEvent.indeterminate: indeterminateStyle,
+        WidgetEvent.focused: focusedStyle,
+        WidgetEvent.hovered: hoveredStyle,
+        WidgetEvent.pressed: pressedStyle,
+        WidgetEvent.disabled: disabledStyle,
+      };
+
+  /// Create a raw of driven checkbox style
+  const DrivenCheckboxStyle({
+    super.margin,
+    super.padding,
+    super.backgroundColor,
+    super.backgroundOpacity,
+    super.backgroundAlpha,
+    super.borderShape,
+    super.borderColor,
+    super.borderOpacity,
+    super.borderAlpha,
+    super.borderWidth,
+    super.borderRadius,
+    super.borderStyle,
+    super.checkmarkSize,
+    super.checkmarkInset,
+    super.checkmarkColor,
+    super.checkmarkOpacity,
+    super.checkmarkAlpha,
+    super.checkmarkWeight,
+    super.checkmarkStyle,
+    super.overlayColor,
+    super.overlayOpacity,
+    super.overlayDisabled,
+    super.overlayRadius,
+    this.selectedStyle,
+    this.indeterminateStyle,
+    this.focusedStyle,
+    this.hoveredStyle,
+    this.pressedStyle,
+    this.disabledStyle,
+    this.mergeResolved,
+  });
+
+  /// Create a [DrivenCheckboxStyle] with value
+  /// from another [CheckboxStyle].
+  DrivenCheckboxStyle.from(
+    CheckboxStyle? enabledStyle, {
+    this.selectedStyle,
+    this.indeterminateStyle,
+    this.focusedStyle,
+    this.hoveredStyle,
+    this.pressedStyle,
+    this.disabledStyle,
+    this.mergeResolved,
+  }) : super.from(enabledStyle);
+
+  /// Create a [DrivenCheckboxStyle] from a resolver callback
+  DrivenCheckboxStyle.resolver(
+    DrivenPropertyResolver<CheckboxStyle?> resolver, {
+    this.mergeResolved = false,
+  })  : selectedStyle = resolver({WidgetEvent.selected}),
+        indeterminateStyle = resolver({WidgetEvent.indeterminate}),
+        focusedStyle = resolver({WidgetEvent.focused}),
+        hoveredStyle = resolver({WidgetEvent.hovered}),
+        pressedStyle = resolver({WidgetEvent.pressed}),
+        disabledStyle = resolver({WidgetEvent.disabled}),
+        super.from(resolver({}));
+
+  /// Resolves the value for the given set of events
+  /// if `value` is an event driven [CheckboxStyle],
+  /// otherwise returns the value itself.
+  static CheckboxStyle? evaluate(
+    CheckboxStyle? value,
+    Set<WidgetEvent> events,
+  ) {
+    return DrivenProperty.evaluate<CheckboxStyle?>(value, events);
+  }
 
   @override
-  CheckboxStyle? resolve(Set<WidgetEvent> events) => _resolver(events);
+  CheckboxStyle resolve(Set<WidgetEvent> events) {
+    CheckboxStyle style = this;
+    for (var e in driven.entries) {
+      if (events.contains(e.key)) {
+        final evaluated = evaluate(e.value, events);
+        style = mergeResolved != false
+            ? style.merge(evaluated)
+            : CheckboxStyle.from(evaluated);
+      }
+    }
+    return style;
+  }
+
+  /// Creates a copy of this [DrivenCheckboxStyle] but with
+  /// the given fields replaced with the new values.
+  @override
+  DrivenCheckboxStyle copyWith({
+    EdgeInsetsGeometry? margin,
+    EdgeInsetsGeometry? padding,
+    Color? backgroundColor,
+    double? backgroundOpacity,
+    int? backgroundAlpha,
+    BoxShape? borderShape,
+    Color? borderColor,
+    double? borderOpacity,
+    int? borderAlpha,
+    double? borderWidth,
+    BorderRadius? borderRadius,
+    BorderStyle? borderStyle,
+    double? checkmarkSize,
+    double? checkmarkInset,
+    Color? checkmarkColor,
+    double? checkmarkOpacity,
+    int? checkmarkAlpha,
+    double? checkmarkWeight,
+    StrokeStyle? checkmarkStyle,
+    Color? overlayColor,
+    double? overlayOpacity,
+    bool? overlayDisabled,
+    double? overlayRadius,
+    bool? mergeResolved,
+    CheckboxStyle? selectedStyle,
+    CheckboxStyle? indeterminateStyle,
+    CheckboxStyle? focusedStyle,
+    CheckboxStyle? hoveredStyle,
+    CheckboxStyle? pressedStyle,
+    CheckboxStyle? disabledStyle,
+  }) {
+    return DrivenCheckboxStyle(
+      margin: margin ?? this.margin,
+      padding: padding ?? this.padding,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      backgroundOpacity: backgroundOpacity ?? this.backgroundOpacity,
+      backgroundAlpha: backgroundAlpha ?? this.backgroundAlpha,
+      borderShape: borderShape ?? this.borderShape,
+      borderColor: borderColor ?? this.borderColor,
+      borderOpacity: borderOpacity ?? this.borderOpacity,
+      borderAlpha: borderAlpha ?? this.borderAlpha,
+      borderWidth: borderWidth ?? this.borderWidth,
+      borderRadius: borderRadius ?? this.borderRadius,
+      borderStyle: borderStyle ?? this.borderStyle,
+      checkmarkSize: checkmarkSize ?? this.checkmarkSize,
+      checkmarkInset: checkmarkInset ?? this.checkmarkInset,
+      checkmarkColor: checkmarkColor ?? this.checkmarkColor,
+      checkmarkOpacity: checkmarkOpacity ?? this.checkmarkOpacity,
+      checkmarkAlpha: checkmarkAlpha ?? this.checkmarkAlpha,
+      checkmarkWeight: checkmarkWeight ?? this.checkmarkWeight,
+      checkmarkStyle: checkmarkStyle ?? this.checkmarkStyle,
+      overlayColor: overlayColor ?? this.overlayColor,
+      overlayOpacity: overlayOpacity ?? this.overlayOpacity,
+      overlayDisabled: overlayDisabled ?? this.overlayDisabled,
+      overlayRadius: overlayRadius ?? this.overlayRadius,
+      mergeResolved: mergeResolved ?? this.mergeResolved,
+      selectedStyle: this.selectedStyle?.merge(selectedStyle) ?? selectedStyle,
+      indeterminateStyle: this.indeterminateStyle?.merge(indeterminateStyle) ??
+          indeterminateStyle,
+      focusedStyle: this.focusedStyle?.merge(focusedStyle) ?? focusedStyle,
+      hoveredStyle: this.hoveredStyle?.merge(hoveredStyle) ?? hoveredStyle,
+      pressedStyle: this.pressedStyle?.merge(pressedStyle) ?? pressedStyle,
+      disabledStyle: this.disabledStyle?.merge(disabledStyle) ?? disabledStyle,
+    );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('mergeResolved', mergeResolved));
+    properties.add(DiagnosticsProperty('selectedStyle', selectedStyle));
+    properties
+        .add(DiagnosticsProperty('indeterminateStyle', indeterminateStyle));
+    properties.add(DiagnosticsProperty('focusedStyle', focusedStyle));
+    properties.add(DiagnosticsProperty('hoveredStyle', hoveredStyle));
+    properties.add(DiagnosticsProperty('pressedStyle', pressedStyle));
+    properties.add(DiagnosticsProperty('disabledStyle', disabledStyle));
+  }
 }
