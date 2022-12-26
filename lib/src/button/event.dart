@@ -77,7 +77,7 @@ abstract class ButtonEvent extends WidgetEvent {
 /// Listeners are notified whenever the value changes.
 /// The value should only be changed with update;
 /// it should not be modified directly.
-class ButtonEventController extends WidgetEventController {}
+typedef ButtonEventController = WidgetEventController;
 
 /// Set of WidgetEvent
 typedef ButtonEvents = WidgetEvents;

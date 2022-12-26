@@ -1,45 +1,52 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart' show Theme, ThemeData, Brightness;
-
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/feedback.dart';
 import 'package:widgetarian/utils.dart';
 import 'package:widgetarian/button.dart';
-import 'style.dart';
+import 'package:widgetarian/anchor.dart';
 import 'event.dart';
+import 'style.dart';
+import 'theme.dart';
 
 /// Chip widget with smooth animation, event driven style, and many more.
 class Switch extends StatelessWidget {
   const Switch({
     Key? key,
-    this.label,
-    this.tooltip,
     this.style,
+    this.tooltip,
     this.onChanged,
-    this.checked = false,
+    this.selected = false,
     this.indeterminate = false,
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
     this.eventsController,
-    this.curve = Curves.linear,
-    this.duration = defaultDuration,
+    this.curve,
+    this.duration,
   }) : super(key: key);
 
-  /// The primary content of the chip.
+  /// The style to be applied to the switch.
   ///
-  /// Typically a [Text] widget.
-  final Widget? label;
+  /// If [style] is an event driven [SwitchStyle]
+  /// by [DrivenSwitchStyle.driven], then [DrivenSwitchStyle.evaluate]
+  /// is used for the following [SwitchEvent]s:
+  ///
+  ///  * [SwitchEvent.selected].
+  ///  * [SwitchEvent.indeterminate].
+  ///  * [SwitchEvent.focused].
+  ///  * [SwitchEvent.hovered].
+  ///  * [SwitchEvent.pressed].
+  ///  * [SwitchEvent.disabled].
+  final SwitchStyle? style;
 
-  /// Tooltip string to be used for the body area (where the label and avatar
-  /// are) of the chip.
+  /// Tooltip string to be used for the body area of the switch.
   final String? tooltip;
 
   /// Called when the chip should change between selected and de-selected
   /// states.
   ///
   /// When the chip is tapped, then the [onChanged] callback, if set, will be
-  /// applied to `!selected` (see [selected]).
+  /// applied to `!selected` (see [selectedStyle]).
   ///
   /// The chip passes the new value to the callback but does not actually
   /// change state until the parent widget rebuilds the chip with the new
@@ -48,9 +55,6 @@ class Switch extends StatelessWidget {
   /// The callback provided to [onChanged] should update the state of the
   /// parent [StatefulWidget] using the [State.setState] method, so that the
   /// parent gets rebuilt.
-  ///
-  /// The [onChanged] and [onPressed] callbacks must not
-  /// both be specified at the same time.
   ///
   /// {@tool snippet}
   ///
@@ -84,114 +88,85 @@ class Switch extends StatelessWidget {
   /// {@end-tool}
   final ValueChanged<bool>? onChanged;
 
-  final bool checked;
+  /// Whether or not this switch is selected.
+  ///
+  /// Must not be null. Defaults to false.
+  final bool selected;
 
+  /// Whether or not this switch is indeterminate.
+  ///
+  /// Must not be null. Defaults to false.
   final bool indeterminate;
 
-  /// Whether or not this chip is disabled for input.
+  /// Whether or not this switch is disabled for input.
   ///
   /// Defaults to false. Cannot be null.
   final bool disabled;
 
-  /// True if this widget will be selected as the initial focus
-  /// when no other node in its scope is currently focused.
-  ///
-  /// Ideally, there is only one widget with autofocus set in each [FocusScope].
-  /// If there is more than one widget with autofocus set,
-  /// then the first one added to the tree will get focus.
-  ///
-  /// Must not be null. Defaults to false.
+  /// {@macro flutter.widgets.Focus.autofocus}
   final bool autofocus;
 
-  /// An optional focus node to use as the focus node for this widget.
-  ///
-  /// If one is not supplied, then one will be automatically allocated, owned,
-  /// and managed by this widget. The widget will be focusable even if a [focusNode] is not supplied.
-  /// If supplied, the given focusNode will be hosted by this widget, but not owned.
-  /// See [FocusNode] for more information on what being hosted and/or owned implies.
-  ///
-  /// Supplying a focus node is sometimes useful if an ancestor
-  /// to this widget wants to control when this widget has the focus.
-  /// The owner will be responsible for calling [FocusNode.dispose]
-  /// on the focus node when it is done with it, but this widget
-  /// will attach/detach and reparent the node when needed.
+  /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
-
-  /// The style to be applied to the chip.
-  ///
-  /// If [style] is an event driven [SwitchStyle]
-  /// by [DrivenButtonStyle.driven], then [SwitchStyle.evaluate]
-  /// is used for the following [SwitchEvent]s:
-  ///
-  ///  * [SwitchEvent.disabled].
-  ///  * [SwitchEvent.selected].
-  ///  * [SwitchEvent.hovered].
-  ///  * [SwitchEvent.focused].
-  ///  * [SwitchEvent.pressed].
-  final SwitchStyle? style;
 
   /// Used by widgets that expose their internal event
   /// for the sake of extensions that add support for additional events.
   final SwitchEventController? eventsController;
 
   /// The curve to apply when animating the parameters of this widget.
-  final Curve curve;
+  final Curve? curve;
 
   /// The duration over which to animate the parameters of this widget.
-  final Duration duration;
+  final Duration? duration;
 
-  static const defaultDuration = Duration(milliseconds: 200);
-
-  static const defaultCurve = Curves.linear;
-
-  static SwitchStyle defaultStyleOf(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final color =
-        isDark ? theme.colorScheme.inversePrimary : theme.colorScheme.primary;
-    return SwitchStyle.when(
-      enabled: SwitchStyle(
-        size: const Size(40, 14),
-        padding: -3,
-        trackColor: theme.unselectedWidgetColor,
-        trackOpacity: .5,
-        thumbColor: Colors.white,
-        thumbScale: 1.3,
-        thumbElevation: 2,
-      ),
-      selected: SwitchStyle(
-        trackColor: color,
-        thumbColor: color,
-      ),
-      hovered: const SwitchStyle(
-        overlayRadius: 20.0,
-      ),
-      pressed: const SwitchStyle(
-        overlayRadius: 0.0,
-      ),
-      disabled: const SwitchStyle(
-        trackAlpha: SwitchStyle.disabledBackgroundAlpha,
-        thumbAlpha: SwitchStyle.disabledBorderAlpha,
-      ),
-    );
-  }
+  // static SwitchStyle defaultStyleOf(BuildContext context) {
+  //   final theme = Theme.of(context);
+  //   final isDark = theme.brightness == Brightness.dark;
+  //   final color =
+  //       isDark ? theme.colorScheme.inversePrimary : theme.colorScheme.primary;
+  //   return DrivenSwitchStyle.from(
+  //     SwitchStyle(
+  //       size: const Size(40, 14),
+  //       thumbInset: -3,
+  //       trackColor: theme.unselectedWidgetColor,
+  //       trackOpacity: .5,
+  //       thumbColor: Colors.white,
+  //       thumbScale: 1.3,
+  //       thumbElevation: 2,
+  //     ),
+  //     selectedStyle: SwitchStyle(
+  //       trackColor: color,
+  //       thumbColor: color,
+  //     ),
+  //     hoveredStyle: const SwitchStyle(
+  //       overlayRadius: 20.0,
+  //     ),
+  //     pressedStyle: const SwitchStyle(
+  //       overlayRadius: 0.0,
+  //     ),
+  //     disabledStyle: const SwitchStyle(
+  //       trackAlpha: SwitchStyle.disabledBackgroundAlpha,
+  //       thumbAlpha: SwitchStyle.disabledBorderAlpha,
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
+    final theme = SwitchTheme.of(context);
     return _SwitchRender(
-      label: label,
       tooltip: tooltip,
-      checked: checked,
+      selected: selected,
       onChanged: onChanged,
       indeterminate: indeterminate,
       disabled: disabled,
       autofocus: autofocus,
       focusNode: focusNode,
       eventsController: eventsController,
-      duration: duration,
-      curve: curve,
-      style: style ?? defaultStyleOf(context),
-      theme: Theme.of(context),
+      duration: duration ?? theme.duration,
+      curve: curve ?? theme.curve,
+      style: theme.style.merge(style),
+      fallback: theme.fallback,
     );
   }
 }
@@ -200,24 +175,22 @@ class Switch extends StatelessWidget {
 class _SwitchRender extends StatefulWidget {
   const _SwitchRender({
     Key? key,
-    this.label,
     this.tooltip,
-    this.checked = false,
+    this.selected = false,
     this.indeterminate = false,
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
     this.onChanged,
     this.eventsController,
-    this.duration = Switch.defaultDuration,
-    this.curve = Switch.defaultCurve,
+    required this.duration,
+    required this.curve,
     required this.style,
-    required this.theme,
+    required this.fallback,
   }) : super(key: key);
 
-  final Widget? label;
   final String? tooltip;
-  final bool checked;
+  final bool selected;
   final bool indeterminate;
   final bool disabled;
   final bool autofocus;
@@ -227,7 +200,7 @@ class _SwitchRender extends StatefulWidget {
   final Curve curve;
   final Duration duration;
   final SwitchStyle style;
-  final ThemeData theme;
+  final SwitchStyle fallback;
 
   bool get enabled => !disabled;
 
@@ -244,31 +217,32 @@ class _SwitchRender extends StatefulWidget {
 class _SwitchRenderState extends State<_SwitchRender>
     with WidgetEventMixin<_SwitchRender> {
   SwitchStyle style = const SwitchStyle();
+  SwitchStyle fallback = const SwitchStyle();
 
   @protected
   void setStyle() {
-    final raw = widget.style;
-    final resolved = SwitchStyle.evaluate(raw, widgetEvents.value);
-    style = SwitchStyle.from(resolved);
+    final rawStyle = widget.style;
+    final resStyle = DrivenSwitchStyle.evaluate(rawStyle, widgetEvents.value);
+    style = SwitchStyle.from(resStyle);
+
+    final rawFallback = widget.fallback;
+    final resFallback =
+        DrivenSwitchStyle.evaluate(rawFallback, widgetEvents.value);
+    fallback = SwitchStyle.from(resFallback);
+    setState(() {});
   }
 
-  Color? get trackColor {
-    Color? color = style.trackColor;
-    if (color != null) {
-      color = Colors.colorWithOpacity(color, style.trackOpacity);
-      color = Colors.colorWithAlpha(color, style.trackAlpha);
-    }
-    return color;
-  }
+  Color? get trackColor => Colors.withTransparency(
+        style.trackColor ?? fallback.trackColor,
+        opacity: style.trackOpacity,
+        alpha: style.trackAlpha,
+      );
 
-  Color? get thumbColor {
-    Color? color = style.thumbColor;
-    if (color != null) {
-      color = Colors.colorWithOpacity(color, style.thumbOpacity);
-      color = Colors.colorWithAlpha(color, style.thumbAlpha);
-    }
-    return color;
-  }
+  Color? get thumbColor => Colors.withTransparency(
+        style.thumbColor ?? fallback.thumbColor,
+        opacity: style.thumbOpacity,
+        alpha: style.thumbAlpha,
+      );
 
   ShapeBorder get trackShape {
     return style.trackShape ?? const StadiumBorder();
@@ -280,7 +254,7 @@ class _SwitchRenderState extends State<_SwitchRender>
 
   void onTap() {
     widgetEvents.toggle(SwitchEvent.pressed, false);
-    widget.onChanged?.call(!widget.checked);
+    widget.onChanged?.call(!widget.selected);
   }
 
   void onTapCancel() {
@@ -303,7 +277,7 @@ class _SwitchRenderState extends State<_SwitchRender>
   void initState() {
     initWidgetEvents(widget.eventsController);
     widgetEvents.toggle(SwitchEvent.indeterminate, widget.indeterminate);
-    widgetEvents.toggle(SwitchEvent.selected, widget.checked);
+    widgetEvents.toggle(SwitchEvent.selected, widget.selected);
     widgetEvents.toggle(SwitchEvent.disabled, widget.disabled);
     setStyle();
     super.initState();
@@ -314,7 +288,7 @@ class _SwitchRenderState extends State<_SwitchRender>
     if (mounted) {
       updateWidgetEvents(oldWidget.eventsController, widget.eventsController);
       widgetEvents.toggle(SwitchEvent.indeterminate, widget.indeterminate);
-      widgetEvents.toggle(SwitchEvent.selected, widget.checked);
+      widgetEvents.toggle(SwitchEvent.selected, widget.selected);
       widgetEvents.toggle(SwitchEvent.disabled, widget.disabled);
       setStyle();
       super.didUpdateWidget(oldWidget);
@@ -331,10 +305,10 @@ class _SwitchRenderState extends State<_SwitchRender>
 
   @override
   Widget build(BuildContext context) {
-    final checkmark = AnimatedSwitchmark(
+    Widget result = AnimatedSwitchmark(
       duration: widget.duration,
       curve: widget.curve,
-      padding: style.padding,
+      padding: style.thumbInset,
       trackShape: trackShape,
       trackColor: trackColor,
       trackHeight: style.trackHeight,
@@ -347,29 +321,34 @@ class _SwitchRenderState extends State<_SwitchRender>
       overlayOpacity: style.overlayOpacity,
       overlayRadius: style.overlayRadius,
       size: style.size,
-      value: widget.indeterminate ? null : widget.checked,
+      value: widget.indeterminate ? null : widget.selected,
     );
-
-    if (widget.label != null) {
-      return Button(
-        onPressed: onTap,
-        style: style.buttonStyle,
-        disabled: widget.disabled,
-        leading: checkmark,
-        child: widget.label!,
+    if (style.padding != null) {
+      result = Padding(
+        padding: style.padding!,
+        child: result,
       );
     }
 
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (event) => onHover(true),
-      onExit: (event) => onHover(false),
-      child: GestureDetector(
+    if (widget.hasCallback) {
+      result = Anchor(
+        shape: BoxShape.circle,
+        overlayDisabled: true,
         onTap: onTap,
         onTapDown: onTapDown,
         onTapCancel: onTapCancel,
-        child: checkmark,
-      ),
-    );
+        onHover: onHover,
+        child: result,
+      );
+    }
+
+    if (style.margin != null) {
+      result = Padding(
+        padding: style.margin!,
+        child: result,
+      );
+    }
+
+    return result;
   }
 }

@@ -31,7 +31,7 @@ abstract class SwitchEvent extends WidgetEvent {
   /// The state when the user is actively pressing down on the given widget.
   static const pressed = WidgetEvent.pressed;
 
-  /// Checker for whether events considers [CheckboxEvent.selected] to be active.
+  /// Checker for whether events considers [CheckboxEvent.selectedStyle] to be active.
   static bool isSelected(Set<WidgetEvent> events) {
     return events.contains(selected);
   }

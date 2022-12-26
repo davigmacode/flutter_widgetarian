@@ -1,6 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart' show Theme, ThemeData;
-
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/utils.dart';
 import 'package:widgetarian/feedback.dart';
@@ -119,30 +117,6 @@ class Checkbox extends StatelessWidget {
   /// The duration over which to animate the parameters of this widget.
   final Duration? duration;
 
-  static CheckboxStyle defaultStyleOf(BuildContext context) {
-    final theme = Theme.of(context);
-    final color = theme.brightness.isDark
-        ? theme.colorScheme.inversePrimary
-        : theme.colorScheme.primary;
-    return DrivenCheckboxStyle.from(
-      CheckboxStyle.defaults,
-      selectedStyle: CheckboxStyle(
-        backgroundColor: color,
-        borderStyle: BorderStyle.none,
-      ),
-      indeterminateStyle: CheckboxStyle(
-        backgroundColor: color,
-        borderStyle: BorderStyle.none,
-      ),
-      hoveredStyle: const CheckboxStyle(overlayRadius: 20.0),
-      pressedStyle: const CheckboxStyle(overlayRadius: 0.0),
-      disabledStyle: const CheckboxStyle(
-        backgroundAlpha: CheckboxStyle.disabledBackgroundAlpha,
-        borderAlpha: CheckboxStyle.disabledBorderAlpha,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final checkboxTheme = CheckboxTheme.of(context);
@@ -194,8 +168,6 @@ class _CheckboxRender extends StatefulWidget {
   final CheckboxStyle fallback;
 
   bool get enabled => !disabled;
-
-  bool get canTap => enabled && hasCallback;
 
   bool get hasCallback {
     return onChanged != null;
@@ -252,7 +224,7 @@ class _CheckboxRenderState extends State<_CheckboxRender>
   }
 
   ShapeBorder get border {
-    return style.borderShape == BoxShape.rectangle
+    return style.shape == BoxShape.rectangle
         ? RoundedRectangleBorder(
             borderRadius: style.borderRadius!,
             side: borderSide,
@@ -318,7 +290,7 @@ class _CheckboxRenderState extends State<_CheckboxRender>
       curve: widget.curve,
       color: checkmarkColor,
       weight: style.checkmarkWeight,
-      size: style.checkmarkSize,
+      size: style.size,
       fill: backgroundColor,
       shape: border,
       value: widget.indeterminate ? null : widget.selected,
@@ -331,18 +303,21 @@ class _CheckboxRenderState extends State<_CheckboxRender>
       );
     }
 
-    result = Anchor(
-      shape: BoxShape.circle,
-      overlayColor: style.overlayColor,
-      overlayOpacity: style.overlayOpacity,
-      overlayDisabled: style.overlayDisabled,
-      radius: style.overlayRadius,
-      onTap: onTap,
-      onTapDown: onTapDown,
-      onTapCancel: onTapCancel,
-      onHover: onHover,
-      child: result,
-    );
+    if (widget.hasCallback) {
+      result = Anchor(
+        disabled: widget.disabled,
+        shape: BoxShape.circle,
+        overlayColor: style.overlayColor,
+        overlayOpacity: style.overlayOpacity,
+        overlayDisabled: style.overlayDisabled,
+        radius: style.overlayRadius,
+        onTap: onTap,
+        onTapDown: onTapDown,
+        onTapCancel: onTapCancel,
+        onHover: onHover,
+        child: result,
+      );
+    }
 
     if (style.margin != null) {
       result = Padding(

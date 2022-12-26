@@ -1,136 +1,33 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/button.dart';
 import 'package:widgetarian/event.dart';
 import 'event.dart';
 
-/// Default radio's style.
-class RadioStyle {
-  const RadioStyle({
-    this.size,
-    this.padding,
-    this.fillColor,
-    this.fillOpacity,
-    this.fillAlpha,
-    this.borderShape,
-    this.borderColor,
-    this.borderOpacity,
-    this.borderAlpha,
-    this.borderWidth,
-    this.borderRadius,
-    this.borderStyle,
-    this.thumbColor,
-    this.thumbOpacity,
-    this.thumbAlpha,
-    this.overlayColor,
-    this.overlayRadius,
-    this.buttonStyle,
-  });
-
-  /// Create a checkbox's style from another style
-  RadioStyle.from(RadioStyle? other)
-      : size = other?.size,
-        padding = other?.padding,
-        fillColor = other?.fillColor,
-        fillOpacity = other?.fillOpacity,
-        fillAlpha = other?.fillAlpha,
-        borderShape = other?.borderShape,
-        borderColor = other?.borderColor,
-        borderOpacity = other?.borderOpacity,
-        borderAlpha = other?.borderAlpha,
-        borderWidth = other?.borderWidth,
-        borderRadius = other?.borderRadius,
-        borderStyle = other?.borderStyle,
-        thumbColor = other?.thumbColor,
-        thumbOpacity = other?.thumbOpacity,
-        thumbAlpha = other?.thumbAlpha,
-        overlayColor = other?.overlayColor,
-        overlayRadius = other?.overlayRadius,
-        buttonStyle = other?.buttonStyle;
-
-  /// Create an event driven checkbox's style using [callback].
-  factory RadioStyle.driven(
-    DrivenPropertyResolver<RadioStyle?> callback,
-  ) {
-    return _RadioStyle(callback);
-  }
-
-  /// Create a checkbox's style when some events occurs.
-  ///
-  /// The [enabled] is base style to be applied to the checkbox.
-  /// if `null` will fallback with empty DrivenButtonStyle
-  ///
-  /// The [disabled] style to be merged with [enabled],
-  /// when events includes [RadioEvent.disabled].
-  ///
-  /// The [hovered] style to be merged with [enabled],
-  /// when events includes [RadioEvent.hovered].
-  ///
-  /// The [focused] style to be merged with [enabled],
-  /// when events includes [RadioEvent.focused].
-  ///
-  /// The [pressed] style to be merged with [enabled],
-  /// when events includes [RadioEvent.pressed].
-  factory RadioStyle.when({
-    RadioStyle? enabled,
-    RadioStyle? selected,
-    RadioStyle? focused,
-    RadioStyle? hovered,
-    RadioStyle? pressed,
-    RadioStyle? disabled,
-  }) {
-    return RadioStyle.driven((events) {
-      return (enabled ?? const RadioStyle())
-          .merge(
-              RadioEvent.isSelected(events) ? evaluate(selected, events) : null)
-          .merge(
-              RadioEvent.isFocused(events) ? evaluate(focused, events) : null)
-          .merge(
-              RadioEvent.isHovered(events) ? evaluate(hovered, events) : null)
-          .merge(
-              RadioEvent.isPressed(events) ? evaluate(pressed, events) : null)
-          .merge(RadioEvent.isDisabled(events)
-              ? evaluate(disabled, events)
-              : null);
-    });
-  }
-
-  /// Resolves the value for the given set of events
-  /// if `value` is an event driven [RadioStyle],
-  /// otherwise returns the value itself.
-  static RadioStyle? evaluate(
-    RadioStyle? value,
-    Set<WidgetEvent> events,
-  ) {
-    return value?.merge(DrivenProperty.evaluate<RadioStyle?>(value, events));
-  }
-
-  static const defaultSize = 18.0;
-  static const defaultStrokeWidth = 2.0;
-  static const defaultBorderWidth = 2.0;
-  static const defaultBorderStyle = BorderStyle.solid;
-  static const defaultBorderRadius = BorderRadius.zero;
-  static const defaultBorderShape = BoxShape.rectangle;
-  static const disabledStrokeAlpha = 0x61; // 38%
-  static const disabledBackgroundAlpha = 0x0c; // 38% * 12% = 5%
-  static const disabledBorderAlpha = 0x0c; // 38% * 12% = 5%
-
-  /// Defaults to [ChipStyle.defaultCheckmarkSize].
+/// The style to be applied to [Radio] widget
+@immutable
+class RadioStyle with Diagnosticable {
+  /// The size of the radio in logical pixels.
   final double? size;
 
-  final double? padding;
+  /// Type of the radio border shape.
+  final BoxShape? shape;
 
-  /// Color to be used for the checkbox's background.
-  final Color? fillColor;
+  /// Empty space to surround the outside clickable area.
+  final EdgeInsetsGeometry? margin;
 
-  /// Opacity to be apply to [fillColor].
-  final double? fillOpacity;
+  /// Empty space to increase the clickable area.
+  final EdgeInsetsGeometry? padding;
 
-  /// Alpha to be apply to [fillColor].
-  final int? fillAlpha;
+  /// Color to be used for the radio's background.
+  final Color? backgroundColor;
 
-  final BoxShape? borderShape;
+  /// Opacity to be apply to [backgroundColor].
+  final double? backgroundOpacity;
 
-  /// Color to be used for the checkbox's border.
+  /// Alpha to be apply to [backgroundColor].
+  final int? backgroundAlpha;
+
+  /// Color to be used for the radio's border.
   final Color? borderColor;
 
   /// Opacity to be apply to [borderColor].
@@ -139,97 +36,191 @@ class RadioStyle {
   /// Alpha to be apply to [borderColor].
   final int? borderAlpha;
 
-  /// The width of this side of the checkbox's border, in logical pixels.
+  /// The width of this side of the radio's border, in logical pixels.
   final double? borderWidth;
 
-  /// The radii for each corner of the checkbox's border.
+  /// The radii for each corner of the radio's border.
   final BorderRadiusGeometry? borderRadius;
 
-  /// The style of this side of the checkbox's border.
+  /// The style of this side of the radio's border.
   ///
   /// To omit a side, set [borderStyle] to [BorderStyle.none].
   /// This skips painting the border, but the border still has a [borderWidth].
   final BorderStyle? borderStyle;
 
-  /// The Color to be apply to the checkmark.
-  ///
-  /// If null fallback to [avatarForegroundColor] or [foregroundColor].
+  final double? thumbInset;
+
+  /// The Color to be apply to the radio's thumb.
   final Color? thumbColor;
 
-  /// Opacity to be apply to [fillColor].
+  /// Opacity to be apply to [thumbColor].
   final double? thumbOpacity;
 
-  /// Alpha to be apply to [fillColor].
+  /// Alpha to be apply to [thumbColor].
   final int? thumbAlpha;
 
+  /// The overlay color when pressed, hovered over, or focused.
   final Color? overlayColor;
 
+  /// The overlay opacity when pressed, hovered over, or focused.
+  final double? overlayOpacity;
+
+  /// Whether the overlay is disabled or not,
+  final bool? overlayDisabled;
+
+  /// The radius of the overlay.
   final double? overlayRadius;
 
-  final ButtonStyle? buttonStyle;
+  /// An [RadioStyle] with some reasonable default values.
+  static const defaults = DrivenRadioStyle(
+    size: 18.0,
+    shape: BoxShape.circle,
+    padding: EdgeInsets.all(9),
+    borderStyle: BorderStyle.solid,
+    borderRadius: BorderRadius.zero,
+    borderWidth: 2.0,
+    thumbOpacity: 0,
+    thumbInset: 1,
+    selectedStyle: RadioStyle(
+      thumbInset: .45,
+      thumbOpacity: 1,
+    ),
+    hoveredStyle: RadioStyle(overlayRadius: 20.0),
+    pressedStyle: RadioStyle(overlayRadius: 10.0),
+    disabledStyle: RadioStyle(
+      backgroundAlpha: RadioStyle.disabledBackgroundAlpha,
+      borderAlpha: RadioStyle.disabledBorderAlpha,
+    ),
+  );
+
+  static const disabledBackgroundAlpha = 0x0c; // 38% * 12% = 5%
+  static const disabledBorderAlpha = 0x0c; // 38% * 12% = 5%
+
+  /// Create a raw style of radio widget
+  const RadioStyle({
+    this.size,
+    this.shape,
+    this.margin,
+    this.padding,
+    this.backgroundColor,
+    this.backgroundOpacity,
+    this.backgroundAlpha,
+    this.borderColor,
+    this.borderOpacity,
+    this.borderAlpha,
+    this.borderWidth,
+    this.borderRadius,
+    this.borderStyle,
+    this.thumbInset,
+    this.thumbColor,
+    this.thumbOpacity,
+    this.thumbAlpha,
+    this.overlayColor,
+    this.overlayOpacity,
+    this.overlayDisabled,
+    this.overlayRadius,
+  });
+
+  /// Create a checkbox's style from another style
+  RadioStyle.from(RadioStyle? other)
+      : size = other?.size,
+        shape = other?.shape,
+        margin = other?.margin,
+        padding = other?.padding,
+        backgroundColor = other?.backgroundColor,
+        backgroundOpacity = other?.backgroundOpacity,
+        backgroundAlpha = other?.backgroundAlpha,
+        borderColor = other?.borderColor,
+        borderOpacity = other?.borderOpacity,
+        borderAlpha = other?.borderAlpha,
+        borderWidth = other?.borderWidth,
+        borderRadius = other?.borderRadius,
+        borderStyle = other?.borderStyle,
+        thumbInset = other?.thumbInset,
+        thumbColor = other?.thumbColor,
+        thumbOpacity = other?.thumbOpacity,
+        thumbAlpha = other?.thumbAlpha,
+        overlayColor = other?.overlayColor,
+        overlayOpacity = other?.overlayOpacity,
+        overlayDisabled = other?.overlayDisabled,
+        overlayRadius = other?.overlayRadius;
 
   /// Creates a copy of this [RadioStyle] but with
   /// the given fields replaced with the new values.
   RadioStyle copyWith({
     double? size,
-    double? padding,
-    Color? fillColor,
-    double? fillOpacity,
-    int? fillAlpha,
-    BoxShape? borderShape,
+    BoxShape? shape,
+    EdgeInsetsGeometry? margin,
+    EdgeInsetsGeometry? padding,
+    Color? backgroundColor,
+    double? backgroundOpacity,
+    int? backgroundAlpha,
     Color? borderColor,
     double? borderOpacity,
     int? borderAlpha,
     double? borderWidth,
     BorderRadiusGeometry? borderRadius,
     BorderStyle? borderStyle,
+    double? thumbInset,
     Color? thumbColor,
     double? thumbOpacity,
     int? thumbAlpha,
     Color? overlayColor,
+    double? overlayOpacity,
+    bool? overlayDisabled,
     double? overlayRadius,
-    ButtonStyle? buttonStyle,
+    bool? mergeResolved,
     RadioStyle? selectedStyle,
     RadioStyle? focusedStyle,
     RadioStyle? hoveredStyle,
     RadioStyle? pressedStyle,
     RadioStyle? disabledStyle,
   }) {
-    final hasEvent = selectedStyle != null ||
-        focusedStyle != null ||
-        hoveredStyle != null ||
-        pressedStyle != null ||
-        disabledStyle != null;
     final style = RadioStyle(
       size: size ?? this.size,
+      shape: shape ?? this.shape,
+      margin: margin ?? this.margin,
       padding: padding ?? this.padding,
-      fillColor: fillColor ?? this.fillColor,
-      fillOpacity: fillOpacity ?? this.fillOpacity,
-      fillAlpha: fillAlpha ?? this.fillAlpha,
-      borderShape: borderShape ?? this.borderShape,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      backgroundOpacity: backgroundOpacity ?? this.backgroundOpacity,
+      backgroundAlpha: backgroundAlpha ?? this.backgroundAlpha,
       borderColor: borderColor ?? this.borderColor,
       borderOpacity: borderOpacity ?? this.borderOpacity,
       borderAlpha: borderAlpha ?? this.borderAlpha,
       borderWidth: borderWidth ?? this.borderWidth,
       borderRadius: borderRadius ?? this.borderRadius,
       borderStyle: borderStyle ?? this.borderStyle,
+      thumbInset: thumbInset ?? this.thumbInset,
       thumbColor: thumbColor ?? this.thumbColor,
       thumbOpacity: thumbOpacity ?? this.thumbOpacity,
       thumbAlpha: thumbAlpha ?? this.thumbAlpha,
       overlayColor: overlayColor ?? this.overlayColor,
+      overlayOpacity: overlayOpacity ?? this.overlayOpacity,
+      overlayDisabled: overlayDisabled ?? this.overlayDisabled,
       overlayRadius: overlayRadius ?? this.overlayRadius,
-      buttonStyle: buttonStyle ?? this.buttonStyle,
     );
-    return hasEvent
-        ? RadioStyle.when(
-            enabled: style,
-            selected: selectedStyle,
-            focused: focusedStyle,
-            hovered: hoveredStyle,
-            pressed: pressedStyle,
-            disabled: disabledStyle,
-          )
-        : style;
+
+    final hasDrivenStyle = [
+      mergeResolved,
+      selectedStyle,
+      focusedStyle,
+      hoveredStyle,
+      pressedStyle,
+      disabledStyle,
+    ].any((el) => el != null);
+
+    if (hasDrivenStyle) {
+      return DrivenRadioStyle.from(
+        style,
+        selectedStyle: selectedStyle,
+        focusedStyle: focusedStyle,
+        hoveredStyle: hoveredStyle,
+        pressedStyle: pressedStyle,
+        disabledStyle: disabledStyle,
+        mergeResolved: mergeResolved,
+      );
+    }
+    return style;
   }
 
   /// Creates a copy of this [RadioStyle] but with
@@ -238,44 +229,229 @@ class RadioStyle {
     // if null return current object
     if (other == null) return this;
 
-    return copyWith(
+    var style = copyWith(
       size: other.size,
+      shape: other.shape,
+      margin: other.margin,
       padding: other.padding,
-      fillColor: other.fillColor,
-      fillOpacity: other.fillOpacity,
-      fillAlpha: other.fillAlpha,
-      borderShape: other.borderShape,
+      backgroundColor: other.backgroundColor,
+      backgroundOpacity: other.backgroundOpacity,
+      backgroundAlpha: other.backgroundAlpha,
       borderColor: other.borderColor,
       borderOpacity: other.borderOpacity,
       borderAlpha: other.borderAlpha,
       borderWidth: other.borderWidth,
       borderRadius: other.borderRadius,
       borderStyle: other.borderStyle,
+      thumbInset: other.thumbInset,
       thumbColor: other.thumbColor,
       thumbOpacity: other.thumbOpacity,
       thumbAlpha: other.thumbAlpha,
       overlayColor: other.overlayColor,
+      overlayOpacity: other.overlayOpacity,
+      overlayDisabled: other.overlayDisabled,
       overlayRadius: other.overlayRadius,
-      buttonStyle: other.buttonStyle,
-      selectedStyle:
-          other is _RadioStyle ? evaluate(other, {RadioEvent.selected}) : null,
-      focusedStyle:
-          other is _RadioStyle ? evaluate(other, {RadioEvent.focused}) : null,
-      hoveredStyle:
-          other is _RadioStyle ? evaluate(other, {RadioEvent.hovered}) : null,
-      pressedStyle:
-          other is _RadioStyle ? evaluate(other, {RadioEvent.pressed}) : null,
-      disabledStyle:
-          other is _RadioStyle ? evaluate(other, {RadioEvent.disabled}) : null,
     );
+
+    if (other is DrivenRadioStyle) {
+      style = style.copyWith(
+        selectedStyle: other.selectedStyle,
+        focusedStyle: other.focusedStyle,
+        hoveredStyle: other.hoveredStyle,
+        pressedStyle: other.pressedStyle,
+        disabledStyle: other.disabledStyle,
+        mergeResolved: other.mergeResolved,
+      );
+    }
+
+    return style;
   }
 }
 
-class _RadioStyle extends RadioStyle implements DrivenProperty<RadioStyle?> {
-  _RadioStyle(this._resolver) : super.from(_resolver({}));
+/// Create a [RadioStyle] that handle the widget events
+class DrivenRadioStyle extends RadioStyle
+    implements DrivenProperty<RadioStyle?> {
+  /// Whether the resolved style is merged to
+  /// the previous resolved style or not
+  final bool? mergeResolved;
 
-  final DrivenPropertyResolver<RadioStyle?> _resolver;
+  /// The style to be resolved when
+  /// events includes [RadioEvent.selected].
+  final RadioStyle? selectedStyle;
+
+  /// The style to be resolved when
+  /// events includes [RadioEvent.focused].
+  final RadioStyle? focusedStyle;
+
+  /// The style to be resolved when
+  /// events includes [RadioEvent.hovered].
+  final RadioStyle? hoveredStyle;
+
+  /// The style to be resolved when
+  /// events includes [RadioEvent.pressed].
+  final RadioStyle? pressedStyle;
+
+  /// The style to be resolved when
+  /// events includes [RadioEvent.disabled].
+  final RadioStyle? disabledStyle;
+
+  /// Map of driven style, order matters
+  Map<WidgetEvent, RadioStyle?> get driven => {
+        WidgetEvent.selected: selectedStyle,
+        WidgetEvent.focused: focusedStyle,
+        WidgetEvent.hovered: hoveredStyle,
+        WidgetEvent.pressed: pressedStyle,
+        WidgetEvent.disabled: disabledStyle,
+      };
+
+  const DrivenRadioStyle({
+    super.size,
+    super.shape,
+    super.margin,
+    super.padding,
+    super.backgroundColor,
+    super.backgroundOpacity,
+    super.backgroundAlpha,
+    super.borderColor,
+    super.borderOpacity,
+    super.borderAlpha,
+    super.borderWidth,
+    super.borderRadius,
+    super.borderStyle,
+    super.thumbInset,
+    super.thumbColor,
+    super.thumbOpacity,
+    super.thumbAlpha,
+    super.overlayColor,
+    super.overlayOpacity,
+    super.overlayDisabled,
+    super.overlayRadius,
+    this.selectedStyle,
+    this.focusedStyle,
+    this.hoveredStyle,
+    this.pressedStyle,
+    this.disabledStyle,
+    this.mergeResolved,
+  });
+
+  /// Create a [DrivenRadioStyle] with value
+  /// from another [CheckboxStyle].
+  DrivenRadioStyle.from(
+    RadioStyle? enabledStyle, {
+    this.selectedStyle,
+    this.focusedStyle,
+    this.hoveredStyle,
+    this.pressedStyle,
+    this.disabledStyle,
+    this.mergeResolved,
+  }) : super.from(enabledStyle);
+
+  /// Create a [DrivenRadioStyle] from a resolver callback
+  DrivenRadioStyle.resolver(
+    DrivenPropertyResolver<RadioStyle?> resolver, {
+    this.mergeResolved = false,
+  })  : selectedStyle = resolver({WidgetEvent.selected}),
+        focusedStyle = resolver({WidgetEvent.focused}),
+        hoveredStyle = resolver({WidgetEvent.hovered}),
+        pressedStyle = resolver({WidgetEvent.pressed}),
+        disabledStyle = resolver({WidgetEvent.disabled}),
+        super.from(resolver({}));
+
+  /// Resolves the value for the given set of events
+  /// if `value` is an event driven [RadioStyle],
+  /// otherwise returns the value itself.
+  static RadioStyle? evaluate(
+    RadioStyle? value,
+    Set<WidgetEvent> events,
+  ) {
+    return DrivenProperty.evaluate<RadioStyle?>(value, events);
+  }
 
   @override
-  RadioStyle? resolve(Set<WidgetEvent> events) => _resolver(events);
+  RadioStyle resolve(Set<WidgetEvent> events) {
+    RadioStyle style = this;
+    for (var e in driven.entries) {
+      if (events.contains(e.key)) {
+        final evaluated = evaluate(e.value, events);
+        style = mergeResolved != false
+            ? style.merge(evaluated)
+            : RadioStyle.from(evaluated);
+      }
+    }
+    return style;
+  }
+
+  /// Creates a copy of this [DrivenRadioStyle] but with
+  /// the given fields replaced with the new values.
+  @override
+  DrivenRadioStyle copyWith({
+    double? size,
+    BoxShape? shape,
+    EdgeInsetsGeometry? margin,
+    EdgeInsetsGeometry? padding,
+    Color? backgroundColor,
+    double? backgroundOpacity,
+    int? backgroundAlpha,
+    Color? borderColor,
+    double? borderOpacity,
+    int? borderAlpha,
+    double? borderWidth,
+    BorderRadiusGeometry? borderRadius,
+    BorderStyle? borderStyle,
+    double? thumbInset,
+    Color? thumbColor,
+    double? thumbOpacity,
+    int? thumbAlpha,
+    Color? overlayColor,
+    double? overlayOpacity,
+    bool? overlayDisabled,
+    double? overlayRadius,
+    bool? mergeResolved,
+    RadioStyle? selectedStyle,
+    RadioStyle? focusedStyle,
+    RadioStyle? hoveredStyle,
+    RadioStyle? pressedStyle,
+    RadioStyle? disabledStyle,
+  }) {
+    return DrivenRadioStyle(
+      size: size ?? this.size,
+      shape: shape ?? this.shape,
+      margin: margin ?? this.margin,
+      padding: padding ?? this.padding,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      backgroundOpacity: backgroundOpacity ?? this.backgroundOpacity,
+      backgroundAlpha: backgroundAlpha ?? this.backgroundAlpha,
+      borderColor: borderColor ?? this.borderColor,
+      borderOpacity: borderOpacity ?? this.borderOpacity,
+      borderAlpha: borderAlpha ?? this.borderAlpha,
+      borderWidth: borderWidth ?? this.borderWidth,
+      borderRadius: borderRadius ?? this.borderRadius,
+      borderStyle: borderStyle ?? this.borderStyle,
+      thumbInset: thumbInset ?? this.thumbInset,
+      thumbColor: thumbColor ?? this.thumbColor,
+      thumbOpacity: thumbOpacity ?? this.thumbOpacity,
+      thumbAlpha: thumbAlpha ?? this.thumbAlpha,
+      overlayColor: overlayColor ?? this.overlayColor,
+      overlayOpacity: overlayOpacity ?? this.overlayOpacity,
+      overlayDisabled: overlayDisabled ?? this.overlayDisabled,
+      overlayRadius: overlayRadius ?? this.overlayRadius,
+      mergeResolved: mergeResolved ?? this.mergeResolved,
+      selectedStyle: this.selectedStyle?.merge(selectedStyle) ?? selectedStyle,
+      focusedStyle: this.focusedStyle?.merge(focusedStyle) ?? focusedStyle,
+      hoveredStyle: this.hoveredStyle?.merge(hoveredStyle) ?? hoveredStyle,
+      pressedStyle: this.pressedStyle?.merge(pressedStyle) ?? pressedStyle,
+      disabledStyle: this.disabledStyle?.merge(disabledStyle) ?? disabledStyle,
+    );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('mergeResolved', mergeResolved));
+    properties.add(DiagnosticsProperty('selectedStyle', selectedStyle));
+    properties.add(DiagnosticsProperty('focusedStyle', focusedStyle));
+    properties.add(DiagnosticsProperty('hoveredStyle', hoveredStyle));
+    properties.add(DiagnosticsProperty('pressedStyle', pressedStyle));
+    properties.add(DiagnosticsProperty('disabledStyle', disabledStyle));
+  }
 }

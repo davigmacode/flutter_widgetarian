@@ -8,6 +8,12 @@ import 'event.dart';
 /// The style to be applied to checkbox widget
 @immutable
 class CheckboxStyle with Diagnosticable {
+  /// The size of the checkmark in logical pixels.
+  final double? size;
+
+  /// Type of the checkbox shape.
+  final BoxShape? shape;
+
   /// Empty space to surround the outside clickable area.
   final EdgeInsetsGeometry? margin;
 
@@ -22,9 +28,6 @@ class CheckboxStyle with Diagnosticable {
 
   /// Alpha to be apply to [backgroundColor].
   final int? backgroundAlpha;
-
-  /// Type of the checkbox border shape.
-  final BoxShape? borderShape;
 
   /// Color to be used for the checkbox's border.
   final Color? borderColor;
@@ -46,9 +49,6 @@ class CheckboxStyle with Diagnosticable {
   /// To omit a side, set [borderStyle] to [BorderStyle.none].
   /// This skips painting the border, but the border still has a [borderWidth].
   final BorderStyle? borderStyle;
-
-  /// The size of the checkmark in logical pixels.
-  final double? checkmarkSize;
 
   /// The space between the border or the edge of background
   /// and the checkmark in logical pixels.
@@ -85,22 +85,19 @@ class CheckboxStyle with Diagnosticable {
   /// If the checkbox doesn't have a label.
   final double? overlayRadius;
 
+  /// An [CheckboxStyle] with some reasonable default values.
   static const defaults = DrivenCheckboxStyle(
     padding: EdgeInsets.all(9),
-    borderShape: BoxShape.rectangle,
+    shape: BoxShape.rectangle,
     borderRadius: BorderRadius.all(Radius.circular(2)),
     borderStyle: BorderStyle.solid,
     borderWidth: 2.0,
-    checkmarkSize: 18.0,
+    size: 18.0,
     checkmarkWeight: 2.0,
-    selectedStyle: CheckboxStyle(
-      borderStyle: BorderStyle.none,
-    ),
-    indeterminateStyle: CheckboxStyle(
-      borderStyle: BorderStyle.none,
-    ),
+    selectedStyle: CheckboxStyle(borderStyle: BorderStyle.none),
+    indeterminateStyle: CheckboxStyle(borderStyle: BorderStyle.none),
     hoveredStyle: CheckboxStyle(overlayRadius: 20.0),
-    pressedStyle: CheckboxStyle(overlayRadius: 0.0),
+    pressedStyle: CheckboxStyle(overlayRadius: 10.0),
     disabledStyle: CheckboxStyle(
       checkmarkAlpha: CheckboxStyle.disabledCheckmarkAlpha,
       backgroundAlpha: CheckboxStyle.disabledBackgroundAlpha,
@@ -114,19 +111,19 @@ class CheckboxStyle with Diagnosticable {
 
   /// Create a raw style of checkbox widget
   const CheckboxStyle({
+    this.size,
+    this.shape,
     this.margin,
     this.padding,
     this.backgroundColor,
     this.backgroundOpacity,
     this.backgroundAlpha,
-    this.borderShape,
     this.borderColor,
     this.borderOpacity,
     this.borderAlpha,
     this.borderWidth,
     this.borderRadius,
     this.borderStyle,
-    this.checkmarkSize,
     this.checkmarkInset,
     this.checkmarkColor,
     this.checkmarkOpacity,
@@ -141,19 +138,19 @@ class CheckboxStyle with Diagnosticable {
 
   /// Create a checkbox's style from another style
   CheckboxStyle.from(CheckboxStyle? other)
-      : margin = other?.margin,
+      : size = other?.size,
+        shape = other?.shape,
+        margin = other?.margin,
         padding = other?.padding,
         backgroundColor = other?.backgroundColor,
         backgroundOpacity = other?.backgroundOpacity,
         backgroundAlpha = other?.backgroundAlpha,
-        borderShape = other?.borderShape,
         borderColor = other?.borderColor,
         borderOpacity = other?.borderOpacity,
         borderAlpha = other?.borderAlpha,
         borderWidth = other?.borderWidth,
         borderRadius = other?.borderRadius,
         borderStyle = other?.borderStyle,
-        checkmarkSize = other?.checkmarkSize,
         checkmarkInset = other?.checkmarkInset,
         checkmarkColor = other?.checkmarkColor,
         checkmarkOpacity = other?.checkmarkOpacity,
@@ -168,19 +165,19 @@ class CheckboxStyle with Diagnosticable {
   /// Creates a copy of this [CheckboxStyle] but with
   /// the given fields replaced with the new values.
   CheckboxStyle copyWith({
+    double? size,
+    BoxShape? shape,
     EdgeInsetsGeometry? margin,
     EdgeInsetsGeometry? padding,
     Color? backgroundColor,
     double? backgroundOpacity,
     int? backgroundAlpha,
-    BoxShape? borderShape,
     Color? borderColor,
     double? borderOpacity,
     int? borderAlpha,
     double? borderWidth,
     BorderRadius? borderRadius,
     BorderStyle? borderStyle,
-    double? checkmarkSize,
     double? checkmarkInset,
     Color? checkmarkColor,
     double? checkmarkOpacity,
@@ -205,14 +202,14 @@ class CheckboxStyle with Diagnosticable {
       backgroundColor: backgroundColor ?? this.backgroundColor,
       backgroundOpacity: backgroundOpacity ?? this.backgroundOpacity,
       backgroundAlpha: backgroundAlpha ?? this.backgroundAlpha,
-      borderShape: borderShape ?? this.borderShape,
+      shape: shape ?? this.shape,
       borderColor: borderColor ?? this.borderColor,
       borderOpacity: borderOpacity ?? this.borderOpacity,
       borderAlpha: borderAlpha ?? this.borderAlpha,
       borderWidth: borderWidth ?? this.borderWidth,
       borderRadius: borderRadius ?? this.borderRadius,
       borderStyle: borderStyle ?? this.borderStyle,
-      checkmarkSize: checkmarkSize ?? this.checkmarkSize,
+      size: size ?? this.size,
       checkmarkInset: checkmarkInset ?? this.checkmarkInset,
       checkmarkColor: checkmarkColor ?? this.checkmarkColor,
       checkmarkOpacity: checkmarkOpacity ?? this.checkmarkOpacity,
@@ -257,19 +254,19 @@ class CheckboxStyle with Diagnosticable {
     if (other == null) return this;
 
     var style = copyWith(
+      size: other.size,
+      shape: other.shape,
       margin: other.margin,
       padding: other.padding,
       backgroundColor: other.backgroundColor,
       backgroundOpacity: other.backgroundOpacity,
       backgroundAlpha: other.backgroundAlpha,
-      borderShape: other.borderShape,
       borderColor: other.borderColor,
       borderOpacity: other.borderOpacity,
       borderAlpha: other.borderAlpha,
       borderWidth: other.borderWidth,
       borderRadius: other.borderRadius,
       borderStyle: other.borderStyle,
-      checkmarkSize: other.checkmarkSize,
       checkmarkInset: other.checkmarkInset,
       checkmarkColor: other.checkmarkColor,
       checkmarkOpacity: other.checkmarkOpacity,
@@ -301,20 +298,20 @@ class CheckboxStyle with Diagnosticable {
   static CheckboxStyle? lerp(CheckboxStyle? a, CheckboxStyle? b, double t) {
     if (a == null && b == null) return null;
     return CheckboxStyle(
+      size: lerpDouble(a?.size, b?.size, t),
+      shape: lerpEnum(a?.shape, b?.shape, t),
       margin: EdgeInsetsGeometry.lerp(a?.margin, b?.margin, t),
       padding: EdgeInsetsGeometry.lerp(a?.padding, b?.padding, t),
       backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t),
       backgroundOpacity:
           lerpDouble(a?.backgroundOpacity, b?.backgroundOpacity, t),
       backgroundAlpha: lerpInt(a?.backgroundAlpha, b?.backgroundAlpha, t),
-      borderShape: lerpEnum(a?.borderShape, b?.borderShape, t),
       borderColor: Color.lerp(a?.borderColor, b?.borderColor, t),
       borderOpacity: lerpDouble(a?.borderOpacity, b?.borderOpacity, t),
       borderAlpha: lerpInt(a?.borderAlpha, b?.borderAlpha, t),
       borderWidth: lerpDouble(a?.borderWidth, b?.borderWidth, t),
       borderRadius: BorderRadius.lerp(a?.borderRadius, b?.borderRadius, t),
       borderStyle: lerpEnum(a?.borderStyle, b?.borderStyle, t),
-      checkmarkSize: lerpDouble(a?.checkmarkSize, b?.checkmarkSize, t),
       checkmarkInset: lerpDouble(a?.checkmarkInset, b?.checkmarkInset, t),
       checkmarkColor: Color.lerp(a?.checkmarkColor, b?.checkmarkColor, t),
       checkmarkWeight: lerpDouble(a?.checkmarkWeight, b?.checkmarkWeight, t),
@@ -327,19 +324,19 @@ class CheckboxStyle with Diagnosticable {
   }
 
   Map<String, dynamic> toMap() => {
+        'size': size,
+        'shape': shape,
         'margin': margin,
         'padding': padding,
         'backgroundColor': backgroundColor,
         'backgroundOpacity': backgroundOpacity,
         'backgroundAlpha': backgroundAlpha,
-        'borderShape': borderShape,
         'borderColor': borderColor,
         'borderOpacity': borderOpacity,
         'borderAlpha': borderAlpha,
         'borderWidth': borderWidth,
         'borderRadius': borderRadius,
         'borderStyle': borderStyle,
-        'checkmarkSize': checkmarkSize,
         'checkmarkInset': checkmarkInset,
         'checkmarkColor': checkmarkColor,
         'checkmarkOpacity': checkmarkOpacity,
@@ -413,19 +410,19 @@ class DrivenCheckboxStyle extends CheckboxStyle
 
   /// Create a raw of driven checkbox style
   const DrivenCheckboxStyle({
+    super.size,
+    super.shape,
     super.margin,
     super.padding,
     super.backgroundColor,
     super.backgroundOpacity,
     super.backgroundAlpha,
-    super.borderShape,
     super.borderColor,
     super.borderOpacity,
     super.borderAlpha,
     super.borderWidth,
     super.borderRadius,
     super.borderStyle,
-    super.checkmarkSize,
     super.checkmarkInset,
     super.checkmarkColor,
     super.checkmarkOpacity,
@@ -498,19 +495,19 @@ class DrivenCheckboxStyle extends CheckboxStyle
   /// the given fields replaced with the new values.
   @override
   DrivenCheckboxStyle copyWith({
+    double? size,
+    BoxShape? shape,
     EdgeInsetsGeometry? margin,
     EdgeInsetsGeometry? padding,
     Color? backgroundColor,
     double? backgroundOpacity,
     int? backgroundAlpha,
-    BoxShape? borderShape,
     Color? borderColor,
     double? borderOpacity,
     int? borderAlpha,
     double? borderWidth,
     BorderRadius? borderRadius,
     BorderStyle? borderStyle,
-    double? checkmarkSize,
     double? checkmarkInset,
     Color? checkmarkColor,
     double? checkmarkOpacity,
@@ -535,14 +532,14 @@ class DrivenCheckboxStyle extends CheckboxStyle
       backgroundColor: backgroundColor ?? this.backgroundColor,
       backgroundOpacity: backgroundOpacity ?? this.backgroundOpacity,
       backgroundAlpha: backgroundAlpha ?? this.backgroundAlpha,
-      borderShape: borderShape ?? this.borderShape,
+      shape: shape ?? this.shape,
       borderColor: borderColor ?? this.borderColor,
       borderOpacity: borderOpacity ?? this.borderOpacity,
       borderAlpha: borderAlpha ?? this.borderAlpha,
       borderWidth: borderWidth ?? this.borderWidth,
       borderRadius: borderRadius ?? this.borderRadius,
       borderStyle: borderStyle ?? this.borderStyle,
-      checkmarkSize: checkmarkSize ?? this.checkmarkSize,
+      size: size ?? this.size,
       checkmarkInset: checkmarkInset ?? this.checkmarkInset,
       checkmarkColor: checkmarkColor ?? this.checkmarkColor,
       checkmarkOpacity: checkmarkOpacity ?? this.checkmarkOpacity,
