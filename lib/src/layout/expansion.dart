@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
+import 'package:widgetarian/anchor.dart';
 import 'package:widgetarian/animation.dart';
-import 'tile.dart';
-import 'box.dart';
+import 'package:widgetarian/layout.dart';
 
 typedef ExpansionBuilder = Widget Function(
   BuildContext context,
@@ -88,12 +88,16 @@ class ExpansionConsumer extends StatelessWidget {
 
 //--------------------------------------------------------
 
+typedef ExpansionButtonStyle = AnchorStyle;
+
 class ExpansionButton extends StatelessWidget {
   const ExpansionButton({
     Key? key,
+    this.style,
     required this.child,
   }) : super(key: key);
 
+  final ExpansionButtonStyle? style;
   final Widget child;
 
   @override
@@ -101,7 +105,8 @@ class ExpansionButton extends StatelessWidget {
     return ExpansionConsumer(
       child: child,
       builder: (context, state, child) {
-        return GestureDetector(
+        return Anchor(
+          style: style,
           onTap: state.toggle,
           child: child,
         );
@@ -154,48 +159,67 @@ class ExpansionHeader extends StatelessWidget {
     this.subtitle,
     this.leading,
     this.trailing,
-    this.builder,
+    this.buttonStyle,
+    this.tileStyle,
   }) : super(key: key);
 
   final Widget title;
   final Widget? subtitle;
   final Widget? leading;
   final Widget? trailing;
-  final ExpansionBuilder? builder;
+  final ExpansionButtonStyle? buttonStyle;
+  final ListTileStyle? tileStyle;
 
   @override
   Widget build(BuildContext context) {
-    return ExpansionConsumer(builder: (context, state, child) {
-      final tile = ListTile(
+    return ExpansionButton(
+      style: buttonStyle,
+      child: ListTile(
         title: title,
         subtitle: subtitle,
         leading: leading,
         trailing: trailing,
-        onTap: state.toggle,
-      );
-      return builder?.call(context, state, tile) ?? tile;
-    });
+        style: tileStyle,
+      ),
+    );
   }
 }
 
 //--------------------------------------------------------
 
-class ExpansionScrollView extends StatelessWidget {
-  const ExpansionScrollView({
+class ExpansionView extends StatelessWidget {
+  const ExpansionView({
     Key? key,
-    required this.child,
-    required this.constraints,
+    this.minWidth,
+    this.maxWidth,
+    this.minHeight,
+    this.maxHeight,
+    this.constraints,
     this.padding,
+    required this.child,
   }) : super(key: key);
 
-  final Widget child;
-  final BoxConstraints constraints;
+  final double? minWidth;
+  final double? maxWidth;
+  final double? minHeight;
+  final double? maxHeight;
+  final BoxConstraints? constraints;
   final EdgeInsetsGeometry? padding;
+  final Widget child;
+
+  BoxConstraints get effectiveConstraints {
+    return (constraints ?? const BoxConstraints()).copyWith(
+      minWidth: minWidth,
+      maxWidth: maxWidth,
+      minHeight: minHeight,
+      maxHeight: maxHeight,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: constraints,
+      constraints: effectiveConstraints,
       child: SingleChildScrollView(
         padding: padding,
         child: child,
@@ -209,7 +233,7 @@ class ExpansionScrollView extends StatelessWidget {
 class Expansion extends StatelessWidget {
   const Expansion({
     Key? key,
-    this.value = false,
+    this.value = true,
     this.onChanged,
     this.duration = defaultDuration,
     this.curve = defaultCurve,
