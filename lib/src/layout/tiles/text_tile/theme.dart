@@ -1,11 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/utils.dart';
+import 'package:widgetarian/theme.dart';
 import 'style.dart';
 import 'tween.dart';
 
+/// A Widget that controls how descendant tile should look like.
+///
+/// Descendant widgets obtain the current [TextTileStyle] object using `TextTileTheme.of(context)`.
+/// Instances of [TextTileStyle] can be customized with [TextTileStyle.copyWith] or [TextTileStyle.merge].
 class TextTileTheme extends InheritedTheme {
-  /// The [TextTileStyle] to apply
+  /// The [TextTileStyle] to be applied to descendant [TextTile]s
   final TextTileStyle style;
 
   /// Creates a theme that controls
@@ -15,16 +19,6 @@ class TextTileTheme extends InheritedTheme {
     required this.style,
     required Widget child,
   }) : super(key: key, child: child);
-
-  /// A const-constructable [style] that provides fallback values.
-  ///
-  /// Returned from [of] when the given [BuildContext] doesn't have an enclosing default text style.
-  ///
-  /// This constructor creates a [TextTileTheme] with an invalid [child], which
-  /// means the constructed value cannot be incorporated into the tree.
-  const TextTileTheme.fallback({Key? key})
-      : style = TextTileStyle.defaults,
-        super(key: key, child: const NullWidget());
 
   /// Creates an [TextTileTheme] that controls the style of
   /// descendant widgets, and merges in the current [TextTileTheme], if any.
@@ -40,7 +34,7 @@ class TextTileTheme extends InheritedTheme {
         final parent = TextTileTheme.of(context);
         return TextTileTheme(
           key: key,
-          style: parent.style.merge(style),
+          style: parent.merge(style),
           child: child,
         );
       },
@@ -50,16 +44,19 @@ class TextTileTheme extends InheritedTheme {
   /// The [style] from the closest instance of
   /// this class that encloses the given context.
   ///
-  /// Defaults to [ThemeData.textTileTheme]
-  ///
   /// Typical usage is as follows:
   ///
   /// ```dart
-  /// TextTileStyle style = TextTileTheme.of(context).style;
+  /// TextTileStyle style = TextTileTheme.of(context);
   /// ```
-  static TextTileTheme of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<TextTileTheme>() ??
-        const TextTileTheme.fallback();
+  static TextTileStyle of(BuildContext context) {
+    final parentTheme =
+        context.dependOnInheritedWidgetOfExactType<TextTileTheme>();
+    if (parentTheme != null) return parentTheme.style;
+
+    final appTheme = Theme.of(context);
+    final globalTheme = appTheme.extension<TextTileStyle?>();
+    return TextTileStyle.defaults.merge(globalTheme);
   }
 
   @override
@@ -79,8 +76,9 @@ class TextTileTheme extends InheritedTheme {
   }
 }
 
+/// A widget that animates the [TextTileStyle] implicitly.
 class AnimatedTextTileTheme extends ImplicitlyAnimatedWidget {
-  /// The [TextTileStyle] to apply
+  /// The [TextTileStyle] to be applied to descendant [TextTile]s
   final TextTileStyle style;
 
   /// The widget below this widget in the tree.

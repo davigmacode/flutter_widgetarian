@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:widgetarian/utils.dart';
 import '../text_tile/style.dart';
 
+/// The style to be applied to [ListTile] widget
 @immutable
 class ListTileStyle with Diagnosticable {
   final EdgeInsetsGeometry? margin;
@@ -16,7 +17,7 @@ class ListTileStyle with Diagnosticable {
   final double? textSpacing;
   final EdgeInsetsGeometry? textMargin;
 
-  /// Default [ListTileStyle] constructor.
+  /// Create a raw [ListTileStyle]
   const ListTileStyle({
     this.margin,
     this.spacing,

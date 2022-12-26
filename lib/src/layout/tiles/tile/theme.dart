@@ -1,11 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/utils.dart';
+import 'package:widgetarian/theme.dart';
 import 'style.dart';
 import 'tween.dart';
 
+/// A Widget that controls how descendant tile should look like.
+///
+/// Descendant widgets obtain the current [TileStyle] object using `TileTheme.of(context)`.
+/// Instances of [TileStyle] can be customized with [TileStyle.copyWith] or [TileStyle.merge].
 class TileTheme extends InheritedTheme {
-  /// The [TileStyle] to apply
+  /// The [TileStyle] to be applied to descendant [Tile]s
   final TileStyle style;
 
   /// Creates a theme that controls
@@ -15,16 +19,6 @@ class TileTheme extends InheritedTheme {
     required this.style,
     required Widget child,
   }) : super(key: key, child: child);
-
-  /// A const-constructable [style] that provides fallback values.
-  ///
-  /// Returned from [of] when the given [BuildContext] doesn't have an enclosing default text style.
-  ///
-  /// This constructor creates a [TileTheme] with an invalid [child], which
-  /// means the constructed value cannot be incorporated into the tree.
-  const TileTheme.fallback({Key? key})
-      : style = TileStyle.defaults,
-        super(key: key, child: const NullWidget());
 
   /// Creates an [TileTheme] that controls the style of
   /// descendant widgets, and merges in the current [TileTheme], if any.
@@ -40,26 +34,28 @@ class TileTheme extends InheritedTheme {
         final parent = TileTheme.of(context);
         return TileTheme(
           key: key,
-          style: parent.style.merge(style),
+          style: parent.merge(style),
           child: child,
         );
       },
     );
   }
 
-  /// The [style] from the closest instance of
+  /// The [TileStyle] from the closest instance of
   /// this class that encloses the given context.
-  ///
-  /// Defaults to [ThemeData.tileTheme]
   ///
   /// Typical usage is as follows:
   ///
   /// ```dart
-  /// TileStyle style = TileTheme.of(context).style;
+  /// TileStyle style = TileTheme.of(context);
   /// ```
-  static TileTheme of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<TileTheme>() ??
-        const TileTheme.fallback();
+  static TileStyle of(BuildContext context) {
+    final parentTheme = context.dependOnInheritedWidgetOfExactType<TileTheme>();
+    if (parentTheme != null) return parentTheme.style;
+
+    final appTheme = Theme.of(context);
+    final globalTheme = appTheme.extension<TileStyle?>();
+    return TileStyle.defaults.merge(globalTheme);
   }
 
   @override
@@ -79,8 +75,9 @@ class TileTheme extends InheritedTheme {
   }
 }
 
+/// A widget that animates the [TileStyle] implicitly.
 class AnimatedTileTheme extends ImplicitlyAnimatedWidget {
-  /// The [TileStyle] to apply
+  /// The [TileStyle] to be applied to descendant [Tile]s
   final TileStyle style;
 
   /// The widget below this widget in the tree.

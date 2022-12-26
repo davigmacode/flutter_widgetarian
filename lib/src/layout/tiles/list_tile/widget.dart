@@ -54,7 +54,7 @@ class ListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themedStyle = ListTileTheme.of(context).style.merge(effectiveStyle);
+    final themedStyle = ListTileTheme.of(context).merge(effectiveStyle);
     Widget content = Tile(
       direction: Axis.horizontal,
       margin: themedStyle.margin,

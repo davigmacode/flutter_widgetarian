@@ -4,6 +4,7 @@ import 'package:widgetarian/utils.dart';
 
 enum TextTileAlign { left, center, right }
 
+/// The style to be applied to [TextTile] widget
 @immutable
 class TextTileStyle with Diagnosticable {
   final double? spacing;
@@ -23,7 +24,7 @@ class TextTileStyle with Diagnosticable {
     }
   }
 
-  /// Default [TextTileStyle] constructor.
+  /// Create a raw [TextTileStyle]
   const TextTileStyle({
     this.spacing,
     this.margin,

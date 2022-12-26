@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:widgetarian/utils.dart';
 
+/// The style to be applied to [Tile] widget
 @immutable
 class TileStyle with Diagnosticable {
   final Axis? direction;
@@ -13,7 +14,7 @@ class TileStyle with Diagnosticable {
   final bool? mainAxisExpanded;
   final bool? childExpanded;
 
-  /// Default [TileStyle] constructor.
+  /// Create a raw [TileStyle]
   const TileStyle({
     this.direction,
     this.margin,
@@ -25,7 +26,7 @@ class TileStyle with Diagnosticable {
     this.childExpanded,
   });
 
-  /// An [TileStyle] with some reasonable default values.
+  /// A [TileStyle] with some reasonable default values.
   static const defaults = TileStyle(
     direction: Axis.horizontal,
     margin: EdgeInsets.zero,

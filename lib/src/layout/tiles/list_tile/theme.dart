@@ -1,11 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/utils.dart';
+import 'package:widgetarian/theme.dart';
 import 'style.dart';
 import 'tween.dart';
 
+/// A Widget that controls how descendant tile should look like.
+///
+/// Descendant widgets obtain the current [ListTileStyle] object using `ListTileTheme.of(context)`.
+/// Instances of [ListTileStyle] can be customized with [ListTileStyle.copyWith] or [ListTileStyle.merge].
 class ListTileTheme extends InheritedTheme {
-  /// The [ListTileStyle] to apply
+  /// The [ListTileStyle] to be applied to descendant [ListTile]s
   final ListTileStyle style;
 
   /// Creates a theme that controls
@@ -16,20 +20,10 @@ class ListTileTheme extends InheritedTheme {
     required Widget child,
   }) : super(key: key, child: child);
 
-  /// A const-constructable [style] that provides fallback values.
-  ///
-  /// Returned from [of] when the given [BuildContext] doesn't have an enclosing default text style.
-  ///
-  /// This constructor creates a [ListTileTheme] with an invalid [child], which
-  /// means the constructed value cannot be incorporated into the tree.
-  const ListTileTheme.fallback({Key? key})
-      : style = ListTileStyle.defaults,
-        super(key: key, child: const NullWidget());
-
   /// Creates an [ListTileTheme] that controls the style of
   /// descendant widgets, and merges in the current [ListTileTheme], if any.
   ///
-  /// The [style] and [child] arguments must not be null.
+  /// The [child] arguments must not be null.
   static Widget merge({
     Key? key,
     ListTileStyle? style,
@@ -40,7 +34,7 @@ class ListTileTheme extends InheritedTheme {
         final parent = ListTileTheme.of(context);
         return ListTileTheme(
           key: key,
-          style: parent.style.merge(style),
+          style: parent.merge(style),
           child: child,
         );
       },
@@ -50,16 +44,19 @@ class ListTileTheme extends InheritedTheme {
   /// The [style] from the closest instance of
   /// this class that encloses the given context.
   ///
-  /// Defaults to [ThemeData.listTileTheme]
-  ///
   /// Typical usage is as follows:
   ///
   /// ```dart
-  /// ListTileStyle style = ListTileTheme.of(context).style;
+  /// ListTileStyle style = ListTileTheme.of(context);
   /// ```
-  static ListTileTheme of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<ListTileTheme>() ??
-        const ListTileTheme.fallback();
+  static ListTileStyle of(BuildContext context) {
+    final parentTheme =
+        context.dependOnInheritedWidgetOfExactType<ListTileTheme>();
+    if (parentTheme != null) return parentTheme.style;
+
+    final appTheme = Theme.of(context);
+    final globalTheme = appTheme.extension<ListTileStyle?>();
+    return ListTileStyle.defaults.merge(globalTheme);
   }
 
   @override
@@ -79,8 +76,9 @@ class ListTileTheme extends InheritedTheme {
   }
 }
 
+/// A widget that animates the [ListTileStyle] implicitly.
 class AnimatedListTileTheme extends ImplicitlyAnimatedWidget {
-  /// The [ListTileStyle] to apply
+  /// The [ListTileStyle] to be applied to descendant [ListTile]s
   final ListTileStyle style;
 
   /// The widget below this widget in the tree.
