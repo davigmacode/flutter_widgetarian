@@ -11,13 +11,13 @@ import 'style.dart';
 /// can be customized with [ChipThemeData.copyWith] or [ChipThemeData.merge].
 @immutable
 class ChipThemeData with Diagnosticable {
-  /// The curve to apply when animating the parameters of avatar widget.
+  /// The curve to apply when animating the parameters of [Chip] widget.
   final Curve curve;
 
-  /// The duration over which to animate the parameters of button widget.
+  /// The duration over which to animate the parameters of [Chip] widget.
   final Duration duration;
 
-  /// The [ChipStyle] to be applied to the button widget
+  /// The [ChipStyle] to be applied to the [Chip] widget
   final ChipStyle style;
 
   /// The [ChipStyle] that provides fallback values.
@@ -94,13 +94,13 @@ class ChipThemeData with Diagnosticable {
   }
 }
 
-/// A Widget that controls how descendant chips should look like.
+/// A Widget that controls how descendant [Chip]s should look like.
 class ChipTheme extends InheritedTheme {
   /// The properties for descendant [Chip]s
   final ChipThemeData data;
 
   /// Creates a theme that controls
-  /// how descendant chips should look like.
+  /// how descendant [Chip]s should look like.
   const ChipTheme({
     Key? key,
     required this.data,

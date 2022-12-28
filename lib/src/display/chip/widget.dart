@@ -1,6 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart' show Theme, ThemeData, Brightness, Icons;
-
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/feedback.dart';
 import 'package:widgetarian/layout.dart';
@@ -234,14 +232,16 @@ class Chip extends StatelessWidget {
     return onPressed != null || onSelected != null;
   }
 
+  static const deleteIconData = IconData(0xe16a, fontFamily: 'MaterialIcons');
+
   @override
   Widget build(BuildContext context) {
-    final chipTheme = ChipTheme.of(context);
+    final theme = ChipTheme.of(context);
     return _ChipRender(
-      curve: curve ?? chipTheme.curve,
-      duration: duration ?? chipTheme.duration,
-      style: chipTheme.style.merge(style),
-      theme: chipTheme,
+      curve: curve ?? theme.curve,
+      duration: duration ?? theme.duration,
+      style: theme.style.merge(style),
+      theme: theme,
       label: label,
       avatarImage: avatarImage,
       avatarText: avatarText,
@@ -488,7 +488,7 @@ class _ChipRenderState extends AnimatedWidgetBaseState<_ChipRender>
             // tooltip: widget.deleteTooltip,
             disabled: !widget.canDelete || widget.disabled,
             onTap: widget.onDeleted!,
-            child: widget.deleteIcon ?? const Icon(Icons.close),
+            child: widget.deleteIcon ?? const Icon(Chip.deleteIconData),
           )
         : null;
   }

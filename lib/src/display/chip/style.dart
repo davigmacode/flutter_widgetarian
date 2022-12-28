@@ -25,7 +25,7 @@ class ChipStyle extends SheetStyle {
   /// Defaults to [ChipStyle.defaultCheckmarkWeight].
   final double? checkmarkWeight;
 
-  /// Defaults to [ChipCheckmarkStyle.sharp].
+  /// Defaults to [StrokeStyle.sharp].
   final StrokeStyle? checkmarkStyle;
 
   /// Create a raw chip's style
@@ -101,6 +101,7 @@ class ChipStyle extends SheetStyle {
           iconSize: other?.iconSize,
         );
 
+  /// An [ChipStyle] with some reasonable default values.
   static const defaults = ChipStyle(
     height: 32.0,
     margin: EdgeInsets.zero,

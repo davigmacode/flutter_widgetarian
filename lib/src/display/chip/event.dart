@@ -64,7 +64,7 @@ abstract class ChipEvent extends WidgetEvent {
 /// Listeners are notified whenever the value changes.
 /// The value should only be changed with update;
 /// it should not be modified directly.
-class ChipEventController extends WidgetEventController {}
+typedef ChipEventController = WidgetEventController;
 
 /// Set of WidgetEvent
 typedef ChipEvents = WidgetEvents;
