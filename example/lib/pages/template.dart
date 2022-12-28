@@ -42,7 +42,7 @@ class PageTemplate extends StatelessWidget {
                   return ListTile(
                     title: Text(menuData.name),
                     style: const ListTileStyle(
-                      padding: EdgeInsets.symmetric(
+                      margin: EdgeInsets.symmetric(
                         horizontal: 20,
                         vertical: 10,
                       ),
@@ -61,7 +61,7 @@ class PageTemplate extends StatelessWidget {
                     return ListTile(
                       onTap: state.toggle,
                       style: const ListTileStyle(
-                        padding: EdgeInsets.symmetric(
+                        margin: EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 10,
                         ),
@@ -83,7 +83,7 @@ class PageTemplate extends StatelessWidget {
                         leading: const Icon(Icons.call_missed_outgoing),
                         style: const ListTileStyle(
                           spacing: 15,
-                          padding: EdgeInsets.symmetric(
+                          margin: EdgeInsets.symmetric(
                             horizontal: 20,
                             vertical: 10,
                           ),

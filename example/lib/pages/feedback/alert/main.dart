@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../template.dart';
 import 'basic.dart';
+import 'closable.dart';
 
-class AlertPage extends StatefulWidget {
+class AlertPage extends StatelessWidget {
   const AlertPage({
     Key? key,
     required this.title,
@@ -12,18 +13,14 @@ class AlertPage extends StatefulWidget {
   final String title;
 
   @override
-  State<AlertPage> createState() => _AlertPageState();
-}
-
-class _AlertPageState extends State<AlertPage> {
-  @override
   Widget build(BuildContext context) {
     return PageTemplate(
-      title: widget.title,
+      title: title,
       body: ListView(
         padding: const EdgeInsets.all(25),
         children: const [
           AlertBasicUsage(),
+          AlertClosableUsage(),
         ],
       ),
     );

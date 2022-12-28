@@ -4,7 +4,7 @@ import '../../template.dart';
 import 'basic.dart';
 import 'group.dart';
 
-class AvatarPage extends StatefulWidget {
+class AvatarPage extends StatelessWidget {
   const AvatarPage({
     Key? key,
     required this.title,
@@ -13,14 +13,9 @@ class AvatarPage extends StatefulWidget {
   final String title;
 
   @override
-  State<AvatarPage> createState() => _AvatarPageState();
-}
-
-class _AvatarPageState extends State<AvatarPage> {
-  @override
   Widget build(BuildContext context) {
     return PageTemplate(
-      title: widget.title,
+      title: title,
       body: ListView(
         padding: const EdgeInsets.all(25),
         children: const [

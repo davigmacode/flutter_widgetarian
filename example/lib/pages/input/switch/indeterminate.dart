@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide Switch;
 import 'package:widgetarian/input.dart';
+import 'package:widgetarian/button.dart';
 import 'package:widgetarian/choice.dart';
 
 import '../../sample.dart';
@@ -33,18 +34,25 @@ class _SwitchIndeterminateUsageState extends State<SwitchIndeterminateUsage> {
           onChanged: setSelected,
           builder: (context, group, _) {
             return Wrap(
+              spacing: 15,
               children: List<Widget>.generate(
                 choices.length,
-                (i) => Switch(
-                  label: Text(choices[i]),
-                  checked: group.has(choices[i]),
+                (i) => SwitchTile(
+                  selected: group.has(choices[i]),
                   onChanged: group.select(choices[i]),
+                  buttonStyle: DrivenButtonStyle.outlined(
+                    foregroundSpacing: 12,
+                  ),
+                  child: Text(choices[i]),
                 ),
-              )..add(Switch(
-                  label: const Text('Select All'),
-                  checked: group.isChecked,
+              )..add(SwitchTile(
+                  selected: group.isChecked,
                   indeterminate: group.isIndeterminate,
                   onChanged: group.selectAll(),
+                  buttonStyle: DrivenButtonStyle.tonal(
+                    foregroundSpacing: 12,
+                  ),
+                  child: const Text('Select All'),
                 )),
             );
           },

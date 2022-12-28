@@ -9,27 +9,27 @@ class ButtonBasicUsage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Sample(
-      title: 'Basic Usage',
+      title: 'Button Variant',
       script: script,
       children: [
         Button(
-          onPressed: () => {},
-          style: ButtonStyle.flat(),
-          child: const Text('Flat Button'),
+          onPressed: () {},
+          style: DrivenButtonStyle.text(),
+          child: const Text('Text Button'),
         ),
         Button(
-          onPressed: () => {},
-          style: ButtonStyle.toned(),
-          child: const Text('Toned Button'),
+          onPressed: () {},
+          style: DrivenButtonStyle.tonal(),
+          child: const Text('Tonal Button'),
         ),
         Button(
-          onPressed: () => {},
-          style: ButtonStyle.outlined(),
+          onPressed: () {},
+          style: DrivenButtonStyle.outlined(),
           child: const Text('Outlined Button'),
         ),
         Button(
-          onPressed: () => {},
-          style: ButtonStyle.filled(),
+          onPressed: () {},
+          style: DrivenButtonStyle.filled(),
           child: const Text('Filled Button'),
         ),
       ],
@@ -42,23 +42,23 @@ const script = '''Wrap(
   runSpacing: 15,
   children: [
     Button(
-      onPressed: () => {},
-      style: ButtonStyle.flat(),
-      child: const Text('Flat Button'),
+      onPressed: () {},
+      style: DrivenButtonStyle.text(),
+      child: const Text('Text Button'),
     ),
     Button(
-      onPressed: () => {},
-      style: ButtonStyle.toned(),
-      child: const Text('Toned Button'),
+      onPressed: () {},
+      style: DrivenButtonStyle.tonal(),
+      child: const Text('Tonal Button'),
     ),
     Button(
-      onPressed: () => {},
-      style: ButtonStyle.outlined(),
+      onPressed: () {},
+      style: DrivenButtonStyle.outlined(),
       child: const Text('Outlined Button'),
     ),
     Button(
-      onPressed: () => {},
-      style: ButtonStyle.filled(),
+      onPressed: () {},
+      style: DrivenButtonStyle.filled(),
       child: const Text('Filled Button'),
     ),
   ],

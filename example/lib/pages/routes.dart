@@ -5,16 +5,22 @@ import 'input/radio/main.dart';
 import 'input/switch/main.dart';
 import 'button/main.dart';
 import 'display/avatar/main.dart';
+import 'display/badge/main.dart';
 import 'display/chip/main.dart';
 import 'display/spoiler/main.dart';
 import 'feedback/checkmark.dart';
 import 'feedback/alert/main.dart';
 import 'feedback/toggle_icon/main.dart';
 import 'choice/basic/main.dart';
-import 'layout/tile.dart';
+import 'layout/tile/main.dart';
+import 'layout/gap/main.dart';
 import 'layout/expansion/main.dart';
+import 'layout/overlaid/main.dart';
 import 'layout/sheet/main.dart';
+import 'navigation/anchor/main.dart';
+import 'navigation/menu/main.dart';
 import 'typography/main.dart';
+import 'theme/main.dart';
 import 'text/main.dart';
 import 'home.dart';
 
@@ -65,7 +71,7 @@ final Map<String, MenuItem> menu = {
       ),
       '/display/badge': MenuLeaf(
         name: 'Badge',
-        builder: (context) => const AvatarPage(
+        builder: (context) => const BadgePage(
           title: 'Widgetarian Badge',
         ),
       ),
@@ -75,12 +81,12 @@ final Map<String, MenuItem> menu = {
           title: 'Widgetarian Chip',
         ),
       ),
-      '/display/divider': MenuLeaf(
-        name: 'Divider',
-        builder: (context) => const ChipPage(
-          title: 'Widgetarian Divider',
-        ),
-      ),
+      // '/display/divider': MenuLeaf(
+      //   name: 'Divider',
+      //   builder: (context) => const ChipPage(
+      //     title: 'Widgetarian Divider',
+      //   ),
+      // ),
       '/display/spoiler': MenuLeaf(
         name: 'Spoiler',
         builder: (context) => const SpoilerPage(
@@ -105,13 +111,13 @@ final Map<String, MenuItem> menu = {
     items: {
       '/navigation/anchor': MenuLeaf(
         name: 'Anchor',
-        builder: (context) => const ChoiceBasicPage(
+        builder: (context) => const AnchorPage(
           title: 'Widgetarian Anchor',
         ),
       ),
       '/navigation/menu': MenuLeaf(
         name: 'Menu',
-        builder: (context) => const ChoiceBasicPage(
+        builder: (context) => const MenuPage(
           title: 'Widgetarian Menu',
         ),
       ),
@@ -132,12 +138,12 @@ final Map<String, MenuItem> menu = {
           title: 'Widgetarian Alert',
         ),
       ),
-      '/feedback/skeleton': MenuLeaf(
-        name: 'Skeleton',
-        builder: (context) => const AlertPage(
-          title: 'Widgetarian Skeleton',
-        ),
-      ),
+      // '/feedback/skeleton': MenuLeaf(
+      //   name: 'Skeleton',
+      //   builder: (context) => const AlertPage(
+      //     title: 'Widgetarian Skeleton',
+      //   ),
+      // ),
       '/feedback/toggle-icon': MenuLeaf(
         name: 'Toggle Icon',
         builder: (context) => const ToggleIconPage(
@@ -161,21 +167,15 @@ final Map<String, MenuItem> menu = {
           title: 'Widgetarian Expansion',
         ),
       ),
-      '/layout/overlay': MenuLeaf(
-        name: 'Overlay',
-        builder: (context) => const ExpansionPage(
-          title: 'Widgetarian Overlay',
-        ),
-      ),
       '/layout/overlaid': MenuLeaf(
         name: 'Overlaid',
-        builder: (context) => const ExpansionPage(
+        builder: (context) => const OverlaidPage(
           title: 'Widgetarian Overlaid',
         ),
       ),
       '/layout/gap': MenuLeaf(
         name: 'Gap',
-        builder: (context) => const ExpansionPage(
+        builder: (context) => const GapPage(
           title: 'Widgetarian Gap',
         ),
       ),
@@ -191,6 +191,12 @@ final Map<String, MenuItem> menu = {
     name: 'Typography',
     builder: (context) => const TypographyPage(
       title: 'Widgetarian Typography',
+    ),
+  ),
+  '/theme': MenuLeaf(
+    name: 'Theme',
+    builder: (context) => const ThemePage(
+      title: 'Widgetarian Theme',
     ),
   ),
   '/text': MenuLeaf(

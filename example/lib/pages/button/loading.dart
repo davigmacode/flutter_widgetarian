@@ -36,12 +36,15 @@ class _ButtonLoadingUsageState extends State<ButtonLoadingUsage> {
         Button(
           loading: loading,
           onPressed: load,
-          style: ButtonStyle.flat(),
+          style: DrivenButtonStyle.text(),
           leading: DrivenWidget.by((events) {
             return AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
               child: ButtonEvent.isLoading(events)
-                  ? const CircularProgressIndicator()
+                  ? const SizedBox.square(
+                      dimension: 18,
+                      child: CircularProgressIndicator(),
+                    )
                   : Container(),
             );
           }),
@@ -59,28 +62,6 @@ class _ButtonLoadingUsageState extends State<ButtonLoadingUsage> {
             );
           }),
         ),
-        Button(
-          onPressed: () => {},
-          style: ButtonStyle.toned(),
-          trailing: const Icon(Icons.close),
-          child: const Text('Toned Button'),
-        ),
-        Button(
-          onPressed: () => {},
-          style: ButtonStyle.outlined(),
-          leading: const Icon(Icons.calendar_month),
-          trailing: const Icon(Icons.close),
-          child: const Text('Outlined Button'),
-        ),
-        Button(
-          onPressed: () => {},
-          style: ButtonStyle.filled(),
-          leading: const SizedBox.square(
-            dimension: 18,
-            child: CircularProgressIndicator(),
-          ),
-          child: const Text('Filled Button'),
-        ),
       ],
     );
   }
@@ -91,24 +72,33 @@ const script = '''Wrap(
   runSpacing: 15,
   children: [
     Button(
-      onPressed: () => {},
-      style: ButtonStyle.flat(),
-      child: const Text('Flat Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.toned(),
-      child: const Text('Toned Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.outlined(),
-      child: const Text('Outlined Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.filled(),
-      child: const Text('Filled Button'),
+      loading: loading,
+      onPressed: load,
+      style: DrivenButtonStyle.text(),
+      leading: DrivenWidget.by((events) {
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 200),
+          child: ButtonEvent.isLoading(events)
+              ? const SizedBox.square(
+                  dimension: 18,
+                  child: CircularProgressIndicator(),
+                )
+              : Container(),
+        );
+      }),
+      child: DrivenWidget.by((events) {
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 200),
+          child: ButtonEvent.isLoading(events)
+              ? const Text('Loading..', key: ValueKey('loading'))
+              : ButtonEvent.isHovered(events)
+                  ? const Text('Hovered', key: ValueKey('hovered'))
+                  : const Text(
+                      'Enabled',
+                      key: ValueKey('enabled'),
+                    ),
+        );
+      }),
     ),
   ],
 )''';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:widgetarian/feedback.dart';
 import 'package:widgetarian/choice.dart';
+import 'package:widgetarian/navigation.dart';
 
 import '../../sample.dart';
 
@@ -20,99 +21,70 @@ class _ToggleIconBasicUsageState extends State<ToggleIconBasicUsage> {
       children: [
         Choice(
           multiple: true,
-          // mandatory: true,
-          builder: (context, state, child) {
+          builder: (context, choice, child) {
             return Wrap(
               spacing: 15,
               runSpacing: 15,
               children: [
-                ToggleIcon(
-                  selected: state.has('bookmark'),
-                  onSelected: state.select('bookmark'),
-                  style: ToggleIconStyle.when(
-                    enabled: const ToggleIconStyle(
-                      size: 30,
-                      outerOpacity: 1,
-                      innerOpacity: 0,
-                      overlayRadius: 0,
-                    ),
-                    selected: ToggleIconStyle(
-                      outerColor: Theme.of(context).colorScheme.primary,
-                      innerColor: Theme.of(context).colorScheme.primary,
-                      innerOpacity: 1,
-                    ),
-                    hovered: const ToggleIconStyle(overlayRadius: 20),
-                    pressed: const ToggleIconStyle(overlayRadius: 0),
+                Anchor(
+                  onTap: () => choice.toggle('bookmark'),
+                  style: const DrivenAnchorStyle.circle(
+                    radius: 0,
+                    hoveredStyle: AnchorStyle(radius: 20),
+                    pressedStyle: AnchorStyle(radius: 0),
                   ),
-                  outerIcon: Icons.bookmark_border,
-                  innerIcon: Icons.bookmark,
+                  child: ToggleIcon(
+                    Icons.bookmark,
+                    backIcon: Icons.bookmark_border,
+                    selected: choice.has('bookmark'),
+                    style: DrivenToggleIconStyle.fade(size: 30),
+                  ),
                 ),
-                ToggleIcon(
-                  selected: state.has('favorite'),
-                  onSelected: state.select('favorite'),
-                  style: ToggleIconStyle.when(
-                    enabled: const ToggleIconStyle(
-                      size: 30,
-                      outerOpacity: 1,
-                      innerOpacity: 0,
-                      innerScale: 0,
-                      overlayRadius: 0,
-                    ),
-                    selected: ToggleIconStyle(
-                      outerColor: Theme.of(context).colorScheme.primary,
-                      innerColor: Theme.of(context).colorScheme.primary,
-                      innerOpacity: 1,
-                      innerScale: 1,
-                    ),
-                    hovered: const ToggleIconStyle(overlayRadius: 20),
-                    pressed: const ToggleIconStyle(overlayRadius: 0),
+                Anchor(
+                  onTap: () => choice.toggle('favorite'),
+                  style: const DrivenAnchorStyle.circle(
+                    radius: 0,
+                    hoveredStyle: AnchorStyle(radius: 20),
+                    pressedStyle: AnchorStyle(radius: 0),
                   ),
-                  outerIcon: Icons.favorite_border,
-                  innerIcon: Icons.favorite,
+                  child: ToggleIcon(
+                    Icons.favorite,
+                    backIcon: Icons.favorite_border,
+                    selected: choice.has('favorite'),
+                    style: DrivenToggleIconStyle.scaleUp(size: 30),
+                  ),
                 ),
-                ToggleIcon(
-                  selected: state.has('star'),
-                  onSelected: state.select('star'),
-                  style: ToggleIconStyle.when(
-                    enabled: const ToggleIconStyle(
-                      size: 30,
-                      outerOpacity: 1,
-                      innerOpacity: 0,
-                      innerScale: 3,
-                      overlayRadius: 0,
-                    ),
-                    selected: ToggleIconStyle(
-                      outerColor: Theme.of(context).colorScheme.primary,
-                      innerColor: Theme.of(context).colorScheme.primary,
-                      innerOpacity: 1,
-                      innerScale: 1,
-                    ),
-                    hovered: const ToggleIconStyle(overlayRadius: 20),
-                    pressed: const ToggleIconStyle(overlayRadius: 0),
+                Anchor(
+                  onTap: () => choice.toggle('star'),
+                  style: const DrivenAnchorStyle.circle(
+                    radius: 0,
+                    hoveredStyle: AnchorStyle(radius: 20),
+                    pressedStyle: AnchorStyle(radius: 0),
                   ),
-                  outerIcon: Icons.star_border,
-                  innerIcon: Icons.star,
+                  child: ToggleIcon(
+                    Icons.star,
+                    selected: choice.has('star'),
+                    style: DrivenToggleIconStyle.scaleDown(size: 30),
+                  ),
                 ),
-                ToggleIcon(
-                  selected: state.has('tree'),
-                  onSelected: state.select('tree'),
-                  style: ToggleIconStyle.when(
-                    enabled: const ToggleIconStyle(
-                      size: 30,
-                      outerOpacity: 1,
-                      innerOpacity: 0,
-                      overlayRadius: 0,
-                    ),
-                    selected: ToggleIconStyle(
-                      outerColor: Theme.of(context).colorScheme.primary,
-                      innerColor: Theme.of(context).colorScheme.primary,
-                      innerOpacity: 1,
-                    ),
-                    hovered: const ToggleIconStyle(overlayRadius: 20),
-                    pressed: const ToggleIconStyle(overlayRadius: 0),
+                Anchor(
+                  onTap: () => choice.toggle('tree'),
+                  style: const DrivenAnchorStyle.circle(
+                    radius: 0,
+                    hoveredStyle: AnchorStyle(radius: 20),
+                    pressedStyle: AnchorStyle(radius: 0),
                   ),
-                  outerIcon: Icons.account_tree_outlined,
-                  innerIcon: Icons.account_tree,
+                  child: ToggleIcon(
+                    Icons.account_tree,
+                    backIcon: Icons.account_tree_outlined,
+                    selected: choice.has('tree'),
+                    style: const DrivenToggleIconStyle(
+                      size: 30,
+                      opacity: 0,
+                      color: Colors.orange,
+                      selectedStyle: ToggleIconStyle(opacity: 1),
+                    ),
+                  ),
                 ),
               ],
             );
@@ -123,29 +95,79 @@ class _ToggleIconBasicUsageState extends State<ToggleIconBasicUsage> {
   }
 }
 
-const script = '''Wrap(
-  spacing: 15,
-  runSpacing: 15,
-  children: [
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.flat(),
-      child: const Text('Flat Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.toned(),
-      child: const Text('Toned Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.outlined(),
-      child: const Text('Outlined Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.filled(),
-      child: const Text('Filled Button'),
-    ),
-  ],
+const script = '''Choice(
+  multiple: true,
+  builder: (context, choice, child) {
+    return Wrap(
+      spacing: 15,
+      runSpacing: 15,
+      children: [
+        Anchor(
+          onTap: () => choice.toggle('bookmark'),
+          style: const DrivenAnchorStyle.circle(
+            radius: 0,
+            hoveredStyle: AnchorStyle(radius: 20),
+            pressedStyle: AnchorStyle(radius: 0),
+          ),
+          child: ToggleIcon(
+            selected: choice.has('bookmark'),
+            style: DrivenToggleIconStyle.fade(size: 30),
+            outerIcon: Icons.bookmark_border,
+            innerIcon: Icons.bookmark,
+          ),
+        ),
+        Anchor(
+          onTap: () => choice.toggle('favorite'),
+          style: const DrivenAnchorStyle.circle(
+            radius: 0,
+            hoveredStyle: AnchorStyle(radius: 20),
+            pressedStyle: AnchorStyle(radius: 0),
+          ),
+          child: ToggleIcon(
+            selected: choice.has('favorite'),
+            style: DrivenToggleIconStyle.scaleUp(size: 30),
+            outerIcon: Icons.favorite_border,
+            innerIcon: Icons.favorite,
+          ),
+        ),
+        Anchor(
+          onTap: () => choice.toggle('star'),
+          style: const DrivenAnchorStyle.circle(
+            radius: 0,
+            hoveredStyle: AnchorStyle(radius: 20),
+            pressedStyle: AnchorStyle(radius: 0),
+          ),
+          child: ToggleIcon(
+            selected: choice.has('star'),
+            style: DrivenToggleIconStyle.scaleDown(size: 30),
+            outerIcon: Icons.star,
+            innerIcon: Icons.star,
+          ),
+        ),
+        Anchor(
+          onTap: () => choice.toggle('tree'),
+          style: const DrivenAnchorStyle.circle(
+            radius: 0,
+            hoveredStyle: AnchorStyle(radius: 20),
+            pressedStyle: AnchorStyle(radius: 0),
+          ),
+          child: ToggleIcon(
+            selected: choice.has('tree'),
+            style: DrivenToggleIconStyle(
+              size: 30,
+              outerColor: Theme.of(context).iconTheme.color,
+              outerOpacity: 1,
+              innerOpacity: 0,
+              selectedStyle: const ToggleIconStyle(
+                innerColor: Colors.orange,
+                innerOpacity: 1,
+              ),
+            ),
+            outerIcon: Icons.account_tree_outlined,
+            innerIcon: Icons.account_tree,
+          ),
+        ),
+      ],
+    );
+  },
 )''';

@@ -13,35 +13,28 @@ class ButtonIconUsage extends StatelessWidget {
       script: script,
       children: [
         Button(
-          onPressed: () => {},
-          style: ButtonStyle.flat(
-            shape: BoxShape.circle,
-          ),
+          onPressed: () {},
+          style: DrivenButtonStyle.text().icon(),
+          child: const Icon(Icons.settings),
+        ),
+        Button.icon(
+          onPressed: () {},
+          shape: BoxShape.rectangle,
+          style: DrivenButtonStyle.tonal(),
           child: const Icon(Icons.settings),
         ),
         Button(
-          onPressed: () => {},
-          style: ButtonStyle.toned(
-            padding: EdgeInsets.zero,
-            width: ButtonStyle.defaultHeight,
-          ),
-          child: const Icon(Icons.settings),
-        ),
-        Button(
-          onPressed: () => {},
-          style: ButtonStyle.outlined(
-            padding: EdgeInsets.zero,
-            width: ButtonStyle.defaultHeight,
+          onPressed: () {},
+          style: DrivenButtonStyle.outlined(
             hoveredStyle: ButtonStyle(
               borderRadius: BorderRadius.circular(25),
             ),
-          ),
+          ).icon(shape: BoxShape.rectangle),
           child: const Icon(Icons.settings),
         ),
-        Button(
-          onPressed: () => {},
-          style: ButtonStyle.filled(
-            shape: BoxShape.circle,
+        Button.icon(
+          onPressed: () {},
+          style: DrivenButtonStyle.filled(
             pressedStyle: const ButtonStyle(
               shape: BoxShape.rectangle,
             ),
@@ -58,35 +51,28 @@ const script = '''Wrap(
   runSpacing: 15,
   children: [
     Button(
-      onPressed: () => {},
-      style: ButtonStyle.flat(
-        shape: BoxShape.circle,
-      ),
+      onPressed: () {},
+      style: DrivenButtonStyle.text().icon(),
+      child: const Icon(Icons.settings),
+    ),
+    Button.icon(
+      onPressed: () {},
+      shape: BoxShape.rectangle,
+      style: DrivenButtonStyle.tonal(),
       child: const Icon(Icons.settings),
     ),
     Button(
-      onPressed: () => {},
-      style: ButtonStyle.toned(
-        padding: EdgeInsets.zero,
-        width: ButtonStyle.defaultHeight,
-      ),
-      child: const Icon(Icons.settings),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.outlined(
-        padding: EdgeInsets.zero,
-        width: ButtonStyle.defaultHeight,
+      onPressed: () {},
+      style: DrivenButtonStyle.outlined(
         hoveredStyle: ButtonStyle(
           borderRadius: BorderRadius.circular(25),
         ),
-      ),
+      ).icon(shape: BoxShape.rectangle),
       child: const Icon(Icons.settings),
     ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.filled(
-        shape: BoxShape.circle,
+    Button.icon(
+      onPressed: () {},
+      style: DrivenButtonStyle.filled(
         pressedStyle: const ButtonStyle(
           shape: BoxShape.rectangle,
         ),

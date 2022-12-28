@@ -1,40 +1,62 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ListTile, ListTileStyle;
 import 'package:widgetarian/layout.dart';
 
 import '../../sample.dart';
 
-class ExpansionPanelUsage extends StatefulWidget {
+class ExpansionPanelUsage extends StatelessWidget {
   const ExpansionPanelUsage({Key? key}) : super(key: key);
 
   @override
-  State<ExpansionPanelUsage> createState() => _ExpansionPanelUsageState();
-}
-
-class _ExpansionPanelUsageState extends State<ExpansionPanelUsage> {
-  @override
   Widget build(BuildContext context) {
     return const Sample(
-      title: 'Basic Usage',
+      title: 'Expansion Panel',
       script: script,
+      wrapped: false,
       children: [
         SizedBox(
           width: 500,
-          child: Card(
-            child: Padding(
-              padding: EdgeInsets.all(15.0),
-              child: Expansion(
-                value: true,
-                header: ExpansionHeader(
-                  title: Text('What is Lorem Ipsum?'),
-                  trailing: ExpansionIcon(),
+          child: Expansion(
+            value: true,
+            header: ExpansionHeader(
+              title: Text('What is Lorem Ipsum?'),
+              trailing: ExpansionIcon(),
+              buttonStyle: ExpansionButtonStyle(
+                overlayDisabled: true,
+              ),
+            ),
+            child: Text(
+              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+            ),
+          ),
+        ),
+        Gap(20),
+        SizedBox(
+          width: 500,
+          child: Expansion(
+            value: false,
+            header: ListTile(
+              title: Text('What is Lorem Ipsum?'),
+              trailing: ExpansionButton(
+                style: ExpansionButtonStyle(
+                  shape: BoxShape.circle,
+                  radius: 16,
                 ),
-                divider: Divider(),
-                child: ExpansionScrollView(
-                  constraints: BoxConstraints(maxHeight: 100),
-                  child: Text(
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-                  ),
+                child: ExpansionIcon(
+                  icon: Icons.arrow_drop_down_rounded,
                 ),
+              ),
+            ),
+            divider: Divider(),
+            collapsed: Text(
+              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+              maxLines: 2,
+              softWrap: true,
+              overflow: TextOverflow.ellipsis,
+            ),
+            child: ExpansionView(
+              maxHeight: 100,
+              child: Text(
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
               ),
             ),
           ),
@@ -44,29 +66,9 @@ class _ExpansionPanelUsageState extends State<ExpansionPanelUsage> {
   }
 }
 
-const script = '''Wrap(
-  spacing: 15,
-  runSpacing: 15,
-  children: [
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.flat(),
-      child: const Text('Flat Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.toned(),
-      child: const Text('Toned Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.outlined(),
-      child: const Text('Outlined Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.filled(),
-      child: const Text('Filled Button'),
-    ),
-  ],
+const script = '''Anchor(
+  onTap: () {},
+  shape: BoxShape.circle,
+  radius: 20,
+  child: const Icon(Icons.chat),
 )''';

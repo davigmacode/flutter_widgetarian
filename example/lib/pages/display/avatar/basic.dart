@@ -13,30 +13,37 @@ class AvatarBasicUsage extends StatelessWidget {
       script: script,
       children: [
         Avatar(
-          style: AvatarStyle(
-            elevation: 5.0,
-          ),
-          image: NetworkImage('https://i.pravatar.cc/50'),
+          style: AvatarStyle(elevation: 5.0),
+          image: NetworkImage('https://i.pravatar.cc/50?u=1'),
         ),
         Avatar(
           style: AvatarStyle(
-            size: 40,
+            shape: BoxShape.rectangle,
+            elevation: 5.0,
+            size: 60,
+          ),
+          image: NetworkImage('https://i.pravatar.cc/50?u=2'),
+        ),
+        Avatar(
+          style: AvatarStyle(
+            size: 50,
+            shape: BoxShape.rectangle,
             backgroundColor: Colors.red,
             foregroundStyle: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Colors.amber,
             ),
-            shape: BoxShape.rectangle,
           ),
           child: Text('LF'),
         ),
         Avatar(
           style: AvatarStyle(
-            size: 40,
+            size: 70,
             elevation: 2,
             backgroundColor: Colors.red,
             foregroundStyle: TextStyle(
+              fontSize: 40,
               fontWeight: FontWeight.bold,
               color: Colors.amber,
             ),
@@ -52,25 +59,43 @@ const script = '''Wrap(
   spacing: 15,
   runSpacing: 15,
   children: [
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.flat(),
-      child: const Text('Flat Button'),
+    Avatar(
+      style: AvatarStyle(elevation: 5.0),
+      image: NetworkImage('https://i.pravatar.cc/50?u=1'),
     ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.toned(),
-      child: const Text('Toned Button'),
+    Avatar(
+      style: AvatarStyle(
+        shape: BoxShape.rectangle,
+        elevation: 5.0,
+        size: 60,
+      ),
+      image: NetworkImage('https://i.pravatar.cc/50?u=2'),
     ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.outlined(),
-      child: const Text('Outlined Button'),
+    Avatar(
+      style: AvatarStyle(
+        size: 50,
+        shape: BoxShape.rectangle,
+        backgroundColor: Colors.red,
+        foregroundStyle: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: Colors.amber,
+        ),
+      ),
+      child: Text('LF'),
     ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.filled(),
-      child: const Text('Filled Button'),
+    Avatar(
+      style: AvatarStyle(
+        size: 70,
+        elevation: 2,
+        backgroundColor: Colors.red,
+        foregroundStyle: TextStyle(
+          fontSize: 40,
+          fontWeight: FontWeight.bold,
+          color: Colors.amber,
+        ),
+      ),
+      child: Icon(Icons.person),
     ),
   ],
 )''';

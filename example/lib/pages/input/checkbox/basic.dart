@@ -24,7 +24,7 @@ class _CheckboxBasicUsageState extends State<CheckboxBasicUsage> {
       script: script,
       children: [
         Checkbox(
-          checked: _checked,
+          selected: _checked,
           onChanged: _setChecked,
         ),
       ],

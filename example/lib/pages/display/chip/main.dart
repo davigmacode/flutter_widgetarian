@@ -27,7 +27,7 @@ class _ChipPageState extends State<ChipPage> {
     const style = ChipStyle(margin: EdgeInsets.all(5));
     log('${style.margin}', name: 'style initial');
 
-    final merged = style.merge(ChipStyle.outlined(
+    final merged = style.merge(DrivenChipStyle.outlined(
       margin: EdgeInsets.zero,
       pressedStyle: const ChipStyle(
         margin: EdgeInsets.all(10),
@@ -35,7 +35,7 @@ class _ChipPageState extends State<ChipPage> {
     ));
     log('${merged.margin}', name: 'style merged');
 
-    final evaluated = ChipStyle.evaluate(merged, {ChipEvent.pressed});
+    final evaluated = DrivenChipStyle.evaluate(merged, {ChipEvent.pressed});
     log('${evaluated?.margin}', name: 'style pressed');
 
     // final style = ChipStyle.when(
@@ -73,7 +73,7 @@ class _ChipPageState extends State<ChipPage> {
                 Chip(
                   label: const Text('Toned Chip'),
                   leading: const Icon(Icons.calendar_month),
-                  style: ChipStyle.toned(),
+                  style: DrivenChipStyle.tonal(),
                   selected: _selected,
                   disabled: true,
                   onPressed: () => {},
@@ -85,7 +85,7 @@ class _ChipPageState extends State<ChipPage> {
               children: [
                 Chip(
                   label: const Text('Outlined Chip'),
-                  style: ChipStyle.outlined(),
+                  style: DrivenChipStyle.outlined(),
                   checkmark: true,
                   selected: _selected,
                   onDeleted: () {},
@@ -93,7 +93,7 @@ class _ChipPageState extends State<ChipPage> {
                 Chip(
                   label: const Text('Outlined Chip'),
                   trailing: const Icon(Icons.calendar_month),
-                  style: ChipStyle.outlined(),
+                  style: DrivenChipStyle.outlined(),
                   checkmark: true,
                   disabled: true,
                   selected: _selected,
@@ -107,7 +107,7 @@ class _ChipPageState extends State<ChipPage> {
                 Chip(
                   label: const Text('Filled Chip'),
                   avatarText: const Text('FC'),
-                  style: ChipStyle.filled(
+                  style: DrivenChipStyle.filled(
                     selectedStyle: ChipStyle(
                       borderRadius: BorderRadius.circular(25),
                     ),
@@ -119,7 +119,7 @@ class _ChipPageState extends State<ChipPage> {
                 Chip(
                   label: const Text('Filled Chip'),
                   leading: const Icon(Icons.image),
-                  style: ChipStyle.filled(),
+                  style: DrivenChipStyle.filled(),
                   selected: _selected,
                   onDeleted: () {},
                   disabled: true,
@@ -132,11 +132,11 @@ class _ChipPageState extends State<ChipPage> {
                 Chip(
                   label: const Text('Mixed Style Chip'),
                   avatarImage: const NetworkImage('https://i.pravatar.cc/50'),
-                  style: ChipStyle.when(
-                    enabled: ChipStyle.toned(
+                  style: DrivenChipStyle.from(
+                    DrivenChipStyle.tonal(
                       borderRadius: BorderRadius.circular(25),
                     ),
-                    selected: ChipStyle.filled(
+                    selectedStyle: DrivenChipStyle.filled(
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
@@ -148,8 +148,8 @@ class _ChipPageState extends State<ChipPage> {
                 Chip(
                   label: const Text('Mixed Style Chip'),
                   leading: const Icon(Icons.image),
-                  style: ChipStyle.filled(
-                    selectedStyle: ChipStyle.outlined(
+                  style: DrivenChipStyle.filled(
+                    selectedStyle: DrivenChipStyle.outlined(
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),

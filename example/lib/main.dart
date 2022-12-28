@@ -1,8 +1,10 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:widgetarian/theme.dart';
 import 'pages/routes.dart';
 
 void main() {
+  // debugRepaintRainbowEnabled = true;
   runApp(const MyApp());
 }
 
@@ -13,23 +15,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ThemePatrol(
-      light: ThemeData(
-        brightness: Brightness.light,
-        colorScheme: ColorScheme.fromSeed(
-          brightness: Brightness.light,
-          seedColor: Colors.red,
-        ),
-        materialTapTargetSize: MaterialTapTargetSize.padded,
-      ),
-      dark: ThemeData(
-        brightness: Brightness.dark,
-        colorScheme: ColorScheme.fromSeed(
-          brightness: Brightness.dark,
-          seedColor: Colors.red,
-        ),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        materialTapTargetSize: MaterialTapTargetSize.padded,
-      ),
+      onAvailableChanged: (_) => log('available themes changed'),
+      onThemeChanged: (theme) => log('theme changed to ${theme.selected}'),
+      onModeChanged: (theme) => log('theme mode changed to ${theme.mode.name}'),
+      onColorChanged: (theme) =>
+          log('theme color changed to ${theme.color.toString()}'),
+      onChanged: (theme) => log('value changed'),
+      themes: {
+        'basic': ThemeConfig.fromColor(Colors.green),
+        'pro': ThemeConfig.fromColor(Colors.red),
+        'premium': ThemeConfig.fromColor(Colors.amber),
+      },
+      // light: ThemeData.light(),
+      // dark: ThemeData.dark(),
       builder: (context, theme) {
         return MaterialApp(
           title: 'Widgetarian',

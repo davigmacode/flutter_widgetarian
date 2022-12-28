@@ -24,7 +24,7 @@ class _RadioBasicUsageState extends State<RadioBasicUsage> {
       script: script,
       children: [
         Radio(
-          checked: _checked,
+          selected: _checked,
           onChanged: _setChecked,
         ),
       ],

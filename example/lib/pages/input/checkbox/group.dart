@@ -31,12 +31,13 @@ class _CheckboxGroupUsageState extends State<CheckboxGroupUsage> {
           onChanged: setSelected,
           builder: (context, group, _) {
             return Wrap(
+              spacing: 15,
               children: List<Widget>.generate(
                 choices.length,
-                (i) => Checkbox(
-                  label: Text(choices[i]),
-                  checked: group.has(choices[i]),
+                (i) => CheckboxTile(
+                  selected: group.has(choices[i]),
                   onChanged: group.select(choices[i]),
+                  child: Text(choices[i]),
                 ),
               ),
             );

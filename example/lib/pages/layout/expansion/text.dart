@@ -1,90 +1,45 @@
-import 'package:flutter/material.dart' hide ListTile;
+import 'package:flutter/material.dart';
 import 'package:widgetarian/layout.dart';
+import 'package:widgetarian/text.dart';
 
 import '../../sample.dart';
 
-class ExpansionTextUsage extends StatefulWidget {
+class ExpansionTextUsage extends StatelessWidget {
   const ExpansionTextUsage({Key? key}) : super(key: key);
 
   @override
-  State<ExpansionTextUsage> createState() => _ExpansionTextUsageState();
-}
-
-class _ExpansionTextUsageState extends State<ExpansionTextUsage> {
-  @override
   Widget build(BuildContext context) {
     return Sample(
-      title: 'Basic Usage',
+      title: 'Expansion Text',
       script: script,
+      wrapped: false,
       children: [
         SizedBox(
           width: 500,
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Expansion(
-                header: const ExpansionHeader(
-                  title: Text('Menu'),
-                  trailing: ExpansionIcon(),
-                ),
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    ListTile(
-                      title: const Text('Menu Item'),
-                      onTap: () {},
-                    ),
-                    ListTile(
-                      title: const Text('Menu Item'),
-                      onTap: () {},
-                    ),
-                    Expansion(
-                      header: const ExpansionHeader(
-                        title: Text('Nested Menu'),
-                        trailing: ExpansionIcon(),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        child: ListView(
-                          shrinkWrap: true,
-                          children: [
-                            ListTile(
-                              title: const Text('Menu Item'),
-                              onTap: () {},
-                            ),
-                            ListTile(
-                              title: const Text('Menu Item'),
-                              onTap: () {},
-                            ),
-                            Expansion(
-                              header: const ExpansionHeader(
-                                title: Text('Nested Menu'),
-                                trailing: ExpansionIcon(),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                                child: ListView(
-                                  shrinkWrap: true,
-                                  children: [
-                                    ListTile(
-                                      title: const Text('Menu Item'),
-                                      onTap: () {},
-                                    ),
-                                    ListTile(
-                                      title: const Text('Menu Item'),
-                                      onTap: () {},
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+          child: Expansion(
+            value: false,
+            collapsed: const ExpansionButton(
+              child: ConstrainedText(
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                maxLines: 2,
+                ellipsis: TextSpan(text: '...Show more'),
               ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."),
+                Gap(10),
+                ExpansionButton(
+                  child: Text(
+                    'Show less',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -93,29 +48,9 @@ class _ExpansionTextUsageState extends State<ExpansionTextUsage> {
   }
 }
 
-const script = '''Wrap(
-  spacing: 15,
-  runSpacing: 15,
-  children: [
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.flat(),
-      child: const Text('Flat Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.toned(),
-      child: const Text('Toned Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.outlined(),
-      child: const Text('Outlined Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.filled(),
-      child: const Text('Filled Button'),
-    ),
-  ],
+const script = '''Anchor(
+  onTap: () {},
+  shape: BoxShape.circle,
+  radius: 20,
+  child: const Icon(Icons.chat),
 )''';

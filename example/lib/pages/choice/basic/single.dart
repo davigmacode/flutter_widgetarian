@@ -50,10 +50,10 @@ class _ChoiceBasicSingleUsageState extends State<ChoiceBasicSingleUsage> {
             return Wrap(
               children: List<Widget>.generate(
                 strChoices.length,
-                (i) => Checkbox(
-                  label: Text(strChoices[i]),
-                  checked: group.has(strChoices[i]),
+                (i) => CheckboxTile(
+                  selected: group.has(strChoices[i]),
                   onChanged: group.select(strChoices[i]),
+                  child: Text(strChoices[i]),
                 ),
               ),
             );
@@ -68,10 +68,10 @@ class _ChoiceBasicSingleUsageState extends State<ChoiceBasicSingleUsage> {
             return Wrap(
               children: List<Widget>.generate(
                 strChoices.length,
-                (i) => Radio(
-                  label: Text(strChoices[i]),
-                  checked: group.has(strChoices[i]),
+                (i) => RadioTile(
+                  selected: group.has(strChoices[i]),
                   onChanged: group.select(strChoices[i]),
+                  child: Text(strChoices[i]),
                 ),
               ),
             );
@@ -86,10 +86,10 @@ class _ChoiceBasicSingleUsageState extends State<ChoiceBasicSingleUsage> {
             return Wrap(
               children: List<Widget>.generate(
                 strChoices.length,
-                (i) => Switch(
-                  label: Text(strChoices[i]),
-                  checked: group.has(strChoices[i]),
+                (i) => SwitchTile(
+                  selected: group.has(strChoices[i]),
                   onChanged: group.select(strChoices[i]),
+                  child: Text(strChoices[i]),
                 ),
               ),
             );
@@ -124,18 +124,16 @@ class _ChoiceBasicSingleUsageState extends State<ChoiceBasicSingleUsage> {
               spacing: 15,
               children: List<Widget>.generate(
                 iconChoices.length,
-                (i) => Button(
+                (i) => ToggleButton.icon(
                   selected: group.has(iconChoices[i]),
                   onSelected: group.select(iconChoices[i]),
-                  style: ButtonStyle.flat(
-                    shape: BoxShape.circle,
+                  style: DrivenButtonStyle.text(
                     hoveredStyle: ButtonStyle(
                       foregroundColor: Theme.of(context).colorScheme.primary,
-                      backgroundColor: Theme.of(context).colorScheme.primary,
                     ),
-                    selectedStyle: ButtonStyle(
-                      foregroundColor: Theme.of(context).colorScheme.primary,
-                      backgroundColor: Theme.of(context).colorScheme.primary,
+                    selectedStyle: DrivenButtonStyle.filled(
+                      color: Theme.of(context).colorScheme.primary,
+                      hoveredStyle: const ButtonStyle(backgroundOpacity: .3),
                     ),
                   ),
                   child: Icon(iconChoices[i]),

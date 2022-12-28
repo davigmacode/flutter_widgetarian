@@ -33,10 +33,10 @@ class _SwitchGroupUsageState extends State<SwitchGroupUsage> {
             return Wrap(
               children: List<Widget>.generate(
                 choices.length,
-                (i) => Switch(
-                  label: Text(choices[i]),
-                  checked: group.has(choices[i]),
+                (i) => SwitchTile(
+                  selected: group.has(choices[i]),
                   onChanged: group.select(choices[i]),
+                  child: Text(choices[i]),
                 ),
               ),
             );

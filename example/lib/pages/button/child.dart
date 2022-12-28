@@ -9,31 +9,31 @@ class ButtonChildUsage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Sample(
-      title: 'With Leading and Trailing Widget',
+      title: 'Button Children',
       script: script,
       children: [
         Button(
-          onPressed: () => {},
-          style: ButtonStyle.flat(),
+          onPressed: () {},
+          style: DrivenButtonStyle.text(),
           leading: const Icon(Icons.calendar_month),
-          child: const Text('Flat Button'),
+          child: const Text('Text Button'),
         ),
         Button(
-          onPressed: () => {},
-          style: ButtonStyle.toned(),
+          onPressed: () {},
+          style: DrivenButtonStyle.tonal(),
           trailing: const Icon(Icons.close),
-          child: const Text('Toned Button'),
+          child: const Text('Tonal Button'),
         ),
         Button(
-          onPressed: () => {},
-          style: ButtonStyle.outlined(),
+          onPressed: () {},
+          style: DrivenButtonStyle.outlined(),
           leading: const Icon(Icons.calendar_month),
           trailing: const Icon(Icons.close),
           child: const Text('Outlined Button'),
         ),
         Button(
-          onPressed: () => {},
-          style: ButtonStyle.filled(),
+          onPressed: () {},
+          style: DrivenButtonStyle.filled(),
           leading: const SizedBox.square(
             dimension: 18,
             child: CircularProgressIndicator(),
@@ -50,23 +50,31 @@ const script = '''Wrap(
   runSpacing: 15,
   children: [
     Button(
-      onPressed: () => {},
-      style: ButtonStyle.flat(),
-      child: const Text('Flat Button'),
+      onPressed: () {},
+      style: DrivenButtonStyle.text(),
+      leading: const Icon(Icons.calendar_month),
+      child: const Text('Text Button'),
     ),
     Button(
-      onPressed: () => {},
-      style: ButtonStyle.toned(),
-      child: const Text('Toned Button'),
+      onPressed: () {},
+      style: DrivenButtonStyle.tonal(),
+      trailing: const Icon(Icons.close),
+      child: const Text('Tonal Button'),
     ),
     Button(
-      onPressed: () => {},
-      style: ButtonStyle.outlined(),
+      onPressed: () {},
+      style: DrivenButtonStyle.outlined(),
+      leading: const Icon(Icons.calendar_month),
+      trailing: const Icon(Icons.close),
       child: const Text('Outlined Button'),
     ),
     Button(
-      onPressed: () => {},
-      style: ButtonStyle.filled(),
+      onPressed: () {},
+      style: DrivenButtonStyle.filled(),
+      leading: const SizedBox.square(
+        dimension: 18,
+        child: CircularProgressIndicator(),
+      ),
       child: const Text('Filled Button'),
     ),
   ],

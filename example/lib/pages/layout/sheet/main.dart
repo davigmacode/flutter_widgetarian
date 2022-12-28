@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../template.dart';
-import 'basic.dart';
+import 'rectangle.dart';
+import 'circle.dart';
 
-class SheetPage extends StatefulWidget {
+class SheetPage extends StatelessWidget {
   const SheetPage({
     Key? key,
     required this.title,
@@ -12,18 +13,14 @@ class SheetPage extends StatefulWidget {
   final String title;
 
   @override
-  State<SheetPage> createState() => _SheetPageState();
-}
-
-class _SheetPageState extends State<SheetPage> {
-  @override
   Widget build(BuildContext context) {
     return PageTemplate(
-      title: widget.title,
+      title: title,
       body: ListView(
         padding: const EdgeInsets.all(25),
         children: const [
-          SheetBasicUsage(),
+          SheetRectangleUsage(),
+          SheetCircleUsage(),
         ],
       ),
     );

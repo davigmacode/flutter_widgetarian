@@ -24,7 +24,7 @@ class _SwitchBasicUsageState extends State<SwitchBasicUsage> {
       script: script,
       children: [
         Switch(
-          checked: _checked,
+          selected: _checked,
           onChanged: _setChecked,
         ),
       ],

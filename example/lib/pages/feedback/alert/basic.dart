@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:widgetarian/button.dart';
+import 'package:flutter/material.dart' hide Switch, ButtonStyle;
 import 'package:widgetarian/layout.dart';
 import 'package:widgetarian/feedback.dart';
+import 'package:widgetarian/choice.dart';
+import 'package:widgetarian/input.dart';
 
 import '../../sample.dart';
 
@@ -13,12 +14,11 @@ class AlertBasicUsage extends StatefulWidget {
 }
 
 class _AlertBasicUsageState extends State<AlertBasicUsage> {
-  bool _open = true;
+  List<String> choices = ['Tonal', 'Elevated', 'Outlined'];
+  List<String> selected = [];
 
-  void _setOpen(bool? value) {
-    setState(() {
-      _open = value ?? !_open;
-    });
+  void setSelected(List<String> value) {
+    setState(() => selected = value);
   }
 
   @override
@@ -27,55 +27,71 @@ class _AlertBasicUsageState extends State<AlertBasicUsage> {
       title: 'Basic Usage',
       script: script,
       wrapped: false,
-      children: [
-        Expansion(
-          value: _open,
-          onChanged: _setOpen,
-          child: Alert(
-            style: const SheetStyle().toned(
-              // color: Colors.orange,
-              foregroundColor: Colors.orange,
-              backgroundColor: Colors.orange,
-              // color: Theme.of(context).cardColor,
-              padding: const EdgeInsets.all(20),
-              // borderRadius: BorderRadius.zero,
-              // elevation: 2,
-              // width: double.infinity,
+      options: Choice<String>(
+        mandatory: true,
+        value: selected,
+        onChanged: setSelected,
+        builder: (context, group, _) {
+          return ListView(
+            shrinkWrap: true,
+            children: List<Widget>.generate(
+              choices.length,
+              (i) => Switch(
+                // label: Text(choices[i]),
+                selected: group.has(choices[i]),
+                onChanged: group.select(choices[i]),
+              ),
             ),
-            icon: const Icon(Icons.warning),
-            action: const ExpansionButton(
-              child: Icon(Icons.close),
-            ),
-            title: const Text('Warning'),
-            child: const Text('This is a warning alert — check it out!'),
+          );
+        },
+      ),
+      children: const [
+        Alert(
+          style: AlertStyle.toned(
+            foregroundColor: Colors.red,
+            backgroundColor: Colors.red,
+            padding: EdgeInsets.all(20),
           ),
+          icon: Icon(Icons.error),
+          action: Icon(Icons.close),
+          // title:  Text('Warning'),
+          message: Text('This is a warning alert — check it out!'),
         ),
-        const Gap(20),
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 200),
-          child: _open
-              ? Alert(
-                  style: const SheetStyle().toned(
-                    // color: Colors.orange,
-                    foregroundColor: Colors.orange,
-                    backgroundColor: Colors.orange,
-                    // color: Theme.of(context).cardColor,
-                    padding: const EdgeInsets.all(20),
-                    // borderRadius: BorderRadius.zero,
-                    // elevation: 2,
-                    // width: double.infinity,
-                  ),
-                  icon: const Icon(Icons.warning),
-                  action: const Icon(Icons.close),
-                  title: const Text('Warning'),
-                  child: const Text('This is a warning alert — check it out!'),
-                )
-              : Container(),
+        Gap(20),
+        Alert(
+          style: AlertStyle.toned(
+            foregroundColor: Colors.orange,
+            backgroundColor: Colors.orange,
+            padding: EdgeInsets.all(20),
+          ),
+          icon: Icon(Icons.warning),
+          action: Icon(Icons.close),
+          // title:  Text('Warning'),
+          message: Text('This is a warning alert — check it out!'),
         ),
-        const Gap(20),
-        Button(
-          onPressed: () => _setOpen(null),
-          child: const Text('Toggle Open'),
+        Gap(20),
+        Alert(
+          style: const AlertStyle.toned(
+            foregroundColor: Colors.blue,
+            backgroundColor: Colors.blue,
+            padding: EdgeInsets.all(20),
+          ),
+          icon: Icon(Icons.info),
+          action: Icon(Icons.close),
+          // title:  Text('Warning'),
+          message: Text('This is a warning alert — check it out!'),
+        ),
+        Gap(20),
+        Alert(
+          style: AlertStyle.toned(
+            foregroundColor: Colors.green,
+            backgroundColor: Colors.green,
+            padding: EdgeInsets.all(20),
+          ),
+          icon: Icon(Icons.check_circle),
+          action: Icon(Icons.close),
+          // title:  Text('Warning'),
+          message: Text('This is a warning alert — check it out!'),
         ),
       ],
     );

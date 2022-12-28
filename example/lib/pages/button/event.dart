@@ -10,74 +10,131 @@ class ButtonEventUsage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Sample(
-      title: 'Button Event',
-      script: '',
+      title: 'Button Interaction',
+      script: script,
       children: [
         Button(
-          onPressed: () => {},
-          style: ButtonStyle.flat(),
+          onPressed: () {},
+          style: DrivenButtonStyle.tonal(),
+          child: DrivenWidget.by((events) {
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: ButtonEvent.isPressed(events)
+                  ? const Text('Pressed', key: ValueKey('pressed'))
+                  : ButtonEvent.isHovered(events)
+                      ? const Text('Hovered', key: ValueKey('hovered'))
+                      : const Text('Enabled', key: ValueKey('enabled')),
+            );
+          }),
+        ),
+        Button(
+          onPressed: () {},
+          style: DrivenButtonStyle.text(),
           child: DrivenWidget.by((events) {
             return AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
               child: ButtonEvent.isPressed(events)
                   ? const Icon(Icons.check)
                   : AnimatedSpin(
-                      clockwise: false,
                       enabled: ButtonEvent.isHovered(events),
                       duration: const Duration(seconds: 1),
                       child: const Icon(Icons.settings),
-                    ),
-            );
-            // return AnimatedIcon(
-            //   icon: ButtonEvent.isPressed(events)
-            //       ? Icons.check
-            //       : Icons.settings,
-            //   // icon: Icons.expand_more,
-            //   // scale: ButtonEvent.isHovered(events) ? 2 : 1,
-            //   // rotation: ButtonEvent.isHovered(events) ? 180 : 0,
-            //   // flipX: ButtonEvent.isPressed(events),
-            //   // flipY: ButtonEvent.isPressed(events),
-            // );
-          }),
-        ),
-        Button(
-          onPressed: () => {},
-          style: ButtonStyle.toned(),
-          child: DrivenWidget.by((events) {
-            return AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              child: ButtonEvent.isHovered(events)
-                  ? const Text('Hovered', key: ValueKey('hovered'))
-                  : const Text(
-                      'Flat Button',
-                      key: ValueKey('enabled'),
                     ),
             );
           }),
         ),
         Button(
           onPressed: () {},
-          style: ButtonStyle.when(
-            enabled: ButtonStyle.toned(
-              borderRadius: BorderRadius.circular(25),
-            ),
-            focused: const ButtonStyle(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.red,
-            ),
-            hovered: ButtonStyle.outlined(
+          style: DrivenButtonStyle.from(
+            DrivenButtonStyle.outlined(
               color: Colors.blue,
               borderRadius: BorderRadius.circular(5),
             ),
-            pressed: ButtonStyle.filled(
+            focusedStyle: const ButtonStyle(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.red,
+            ),
+            hoveredStyle: DrivenButtonStyle.tonal(
+              backgroundColor: Colors.orange,
+              foregroundColor: Colors.orange,
+              foregroundSpacing: 20,
+              borderRadius: BorderRadius.circular(25),
+            ),
+            pressedStyle: DrivenButtonStyle.filled(
               color: Colors.red,
+              backgroundOpacity: 1,
               foregroundColor: Colors.white,
               borderRadius: BorderRadius.circular(25),
             ),
           ),
-          child: const Text('Mixed Style Chip'),
+          trailing: const Icon(Icons.close),
+          child: const Text('Mixed Style'),
         ),
       ],
     );
   }
 }
+
+const script = '''Wrap(
+  spacing: 15,
+  runSpacing: 15,
+  children: [
+    Button(
+      onPressed: () {},
+      style: DrivenButtonStyle.tonal(),
+      child: DrivenWidget.by((events) {
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 200),
+          child: ButtonEvent.isPressed(events)
+              ? const Text('Pressed', key: ValueKey('pressed'))
+              : ButtonEvent.isHovered(events)
+                  ? const Text('Hovered', key: ValueKey('hovered'))
+                  : const Text('Enabled', key: ValueKey('enabled')),
+        );
+      }),
+    ),
+    Button(
+      onPressed: () {},
+      style: DrivenButtonStyle.text(),
+      child: DrivenWidget.by((events) {
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 200),
+          child: ButtonEvent.isPressed(events)
+              ? const Icon(Icons.check)
+              : AnimatedSpin(
+                  enabled: ButtonEvent.isHovered(events),
+                  duration: const Duration(seconds: 1),
+                  child: const Icon(Icons.settings),
+                ),
+        );
+      }),
+    ),
+    Button(
+      onPressed: () {},
+      style: DrivenButtonStyle.from(
+        DrivenButtonStyle.outlined(
+          color: Colors.blue,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        focusedStyle: const ButtonStyle(
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.red,
+        ),
+        hoveredStyle: DrivenButtonStyle.tonal(
+          backgroundColor: Colors.orange,
+          foregroundColor: Colors.orange,
+          foregroundSpacing: 20,
+          borderRadius: BorderRadius.circular(25),
+        ),
+        pressedStyle: DrivenButtonStyle.filled(
+          color: Colors.red,
+          backgroundOpacity: 1,
+          foregroundColor: Colors.white,
+          borderRadius: BorderRadius.circular(25),
+        ),
+      ),
+      trailing: const Icon(Icons.close),
+      child: const Text('Mixed Style'),
+    ),
+  ],
+)''';

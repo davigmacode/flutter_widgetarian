@@ -51,16 +51,16 @@ class _ChoiceBasicMultipleUsageState extends State<ChoiceBasicMultipleUsage> {
             return Wrap(
               children: List<Widget>.generate(
                 strChoices.length,
-                (i) => Checkbox(
-                  label: Text(strChoices[i]),
-                  checked: group.has(strChoices[i]),
+                (i) => CheckboxTile(
+                  selected: group.has(strChoices[i]),
                   onChanged: group.select(strChoices[i]),
+                  child: Text(strChoices[i]),
                 ),
-              )..add(Checkbox(
-                  label: const Text('Select All'),
-                  checked: group.isChecked,
+              )..add(CheckboxTile(
+                  selected: group.isChecked,
                   indeterminate: group.isIndeterminate,
                   onChanged: group.selectAll(),
+                  child: const Text('Select All'),
                 )),
             );
           },
@@ -75,16 +75,16 @@ class _ChoiceBasicMultipleUsageState extends State<ChoiceBasicMultipleUsage> {
             return Wrap(
               children: List<Widget>.generate(
                 strChoices.length,
-                (i) => Switch(
-                  label: Text(strChoices[i]),
-                  checked: group.has(strChoices[i]),
+                (i) => SwitchTile(
+                  selected: group.has(strChoices[i]),
                   onChanged: group.select(strChoices[i]),
+                  child: Text(strChoices[i]),
                 ),
-              )..add(Switch(
-                  label: const Text('Select All'),
-                  checked: group.isChecked,
+              )..add(SwitchTile(
+                  selected: group.isChecked,
                   indeterminate: group.isIndeterminate,
                   onChanged: group.selectAll(),
+                  child: const Text('Select All'),
                 )),
             );
           },
@@ -126,20 +126,17 @@ class _ChoiceBasicMultipleUsageState extends State<ChoiceBasicMultipleUsage> {
               spacing: 15,
               children: List<Widget>.generate(
                 iconChoices.length,
-                (i) => Button(
+                (i) => ToggleButton(
                   selected: group.has(iconChoices[i]),
                   onSelected: group.select(iconChoices[i]),
-                  style: ButtonStyle.flat(
-                    shape: BoxShape.circle,
+                  style: DrivenButtonStyle.text(
                     hoveredStyle: ButtonStyle(
                       foregroundColor: Theme.of(context).colorScheme.primary,
-                      backgroundColor: Theme.of(context).colorScheme.primary,
                     ),
                     selectedStyle: ButtonStyle(
                       foregroundColor: Theme.of(context).colorScheme.primary,
-                      backgroundColor: Theme.of(context).colorScheme.primary,
                     ),
-                  ),
+                  ).icon(),
                   child: Icon(iconChoices[i]),
                 ),
               ),
