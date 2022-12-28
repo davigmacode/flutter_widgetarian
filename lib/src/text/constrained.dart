@@ -5,7 +5,7 @@ class ConstrainedText extends StatelessWidget {
     this.data, {
     Key? key,
     this.style,
-    this.trailing,
+    this.ellipsis,
     this.minLines,
     this.maxLines,
     this.maxLength,
@@ -13,7 +13,7 @@ class ConstrainedText extends StatelessWidget {
 
   final String data;
   final TextStyle? style;
-  final TextSpan? trailing;
+  final InlineSpan? ellipsis;
   final int? minLines;
   final int? maxLines;
   final int? maxLength;
@@ -37,11 +37,19 @@ class ConstrainedText extends StatelessWidget {
 
     bool exceedLimit = maxLength != null && maxLength! <= data.length;
 
-    final trailingSpan = trailing ??
+    final trailingSpan = ellipsis ??
         TextSpan(
           text: '...',
           style: textStyle,
         );
+
+    // final trailingPlaceholder = <PlaceholderSpan>[];
+    // trailingSpan.visitChildren((InlineSpan span) {
+    //   if (span is PlaceholderSpan) {
+    //     trailingPlaceholder.add(span.);
+    //   }
+    //   return true;
+    // });
 
     final mainSpan = TextSpan(
       text: exceedLimit ? data.substring(0, maxLength) : data,
@@ -56,18 +64,12 @@ class ConstrainedText extends StatelessWidget {
         final textPainter = TextPainter(
           text: trailingSpan,
           maxLines: maxLines,
+          textScaleFactor: MediaQuery.of(context).textScaleFactor,
           textDirection: Directionality.of(context),
         );
-        // textPainter.setPlaceholderDimensions([
-        //   const PlaceholderDimensions(
-        //     size: Size.zero,
-        //     alignment: PlaceholderAlignment.baseline,
-        //   ),
-        // ]);
-        textPainter.layout(
-          minWidth: 0,
-          maxWidth: constraints.maxWidth,
-        );
+
+        // textPainter.setPlaceholderDimensions(trailingPlaceholder);
+        textPainter.layout(maxWidth: constraints.maxWidth);
         final trailingSize = textPainter.size;
 
         // Layout and measure main span

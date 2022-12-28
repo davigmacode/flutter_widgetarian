@@ -63,7 +63,7 @@ class _SpoilerState extends State<Spoiler> {
           maxLength: widget.trimLength,
           maxLines: widget.trimLines,
           style: textTheme.style,
-          trailing: TextSpan(
+          ellipsis: TextSpan(
             text: widget.moreText,
             style: textTheme.style,
           ),
