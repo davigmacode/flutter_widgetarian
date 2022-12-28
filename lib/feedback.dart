@@ -14,5 +14,7 @@ export 'src/feedback/overlay/theme.dart';
 export 'src/feedback/overlay/tween.dart';
 export 'src/feedback/overlay/widget.dart';
 
+export 'src/feedback/toggle_icon/event.dart';
 export 'src/feedback/toggle_icon/style.dart';
+export 'src/feedback/toggle_icon/theme.dart';
 export 'src/feedback/toggle_icon/widget.dart';
