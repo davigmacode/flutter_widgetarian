@@ -75,6 +75,7 @@ class ButtonStyle extends SheetStyle {
           iconSize: other?.iconSize,
         );
 
+  /// An [ButtonStyle] with some reasonable default values.
   static const defaults = ButtonStyle(
     clipBehavior: Clip.antiAlias,
     borderRadius: BorderRadius.all(Radius.circular(8)),

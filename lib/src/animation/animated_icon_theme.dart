@@ -1,64 +1,59 @@
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/tween.dart';
 
-class AnimatedIconTheme extends StatelessWidget {
-  const AnimatedIconTheme({
-    Key? key,
-    this.curve = Curves.linear,
-    this.duration = const Duration(milliseconds: 200),
-    this.data,
-    required this.child,
-  }) : super(key: key);
-
-  /// The curve to apply when animating the parameters of this widget.
-  final Curve curve;
-
-  /// The duration over which to animate the parameters of this widget.
-  final Duration duration;
-
+/// A widget that animates the icon theme data implicitly.
+class AnimatedIconTheme extends ImplicitlyAnimatedWidget {
   /// The color, opacity, and size to use for icons in this subtree.
-  final IconThemeData? data;
+  final IconThemeData data;
 
   /// The widget below this widget in the tree.
   final Widget child;
 
-  @override
-  Widget build(BuildContext context) {
-    return _AnimatedIconTheme(
-      curve: curve,
-      duration: duration,
-      data: IconTheme.of(context).merge(data),
-      child: child,
-    );
-  }
-}
-
-class _AnimatedIconTheme extends ImplicitlyAnimatedWidget {
-  /// Creates a widget that animates the icon theme data implicitly.
-  const _AnimatedIconTheme({
+  /// Creates an animated icon theme
+  const AnimatedIconTheme({
     Key? key,
     Curve curve = Curves.linear,
     Duration duration = const Duration(milliseconds: 200),
-    VoidCallback? onEnd,
     required this.data,
     required this.child,
   }) : super(
           key: key,
           curve: curve,
           duration: duration,
-          onEnd: onEnd,
         );
 
-  final IconThemeData data;
-  final Widget child;
+  /// Creates an [AnimatedIconTheme] that controls the style of
+  /// descendant widgets, and merges in the current [AnimatedIconTheme], if any.
+  ///
+  /// The [child] arguments must not be null.
+  static Widget merge({
+    Key? key,
+    Curve curve = Curves.linear,
+    Duration duration = const Duration(milliseconds: 200),
+    IconThemeData? data,
+    required Widget child,
+  }) {
+    return Builder(
+      builder: (BuildContext context) {
+        final parent = IconTheme.of(context);
+        return AnimatedIconTheme(
+          key: key,
+          curve: curve,
+          duration: duration,
+          data: parent.merge(data),
+          child: child,
+        );
+      },
+    );
+  }
 
   @override
-  AnimatedWidgetBaseState<_AnimatedIconTheme> createState() =>
+  AnimatedWidgetBaseState<AnimatedIconTheme> createState() =>
       _AnimatedIconThemeState();
 }
 
 class _AnimatedIconThemeState
-    extends AnimatedWidgetBaseState<_AnimatedIconTheme> {
+    extends AnimatedWidgetBaseState<AnimatedIconTheme> {
   IconThemeDataTween? _dataTween;
 
   @override
@@ -72,7 +67,7 @@ class _AnimatedIconThemeState
 
   @override
   Widget build(BuildContext context) {
-    return IconTheme(
+    return IconTheme.merge(
       data: _dataTween!.evaluate(animation),
       child: widget.child,
     );
