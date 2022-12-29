@@ -241,7 +241,7 @@ class Chip extends StatelessWidget {
       curve: curve ?? theme.curve,
       duration: duration ?? theme.duration,
       style: theme.style.merge(style),
-      theme: theme,
+      fallback: theme.fallback,
       label: label,
       avatarImage: avatarImage,
       avatarText: avatarText,
@@ -275,7 +275,6 @@ class _ChipRender extends ImplicitlyAnimatedWidget {
     this.tooltip,
     this.deleteIcon,
     this.deleteTooltip,
-    this.style,
     this.selected = false,
     this.disabled = false,
     this.checkmark = false,
@@ -285,7 +284,8 @@ class _ChipRender extends ImplicitlyAnimatedWidget {
     this.onDeleted,
     this.onSelected,
     this.eventsController,
-    required this.theme,
+    required this.style,
+    required this.fallback,
     required Curve curve,
     required Duration duration,
   }) : super(
@@ -310,9 +310,9 @@ class _ChipRender extends ImplicitlyAnimatedWidget {
   final VoidCallback? onPressed;
   final VoidCallback? onDeleted;
   final ValueChanged<bool>? onSelected;
-  final ChipStyle? style;
+  final ChipStyle style;
+  final ChipStyle fallback;
   final ChipEventController? eventsController;
-  final ChipThemeData theme;
 
   bool get enabled => !disabled;
 
@@ -339,7 +339,7 @@ class _ChipRenderState extends AnimatedWidgetBaseState<_ChipRender>
     final resStyle = DrivenChipStyle.evaluate(rawStyle, widgetEvents.value);
     style = ChipStyle.from(resStyle);
 
-    final rawFallback = widget.theme.fallback;
+    final rawFallback = widget.fallback;
     final resFallback =
         DrivenChipStyle.evaluate(rawFallback, widgetEvents.value);
     fallback = ChipStyle.from(resFallback);
@@ -392,7 +392,10 @@ class _ChipRenderState extends AnimatedWidgetBaseState<_ChipRender>
   }
 
   TextStyle get foregroundStyle {
-    return TextStyle(color: foregroundColor).merge(style.foregroundStyle);
+    return const TextStyle()
+        .merge(fallback.foregroundStyle)
+        .merge(style.foregroundStyle)
+        .copyWith(color: foregroundColor);
   }
 
   Color? get avatarBackgroundColor {
@@ -586,7 +589,7 @@ class _ChipRenderState extends AnimatedWidgetBaseState<_ChipRender>
         duration: widget.duration,
         style: style,
         padding: EdgeInsets.zero,
-        foregroundColor: foregroundColor,
+        foregroundStyle: foregroundStyle,
         backgroundColor: backgroundColor,
         borderColor: borderColor,
         tooltip: widget.canTap ? widget.tooltip : null,

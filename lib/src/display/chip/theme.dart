@@ -154,6 +154,7 @@ class ChipTheme extends InheritedTheme {
     return ChipThemeData.defaults
         .copyWith(
           fallback: DrivenChipStyle(
+            foregroundStyle: appTheme.textTheme.labelLarge,
             foregroundColor: appTheme.colorScheme.onSurface,
             backgroundColor: appTheme.unselectedWidgetColor,
             borderColor: appTheme.colorScheme.outline,
