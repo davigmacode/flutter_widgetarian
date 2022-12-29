@@ -268,8 +268,8 @@ class _SheetRenderState extends State<_SheetRender> {
 
   TextStyle get foregroundStyle {
     return const TextStyle()
-        .copyWith(color: foregroundColor)
-        .merge(style.foregroundStyle);
+        .merge(style.foregroundStyle)
+        .copyWith(color: foregroundColor);
   }
 
   double? get width {
