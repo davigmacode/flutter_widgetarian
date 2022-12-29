@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart' hide ButtonStyle;
+import 'package:flutter/material.dart'
+    hide ButtonStyle, TextButton, OutlinedButton;
 import 'package:widgetarian/button.dart';
 
 import '../sample.dart';
@@ -12,22 +13,19 @@ class ButtonBlockUsage extends StatelessWidget {
       title: 'Block Button',
       script: script,
       children: [
-        Button(
+        TextButton.block(
           onPressed: () {},
-          style: DrivenButtonStyle.text().block(),
           child: const Text('Text Button'),
         ),
-        Button.block(
+        TonalButton.block(
           onPressed: () {},
-          style: DrivenButtonStyle.tonal(),
           trailing: const Icon(Icons.close),
           child: const Text('Tonal Button'),
         ),
-        Button.block(
+        OutlinedButton.block(
           expanded: false,
           justifyChildren: MainAxisAlignment.spaceBetween,
           onPressed: () {},
-          style: DrivenButtonStyle.outlined(),
           leading: const Icon(Icons.calendar_month),
           trailing: const Icon(Icons.close),
           child: const Text('Outlined Button'),
@@ -37,7 +35,9 @@ class ButtonBlockUsage extends StatelessWidget {
           style: DrivenButtonStyle.filled().block(expanded: false),
           leading: const SizedBox.square(
             dimension: 18,
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              color: Colors.white,
+            ),
           ),
           child: const Text('Filled Button'),
         ),
@@ -48,22 +48,19 @@ class ButtonBlockUsage extends StatelessWidget {
 
 const script = '''Column(
   children: [
-    Button(
+    TextButton.block(
       onPressed: () {},
-      style: DrivenButtonStyle.text().block(),
       child: const Text('Text Button'),
     ),
-    Button.block(
+    TonalButton.block(
       onPressed: () {},
-      style: DrivenButtonStyle.tonal(),
       trailing: const Icon(Icons.close),
       child: const Text('Tonal Button'),
     ),
-    Button.block(
+    OutlinedButton.block(
       expanded: false,
       justifyChildren: MainAxisAlignment.spaceBetween,
       onPressed: () {},
-      style: DrivenButtonStyle.outlined(),
       leading: const Icon(Icons.calendar_month),
       trailing: const Icon(Icons.close),
       child: const Text('Outlined Button'),
@@ -73,7 +70,9 @@ const script = '''Column(
       style: DrivenButtonStyle.filled().block(expanded: false),
       leading: const SizedBox.square(
         dimension: 18,
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          color: Colors.white,
+        ),
       ),
       child: const Text('Filled Button'),
     ),

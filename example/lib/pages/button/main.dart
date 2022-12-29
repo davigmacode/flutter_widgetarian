@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart' hide ButtonStyle;
-import 'package:widgetarian/button.dart';
-import 'dart:developer';
+import 'package:flutter/material.dart';
 
 import '../template.dart';
 import 'basic.dart';

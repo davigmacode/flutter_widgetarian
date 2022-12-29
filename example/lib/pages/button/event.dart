@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart' hide ButtonStyle, AnimatedIcon;
+import 'package:flutter/material.dart'
+    hide ButtonStyle, TextButton, AnimatedIcon;
 import 'package:widgetarian/animation.dart';
 import 'package:widgetarian/button.dart';
 import 'package:widgetarian/event.dart';
@@ -13,9 +14,8 @@ class ButtonEventUsage extends StatelessWidget {
       title: 'Button Interaction',
       script: script,
       children: [
-        Button(
+        TonalButton(
           onPressed: () {},
-          style: DrivenButtonStyle.tonal(),
           child: DrivenWidget.by((events) {
             return AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
@@ -27,9 +27,8 @@ class ButtonEventUsage extends StatelessWidget {
             );
           }),
         ),
-        Button(
+        TextButton(
           onPressed: () {},
-          style: DrivenButtonStyle.text(),
           child: DrivenWidget.by((events) {
             return AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
@@ -79,9 +78,8 @@ const script = '''Wrap(
   spacing: 15,
   runSpacing: 15,
   children: [
-    Button(
+    TonalButton(
       onPressed: () {},
-      style: DrivenButtonStyle.tonal(),
       child: DrivenWidget.by((events) {
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),
@@ -93,9 +91,8 @@ const script = '''Wrap(
         );
       }),
     ),
-    Button(
+    TextButton(
       onPressed: () {},
-      style: DrivenButtonStyle.text(),
       child: DrivenWidget.by((events) {
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),

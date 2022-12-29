@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide ButtonStyle;
+import 'package:flutter/material.dart' hide TextButton, OutlinedButton;
 import 'package:widgetarian/button.dart';
 
 import '../sample.dart';
@@ -12,31 +12,27 @@ class ButtonChildUsage extends StatelessWidget {
       title: 'Button Children',
       script: script,
       children: [
-        Button(
+        TextButton(
           onPressed: () {},
-          style: DrivenButtonStyle.text(),
           leading: const Icon(Icons.calendar_month),
           child: const Text('Text Button'),
         ),
-        Button(
+        TonalButton(
           onPressed: () {},
-          style: DrivenButtonStyle.tonal(),
           trailing: const Icon(Icons.close),
           child: const Text('Tonal Button'),
         ),
-        Button(
+        OutlinedButton(
           onPressed: () {},
-          style: DrivenButtonStyle.outlined(),
           leading: const Icon(Icons.calendar_month),
           trailing: const Icon(Icons.close),
           child: const Text('Outlined Button'),
         ),
-        Button(
+        FilledButton(
           onPressed: () {},
-          style: DrivenButtonStyle.filled(),
           leading: const SizedBox.square(
             dimension: 18,
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(color: Colors.white),
           ),
           child: const Text('Filled Button'),
         ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart' hide ButtonStyle;
 import 'package:widgetarian/button.dart';
 import 'package:widgetarian/choice.dart';
-import 'package:widgetarian/layout.dart';
 
 import '../sample.dart';
 

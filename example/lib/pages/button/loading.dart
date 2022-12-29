@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide ButtonStyle;
+import 'package:flutter/material.dart' hide ButtonStyle, TextButton;
 import 'package:widgetarian/button.dart';
 import 'package:widgetarian/event.dart';
 
@@ -33,10 +33,9 @@ class _ButtonLoadingUsageState extends State<ButtonLoadingUsage> {
       title: 'Loading Button',
       script: script,
       children: [
-        Button(
+        TextButton(
           loading: loading,
           onPressed: load,
-          style: DrivenButtonStyle.text(),
           leading: DrivenWidget.by((events) {
             return AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
@@ -71,10 +70,9 @@ const script = '''Wrap(
   spacing: 15,
   runSpacing: 15,
   children: [
-    Button(
+    TextButton(
       loading: loading,
       onPressed: load,
-      style: DrivenButtonStyle.text(),
       leading: DrivenWidget.by((events) {
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),

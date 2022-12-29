@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart' hide ButtonStyle;
+import 'package:flutter/material.dart'
+    hide ButtonStyle, TextButton, OutlinedButton;
 import 'package:widgetarian/button.dart';
 
 import '../sample.dart';
@@ -12,22 +13,20 @@ class ButtonIconUsage extends StatelessWidget {
       title: 'Icon Button',
       script: script,
       children: [
-        Button(
+        TextButton.icon(
           onPressed: () {},
-          style: DrivenButtonStyle.text().icon(),
           child: const Icon(Icons.settings),
         ),
-        Button.icon(
+        TonalButton.icon(
           onPressed: () {},
           shape: BoxShape.rectangle,
-          style: DrivenButtonStyle.tonal(),
           child: const Icon(Icons.settings),
         ),
         Button(
           onPressed: () {},
           style: DrivenButtonStyle.outlined(
             hoveredStyle: ButtonStyle(
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(5),
             ),
           ).icon(shape: BoxShape.rectangle),
           child: const Icon(Icons.settings),
@@ -35,8 +34,9 @@ class ButtonIconUsage extends StatelessWidget {
         Button.icon(
           onPressed: () {},
           style: DrivenButtonStyle.filled(
-            pressedStyle: const ButtonStyle(
+            pressedStyle: ButtonStyle(
               shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(5),
             ),
           ),
           child: const Icon(Icons.settings),
@@ -50,22 +50,20 @@ const script = '''Wrap(
   spacing: 15,
   runSpacing: 15,
   children: [
-    Button(
+    TextButton.icon(
       onPressed: () {},
-      style: DrivenButtonStyle.text().icon(),
       child: const Icon(Icons.settings),
     ),
-    Button.icon(
+    TonalButton.icon(
       onPressed: () {},
       shape: BoxShape.rectangle,
-      style: DrivenButtonStyle.tonal(),
       child: const Icon(Icons.settings),
     ),
     Button(
       onPressed: () {},
       style: DrivenButtonStyle.outlined(
         hoveredStyle: ButtonStyle(
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(5),
         ),
       ).icon(shape: BoxShape.rectangle),
       child: const Icon(Icons.settings),
@@ -73,8 +71,9 @@ const script = '''Wrap(
     Button.icon(
       onPressed: () {},
       style: DrivenButtonStyle.filled(
-        pressedStyle: const ButtonStyle(
+        pressedStyle: ButtonStyle(
           shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(5),
         ),
       ),
       child: const Icon(Icons.settings),
