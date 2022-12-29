@@ -155,8 +155,11 @@ class ButtonTheme extends InheritedTheme {
     return ButtonThemeData.defaults
         .copyWith(
           fallback: DrivenButtonStyle(
+            foregroundStyle: appTheme.textTheme.labelLarge,
             foregroundColor: appTheme.colorScheme.onSurface,
-            backgroundColor: appTheme.unselectedWidgetColor,
+            backgroundColor: appTheme.brightness.isLight
+                ? appTheme.colorScheme.primary
+                : appTheme.colorScheme.inversePrimary,
             borderColor: appTheme.colorScheme.outline,
             shadowColor: appTheme.colorScheme.shadow,
             selectedStyle: ButtonStyle(

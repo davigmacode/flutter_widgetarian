@@ -6,16 +6,17 @@ import 'theme.dart';
 import 'event.dart';
 import 'render.dart';
 
-/// Buttons allow users to take actions, and make choices, with a single tap
-class Button extends StatelessWidget {
-  /// Create a button
-  const Button({
+/// A Toggle Button can be used to group related options.
+class ToggleButton extends StatelessWidget {
+  /// Create a toggle button
+  const ToggleButton({
     Key? key,
+    this.selected = false,
     this.loading = false,
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
-    this.onPressed,
+    this.onSelected,
     this.eventsController,
     this.curve,
     this.duration,
@@ -27,17 +28,18 @@ class Button extends StatelessWidget {
   })  : _postStyle = null,
         super(key: key);
 
-  /// Create a block button
-  Button.block({
+  /// Create a block toggle button
+  ToggleButton.block({
     Key? key,
     CrossAxisAlignment? alignChildren,
     MainAxisAlignment? justifyChildren,
     bool expanded = true,
+    this.selected = false,
     this.loading = false,
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
-    this.onPressed,
+    this.onSelected,
     this.eventsController,
     this.curve,
     this.duration,
@@ -53,16 +55,17 @@ class Button extends StatelessWidget {
         ),
         super(key: key);
 
-  /// Create an icon button
-  Button.icon({
+  /// Create an icon toggle button
+  ToggleButton.icon({
     Key? key,
     BoxShape shape = BoxShape.circle,
     double? size,
+    this.selected = false,
     this.loading = false,
     this.disabled = false,
     this.autofocus = false,
     this.focusNode,
-    this.onPressed,
+    this.onSelected,
     this.eventsController,
     this.curve,
     this.duration,
@@ -89,6 +92,9 @@ class Button extends StatelessWidget {
   /// {@macro widgetarian.button.tooltip}
   final String? tooltip;
 
+  /// {@macro widgetarian.button.selected}
+  final bool selected;
+
   /// {@macro widgetarian.button.loading}
   final bool loading;
 
@@ -101,8 +107,8 @@ class Button extends StatelessWidget {
   /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
-  /// {@macro widgetarian.button.onPressed}
-  final VoidCallback? onPressed;
+  /// {@macro widgetarian.button.onSelected}
+  final ValueChanged<bool>? onSelected;
 
   /// {@macro widgetarian.button.style}
   final ButtonStyle? style;
@@ -121,20 +127,24 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = Theme.of(context);
     final buttonTheme = ButtonTheme.of(context);
-    final buttonStyle = style ?? buttonTheme.style;
+    final buttonStyle = buttonTheme.style.merge(style);
+    final fallbackStyle = buttonTheme.fallback.copyWith(
+      backgroundColor: appTheme.unselectedWidgetColor,
+    );
     return ButtonRender(
       curve: curve ?? buttonTheme.curve,
       duration: duration ?? buttonTheme.duration,
-      fallback: buttonTheme.fallback,
+      fallback: fallbackStyle,
       style: buttonStyle.merge(_postStyle),
-      selected: false,
+      selected: selected,
       loading: loading,
       disabled: disabled,
       autofocus: autofocus,
       focusNode: focusNode,
-      onPressed: onPressed,
-      onSelected: null,
+      onPressed: null,
+      onSelected: onSelected,
       eventsController: eventsController,
       leading: leading,
       trailing: trailing,
@@ -146,6 +156,7 @@ class Button extends StatelessWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<bool>('selected', selected));
     properties.add(DiagnosticsProperty<bool>('loading', loading));
     properties.add(DiagnosticsProperty<bool>('disabled', disabled));
     properties.add(DiagnosticsProperty<bool>('autofocus', autofocus));

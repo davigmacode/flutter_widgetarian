@@ -78,7 +78,7 @@ class ButtonStyle extends SheetStyle {
   /// An [ButtonStyle] with some reasonable default values.
   static const defaults = ButtonStyle(
     clipBehavior: Clip.antiAlias,
-    borderRadius: BorderRadius.all(Radius.circular(8)),
+    borderRadius: BorderRadius.all(Radius.circular(25)),
     margin: EdgeInsets.zero,
     padding: EdgeInsets.symmetric(horizontal: 16),
     height: 40.0,
