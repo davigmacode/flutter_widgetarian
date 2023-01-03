@@ -100,6 +100,11 @@ class SheetStyle with Diagnosticable {
   /// {@endtemplate}
   final double? foregroundSpacing;
 
+  /// {@template widgetarian.sheet.style.foregroundSpacingEnforced}
+  /// Whether the spacing is forced to child with no leading or trailing.
+  /// {@endtemplate}
+  final bool? foregroundLoosen;
+
   /// {@template widgetarian.sheet.style.foregroundExpanded}
   /// Whether the foreground widget is expanded or not
   /// {@endtemplate}
@@ -245,6 +250,7 @@ class SheetStyle with Diagnosticable {
     this.foregroundOpacity,
     this.foregroundAlpha,
     this.foregroundSpacing,
+    this.foregroundLoosen,
     this.foregroundExpanded,
     this.foregroundAlign,
     this.foregroundJustify,
@@ -279,6 +285,7 @@ class SheetStyle with Diagnosticable {
         foregroundOpacity = other?.foregroundOpacity,
         foregroundAlpha = other?.foregroundAlpha,
         foregroundSpacing = other?.foregroundSpacing,
+        foregroundLoosen = other?.foregroundLoosen,
         foregroundExpanded = other?.foregroundExpanded,
         foregroundAlign = other?.foregroundAlign,
         foregroundJustify = other?.foregroundJustify,
@@ -312,6 +319,7 @@ class SheetStyle with Diagnosticable {
     this.foregroundOpacity,
     this.foregroundAlpha,
     this.foregroundSpacing,
+    this.foregroundLoosen,
     this.foregroundExpanded,
     this.foregroundAlign,
     this.foregroundJustify,
@@ -347,6 +355,7 @@ class SheetStyle with Diagnosticable {
     this.foregroundOpacity,
     this.foregroundAlpha,
     this.foregroundSpacing,
+    this.foregroundLoosen,
     this.foregroundExpanded,
     this.foregroundAlign,
     this.foregroundJustify,
@@ -380,6 +389,7 @@ class SheetStyle with Diagnosticable {
     this.foregroundOpacity,
     this.foregroundAlpha,
     this.foregroundSpacing,
+    this.foregroundLoosen,
     this.foregroundExpanded,
     this.foregroundAlign,
     this.foregroundJustify,
@@ -415,6 +425,7 @@ class SheetStyle with Diagnosticable {
     double? foregroundOpacity,
     int? foregroundAlpha,
     double? foregroundSpacing,
+    bool? foregroundLoosen,
     bool? foregroundExpanded,
     CrossAxisAlignment? foregroundAlign,
     MainAxisAlignment? foregroundJustify,
@@ -447,6 +458,7 @@ class SheetStyle with Diagnosticable {
       foregroundOpacity: foregroundOpacity ?? this.foregroundOpacity,
       foregroundAlpha: foregroundAlpha ?? this.foregroundAlpha,
       foregroundSpacing: foregroundSpacing ?? this.foregroundSpacing,
+      foregroundLoosen: foregroundLoosen ?? this.foregroundLoosen,
       foregroundExpanded: foregroundExpanded ?? this.foregroundExpanded,
       foregroundAlign: foregroundAlign ?? this.foregroundAlign,
       foregroundJustify: foregroundJustify ?? this.foregroundJustify,
@@ -487,6 +499,7 @@ class SheetStyle with Diagnosticable {
       foregroundOpacity: other.foregroundOpacity,
       foregroundAlpha: other.foregroundAlpha,
       foregroundSpacing: other.foregroundSpacing,
+      foregroundLoosen: other.foregroundLoosen,
       foregroundExpanded: other.foregroundExpanded,
       foregroundAlign: other.foregroundAlign,
       foregroundJustify: other.foregroundJustify,
@@ -528,6 +541,7 @@ class SheetStyle with Diagnosticable {
       foregroundAlpha: lerpInt(a?.foregroundAlpha, b?.foregroundAlpha, t),
       foregroundSpacing:
           lerpDouble(a?.foregroundSpacing, b?.foregroundSpacing, t),
+      foregroundLoosen: lerpBool(a?.foregroundLoosen, b?.foregroundLoosen, t),
       foregroundExpanded:
           lerpBool(a?.foregroundExpanded, b?.foregroundExpanded, t),
       foregroundAlign: lerpEnum(a?.foregroundAlign, b?.foregroundAlign, t),
@@ -565,6 +579,7 @@ class SheetStyle with Diagnosticable {
         'foregroundOpacity': foregroundOpacity,
         'foregroundAlpha': foregroundAlpha,
         'foregroundSpacing': foregroundSpacing,
+        'foregroundLoosen': foregroundLoosen,
         'foregroundExpanded': foregroundExpanded,
         'foregroundAlign': foregroundAlign,
         'foregroundJustify': foregroundJustify,

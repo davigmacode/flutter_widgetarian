@@ -380,6 +380,9 @@ class _ChipRenderState extends AnimatedWidgetBaseState<_ChipRender>
         alpha: style.foregroundAlpha,
       );
 
+  Color? get overlayColor =>
+      style.overlayColor ?? Colors.onSurface(backgroundColor);
+
   EdgeInsetsGeometry get padding {
     final fallback = hasAvatar
         ? ChipStyle.defaultPaddingWithAvatar
@@ -597,7 +600,7 @@ class _ChipRenderState extends AnimatedWidgetBaseState<_ChipRender>
           disabled: !widget.canTap,
           autofocus: widget.autofocus,
           focusNode: widget.focusNode,
-          overlayColor: style.overlayColor,
+          overlayColor: overlayColor,
           onTap: onTap,
           onTapDown: onTapDown,
           onTapCancel: onTapCancel,

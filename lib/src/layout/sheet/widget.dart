@@ -308,6 +308,7 @@ class _SheetRenderState extends State<_SheetRender> {
               mainAxisAlignment: style.foregroundJustify,
               mainAxisExpanded: width == double.infinity,
               spacing: style.foregroundSpacing,
+              spacingEnforced: style.foregroundLoosen,
             ),
             child: AnimatedBox(
               curve: widget.curve,

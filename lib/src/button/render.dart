@@ -253,6 +253,9 @@ class ButtonRenderState extends State<ButtonRender>
         alpha: style.foregroundAlpha,
       );
 
+  Color? get overlayColor =>
+      style.overlayColor ?? Colors.onSurface(backgroundColor);
+
   EdgeInsetsGeometry get padding {
     final defaultPadding = style.shape == BoxShape.circle
         ? EdgeInsets.zero
@@ -336,7 +339,7 @@ class ButtonRenderState extends State<ButtonRender>
           disabled: !widget.canTap,
           autofocus: widget.autofocus,
           focusNode: widget.focusNode,
-          overlayColor: style.overlayColor,
+          overlayColor: overlayColor,
           onTap: onTap,
           onTapDown: onTapDown,
           onTapCancel: onTapCancel,

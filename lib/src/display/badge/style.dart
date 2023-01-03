@@ -148,6 +148,7 @@ class BadgeStyle extends SheetStyle {
     double? foregroundOpacity,
     int? foregroundAlpha,
     double? foregroundSpacing,
+    bool? foregroundLoosen,
     bool? foregroundExpanded,
     CrossAxisAlignment? foregroundAlign,
     MainAxisAlignment? foregroundJustify,
