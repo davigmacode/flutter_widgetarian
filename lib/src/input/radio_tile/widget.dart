@@ -26,59 +26,38 @@ class RadioTile extends StatelessWidget {
     required this.child,
   }) : super(key: key);
 
-  /// Called when the radio should change
-  /// between selected and de-selected states.
-  ///
-  /// When the radio is tapped, then the [onChanged] callback, if set, will be
-  /// applied to `!selected` (see [selectedStyle]).
-  ///
-  /// The radio passes the new value to the callback but does not actually
-  /// change state until the parent widget rebuilds the radio with the new value.
-  ///
-  /// The callback provided to [onChanged] should update the state of the
-  /// parent [StatefulWidget] using the [State.setState] method, so that the
-  /// parent gets rebuilt.
-  ///
-  /// {@tool snippet}
-  ///
-  /// A [StatefulWidget] that illustrates use of onSelected in an [RadioTile].
-  ///
-  /// ```dart
-  /// class Wood extends StatefulWidget {
-  ///   const Wood({Key? key}) : super(key: key);
-  ///
-  ///   @override
-  ///   State<StatefulWidget> createState() => WoodState();
-  /// }
-  ///
-  /// class WoodState extends State<Wood> {
-  ///   bool _useChisel = false;
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return Radio(
-  ///       label: const Text('Use Chisel'),
-  ///       selected: _useChisel,
-  ///       onSelected: (bool newValue) {
-  ///         setState(() {
-  ///           _useChisel = newValue;
-  ///         });
-  ///       },
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  /// {@end-tool}
+  /// Create a tiled radio widget for list item
+  RadioTile.list({
+    Key? key,
+    this.radioStyle,
+    ButtonStyle? buttonStyle,
+    this.controlAffinity,
+    this.onChanged,
+    this.selected = false,
+    this.disabled = false,
+    this.autofocus = false,
+    this.focusNode,
+    this.curve,
+    this.duration,
+    this.tooltip,
+    this.secondary,
+    required this.child,
+  })  : buttonStyle = const ButtonStyle(
+          width: double.infinity,
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          borderRadius: BorderRadius.zero,
+          foregroundExpanded: true,
+          foregroundSpacing: 15,
+        ).merge(buttonStyle),
+        super(key: key);
+
+  /// {@macro widgetarian.radio.onChanged}
   final ValueChanged<bool>? onChanged;
 
-  /// Whether or not this radio is selected.
-  ///
-  /// Must not be null. Defaults to false.
+  /// {@macro widgetarian.radio.selected}
   final bool selected;
 
-  /// Whether or not this radio is disabled for input.
-  ///
-  /// Defaults to false. Cannot be null.
+  /// {@macro widgetarian.radio.disabled}
   final bool disabled;
 
   /// {@macro flutter.widgets.Focus.autofocus}
@@ -87,44 +66,22 @@ class RadioTile extends StatelessWidget {
   /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
-  /// The style to be applied to the radio.
-  ///
-  /// If [radioStyle] is an event driven [RadioStyle]
-  /// by [DrivenRadioStyle], then [RadioStyle.evaluate]
-  /// is used for the following [RadioEvent]s:
-  ///
-  ///  * [RadioEvent.selected].
-  ///  * [RadioEvent.indeterminate].
-  ///  * [RadioEvent.focused].
-  ///  * [RadioEvent.hovered].
-  ///  * [RadioEvent.pressed].
-  ///  * [RadioEvent.disabled].
+  /// {@macro widgetarian.radio.style}
   final RadioStyle? radioStyle;
 
-  /// The style to be applied to the clickable area.
-  ///
-  /// If [buttonStyle] is an event driven [ButtonStyle]
-  /// by [DrivenButtonStyle], then [DrivenButtonStyle.evaluate]
-  /// is used for the following [ButtonEvent]s:
-  ///
-  ///  * [ButtonEvent.selected].
-  ///  * [ButtonEvent.indeterminate].
-  ///  * [ButtonEvent.focused].
-  ///  * [ButtonEvent.hovered].
-  ///  * [ButtonEvent.pressed].
-  ///  * [ButtonEvent.disabled].
+  /// {@macro widgetarian.button.style}
   final ButtonStyle? buttonStyle;
 
   /// Where to place the control next to a label.
   final ControlAffinity? controlAffinity;
 
-  /// The curve to apply when animating the parameters of this widget.
+  /// {@macro widgetarian.radio.curve}
   final Curve? curve;
 
-  /// The duration over which to animate the parameters of this widget.
+  /// {@macro widgetarian.radio.duration}
   final Duration? duration;
 
-  /// Tooltip string to be used for the body area of the radio.
+  /// {@macro widgetarian.radio.tooltip}
   final String? tooltip;
 
   /// A widget to display on the opposite side of the tile from the radio.

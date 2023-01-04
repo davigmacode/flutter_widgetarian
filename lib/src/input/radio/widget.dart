@@ -23,6 +23,7 @@ class Radio extends StatelessWidget {
     this.eventsController,
   }) : super(key: key);
 
+  /// {@template widgetarian.radio.style}
   /// The style to be applied to the radio.
   ///
   /// If [style] is an event driven [RadioStyle]
@@ -34,19 +35,26 @@ class Radio extends StatelessWidget {
   ///  * [RadioEvent.hovered].
   ///  * [RadioEvent.focused].
   ///  * [RadioEvent.pressed].
+  /// {@endtemplate}
   final RadioStyle? style;
 
+  /// {@template widgetarian.radio.tooltip}
   /// Tooltip string to be used for the body area of the radio.
+  /// {@endtemplate}
   final String? tooltip;
 
+  /// {@template widgetarian.radio.selected}
   /// Whether or not this radio is selected.
   ///
   /// Must not be null. Defaults to false.
+  /// {@endtemplate}
   final bool selected;
 
+  /// {@template widgetarian.radio.disabled}
   /// Whether or not this radio is disabled for input.
   ///
   /// Defaults to false. Cannot be null.
+  /// {@endtemplate}
   final bool disabled;
 
   /// {@macro flutter.widgets.Focus.autofocus}
@@ -55,6 +63,7 @@ class Radio extends StatelessWidget {
   /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
+  /// {@template widgetarian.radio.onChanged}
   /// Called when the radio should change between selected and de-selected
   /// states.
   ///
@@ -99,16 +108,23 @@ class Radio extends StatelessWidget {
   /// }
   /// ```
   /// {@end-tool}
+  /// {@endtemplate}
   final ValueChanged<bool>? onChanged;
 
+  /// {@template widgetarian.radio.curve}
   /// The curve to apply when animating the parameters of this widget.
+  /// {@endtemplate}
   final Curve? curve;
 
+  /// {@template widgetarian.radio.duration}
   /// The duration over which to animate the parameters of this widget.
+  /// {@endtemplate}
   final Duration? duration;
 
+  /// {@template widgetarian.radio.eventsController}
   /// Used by widgets that expose their internal event
   /// for the sake of extensions that add support for additional events.
+  /// {@endtemplate}
   final RadioEventController? eventsController;
 
   @override

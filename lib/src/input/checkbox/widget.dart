@@ -25,6 +25,7 @@ class Checkbox extends StatelessWidget {
     this.duration,
   }) : super(key: key);
 
+  /// {@template widgetarian.checkbox.onChanged}
   /// Called when the checkbox should change
   /// between selected and de-selected states.
   ///
@@ -68,24 +69,33 @@ class Checkbox extends StatelessWidget {
   /// }
   /// ```
   /// {@end-tool}
+  /// {@endtemplate}
   final ValueChanged<bool>? onChanged;
 
+  /// {@template widgetarian.checkbox.tooltip}
   /// Tooltip string to be used for the body area of the checkbox.
+  /// {@endtemplate}
   final String? tooltip;
 
+  /// {@template widgetarian.checkbox.selected}
   /// Whether or not this checkbox is selected.
   ///
   /// Must not be null. Defaults to false.
+  /// {@endtemplate}
   final bool selected;
 
+  /// {@template widgetarian.checkbox.indeterminate}
   /// Whether or not this checkbox is indeterminate.
   ///
   /// Must not be null. Defaults to false.
+  /// {@endtemplate}
   final bool indeterminate;
 
+  /// {@template widgetarian.checkbox.disabled}
   /// Whether or not this checkbox is disabled for input.
   ///
   /// Defaults to false. Cannot be null.
+  /// {@endtemplate}
   final bool disabled;
 
   /// {@macro flutter.widgets.Focus.autofocus}
@@ -94,6 +104,7 @@ class Checkbox extends StatelessWidget {
   /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
+  /// {@template widgetarian.checkbox.style}
   /// The style to be applied to the checkbox.
   ///
   /// If [style] is an event driven [CheckboxStyle]
@@ -105,16 +116,23 @@ class Checkbox extends StatelessWidget {
   ///  * [CheckboxEvent.hovered].
   ///  * [CheckboxEvent.pressed].
   ///  * [CheckboxEvent.disabled].
+  /// {@endtemplate}
   final CheckboxStyle? style;
 
+  /// {@template widgetarian.checkbox.eventsController}
   /// Used by widgets that expose their internal event
   /// for the sake of extensions that add support for additional events.
+  /// {@endtemplate}
   final CheckboxEventController? eventsController;
 
+  /// {@template widgetarian.checkbox.curve}
   /// The curve to apply when animating the parameters of this widget.
+  /// {@endtemplate}
   final Curve? curve;
 
+  /// {@template widgetarian.checkbox.duration}
   /// The duration over which to animate the parameters of this widget.
+  /// {@endtemplate}
   final Duration? duration;
 
   @override

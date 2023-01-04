@@ -27,64 +27,42 @@ class SwitchTile extends StatelessWidget {
     required this.child,
   }) : super(key: key);
 
-  /// Called when the switch should change
-  /// between selected and de-selected states.
-  ///
-  /// When the switch is tapped, then the [onChanged] callback, if set, will be
-  /// applied to `!selected` (see [selectedStyle]).
-  ///
-  /// The switch passes the new value to the callback but does not actually
-  /// change state until the parent widget rebuilds the switch with the new value.
-  ///
-  /// The callback provided to [onChanged] should update the state of the
-  /// parent [StatefulWidget] using the [State.setState] method, so that the
-  /// parent gets rebuilt.
-  ///
-  /// {@tool snippet}
-  ///
-  /// A [StatefulWidget] that illustrates use of onSelected in an [SwitchTile].
-  ///
-  /// ```dart
-  /// class Wood extends StatefulWidget {
-  ///   const Wood({Key? key}) : super(key: key);
-  ///
-  ///   @override
-  ///   State<StatefulWidget> createState() => WoodState();
-  /// }
-  ///
-  /// class WoodState extends State<Wood> {
-  ///   bool _useChisel = false;
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return Switch(
-  ///       label: const Text('Use Chisel'),
-  ///       selected: _useChisel,
-  ///       onSelected: (bool newValue) {
-  ///         setState(() {
-  ///           _useChisel = newValue;
-  ///         });
-  ///       },
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  /// {@end-tool}
+  /// Create a tiled switch widget for list item
+  SwitchTile.list({
+    Key? key,
+    this.switchStyle,
+    ButtonStyle? buttonStyle,
+    this.controlAffinity,
+    this.onChanged,
+    this.selected = false,
+    this.indeterminate = false,
+    this.disabled = false,
+    this.autofocus = false,
+    this.focusNode,
+    this.curve,
+    this.duration,
+    this.tooltip,
+    this.secondary,
+    required this.child,
+  })  : buttonStyle = const ButtonStyle(
+          width: double.infinity,
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          borderRadius: BorderRadius.zero,
+          foregroundExpanded: true,
+          foregroundSpacing: 15,
+        ).merge(buttonStyle),
+        super(key: key);
+
+  /// {@macro widgetarian.switch.onChanged}
   final ValueChanged<bool>? onChanged;
 
-  /// Whether or not this switch is selected.
-  ///
-  /// Must not be null. Defaults to false.
+  /// {@macro widgetarian.switch.selected}
   final bool selected;
 
-  /// Whether or not this switch is indeterminate.
-  ///
-  /// Must not be null. Defaults to false.
+  /// {@macro widgetarian.switch.indeterminate}
   final bool indeterminate;
 
-  /// Whether or not this switch is disabled for input.
-  ///
-  /// Defaults to false. Cannot be null.
+  /// {@macro widgetarian.switch.disabled}
   final bool disabled;
 
   /// {@macro flutter.widgets.Focus.autofocus}
@@ -93,44 +71,22 @@ class SwitchTile extends StatelessWidget {
   /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
-  /// The style to be applied to the switch.
-  ///
-  /// If [switchStyle] is an event driven [SwitchStyle]
-  /// by [DrivenSwitchStyle], then [SwitchStyle.evaluate]
-  /// is used for the following [SwitchEvent]s:
-  ///
-  ///  * [SwitchEvent.selected].
-  ///  * [SwitchEvent.indeterminate].
-  ///  * [SwitchEvent.focused].
-  ///  * [SwitchEvent.hovered].
-  ///  * [SwitchEvent.pressed].
-  ///  * [SwitchEvent.disabled].
+  /// {@macro widgetarian.switch.style}
   final SwitchStyle? switchStyle;
 
-  /// The style to be applied to the clickable area.
-  ///
-  /// If [buttonStyle] is an event driven [ButtonStyle]
-  /// by [DrivenButtonStyle], then [DrivenButtonStyle.evaluate]
-  /// is used for the following [ButtonEvent]s:
-  ///
-  ///  * [ButtonEvent.selected].
-  ///  * [ButtonEvent.indeterminate].
-  ///  * [ButtonEvent.focused].
-  ///  * [ButtonEvent.hovered].
-  ///  * [ButtonEvent.pressed].
-  ///  * [ButtonEvent.disabled].
+  /// {@macro widgetarian.button.disabled}
   final ButtonStyle? buttonStyle;
 
   /// Where to place the control next to a label.
   final ControlAffinity? controlAffinity;
 
-  /// The curve to apply when animating the parameters of this widget.
+  /// {@macro widgetarian.switch.curve}
   final Curve? curve;
 
-  /// The duration over which to animate the parameters of this widget.
+  /// {@macro widgetarian.switch.duration}
   final Duration? duration;
 
-  /// Tooltip string to be used for the body area of the switch.
+  /// {@macro widgetarian.switch.tooltip}
   final String? tooltip;
 
   /// A widget to display on the opposite side of the tile from the switch.

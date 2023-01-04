@@ -2,13 +2,12 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/feedback.dart';
 import 'package:widgetarian/utils.dart';
-import 'package:widgetarian/button.dart';
 import 'package:widgetarian/anchor.dart';
 import 'event.dart';
 import 'style.dart';
 import 'theme.dart';
 
-/// Chip widget with smooth animation, event driven style, and many more.
+/// Switches toggle the state of a single setting on or off.
 class Switch extends StatelessWidget {
   const Switch({
     Key? key,
@@ -25,6 +24,7 @@ class Switch extends StatelessWidget {
     this.duration,
   }) : super(key: key);
 
+  /// {@template widgetarian.switch.style}
   /// The style to be applied to the switch.
   ///
   /// If [style] is an event driven [SwitchStyle]
@@ -37,11 +37,15 @@ class Switch extends StatelessWidget {
   ///  * [SwitchEvent.hovered].
   ///  * [SwitchEvent.pressed].
   ///  * [SwitchEvent.disabled].
+  /// {@endtemplate}
   final SwitchStyle? style;
 
+  /// {@template widgetarian.switch.tooltip}
   /// Tooltip string to be used for the body area of the switch.
+  /// {@endtemplate}
   final String? tooltip;
 
+  /// {@template widgetarian.switch.onChanged}
   /// Called when the chip should change between selected and de-selected
   /// states.
   ///
@@ -86,21 +90,28 @@ class Switch extends StatelessWidget {
   /// }
   /// ```
   /// {@end-tool}
+  /// {@endtemplate}
   final ValueChanged<bool>? onChanged;
 
+  /// {@template widgetarian.switch.selected}
   /// Whether or not this switch is selected.
   ///
   /// Must not be null. Defaults to false.
+  /// {@endtemplate}
   final bool selected;
 
+  /// {@template widgetarian.switch.indeterminate}
   /// Whether or not this switch is indeterminate.
   ///
   /// Must not be null. Defaults to false.
+  /// {@endtemplate}
   final bool indeterminate;
 
+  /// {@template widgetarian.switch.disabled}
   /// Whether or not this switch is disabled for input.
   ///
   /// Defaults to false. Cannot be null.
+  /// {@endtemplate}
   final bool disabled;
 
   /// {@macro flutter.widgets.Focus.autofocus}
@@ -109,47 +120,21 @@ class Switch extends StatelessWidget {
   /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
+  /// {@template widgetarian.switch.eventsController}
   /// Used by widgets that expose their internal event
   /// for the sake of extensions that add support for additional events.
+  /// {@endtemplate}
   final SwitchEventController? eventsController;
 
+  /// {@template widgetarian.switch.curve}
   /// The curve to apply when animating the parameters of this widget.
+  /// {@endtemplate}
   final Curve? curve;
 
+  /// {@template widgetarian.switch.duration}
   /// The duration over which to animate the parameters of this widget.
+  /// {@endtemplate}
   final Duration? duration;
-
-  // static SwitchStyle defaultStyleOf(BuildContext context) {
-  //   final theme = Theme.of(context);
-  //   final isDark = theme.brightness == Brightness.dark;
-  //   final color =
-  //       isDark ? theme.colorScheme.inversePrimary : theme.colorScheme.primary;
-  //   return DrivenSwitchStyle.from(
-  //     SwitchStyle(
-  //       size: const Size(40, 14),
-  //       thumbInset: -3,
-  //       trackColor: theme.unselectedWidgetColor,
-  //       trackOpacity: .5,
-  //       thumbColor: Colors.white,
-  //       thumbScale: 1.3,
-  //       thumbElevation: 2,
-  //     ),
-  //     selectedStyle: SwitchStyle(
-  //       trackColor: color,
-  //       thumbColor: color,
-  //     ),
-  //     hoveredStyle: const SwitchStyle(
-  //       overlayRadius: 20.0,
-  //     ),
-  //     pressedStyle: const SwitchStyle(
-  //       overlayRadius: 0.0,
-  //     ),
-  //     disabledStyle: const SwitchStyle(
-  //       trackAlpha: SwitchStyle.disabledBackgroundAlpha,
-  //       thumbAlpha: SwitchStyle.disabledBorderAlpha,
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
