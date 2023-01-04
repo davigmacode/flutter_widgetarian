@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'style.dart';
 
-class ButtonStyleFallback {
+@immutable
+class ButtonStyleFallback with Diagnosticable {
   final ButtonStyle? base;
   final ButtonStyle? tonal;
   final ButtonStyle? filled;
@@ -62,5 +64,15 @@ class ButtonStyleFallback {
       default:
         return style;
     }
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<ButtonStyle?>('base', base));
+    properties.add(DiagnosticsProperty<ButtonStyle?>('tonal', tonal));
+    properties.add(DiagnosticsProperty<ButtonStyle?>('filled', filled));
+    properties.add(DiagnosticsProperty<ButtonStyle?>('elevated', elevated));
+    properties.add(DiagnosticsProperty<ButtonStyle?>('outlined', outlined));
   }
 }

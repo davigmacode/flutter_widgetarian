@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'style.dart';
 import 'variant.dart';
 
-class SheetStyleFallback {
+@immutable
+class SheetStyleFallback with Diagnosticable {
   final SheetStyle? base;
   final SheetStyle? text;
   final SheetStyle? tonal;
@@ -70,5 +72,16 @@ class SheetStyleFallback {
       default:
         return style;
     }
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<SheetStyle?>('base', base));
+    properties.add(DiagnosticsProperty<SheetStyle?>('text', text));
+    properties.add(DiagnosticsProperty<SheetStyle?>('tonal', tonal));
+    properties.add(DiagnosticsProperty<SheetStyle?>('filled', filled));
+    properties.add(DiagnosticsProperty<SheetStyle?>('elevated', elevated));
+    properties.add(DiagnosticsProperty<SheetStyle?>('outlined', outlined));
   }
 }

@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'style.dart';
 
-class ChipStyleFallback {
+@immutable
+class ChipStyleFallback with Diagnosticable {
   final ChipStyle? base;
   final ChipStyle? tonal;
   final ChipStyle? filled;
@@ -62,5 +64,15 @@ class ChipStyleFallback {
       default:
         return style;
     }
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<ChipStyle?>('base', base));
+    properties.add(DiagnosticsProperty<ChipStyle?>('tonal', tonal));
+    properties.add(DiagnosticsProperty<ChipStyle?>('filled', filled));
+    properties.add(DiagnosticsProperty<ChipStyle?>('elevated', elevated));
+    properties.add(DiagnosticsProperty<ChipStyle?>('outlined', outlined));
   }
 }
