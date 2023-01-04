@@ -13,8 +13,21 @@ class SheetRectangleUsage extends StatelessWidget {
       script: script,
       children: [
         Sheet(
+          style: SheetStyle.tonal(
+            width: 100,
+            height: 100,
+          ),
+          child: Center(child: Text('Tonal')),
+        ),
+        Sheet(
+          style: SheetStyle.elevated(
+            width: 100,
+            height: 100,
+          ),
+          child: Center(child: Text('Elevated')),
+        ),
+        Sheet(
           style: SheetStyle.filled(
-            elevation: 5,
             width: 100,
             height: 100,
           ),
@@ -22,18 +35,10 @@ class SheetRectangleUsage extends StatelessWidget {
         ),
         Sheet(
           style: SheetStyle.outlined(
-            borderRadius: BorderRadius.zero,
             width: 100,
             height: 100,
           ),
           child: Center(child: Text('Outlined')),
-        ),
-        Sheet(
-          style: SheetStyle.tonal(
-            width: 100,
-            height: 100,
-          ),
-          child: Center(child: Text('Tonal')),
         ),
       ],
     );
@@ -45,8 +50,21 @@ const script = '''Wrap(
   runSpacing: 15,
   children: [
     Sheet(
+      style: SheetStyle.tonal(
+        width: 100,
+        height: 100,
+      ),
+      child: Center(child: Text('Tonal')),
+    ),
+    Sheet(
+      style: SheetStyle.elevated(
+        width: 100,
+        height: 100,
+      ),
+      child: Center(child: Text('Elevated')),
+    ),
+    Sheet(
       style: SheetStyle.filled(
-        elevation: 5,
         width: 100,
         height: 100,
       ),
@@ -54,18 +72,10 @@ const script = '''Wrap(
     ),
     Sheet(
       style: SheetStyle.outlined(
-        borderRadius: BorderRadius.zero,
         width: 100,
         height: 100,
       ),
       child: Center(child: Text('Outlined')),
-    ),
-    Sheet(
-      style: SheetStyle.tonal(
-        width: 100,
-        height: 100,
-      ),
-      child: Center(child: Text('Tonal')),
     ),
   ],
 )''';

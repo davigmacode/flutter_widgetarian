@@ -3,6 +3,7 @@ import '../../template.dart';
 import 'basic.dart';
 import 'group.dart';
 import 'indeterminate.dart';
+import 'list.dart';
 
 class CheckboxPage extends StatelessWidget {
   const CheckboxPage({
@@ -22,6 +23,7 @@ class CheckboxPage extends StatelessWidget {
           CheckboxBasicUsage(),
           CheckboxGroupUsage(),
           CheckboxIndeterminateUsage(),
+          CheckboxListUsage(),
         ],
       ),
     );

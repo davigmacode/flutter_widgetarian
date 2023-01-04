@@ -32,29 +32,13 @@ class _RadioBasicUsageState extends State<RadioBasicUsage> {
   }
 }
 
-const script = '''Wrap(
-  spacing: 15,
-  runSpacing: 15,
-  children: [
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.flat(),
-      child: const Text('Flat Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.toned(),
-      child: const Text('Toned Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.outlined(),
-      child: const Text('Outlined Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.filled(),
-      child: const Text('Filled Button'),
-    ),
-  ],
+const script = '''bool _checked = false;
+
+void _setChecked(bool value) {
+  setState(() => _checked = value);
+}
+
+Radio(
+  selected: _checked,
+  onChanged: _setChecked,
 )''';

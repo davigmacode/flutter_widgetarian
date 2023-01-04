@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart'
-    hide ButtonStyle, TextButton, OutlinedButton;
+    hide ButtonStyle, TextButton, ElevatedButton, OutlinedButton;
 import 'package:widgetarian/button.dart';
 
 import '../sample.dart';
@@ -22,13 +22,8 @@ class ButtonIconUsage extends StatelessWidget {
           shape: BoxShape.rectangle,
           child: const Icon(Icons.settings),
         ),
-        Button(
+        ElevatedButton.icon(
           onPressed: () {},
-          style: DrivenButtonStyle.outlined(
-            hoveredStyle: ButtonStyle(
-              borderRadius: BorderRadius.circular(5),
-            ),
-          ).icon(shape: BoxShape.rectangle),
           child: const Icon(Icons.settings),
         ),
         Button.icon(
@@ -39,6 +34,15 @@ class ButtonIconUsage extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
             ),
           ),
+          child: const Icon(Icons.settings),
+        ),
+        Button(
+          onPressed: () {},
+          style: DrivenButtonStyle.outlined(
+            hoveredStyle: ButtonStyle(
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ).icon(shape: BoxShape.rectangle),
           child: const Icon(Icons.settings),
         ),
       ],
@@ -59,13 +63,8 @@ const script = '''Wrap(
       shape: BoxShape.rectangle,
       child: const Icon(Icons.settings),
     ),
-    Button(
+    ElevatedButton.icon(
       onPressed: () {},
-      style: DrivenButtonStyle.outlined(
-        hoveredStyle: ButtonStyle(
-          borderRadius: BorderRadius.circular(5),
-        ),
-      ).icon(shape: BoxShape.rectangle),
       child: const Icon(Icons.settings),
     ),
     Button.icon(
@@ -76,6 +75,15 @@ const script = '''Wrap(
           borderRadius: BorderRadius.circular(5),
         ),
       ),
+      child: const Icon(Icons.settings),
+    ),
+    Button(
+      onPressed: () {},
+      style: DrivenButtonStyle.outlined(
+        hoveredStyle: ButtonStyle(
+          borderRadius: BorderRadius.circular(5),
+        ),
+      ).icon(shape: BoxShape.rectangle),
       child: const Icon(Icons.settings),
     ),
   ],

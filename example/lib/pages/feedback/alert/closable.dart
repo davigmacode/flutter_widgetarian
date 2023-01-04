@@ -33,7 +33,7 @@ class _AlertClosableUsageState extends State<AlertClosableUsage> {
           value: _open,
           onChanged: _setOpen,
           child: const Alert(
-            style: AlertStyle.toned(
+            style: AlertStyle.tonal(
               foregroundColor: Colors.orange,
               backgroundColor: Colors.orange,
               padding: EdgeInsets.all(20),
@@ -55,7 +55,7 @@ class _AlertClosableUsageState extends State<AlertClosableUsage> {
           duration: const Duration(milliseconds: 200),
           child: _open
               ? Alert(
-                  style: const AlertStyle.toned(
+                  style: const AlertStyle.tonal(
                     foregroundColor: Colors.orange,
                     backgroundColor: Colors.orange,
                     padding: EdgeInsets.all(20),

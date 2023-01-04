@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart' hide TextButton, OutlinedButton;
+import 'package:flutter/material.dart'
+    hide TextButton, ElevatedButton, OutlinedButton;
 import 'package:widgetarian/button.dart';
 
 import '../sample.dart';
@@ -20,13 +21,17 @@ class ButtonBasicUsage extends StatelessWidget {
           onPressed: () {},
           child: const Text('Tonal Button'),
         ),
-        OutlinedButton(
+        ElevatedButton(
           onPressed: () {},
-          child: const Text('Outlined Button'),
+          child: const Text('Elevated Button'),
         ),
         FilledButton(
           onPressed: () {},
           child: const Text('Filled Button'),
+        ),
+        OutlinedButton(
+          onPressed: () {},
+          child: const Text('Outlined Button'),
         ),
       ],
     );
@@ -45,13 +50,17 @@ const script = '''Wrap(
       onPressed: () {},
       child: const Text('Tonal Button'),
     ),
-    OutlinedButton(
+    ElevatedButton(
       onPressed: () {},
-      child: const Text('Outlined Button'),
+      child: const Text('Elevated Button'),
     ),
     FilledButton(
       onPressed: () {},
       child: const Text('Filled Button'),
+    ),
+    OutlinedButton(
+      onPressed: () {},
+      child: const Text('Outlined Button'),
     ),
   ],
 )''';

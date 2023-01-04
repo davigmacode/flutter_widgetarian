@@ -1,17 +1,18 @@
-import 'package:flutter/material.dart' hide Switch;
+import 'package:flutter/material.dart' hide Switch, ButtonStyle;
+import 'package:widgetarian/button.dart';
 import 'package:widgetarian/input.dart';
 import 'package:widgetarian/choice.dart';
 
 import '../../sample.dart';
 
-class SwitchGroupUsage extends StatefulWidget {
-  const SwitchGroupUsage({Key? key}) : super(key: key);
+class SwitchListUsage extends StatefulWidget {
+  const SwitchListUsage({Key? key}) : super(key: key);
 
   @override
-  State<SwitchGroupUsage> createState() => _SwitchGroupUsageState();
+  State<SwitchListUsage> createState() => _SwitchListUsageState();
 }
 
-class _SwitchGroupUsageState extends State<SwitchGroupUsage> {
+class _SwitchListUsageState extends State<SwitchListUsage> {
   List<String> choices = ['Flutter', 'React', 'Ionic'];
   List<String> selected = [];
 
@@ -22,7 +23,7 @@ class _SwitchGroupUsageState extends State<SwitchGroupUsage> {
   @override
   Widget build(BuildContext context) {
     return Sample(
-      title: 'Grouped Usage',
+      title: 'List Usage',
       script: script,
       children: [
         Choice<String>(
@@ -30,13 +31,21 @@ class _SwitchGroupUsageState extends State<SwitchGroupUsage> {
           value: selected,
           onChanged: setSelected,
           builder: (context, group, _) {
-            return Wrap(
-              children: List<Widget>.generate(
-                choices.length,
-                (i) => SwitchTile(
-                  selected: group.has(choices[i]),
-                  onChanged: group.select(choices[i]),
-                  child: Text(choices[i]),
+            return SizedBox(
+              width: 200,
+              child: ListView(
+                shrinkWrap: true,
+                children: List<Widget>.generate(
+                  choices.length,
+                  (i) => SwitchTile.list(
+                    controlAffinity: ControlAffinity.trailing,
+                    buttonStyle: const ButtonStyle(
+                      foregroundLoosen: false,
+                    ),
+                    selected: group.has(choices[i]),
+                    onChanged: group.select(choices[i]),
+                    child: Text(choices[i]),
+                  ),
                 ),
               ),
             );

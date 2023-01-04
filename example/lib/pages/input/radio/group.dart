@@ -54,18 +54,18 @@ void setSelected(List<String> value) {
   setState(() => selected = value);
 }
 
-ChoiceGroup<String>(
-  exclusive: true,
+Choice<String>(
+  mandatory: true,
   value: selected,
   onChanged: setSelected,
   builder: (context, group, _) {
     return Wrap(
       children: List<Widget>.generate(
         choices.length,
-        (i) => Checkbox<String>(
-          label: Text(choices[i]),
-          checked: group.has(choices[i]),
+        (i) => RadioTile(
+          selected: group.has(choices[i]),
           onChanged: group.select(choices[i]),
+          child: Text(choices[i]),
         ),
       ),
     );

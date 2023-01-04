@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide Checkbox;
 import '../../template.dart';
 import 'basic.dart';
 import 'group.dart';
+import 'list.dart';
 
 class RadioPage extends StatelessWidget {
   const RadioPage({
@@ -20,6 +21,7 @@ class RadioPage extends StatelessWidget {
         children: const <Widget>[
           RadioBasicUsage(),
           RadioGroupUsage(),
+          RadioListUsage(),
         ],
       ),
     );

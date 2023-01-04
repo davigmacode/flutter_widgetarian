@@ -47,7 +47,7 @@ class _AlertBasicUsageState extends State<AlertBasicUsage> {
       ),
       children: const [
         Alert(
-          style: AlertStyle.toned(
+          style: AlertStyle.tonal(
             foregroundColor: Colors.red,
             backgroundColor: Colors.red,
             padding: EdgeInsets.all(20),
@@ -59,7 +59,7 @@ class _AlertBasicUsageState extends State<AlertBasicUsage> {
         ),
         Gap(20),
         Alert(
-          style: AlertStyle.toned(
+          style: AlertStyle.tonal(
             foregroundColor: Colors.orange,
             backgroundColor: Colors.orange,
             padding: EdgeInsets.all(20),
@@ -71,7 +71,7 @@ class _AlertBasicUsageState extends State<AlertBasicUsage> {
         ),
         Gap(20),
         Alert(
-          style: const AlertStyle.toned(
+          style: const AlertStyle.tonal(
             foregroundColor: Colors.blue,
             backgroundColor: Colors.blue,
             padding: EdgeInsets.all(20),
@@ -83,7 +83,7 @@ class _AlertBasicUsageState extends State<AlertBasicUsage> {
         ),
         Gap(20),
         Alert(
-          style: AlertStyle.toned(
+          style: AlertStyle.tonal(
             foregroundColor: Colors.green,
             backgroundColor: Colors.green,
             padding: EdgeInsets.all(20),

@@ -3,6 +3,7 @@ import '../../template.dart';
 import 'basic.dart';
 import 'group.dart';
 import 'indeterminate.dart';
+import 'list.dart';
 
 class SwitchPage extends StatelessWidget {
   const SwitchPage({
@@ -22,6 +23,7 @@ class SwitchPage extends StatelessWidget {
           SwitchBasicUsage(),
           SwitchGroupUsage(),
           SwitchIndeterminateUsage(),
+          SwitchListUsage(),
         ],
       ),
     );
