@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/theme.dart';
 import 'style.dart';
 import 'theme.dart';
 import 'event.dart';

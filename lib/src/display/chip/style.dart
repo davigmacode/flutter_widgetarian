@@ -1,10 +1,13 @@
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/feedback.dart';
-import '../avatar/style.dart';
-import '../../layout/sheet/style.dart';
+import 'package:widgetarian/src/display/avatar/style.dart';
+import 'package:widgetarian/src/layout/sheet/style.dart';
+import 'package:widgetarian/src/layout/sheet/variant.dart';
 
 export 'package:widgetarian/feedback.dart' show StrokeStyle;
+
+typedef ChipVariant = SheetVariant;
 
 /// The style to be applied to chip widget
 @immutable
@@ -30,6 +33,7 @@ class ChipStyle extends SheetStyle {
 
   /// Create a raw chip's style
   const ChipStyle({
+    super.variant,
     super.height,
     super.margin,
     super.padding,
@@ -73,6 +77,7 @@ class ChipStyle extends SheetStyle {
         checkmarkStyle = other?.checkmarkStyle,
         avatarStyle = other?.avatarStyle,
         super(
+          variant: other?.variant,
           height: other?.height,
           margin: other?.margin,
           padding: other?.padding,
@@ -137,6 +142,7 @@ class ChipStyle extends SheetStyle {
   /// the given fields replaced with the new values.
   @override
   ChipStyle copyWith({
+    SheetVariant? variant,
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,
@@ -181,6 +187,7 @@ class ChipStyle extends SheetStyle {
     ChipStyle? pressedStyle,
   }) {
     final style = ChipStyle(
+      variant: variant ?? this.variant,
       height: height ?? this.height,
       margin: margin ?? this.margin,
       padding: padding ?? this.padding,
@@ -247,6 +254,7 @@ class ChipStyle extends SheetStyle {
     if (other == null) return this;
 
     var style = copyWith(
+      variant: other.variant,
       height: other.height,
       margin: other.margin,
       padding: other.padding,
@@ -343,6 +351,7 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
 
   /// Create a raw [DrivenChipStyle].
   const DrivenChipStyle({
+    super.variant,
     super.height,
     super.margin,
     super.padding,
@@ -437,11 +446,12 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
     this.focusedStyle,
     this.pressedStyle,
     this.mergeResolved,
-  }) : disabledStyle = const ChipStyle(
+  })  : disabledStyle = const ChipStyle(
           foregroundAlpha: ChipStyle.disabledForegroundAlpha,
           backgroundAlpha: ChipStyle.disabledBackgroundAlpha,
           borderAlpha: ChipStyle.disabledBorderAlpha,
-        ).merge(disabledStyle);
+        ).merge(disabledStyle),
+        super(variant: SheetVariant.tonal);
 
   /// Create a [DrivenChipStyle] with default value for filled style.
   DrivenChipStyle.filled({
@@ -479,7 +489,7 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
     super.avatarStyle,
     this.selectedStyle,
     ChipStyle? disabledStyle,
-    this.hoveredStyle,
+    ChipStyle? hoveredStyle,
     this.focusedStyle,
     ChipStyle? pressedStyle,
     this.mergeResolved,
@@ -488,8 +498,10 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
           backgroundAlpha: ChipStyle.disabledBackgroundAlpha,
           borderAlpha: ChipStyle.disabledBorderAlpha,
         ).merge(disabledStyle),
-        pressedStyle = const ChipStyle(elevation: 5).merge(pressedStyle),
+        hoveredStyle = const ChipStyle(elevation: 1).merge(hoveredStyle),
+        pressedStyle = const ChipStyle(elevation: 0).merge(pressedStyle),
         super(
+          variant: SheetVariant.filled,
           backgroundColor: color,
           borderColor: color,
         );
@@ -513,7 +525,7 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
     super.foregroundAlign,
     super.foregroundJustify,
     super.backgroundColor,
-    super.backgroundOpacity = 0,
+    super.backgroundOpacity,
     super.backgroundAlpha,
     super.borderOpacity = 1,
     super.borderAlpha,
@@ -530,15 +542,18 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
     AvatarStyle? avatarStyle,
     this.selectedStyle,
     ChipStyle? disabledStyle,
-    this.hoveredStyle,
+    ChipStyle? hoveredStyle,
     this.focusedStyle,
-    this.pressedStyle,
+    ChipStyle? pressedStyle,
     this.mergeResolved,
   })  : disabledStyle = const ChipStyle(
           foregroundAlpha: ChipStyle.disabledForegroundAlpha,
           borderAlpha: ChipStyle.disabledBorderAlpha,
         ).merge(disabledStyle),
+        hoveredStyle = const ChipStyle(elevation: 0).merge(hoveredStyle),
+        pressedStyle = const ChipStyle(elevation: 0).merge(pressedStyle),
         super(
+          variant: SheetVariant.outlined,
           foregroundColor: color,
           borderColor: color,
           avatarStyle:
@@ -581,6 +596,7 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
   /// the given fields replaced with the new values.
   @override
   DrivenChipStyle copyWith({
+    SheetVariant? variant,
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,
@@ -625,6 +641,7 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
     ChipStyle? pressedStyle,
   }) {
     return DrivenChipStyle(
+      variant: variant ?? this.variant,
       height: height ?? this.height,
       margin: margin ?? this.margin,
       padding: padding ?? this.padding,

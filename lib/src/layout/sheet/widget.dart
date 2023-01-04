@@ -2,10 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/animation.dart';
 import 'package:widgetarian/utils.dart';
-import '../box.dart';
-import '../tiles/tile/style.dart';
-import '../tiles/tile/theme.dart';
+import 'package:widgetarian/src/layout/box.dart';
+import 'package:widgetarian/src/layout/tiles/tile/style.dart';
+import 'package:widgetarian/src/layout/tiles/tile/theme.dart';
 import 'style.dart';
+import 'fallback.dart';
+import 'variant.dart';
 import 'theme.dart';
 
 /// The sheet widget is the baseline for numerous components.
@@ -14,6 +16,7 @@ class Sheet extends StatelessWidget {
     Key? key,
     this.duration,
     this.curve,
+    this.variant,
     this.width,
     this.height,
     this.margin,
@@ -51,6 +54,9 @@ class Sheet extends StatelessWidget {
 
   /// The duration over which to animate the parameters of this widget.
   final Duration? duration;
+
+  /// {@macro widgetarian.sheet.style.width}
+  final SheetVariant? variant;
 
   /// {@macro widgetarian.sheet.style.width}
   final double? width;
@@ -144,6 +150,7 @@ class Sheet extends StatelessWidget {
 
   SheetStyle get effectiveStyle {
     return SheetStyle.from(style).copyWith(
+      variant: variant,
       width: width,
       height: height,
       margin: margin,
@@ -181,7 +188,7 @@ class Sheet extends StatelessWidget {
       curve: curve ?? sheetTheme.curve,
       duration: duration ?? sheetTheme.duration,
       style: sheetTheme.style.merge(effectiveStyle),
-      theme: sheetTheme,
+      fallback: sheetTheme.fallback,
       tooltip: tooltip,
       child: child,
     );
@@ -203,14 +210,14 @@ class _SheetRender extends StatefulWidget {
     required this.curve,
     required this.duration,
     required this.style,
-    required this.theme,
+    required this.fallback,
     required this.child,
   }) : super(key: key);
 
   final Curve curve;
   final Duration duration;
   final SheetStyle style;
-  final SheetThemeData theme;
+  final SheetStyleFallback fallback;
   final String? tooltip;
   final Widget? child;
 
@@ -220,10 +227,10 @@ class _SheetRender extends StatefulWidget {
 
 class _SheetRenderState extends State<_SheetRender> {
   SheetStyle get style => widget.style;
-  SheetStyle get fallback => widget.theme.fallback;
+  SheetStyle get fallback => widget.fallback.resolve(style.variant);
 
   Color? get defaultBackgroundColor {
-    return style.isOutlined ? Colors.transparent : fallback.backgroundColor;
+    return fallback.backgroundColor;
   }
 
   Color? get defaultBorderColor {

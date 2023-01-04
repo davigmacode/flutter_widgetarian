@@ -1,11 +1,11 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/layout.dart';
 import 'package:widgetarian/anchor.dart';
 import 'package:widgetarian/utils.dart';
-import 'style.dart';
 import 'event.dart';
+import 'style.dart';
+import 'fallback.dart';
 
 class ButtonRender extends StatefulWidget {
   const ButtonRender({
@@ -153,7 +153,7 @@ class ButtonRender extends StatefulWidget {
   /// {@template widgetarian.button.fallback}
   /// The [ButtonStyle] that provides fallback values.
   /// {@endtemplate}
-  final ButtonStyle fallback;
+  final ButtonStyleFallback fallback;
 
   /// {@template widgetarian.button.style}
   /// The style to be applied to the button.
@@ -212,7 +212,7 @@ class ButtonRenderState extends State<ButtonRender>
     final resStyle = DrivenButtonStyle.evaluate(rawStyle, widgetEvents.value);
     style = ButtonStyle.from(resStyle);
 
-    final rawFallback = widget.fallback;
+    final rawFallback = widget.fallback.resolve(style.variant);
     final resFallback =
         DrivenButtonStyle.evaluate(rawFallback, widgetEvents.value);
     fallback = ButtonStyle.from(resFallback);
@@ -220,7 +220,7 @@ class ButtonRenderState extends State<ButtonRender>
   }
 
   Color? get defaultBackgroundColor {
-    return style.isOutlined ? Colors.transparent : fallback.backgroundColor;
+    return fallback.backgroundColor;
   }
 
   Color? get defaultBorderColor {
@@ -254,7 +254,9 @@ class ButtonRenderState extends State<ButtonRender>
       );
 
   Color? get overlayColor =>
-      style.overlayColor ?? Colors.onSurface(backgroundColor);
+      style.overlayColor ??
+      fallback.overlayColor ??
+      Colors.onSurface(backgroundColor);
 
   EdgeInsetsGeometry get padding {
     final defaultPadding = style.shape == BoxShape.circle

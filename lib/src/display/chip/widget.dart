@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/feedback.dart';
 import 'package:widgetarian/layout.dart';
+import 'package:widgetarian/src/display/chip/fallback.dart';
 import 'package:widgetarian/utils.dart';
 import 'package:widgetarian/anchor.dart';
 import '../avatar/style.dart';
@@ -311,7 +312,7 @@ class _ChipRender extends ImplicitlyAnimatedWidget {
   final VoidCallback? onDeleted;
   final ValueChanged<bool>? onSelected;
   final ChipStyle style;
-  final ChipStyle fallback;
+  final ChipStyleFallback fallback;
   final ChipEventController? eventsController;
 
   bool get enabled => !disabled;
@@ -339,7 +340,7 @@ class _ChipRenderState extends AnimatedWidgetBaseState<_ChipRender>
     final resStyle = DrivenChipStyle.evaluate(rawStyle, widgetEvents.value);
     style = ChipStyle.from(resStyle);
 
-    final rawFallback = widget.fallback;
+    final rawFallback = widget.fallback.resolve(style.variant);
     final resFallback =
         DrivenChipStyle.evaluate(rawFallback, widgetEvents.value);
     fallback = ChipStyle.from(resFallback);
@@ -347,7 +348,7 @@ class _ChipRenderState extends AnimatedWidgetBaseState<_ChipRender>
   }
 
   Color? get defaultBackgroundColor {
-    return style.isOutlined ? Colors.transparent : fallback.backgroundColor;
+    return fallback.backgroundColor;
   }
 
   Color? get defaultBorderColor {
@@ -593,6 +594,7 @@ class _ChipRenderState extends AnimatedWidgetBaseState<_ChipRender>
         style: style,
         padding: EdgeInsets.zero,
         foregroundStyle: foregroundStyle,
+        foregroundColor: foregroundColor,
         backgroundColor: backgroundColor,
         borderColor: borderColor,
         tooltip: widget.canTap ? widget.tooltip : null,

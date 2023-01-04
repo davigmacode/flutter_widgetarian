@@ -2,14 +2,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/utils.dart';
-import '../layout/sheet/style.dart';
+import 'package:widgetarian/src/layout/sheet/style.dart';
+import 'package:widgetarian/src/layout/sheet/variant.dart';
 import 'event.dart';
+
+typedef ButtonVariant = SheetVariant;
 
 /// The style to be applied to button widget
 @immutable
 class ButtonStyle extends SheetStyle {
   /// Create a raw button's style
   const ButtonStyle({
+    super.variant,
     super.width,
     super.height,
     super.margin,
@@ -45,6 +49,7 @@ class ButtonStyle extends SheetStyle {
   /// Create a button's style from another style
   ButtonStyle.from(ButtonStyle? other)
       : super(
+          variant: other?.variant,
           width: other?.width,
           height: other?.height,
           margin: other?.margin,
@@ -128,6 +133,7 @@ class ButtonStyle extends SheetStyle {
   /// the given fields replaced with the new values.
   @override
   ButtonStyle copyWith({
+    SheetVariant? variant,
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,
@@ -167,6 +173,7 @@ class ButtonStyle extends SheetStyle {
     ButtonStyle? pressedStyle,
   }) {
     final style = ButtonStyle(
+      variant: variant ?? this.variant,
       width: width ?? this.width,
       height: height ?? this.height,
       margin: margin ?? this.margin,
@@ -230,6 +237,7 @@ class ButtonStyle extends SheetStyle {
     if (other == null) return this;
 
     var style = copyWith(
+      variant: other.variant,
       width: other.width,
       height: other.height,
       margin: other.margin,
@@ -279,6 +287,7 @@ class ButtonStyle extends SheetStyle {
   /// Linearly interpolate between two [ButtonStyle] objects.
   static ButtonStyle lerp(ButtonStyle? a, ButtonStyle? b, double t) {
     return ButtonStyle(
+      variant: lerpEnum(a?.variant, b?.variant, t),
       shape: lerpEnum(a?.shape, b?.shape, t),
       width: lerpDouble(a?.width, b?.width, t),
       height: lerpDouble(a?.height, b?.height, t),
@@ -357,6 +366,7 @@ class DrivenButtonStyle extends ButtonStyle
 
   /// Create a raw [DrivenButtonStyle].
   const DrivenButtonStyle({
+    super.variant,
     super.width,
     super.height,
     super.margin,
@@ -445,9 +455,10 @@ class DrivenButtonStyle extends ButtonStyle
     this.focusedStyle,
     this.pressedStyle,
     this.mergeResolved,
-  }) : disabledStyle = const ButtonStyle(
+  })  : disabledStyle = const ButtonStyle(
           foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
-        ).merge(disabledStyle);
+        ).merge(disabledStyle),
+        super(variant: SheetVariant.text);
 
   /// Create a [DrivenButtonStyle] with default value for tonal style.
   DrivenButtonStyle.tonal({
@@ -487,11 +498,12 @@ class DrivenButtonStyle extends ButtonStyle
     this.focusedStyle,
     this.pressedStyle,
     this.mergeResolved,
-  }) : disabledStyle = const ButtonStyle(
+  })  : disabledStyle = const ButtonStyle(
           foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
           backgroundAlpha: ButtonStyle.disabledBackgroundAlpha,
           borderAlpha: ButtonStyle.disabledBorderAlpha,
-        ).merge(disabledStyle);
+        ).merge(disabledStyle),
+        super(variant: SheetVariant.tonal);
 
   /// Create a [DrivenButtonStyle] with default value for filled style.
   DrivenButtonStyle.filled({
@@ -526,7 +538,7 @@ class DrivenButtonStyle extends ButtonStyle
     super.iconSize,
     this.selectedStyle,
     ButtonStyle? disabledStyle,
-    this.hoveredStyle,
+    ButtonStyle? hoveredStyle,
     this.focusedStyle,
     ButtonStyle? pressedStyle,
     this.mergeResolved,
@@ -535,10 +547,62 @@ class DrivenButtonStyle extends ButtonStyle
           backgroundAlpha: ButtonStyle.disabledBackgroundAlpha,
           borderAlpha: ButtonStyle.disabledBorderAlpha,
         ).merge(disabledStyle),
-        pressedStyle = const ButtonStyle(elevation: 5).merge(pressedStyle),
+        hoveredStyle = const ButtonStyle(elevation: 1).merge(hoveredStyle),
+        pressedStyle = const ButtonStyle(elevation: 0).merge(pressedStyle),
         super(
           backgroundColor: color,
           borderColor: color,
+          variant: SheetVariant.filled,
+        );
+
+  /// Create a [DrivenButtonStyle] with default value for elevated style.
+  DrivenButtonStyle.elevated({
+    Color? color,
+    super.width,
+    super.height,
+    super.margin,
+    super.padding,
+    super.clipBehavior,
+    super.overlayColor,
+    super.shadowColor,
+    super.elevation = 1,
+    super.foregroundStyle,
+    super.foregroundColor,
+    super.foregroundOpacity,
+    super.foregroundAlpha,
+    super.foregroundSpacing,
+    super.foregroundLoosen,
+    super.foregroundExpanded,
+    super.foregroundAlign,
+    super.foregroundJustify,
+    super.backgroundOpacity = 1,
+    super.backgroundAlpha,
+    super.borderOpacity = 0,
+    super.borderAlpha,
+    super.borderWidth = 0,
+    super.borderRadius,
+    super.borderStyle = BorderStyle.none,
+    super.shape,
+    super.iconColor,
+    super.iconOpacity,
+    super.iconSize,
+    this.selectedStyle,
+    ButtonStyle? disabledStyle,
+    ButtonStyle? hoveredStyle,
+    this.focusedStyle,
+    ButtonStyle? pressedStyle,
+    this.mergeResolved,
+  })  : disabledStyle = const ButtonStyle(
+          foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
+          backgroundAlpha: ButtonStyle.disabledBackgroundAlpha,
+          borderAlpha: ButtonStyle.disabledBorderAlpha,
+        ).merge(disabledStyle),
+        hoveredStyle = const ButtonStyle(elevation: 3).merge(hoveredStyle),
+        pressedStyle = const ButtonStyle(elevation: 1).merge(pressedStyle),
+        super(
+          backgroundColor: color,
+          borderColor: color,
+          variant: SheetVariant.elevated,
         );
 
   /// Create a [DrivenButtonStyle] with default value for outlined style.
@@ -585,6 +649,7 @@ class DrivenButtonStyle extends ButtonStyle
         super(
           foregroundColor: color,
           borderColor: color,
+          variant: SheetVariant.outlined,
         );
 
   /// Create a [DrivenButtonStyle] from a resolver callback
@@ -623,6 +688,7 @@ class DrivenButtonStyle extends ButtonStyle
   /// the given fields replaced with the new values.
   @override
   DrivenButtonStyle copyWith({
+    SheetVariant? variant,
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,
@@ -662,6 +728,7 @@ class DrivenButtonStyle extends ButtonStyle
     ButtonStyle? pressedStyle,
   }) {
     return DrivenButtonStyle(
+      variant: variant ?? this.variant,
       width: width ?? this.width,
       height: height ?? this.height,
       margin: margin ?? this.margin,

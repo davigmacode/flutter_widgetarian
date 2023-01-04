@@ -1,12 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
-import '../../layout/sheet/style.dart';
+import 'package:widgetarian/src/layout/sheet/style.dart';
+import 'package:widgetarian/src/layout/sheet/variant.dart';
 
 /// The style to be applied to alert widget
 @immutable
 class AlertStyle extends SheetStyle {
   /// Create a raw alert's style
   const AlertStyle({
+    super.variant,
     super.margin,
     super.padding,
     super.clipBehavior,
@@ -40,6 +42,7 @@ class AlertStyle extends SheetStyle {
   /// Create a alert's style from another style
   AlertStyle.from(AlertStyle? other)
       : super(
+          variant: other?.variant,
           width: double.infinity,
           margin: other?.margin,
           padding: other?.padding,
@@ -72,7 +75,7 @@ class AlertStyle extends SheetStyle {
         );
 
   /// Create [AlertStyle] with default value for toned style.
-  const AlertStyle.toned({
+  const AlertStyle.tonal({
     super.margin,
     super.padding,
     super.clipBehavior,
@@ -101,7 +104,10 @@ class AlertStyle extends SheetStyle {
     super.iconColor,
     super.iconOpacity,
     super.iconSize,
-  }) : super(width: double.infinity);
+  }) : super(
+          width: double.infinity,
+          variant: SheetVariant.tonal,
+        );
 
   /// Create [AlertStyle] with default value for filled style.
   const AlertStyle.filled({
@@ -136,6 +142,7 @@ class AlertStyle extends SheetStyle {
           width: double.infinity,
           backgroundColor: color,
           borderColor: color,
+          variant: SheetVariant.filled,
         );
 
   /// Create [AlertStyle] with default value for outlined style.
@@ -171,6 +178,7 @@ class AlertStyle extends SheetStyle {
           width: double.infinity,
           borderColor: color,
           foregroundColor: color,
+          variant: SheetVariant.outlined,
         );
 
   static const defaults = AlertStyle(
@@ -190,6 +198,7 @@ class AlertStyle extends SheetStyle {
   /// the given fields replaced with the new values.
   @override
   AlertStyle copyWith({
+    SheetVariant? variant,
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,
@@ -223,6 +232,7 @@ class AlertStyle extends SheetStyle {
     double? iconSize,
   }) {
     return AlertStyle(
+      variant: variant ?? this.variant,
       margin: margin ?? this.margin,
       padding: padding ?? this.padding,
       clipBehavior: clipBehavior ?? this.clipBehavior,

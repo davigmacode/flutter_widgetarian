@@ -478,6 +478,103 @@ class FilledButton extends VariantButton {
         );
 }
 
+/// Elevated buttons are high-emphasis,
+/// distinguished by their use of elevation and fill.
+/// They contain actions that are primary to your app.
+class ElevatedButton extends VariantButton {
+  /// Create an elevated button
+  ElevatedButton({
+    Key? key,
+    super.loading = false,
+    super.disabled = false,
+    super.autofocus = false,
+    super.focusNode,
+    super.onPressed,
+    super.eventsController,
+    super.curve,
+    super.duration,
+    super.style,
+    super.selectedStyle,
+    super.focusedStyle,
+    super.hoveredStyle,
+    super.pressedStyle,
+    super.disabledStyle,
+    super.tooltip,
+    super.leading,
+    super.trailing,
+    required super.child,
+  }) : super(
+          key: key,
+          preStyle: DrivenButtonStyle.elevated(),
+        );
+
+  /// Create a block elevated button
+  ElevatedButton.block({
+    Key? key,
+    CrossAxisAlignment? alignChildren,
+    MainAxisAlignment? justifyChildren,
+    bool expanded = true,
+    super.loading = false,
+    super.disabled = false,
+    super.autofocus = false,
+    super.focusNode,
+    super.onPressed,
+    super.eventsController,
+    super.curve,
+    super.duration,
+    super.style,
+    super.selectedStyle,
+    super.focusedStyle,
+    super.hoveredStyle,
+    super.pressedStyle,
+    super.disabledStyle,
+    super.tooltip,
+    super.leading,
+    super.trailing,
+    required super.child,
+  }) : super(
+          key: key,
+          preStyle: DrivenButtonStyle.elevated(),
+          postStyle: const ButtonStyle().block(
+            alignChildren: alignChildren,
+            justifyChildren: justifyChildren,
+            expanded: expanded,
+          ),
+        );
+
+  /// Create an icon elevated button
+  ElevatedButton.icon({
+    Key? key,
+    BoxShape shape = BoxShape.circle,
+    double? size,
+    super.loading = false,
+    super.disabled = false,
+    super.autofocus = false,
+    super.focusNode,
+    super.onPressed,
+    super.eventsController,
+    super.curve,
+    super.duration,
+    super.style,
+    super.selectedStyle,
+    super.focusedStyle,
+    super.hoveredStyle,
+    super.pressedStyle,
+    super.disabledStyle,
+    super.tooltip,
+    super.leading,
+    super.trailing,
+    required super.child,
+  }) : super(
+          key: key,
+          preStyle: DrivenButtonStyle.elevated(),
+          postStyle: const ButtonStyle().icon(
+            shape: shape,
+            size: size,
+          ),
+        );
+}
+
 /// Outlined buttons are medium-emphasis buttons.
 /// They contain actions that are important
 /// but aren't the primary action in an app.

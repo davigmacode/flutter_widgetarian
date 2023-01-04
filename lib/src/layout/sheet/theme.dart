@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/theme.dart';
 import 'style.dart';
+import 'fallback.dart';
 
 /// Defines the visual properties of [Sheet].
 ///
@@ -20,7 +21,7 @@ class SheetThemeData with Diagnosticable {
   final SheetStyle style;
 
   /// The [SheetStyle] that provides fallback values.
-  final SheetStyle fallback;
+  final SheetStyleFallback fallback;
 
   /// Creates a theme data that can be used for [SheetTheme].
   const SheetThemeData({
@@ -35,7 +36,7 @@ class SheetThemeData with Diagnosticable {
     curve: Curves.linear,
     duration: Duration(milliseconds: 200),
     style: SheetStyle.defaults,
-    fallback: SheetStyle(),
+    fallback: SheetStyleFallback(),
   );
 
   /// Creates a copy of this [SheetThemeData] but with
@@ -44,7 +45,7 @@ class SheetThemeData with Diagnosticable {
     Curve? curve,
     Duration? duration,
     SheetStyle? style,
-    SheetStyle? fallback,
+    SheetStyleFallback? fallback,
   }) {
     return SheetThemeData(
       curve: curve ?? this.curve,
@@ -115,7 +116,7 @@ class SheetTheme extends InheritedTheme {
     Curve? curve,
     Duration? duration,
     SheetStyle? style,
-    SheetStyle? fallback,
+    SheetStyleFallback? fallback,
     SheetThemeData? data,
     required Widget child,
   }) {
@@ -153,11 +154,22 @@ class SheetTheme extends InheritedTheme {
     final globalTheme = appTheme.extension<SheetThemeData?>();
     return SheetThemeData.defaults
         .copyWith(
-          fallback: SheetStyle(
-            foregroundColor: appTheme.colorScheme.onSurface,
-            backgroundColor: appTheme.unselectedWidgetColor,
-            borderColor: appTheme.colorScheme.outline,
-            shadowColor: appTheme.colorScheme.shadow,
+          fallback: SheetStyleFallback(
+            base: SheetStyle(
+              foregroundColor: appTheme.colorScheme.onSurface,
+              backgroundColor: appTheme.unselectedWidgetColor,
+              borderColor: appTheme.colorScheme.outline,
+              shadowColor: appTheme.colorScheme.shadow,
+            ),
+            filled: SheetStyle(
+              backgroundColor: appTheme.unselectedWidgetColor,
+            ),
+            elevated: SheetStyle(
+              backgroundColor: appTheme.colorScheme.surface,
+            ),
+            outlined: SheetStyle(
+              backgroundColor: appTheme.colorScheme.surface,
+            ),
           ),
         )
         .merge(globalTheme);

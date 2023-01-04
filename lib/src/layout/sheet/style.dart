@@ -1,10 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:widgetarian/utils.dart';
+import 'variant.dart';
 
 /// The style to be applied to the sheet widget
 @immutable
 class SheetStyle with Diagnosticable {
+  /// {@template widgetarian.sheet.style.variant}
+  /// Type of the sheet variant
+  /// {@endtemplate}
+  final SheetVariant? variant;
+
   /// {@template widgetarian.sheet.style.width}
   /// The horizontal extent of the sheet widget.
   /// {@endtemplate}
@@ -203,39 +209,24 @@ class SheetStyle with Diagnosticable {
     borderAlpha: 0x0c, // 38% * 12% = 5%
   );
 
-  /// Whether the sheet's has outline or not
-  bool get isOutlined {
-    final width = borderWidth;
-    return borderStyle == BorderStyle.solid && width != null && width >= 1;
-  }
+  /// Whether or not this is text variant
+  bool get isText => variant == SheetVariant.text;
 
-  /// Whether the sheet's has solid background color or not
-  bool get isFilled {
-    Color? color = backgroundColor;
-    final opacity = backgroundOpacity;
-    final alpha = backgroundAlpha;
+  /// Whether or not this is tonal variant
+  bool get isTonal => variant == SheetVariant.tonal;
 
-    const kOpacityThreshold = 0.4;
-    const kAlphaThreshold = 102;
+  /// Whether or not this is filled variant
+  bool get isFilled => variant == SheetVariant.filled;
 
-    if (color != null) {
-      color = Colors.withTransparency(color, opacity: opacity, alpha: alpha)!;
-      final colorIsNotTransparent = color != Colors.transparent;
-      final colorIsSolid = color.opacity > kOpacityThreshold;
-      return colorIsNotTransparent && colorIsSolid;
-    }
+  /// Whether or not this is elevated variant
+  bool get isElevated => variant == SheetVariant.elevated;
 
-    final isSolidByOpacity = opacity != null && opacity > kOpacityThreshold;
-    final isSolidByAlpha = alpha != null && alpha > kAlphaThreshold;
-
-    return isSolidByOpacity || isSolidByAlpha;
-  }
-
-  /// Whether the sheet's has toned background color or not
-  bool get isToned => !isFilled;
+  /// Whether or not this is outlined variant
+  bool get isOutlined => variant == SheetVariant.outlined;
 
   /// [SheetStyle] with an empty value.
   const SheetStyle({
+    this.variant,
     this.width,
     this.height,
     this.margin,
@@ -271,7 +262,8 @@ class SheetStyle with Diagnosticable {
 
   /// Create a [SheetStyle] from another style
   SheetStyle.from(SheetStyle? other)
-      : width = other?.width,
+      : variant = other?.variant,
+        width = other?.width,
         height = other?.height,
         margin = other?.margin,
         padding = other?.padding,
@@ -336,7 +328,7 @@ class SheetStyle with Diagnosticable {
     this.iconColor,
     this.iconOpacity,
     this.iconSize,
-  });
+  }) : variant = SheetVariant.tonal;
 
   /// Create [SheetStyle] with default value for filled style.
   const SheetStyle.filled({
@@ -371,7 +363,44 @@ class SheetStyle with Diagnosticable {
     this.iconOpacity,
     this.iconSize,
   })  : backgroundColor = color,
-        borderColor = color;
+        borderColor = color,
+        variant = SheetVariant.filled;
+
+  /// Create [SheetStyle] with default value for elevated style.
+  const SheetStyle.elevated({
+    Color? color,
+    this.width,
+    this.height,
+    this.margin,
+    this.padding,
+    this.alignment,
+    this.clipBehavior,
+    this.overlayColor,
+    this.shadowColor,
+    this.elevation = 1,
+    this.foregroundStyle,
+    this.foregroundColor,
+    this.foregroundOpacity,
+    this.foregroundAlpha,
+    this.foregroundSpacing,
+    this.foregroundLoosen,
+    this.foregroundExpanded,
+    this.foregroundAlign,
+    this.foregroundJustify,
+    this.backgroundOpacity = 1,
+    this.backgroundAlpha,
+    this.borderOpacity = 0,
+    this.borderAlpha,
+    this.borderWidth = 0,
+    this.borderRadius,
+    this.borderStyle = BorderStyle.none,
+    this.shape,
+    this.iconColor,
+    this.iconOpacity,
+    this.iconSize,
+  })  : backgroundColor = color,
+        borderColor = color,
+        variant = SheetVariant.elevated;
 
   /// Create [SheetStyle] with default value for outlined style.
   const SheetStyle.outlined({
@@ -406,11 +435,13 @@ class SheetStyle with Diagnosticable {
     this.iconOpacity,
     this.iconSize,
   })  : borderColor = color,
-        foregroundColor = color;
+        foregroundColor = color,
+        variant = SheetVariant.outlined;
 
   /// Creates a copy of this [SheetStyle] but with
   /// the given fields replaced with the new values.
   SheetStyle copyWith({
+    SheetVariant? variant,
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,
@@ -444,6 +475,7 @@ class SheetStyle with Diagnosticable {
     double? iconSize,
   }) {
     return SheetStyle(
+      variant: variant ?? this.variant,
       width: width ?? this.width,
       height: height ?? this.height,
       margin: margin ?? this.margin,
@@ -485,6 +517,7 @@ class SheetStyle with Diagnosticable {
     if (other == null) return this;
 
     return copyWith(
+      variant: other.variant,
       width: other.width,
       height: other.height,
       margin: other.margin,
@@ -523,6 +556,7 @@ class SheetStyle with Diagnosticable {
   static SheetStyle? lerp(SheetStyle? a, SheetStyle? b, double t) {
     if (a == null && b == null) return null;
     return SheetStyle(
+      variant: lerpEnum(a?.variant, b?.variant, t),
       shape: lerpEnum(a?.shape, b?.shape, t),
       width: lerpDouble(a?.width, b?.width, t),
       height: lerpDouble(a?.height, b?.height, t),
@@ -564,6 +598,7 @@ class SheetStyle with Diagnosticable {
   }
 
   Map<String, dynamic> toMap() => {
+        'variant': variant,
         'shape': shape,
         'width': width,
         'height': height,

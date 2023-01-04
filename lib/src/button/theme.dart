@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/theme.dart';
 import 'package:widgetarian/utils.dart';
 import 'style.dart';
+import 'fallback.dart';
 
 /// Defines the visual properties of [Button].
 ///
@@ -21,7 +22,7 @@ class ButtonThemeData with Diagnosticable {
   final ButtonStyle style;
 
   /// The [ButtonStyle] that provides fallback values.
-  final ButtonStyle fallback;
+  final ButtonStyleFallback fallback;
 
   /// Creates a theme data that can be used for [ButtonTheme].
   const ButtonThemeData({
@@ -36,7 +37,7 @@ class ButtonThemeData with Diagnosticable {
     curve: Curves.linear,
     duration: const Duration(milliseconds: 200),
     style: DrivenButtonStyle.text(),
-    fallback: const ButtonStyle(),
+    fallback: const ButtonStyleFallback(),
   );
 
   /// Creates a copy of this [ButtonThemeData] but with
@@ -45,7 +46,7 @@ class ButtonThemeData with Diagnosticable {
     Curve? curve,
     Duration? duration,
     ButtonStyle? style,
-    ButtonStyle? fallback,
+    ButtonStyleFallback? fallback,
   }) {
     return ButtonThemeData(
       curve: curve ?? this.curve,
@@ -116,7 +117,7 @@ class ButtonTheme extends InheritedTheme {
     Curve? curve,
     Duration? duration,
     ButtonStyle? style,
-    ButtonStyle? fallback,
+    ButtonStyleFallback? fallback,
     ButtonThemeData? data,
     required Widget child,
   }) {
@@ -154,20 +155,22 @@ class ButtonTheme extends InheritedTheme {
     final globalTheme = appTheme.extension<ButtonThemeData?>();
     return ButtonThemeData.defaults
         .copyWith(
-          fallback: DrivenButtonStyle(
-            foregroundStyle: appTheme.textTheme.labelLarge,
-            foregroundColor: appTheme.colorScheme.onSurface,
-            backgroundColor: appTheme.brightness.isLight
-                ? appTheme.colorScheme.primary
-                : appTheme.colorScheme.inversePrimary,
-            borderColor: appTheme.colorScheme.outline,
-            shadowColor: appTheme.colorScheme.shadow,
-            selectedStyle: ButtonStyle(
-              foregroundColor: appTheme.colorScheme.primary,
+          fallback: ButtonStyleFallback(
+            base: DrivenButtonStyle(
+              foregroundStyle: appTheme.textTheme.labelLarge,
+              foregroundColor: appTheme.colorScheme.onSurface,
+              borderColor: appTheme.colorScheme.outline,
+              shadowColor: appTheme.colorScheme.shadow,
+              overlayColor: appTheme.brightness.isDark ? Colors.white : null,
+            ),
+            filled: DrivenButtonStyle(
+              foregroundColor: appTheme.colorScheme.onSurface,
               backgroundColor: appTheme.brightness.isLight
                   ? appTheme.colorScheme.primary
                   : appTheme.colorScheme.inversePrimary,
-              borderColor: appTheme.colorScheme.primary,
+            ),
+            outlined: const DrivenButtonStyle(
+              backgroundColor: Colors.transparent,
             ),
           ),
         )

@@ -42,15 +42,30 @@ class Alert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final alertTheme = AlertTheme.of(context);
+    final alertStyle = alertTheme.style.merge(style);
+    final alertCurve = curve ?? alertTheme.curve;
+    final alertDuration = duration ?? alertTheme.duration;
     return Sheet(
-      curve: curve ?? alertTheme.curve,
-      duration: duration ?? alertTheme.duration,
-      style: alertTheme.style.merge(style),
-      child: ListTile(
-        leading: icon,
-        trailing: action,
-        title: title,
-        subtitle: message,
+      curve: alertCurve,
+      duration: alertDuration,
+      style: alertStyle,
+      child: AnimatedListTileTheme(
+        curve: alertCurve,
+        duration: alertDuration,
+        style: ListTileStyle(
+          childExpanded: alertStyle.foregroundExpanded,
+          crossAxisAlignment: alertStyle.foregroundAlign,
+          mainAxisAlignment: alertStyle.foregroundJustify,
+          mainAxisExpanded: alertStyle.width == double.infinity,
+          spacing: alertStyle.foregroundSpacing,
+          spacingEnforced: alertStyle.foregroundLoosen,
+        ),
+        child: ListTile(
+          leading: icon,
+          trailing: action,
+          title: title,
+          subtitle: message,
+        ),
       ),
     );
   }

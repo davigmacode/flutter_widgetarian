@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
-import '../../layout/sheet/style.dart';
+import 'package:widgetarian/src/layout/sheet/style.dart';
+import 'package:widgetarian/src/layout/sheet/variant.dart';
+
+typedef BadgeVariant = SheetVariant;
 
 /// The style to be applied to badge widget
 @immutable
@@ -37,11 +40,12 @@ class BadgeStyle extends SheetStyle {
     super.iconColor,
     super.iconOpacity,
     super.iconSize,
-  });
+  }) : super(variant: SheetVariant.filled);
 
   /// Create a badge's style from another style
   BadgeStyle.from(BadgeStyle? other)
       : super(
+          variant: SheetVariant.filled,
           width: other?.width,
           height: other?.height,
           margin: other?.margin,
@@ -105,6 +109,7 @@ class BadgeStyle extends SheetStyle {
     super.iconOpacity,
     super.iconSize,
   }) : super(
+          variant: SheetVariant.filled,
           shape: BoxShape.circle,
           width: size,
           height: size,
@@ -134,6 +139,7 @@ class BadgeStyle extends SheetStyle {
   /// the given fields replaced with the new values.
   @override
   BadgeStyle copyWith({
+    SheetVariant? variant,
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,

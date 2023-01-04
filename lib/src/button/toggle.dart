@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/theme.dart';
+import 'package:widgetarian/utils.dart';
 import 'style.dart';
 import 'theme.dart';
 import 'event.dart';
@@ -131,7 +132,21 @@ class ToggleButton extends StatelessWidget {
     final buttonTheme = ButtonTheme.of(context);
     final buttonStyle = buttonTheme.style.merge(style);
     final fallbackStyle = buttonTheme.fallback.copyWith(
-      backgroundColor: appTheme.unselectedWidgetColor,
+      filled: DrivenButtonStyle(
+        backgroundColor: appTheme.unselectedWidgetColor,
+        selectedStyle: ButtonStyle(
+          backgroundColor: appTheme.brightness.isLight
+              ? appTheme.colorScheme.primary
+              : appTheme.colorScheme.inversePrimary,
+        ),
+      ),
+      outlined: DrivenButtonStyle(
+        backgroundColor: Colors.transparent,
+        selectedStyle: ButtonStyle(
+          foregroundColor: appTheme.colorScheme.primary,
+          borderColor: appTheme.colorScheme.primary,
+        ),
+      ),
     );
     return ButtonRender(
       curve: curve ?? buttonTheme.curve,

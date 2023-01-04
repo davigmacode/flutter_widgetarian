@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:widgetarian/src/display/chip/fallback.dart';
 import 'package:widgetarian/utils.dart';
 import 'package:widgetarian/theme.dart';
 import 'style.dart';
@@ -21,7 +22,7 @@ class ChipThemeData with Diagnosticable {
   final ChipStyle style;
 
   /// The [ChipStyle] that provides fallback values.
-  final ChipStyle fallback;
+  final ChipStyleFallback fallback;
 
   /// Creates a theme data that can be used for [ChipTheme].
   const ChipThemeData({
@@ -36,7 +37,7 @@ class ChipThemeData with Diagnosticable {
     curve: Curves.linear,
     duration: const Duration(milliseconds: 200),
     style: DrivenChipStyle.tonal(),
-    fallback: const ChipStyle(),
+    fallback: const ChipStyleFallback(),
   );
 
   /// Creates a copy of this [ChipThemeData] but with
@@ -45,7 +46,7 @@ class ChipThemeData with Diagnosticable {
     Curve? curve,
     Duration? duration,
     ChipStyle? style,
-    ChipStyle? fallback,
+    ChipStyleFallback? fallback,
   }) {
     return ChipThemeData(
       curve: curve ?? this.curve,
@@ -116,7 +117,7 @@ class ChipTheme extends InheritedTheme {
     Curve? curve,
     Duration? duration,
     ChipStyle? style,
-    ChipStyle? fallback,
+    ChipStyleFallback? fallback,
     ChipThemeData? data,
     required Widget child,
   }) {
@@ -153,18 +154,29 @@ class ChipTheme extends InheritedTheme {
     final globalTheme = appTheme.extension<ChipThemeData?>();
     return ChipThemeData.defaults
         .copyWith(
-          fallback: DrivenChipStyle(
-            foregroundStyle: appTheme.textTheme.labelLarge,
-            foregroundColor: appTheme.colorScheme.onSurface,
-            backgroundColor: appTheme.unselectedWidgetColor,
-            borderColor: appTheme.colorScheme.outline,
-            shadowColor: appTheme.colorScheme.shadow,
-            selectedStyle: ChipStyle(
-              foregroundColor: appTheme.colorScheme.primary,
-              backgroundColor: appTheme.brightness.isLight
-                  ? appTheme.colorScheme.primary
-                  : appTheme.colorScheme.inversePrimary,
-              borderColor: appTheme.colorScheme.primary,
+          fallback: ChipStyleFallback(
+            base: DrivenChipStyle(
+              foregroundStyle: appTheme.textTheme.labelLarge,
+              foregroundColor: appTheme.colorScheme.onSurface,
+              borderColor: appTheme.colorScheme.outline,
+              shadowColor: appTheme.colorScheme.shadow,
+              overlayColor: appTheme.brightness.isDark ? Colors.white : null,
+            ),
+            filled: DrivenChipStyle(
+              foregroundColor: appTheme.colorScheme.onSurface,
+              backgroundColor: appTheme.unselectedWidgetColor,
+              selectedStyle: ChipStyle(
+                backgroundColor: appTheme.brightness.isLight
+                    ? appTheme.colorScheme.primary
+                    : appTheme.colorScheme.inversePrimary,
+              ),
+            ),
+            outlined: DrivenChipStyle(
+              backgroundColor: appTheme.colorScheme.surface,
+              selectedStyle: ChipStyle(
+                foregroundColor: appTheme.colorScheme.primary,
+                borderColor: appTheme.colorScheme.primary,
+              ),
             ),
           ),
         )
