@@ -10,7 +10,7 @@ import 'event.dart';
 /// Listeners are notified whenever the value changes.
 /// The value should only be changed with update;
 /// it should not be modified directly.
-class WidgetEventController extends ChangeNotifier {
+class WidgetEventController extends ChangeNotifier with Diagnosticable {
   WidgetEventController({
     bool selected = false,
     bool disabled = false,
@@ -165,5 +165,18 @@ class WidgetEventController extends ChangeNotifier {
   void clear() {
     value.clear();
     notifyListeners();
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(IterableProperty<WidgetEvent>('value', value));
+    properties.add(DiagnosticsProperty<bool>('isDisabled', isDisabled));
+    properties.add(DiagnosticsProperty<bool>('isDragged', isDragged));
+    properties.add(DiagnosticsProperty<bool>('isErrored', isErrored));
+    properties.add(DiagnosticsProperty<bool>('isFocused', isFocused));
+    properties.add(DiagnosticsProperty<bool>('isHovered', isHovered));
+    properties.add(DiagnosticsProperty<bool>('isPressed', isPressed));
+    properties.add(DiagnosticsProperty<bool>('isSelected', isSelected));
   }
 }
