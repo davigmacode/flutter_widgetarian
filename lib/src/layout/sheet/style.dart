@@ -56,8 +56,13 @@ class SheetStyle with Diagnosticable {
   /// {@endtemplate}
   final Clip? clipBehavior;
 
+  /// {@template widgetarian.sheet.style.overlayDisabled}
+  /// Whether the overlay is disabled or not
+  /// {@endtemplate}
+  final bool? overlayDisabled;
+
   /// {@template widgetarian.sheet.style.overlayColor}
-  /// Defines the ink response colors.
+  /// Defines the overlay colors.
   /// {@endtemplate}
   final Color? overlayColor;
 
@@ -233,6 +238,7 @@ class SheetStyle with Diagnosticable {
     this.padding,
     this.alignment,
     this.clipBehavior,
+    this.overlayDisabled,
     this.overlayColor,
     this.shadowColor,
     this.elevation,
@@ -269,6 +275,7 @@ class SheetStyle with Diagnosticable {
         padding = other?.padding,
         alignment = other?.alignment,
         clipBehavior = other?.clipBehavior,
+        overlayDisabled = other?.overlayDisabled,
         overlayColor = other?.overlayColor,
         shadowColor = other?.shadowColor,
         elevation = other?.elevation,
@@ -303,6 +310,7 @@ class SheetStyle with Diagnosticable {
     this.padding,
     this.alignment,
     this.clipBehavior,
+    this.overlayDisabled,
     this.overlayColor,
     this.shadowColor,
     this.elevation,
@@ -339,6 +347,7 @@ class SheetStyle with Diagnosticable {
     this.padding,
     this.alignment,
     this.clipBehavior,
+    this.overlayDisabled,
     this.overlayColor,
     this.shadowColor,
     this.elevation,
@@ -375,6 +384,7 @@ class SheetStyle with Diagnosticable {
     this.padding,
     this.alignment,
     this.clipBehavior,
+    this.overlayDisabled,
     this.overlayColor,
     this.shadowColor,
     this.elevation = 1,
@@ -411,6 +421,7 @@ class SheetStyle with Diagnosticable {
     this.padding,
     this.alignment,
     this.clipBehavior,
+    this.overlayDisabled,
     this.overlayColor,
     this.shadowColor,
     this.elevation,
@@ -448,6 +459,7 @@ class SheetStyle with Diagnosticable {
     EdgeInsetsGeometry? padding,
     Alignment? alignment,
     Clip? clipBehavior,
+    bool? overlayDisabled,
     Color? overlayColor,
     Color? shadowColor,
     double? elevation,
@@ -482,6 +494,7 @@ class SheetStyle with Diagnosticable {
       padding: padding ?? this.padding,
       alignment: alignment ?? this.alignment,
       clipBehavior: clipBehavior ?? this.clipBehavior,
+      overlayDisabled: overlayDisabled ?? this.overlayDisabled,
       overlayColor: overlayColor ?? this.overlayColor,
       shadowColor: shadowColor ?? this.shadowColor,
       elevation: elevation ?? this.elevation,
@@ -524,6 +537,7 @@ class SheetStyle with Diagnosticable {
       padding: other.padding,
       alignment: other.alignment,
       clipBehavior: other.clipBehavior,
+      overlayDisabled: other.overlayDisabled,
       overlayColor: other.overlayColor,
       shadowColor: other.shadowColor,
       elevation: other.elevation,
@@ -564,6 +578,7 @@ class SheetStyle with Diagnosticable {
       padding: EdgeInsetsGeometry.lerp(a?.padding, b?.padding, t),
       alignment: lerpEnum(a?.alignment, b?.alignment, t),
       clipBehavior: lerpEnum(a?.clipBehavior, b?.clipBehavior, t),
+      overlayDisabled: lerpBool(a?.overlayDisabled, b?.overlayDisabled, t),
       overlayColor: Color.lerp(a?.overlayColor, b?.overlayColor, t),
       shadowColor: Color.lerp(a?.shadowColor, b?.overlayColor, t),
       elevation: lerpDouble(a?.elevation, b?.elevation, t),
@@ -606,6 +621,7 @@ class SheetStyle with Diagnosticable {
         'padding': padding,
         'alignment': alignment,
         'clipBehavior': clipBehavior,
+        'overlayDisabled': overlayDisabled,
         'overlayColor': overlayColor,
         'shadowColor': shadowColor,
         'elevation': elevation,

@@ -342,6 +342,7 @@ class ButtonRenderState extends State<ButtonRender>
           autofocus: widget.autofocus,
           focusNode: widget.focusNode,
           overlayColor: overlayColor,
+          overlayDisabled: style.overlayDisabled,
           onTap: onTap,
           onTapDown: onTapDown,
           onTapCancel: onTapCancel,

@@ -146,6 +146,7 @@ class BadgeStyle extends SheetStyle {
     EdgeInsetsGeometry? padding,
     Alignment? alignment,
     Clip? clipBehavior,
+    bool? overlayDisabled,
     Color? overlayColor,
     Color? shadowColor,
     double? elevation,
