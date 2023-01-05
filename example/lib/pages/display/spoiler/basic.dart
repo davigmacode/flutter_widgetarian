@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart' hide ButtonStyle;
-import 'package:widgetarian/anchor.dart';
 import 'package:widgetarian/display.dart';
 
 import '../../sample.dart';

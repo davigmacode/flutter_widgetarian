@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart' hide Switch, ButtonStyle;
-import 'package:widgetarian/button.dart';
 import 'package:widgetarian/input.dart';
 import 'package:widgetarian/choice.dart';
 

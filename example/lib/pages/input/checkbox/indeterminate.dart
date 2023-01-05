@@ -36,6 +36,7 @@ class _CheckboxIndeterminateUsageState
           builder: (context, group, _) {
             return Wrap(
               spacing: 15,
+              runSpacing: 15,
               children: List<Widget>.generate(
                 choices.length,
                 (i) => CheckboxTile(
@@ -87,6 +88,7 @@ Choice<String>(
   builder: (context, group, _) {
     return Wrap(
       spacing: 15,
+      runSpacing: 15,
       children: List<Widget>.generate(
         choices.length,
         (i) => CheckboxTile(

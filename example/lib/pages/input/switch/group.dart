@@ -31,6 +31,8 @@ class _SwitchGroupUsageState extends State<SwitchGroupUsage> {
           onChanged: setSelected,
           builder: (context, group, _) {
             return Wrap(
+              spacing: 15,
+              runSpacing: 15,
               children: List<Widget>.generate(
                 choices.length,
                 (i) => SwitchTile(
@@ -60,6 +62,8 @@ Choice<String>(
   onChanged: setSelected,
   builder: (context, group, _) {
     return Wrap(
+      spacing: 15,
+      runSpacing: 15,
       children: List<Widget>.generate(
         choices.length,
         (i) => SwitchTile(

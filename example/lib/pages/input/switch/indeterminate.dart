@@ -34,6 +34,7 @@ class _SwitchIndeterminateUsageState extends State<SwitchIndeterminateUsage> {
           builder: (context, group, _) {
             return Wrap(
               spacing: 15,
+              runSpacing: 15,
               children: List<Widget>.generate(
                 choices.length,
                 (i) => SwitchTile(
@@ -72,6 +73,7 @@ Choice<String>(
   builder: (context, group, _) {
     return Wrap(
       spacing: 15,
+      runSpacing: 15,
       children: List<Widget>.generate(
         choices.length,
         (i) => SwitchTile(

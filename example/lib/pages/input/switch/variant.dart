@@ -31,6 +31,7 @@ class _SwitchVariantUsageState extends State<SwitchVariantUsage> {
           builder: (context, group, _) {
             return Wrap(
               spacing: 15,
+              runSpacing: 15,
               children: [
                 SwitchTile(
                   spacing: 12,
@@ -76,6 +77,7 @@ Choice<String>(
   builder: (context, group, _) {
     return Wrap(
       spacing: 15,
+      runSpacing: 15,
       children: [
         SwitchTile(
           spacing: 12,

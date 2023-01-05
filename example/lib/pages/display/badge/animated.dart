@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:widgetarian/display.dart';
-import 'package:widgetarian/layout.dart';
 import 'package:widgetarian/navigation.dart';
 
 import '../../sample.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart' hide ButtonStyle;
 import 'package:widgetarian/display.dart';
-import 'package:widgetarian/layout.dart';
 
 import '../../sample.dart';
 

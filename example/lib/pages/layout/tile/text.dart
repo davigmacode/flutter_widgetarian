@@ -31,29 +31,15 @@ class TileTextUsage extends StatelessWidget {
   }
 }
 
-const script = '''Wrap(
-  spacing: 15,
-  runSpacing: 15,
-  children: [
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.flat(),
-      child: const Text('Flat Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.toned(),
-      child: const Text('Toned Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.outlined(),
-      child: const Text('Outlined Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.filled(),
-      child: const Text('Filled Button'),
-    ),
-  ],
+const script = '''DefaultTextStyle(
+  style: TextStyle(
+    backgroundColor: bgColor,
+    color: fgColor,
+  ),
+  child: const TextTile(
+    title: Text('Title'),
+    subtitle: Text('Subtitle'),
+    spacing: 3,
+    align: TextTileAlign.right,
+  ),
 )''';

@@ -50,25 +50,31 @@ const script = '''Wrap(
   spacing: 15,
   runSpacing: 15,
   children: [
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.flat(),
-      child: const Text('Flat Button'),
+    DefaultTextStyle(
+      style: TextStyle(
+        backgroundColor: bgColor,
+        color: fgColor,
+      ),
+      child: const Tile(
+        spacing: 10,
+        leading: Text('Leading'),
+        trailing: Text('Trailing'),
+        child: Text('Horizontal Tile'),
+      ),
     ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.toned(),
-      child: const Text('Toned Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.outlined(),
-      child: const Text('Outlined Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.filled(),
-      child: const Text('Filled Button'),
+    DefaultTextStyle(
+      style: TextStyle(
+        backgroundColor: bgColor,
+        color: fgColor,
+      ),
+      child: const Tile(
+        spacing: 3,
+        direction: Axis.vertical,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        leading: Text('Leading'),
+        trailing: Text('Trailing'),
+        child: Text('Vertical Tile'),
+      ),
     ),
   ],
 )''';

@@ -17,7 +17,6 @@ class ExpansionMenuUsage extends StatelessWidget {
           width: 500,
           child: Expansion(
             value: false,
-            // divider: Divider(),
             header: const ExpansionHeader(
               title: Text('Menu'),
               trailing: ExpansionIcon(),
@@ -34,7 +33,6 @@ class ExpansionMenuUsage extends StatelessWidget {
                   onTap: () {},
                 ),
                 Expansion(
-                  // divider: Divider(),
                   header: const ExpansionHeader(
                     title: Text('Nested Menu'),
                     trailing: ExpansionIcon(),
@@ -87,9 +85,70 @@ class ExpansionMenuUsage extends StatelessWidget {
   }
 }
 
-const script = '''Anchor(
-  onTap: () {},
-  shape: BoxShape.circle,
-  radius: 20,
-  child: const Icon(Icons.chat),
+const script = '''SizedBox(
+  width: 500,
+  child: Expansion(
+    value: false,
+    header: const ExpansionHeader(
+      title: Text('Menu'),
+      trailing: ExpansionIcon(),
+    ),
+    child: ListView(
+      shrinkWrap: true,
+      children: [
+        ListTile(
+          title: const Text('Menu Item'),
+          onTap: () {},
+        ),
+        ListTile(
+          title: const Text('Menu Item'),
+          onTap: () {},
+        ),
+        Expansion(
+          header: const ExpansionHeader(
+            title: Text('Nested Menu'),
+            trailing: ExpansionIcon(),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                ListTile(
+                  title: const Text('Menu Item'),
+                  onTap: () {},
+                ),
+                ListTile(
+                  title: const Text('Menu Item'),
+                  onTap: () {},
+                ),
+                Expansion(
+                  header: const ExpansionHeader(
+                    title: Text('Nested Menu'),
+                    trailing: ExpansionIcon(),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: [
+                        ListTile(
+                          title: const Text('Menu Item'),
+                          onTap: () {},
+                        ),
+                        ListTile(
+                          title: const Text('Menu Item'),
+                          onTap: () {},
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  ),
 )''';

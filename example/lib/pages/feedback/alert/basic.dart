@@ -73,7 +73,7 @@ class _AlertBasicUsageState extends State<AlertBasicUsage> {
         ),
         Gap(20),
         Alert(
-          style: const AlertStyle.tonal(
+          style: AlertStyle.tonal(
             foregroundColor: Colors.blue,
             backgroundColor: Colors.blue,
             padding: EdgeInsets.all(20),
