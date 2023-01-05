@@ -36,10 +36,12 @@ class _AlertBasicUsageState extends State<AlertBasicUsage> {
             shrinkWrap: true,
             children: List<Widget>.generate(
               choices.length,
-              (i) => Switch(
-                // label: Text(choices[i]),
+              (i) => SwitchTile.list(
+                loosen: false,
+                controlAffinity: ControlAffinity.trailing,
                 selected: group.has(choices[i]),
                 onChanged: group.select(choices[i]),
+                child: Text(choices[i]),
               ),
             ),
           );

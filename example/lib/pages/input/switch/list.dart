@@ -39,9 +39,6 @@ class _SwitchListUsageState extends State<SwitchListUsage> {
                   choices.length,
                   (i) => SwitchTile.list(
                     controlAffinity: ControlAffinity.trailing,
-                    buttonStyle: const ButtonStyle(
-                      foregroundLoosen: false,
-                    ),
                     selected: group.has(choices[i]),
                     onChanged: group.select(choices[i]),
                     child: Text(choices[i]),
@@ -71,7 +68,8 @@ Choice<String>(
     return Wrap(
       children: List<Widget>.generate(
         choices.length,
-        (i) => SwitchTile(
+        (i) => SwitchTile.list(
+          controlAffinity: ControlAffinity.trailing,
           selected: group.has(choices[i]),
           onChanged: group.select(choices[i]),
           child: Text(choices[i]),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart' hide Radio, ButtonStyle;
-import 'package:widgetarian/button.dart';
 import 'package:widgetarian/input.dart';
 import 'package:widgetarian/choice.dart';
 
@@ -39,9 +38,6 @@ class _RadioListUsageState extends State<RadioListUsage> {
                   choices.length,
                   (i) => RadioTile.list(
                     controlAffinity: ControlAffinity.trailing,
-                    buttonStyle: const ButtonStyle(
-                      foregroundLoosen: false,
-                    ),
                     selected: group.has(choices[i]),
                     onChanged: group.select(choices[i]),
                     child: Text(choices[i]),

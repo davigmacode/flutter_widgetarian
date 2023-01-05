@@ -37,6 +37,7 @@ class _CheckboxListUsageState extends State<CheckboxListUsage> {
                 children: List<Widget>.generate(
                   choices.length,
                   (i) => CheckboxTile.list(
+                    spacing: 15,
                     selected: group.has(choices[i]),
                     onChanged: group.select(choices[i]),
                     child: Text(choices[i]),
@@ -70,6 +71,7 @@ Choice<String>(
         children: List<Widget>.generate(
           choices.length,
           (i) => CheckboxTile.list(
+            spacing: 15,
             selected: group.has(choices[i]),
             onChanged: group.select(choices[i]),
             child: Text(choices[i]),
