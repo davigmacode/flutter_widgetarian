@@ -9,10 +9,14 @@ import 'theme.dart';
 /// A tiled switch. In other words, a switch with a label.
 class SwitchTile extends StatelessWidget {
   /// Create a tiled switch widget
-  const SwitchTile({
+  SwitchTile({
     Key? key,
-    this.switchStyle,
-    this.buttonStyle,
+    SwitchStyle? switchStyle,
+    ButtonStyle? buttonStyle,
+    bool? overlayDisabled,
+    bool? loosen = false,
+    double? spacing,
+    EdgeInsetsGeometry? padding,
     this.controlAffinity,
     this.onChanged,
     this.selected = false,
@@ -25,13 +29,24 @@ class SwitchTile extends StatelessWidget {
     this.tooltip,
     this.secondary,
     required this.child,
-  }) : super(key: key);
+  })  : switchStyle = switchStyle?.copyWith(padding: EdgeInsets.zero),
+        buttonStyle = ButtonStyle(
+          foregroundLoosen: loosen,
+          foregroundSpacing: spacing,
+          overlayDisabled: overlayDisabled,
+          padding: padding,
+        ).merge(buttonStyle),
+        super(key: key);
 
   /// Create a tiled switch widget for list item
   SwitchTile.list({
     Key? key,
-    this.switchStyle,
+    SwitchStyle? switchStyle,
     ButtonStyle? buttonStyle,
+    bool? overlayDisabled,
+    bool? loosen = false,
+    double? spacing,
+    EdgeInsetsGeometry? padding,
     this.controlAffinity,
     this.onChanged,
     this.selected = false,
@@ -44,12 +59,15 @@ class SwitchTile extends StatelessWidget {
     this.tooltip,
     this.secondary,
     required this.child,
-  })  : buttonStyle = const ButtonStyle(
+  })  : switchStyle = switchStyle?.copyWith(padding: EdgeInsets.zero),
+        buttonStyle = ButtonStyle(
           width: double.infinity,
-          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
           borderRadius: BorderRadius.zero,
           foregroundExpanded: true,
-          foregroundSpacing: 15,
+          foregroundLoosen: loosen,
+          foregroundSpacing: spacing,
+          overlayDisabled: overlayDisabled,
+          padding: padding,
         ).merge(buttonStyle),
         super(key: key);
 

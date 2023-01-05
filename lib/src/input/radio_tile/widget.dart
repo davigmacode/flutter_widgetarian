@@ -9,10 +9,14 @@ import 'theme.dart';
 /// A tiled radio. In other words, a radio with a label.
 class RadioTile extends StatelessWidget {
   /// Create a tiled radio widget
-  const RadioTile({
+  RadioTile({
     Key? key,
     this.radioStyle,
-    this.buttonStyle,
+    ButtonStyle? buttonStyle,
+    bool? overlayDisabled,
+    bool? loosen = false,
+    double? spacing,
+    EdgeInsetsGeometry? padding,
     this.controlAffinity,
     this.onChanged,
     this.selected = false,
@@ -24,13 +28,23 @@ class RadioTile extends StatelessWidget {
     this.tooltip,
     this.secondary,
     required this.child,
-  }) : super(key: key);
+  })  : buttonStyle = ButtonStyle(
+          foregroundLoosen: loosen,
+          foregroundSpacing: spacing,
+          overlayDisabled: overlayDisabled,
+          padding: padding,
+        ).merge(buttonStyle),
+        super(key: key);
 
   /// Create a tiled radio widget for list item
   RadioTile.list({
     Key? key,
     this.radioStyle,
     ButtonStyle? buttonStyle,
+    bool? overlayDisabled,
+    bool? loosen = false,
+    double? spacing,
+    EdgeInsetsGeometry? padding,
     this.controlAffinity,
     this.onChanged,
     this.selected = false,
@@ -42,12 +56,14 @@ class RadioTile extends StatelessWidget {
     this.tooltip,
     this.secondary,
     required this.child,
-  })  : buttonStyle = const ButtonStyle(
+  })  : buttonStyle = ButtonStyle(
           width: double.infinity,
-          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
           borderRadius: BorderRadius.zero,
           foregroundExpanded: true,
-          foregroundSpacing: 15,
+          foregroundLoosen: loosen,
+          foregroundSpacing: spacing,
+          overlayDisabled: overlayDisabled,
+          padding: padding,
         ).merge(buttonStyle),
         super(key: key);
 

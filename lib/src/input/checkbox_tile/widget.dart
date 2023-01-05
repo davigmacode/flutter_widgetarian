@@ -9,10 +9,14 @@ import 'theme.dart';
 /// A tiled checkbox. In other words, a checkbox with a label.
 class CheckboxTile extends StatelessWidget {
   /// Create a tiled checkbox widget
-  const CheckboxTile({
+  CheckboxTile({
     Key? key,
     this.checkboxStyle,
-    this.buttonStyle,
+    ButtonStyle? buttonStyle,
+    bool? overlayDisabled,
+    bool? loosen = false,
+    double? spacing,
+    EdgeInsetsGeometry? padding,
     this.controlAffinity,
     this.onChanged,
     this.selected = false,
@@ -25,13 +29,23 @@ class CheckboxTile extends StatelessWidget {
     this.tooltip,
     this.secondary,
     required this.child,
-  }) : super(key: key);
+  })  : buttonStyle = ButtonStyle(
+          overlayDisabled: overlayDisabled,
+          foregroundLoosen: loosen,
+          foregroundSpacing: spacing,
+          padding: padding,
+        ).merge(buttonStyle),
+        super(key: key);
 
   /// Create a tiled checkbox widget to list item
   CheckboxTile.list({
     Key? key,
     this.checkboxStyle,
     ButtonStyle? buttonStyle,
+    bool? overlayDisabled,
+    bool? loosen = false,
+    double? spacing,
+    EdgeInsetsGeometry? padding,
     this.controlAffinity,
     this.onChanged,
     this.selected = false,
@@ -44,12 +58,14 @@ class CheckboxTile extends StatelessWidget {
     this.tooltip,
     this.secondary,
     required this.child,
-  })  : buttonStyle = const ButtonStyle(
+  })  : buttonStyle = ButtonStyle(
           width: double.infinity,
-          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
           borderRadius: BorderRadius.zero,
           foregroundExpanded: true,
-          foregroundSpacing: 15,
+          foregroundLoosen: loosen,
+          foregroundSpacing: spacing,
+          overlayDisabled: overlayDisabled,
+          padding: padding,
         ).merge(buttonStyle),
         super(key: key);
 
