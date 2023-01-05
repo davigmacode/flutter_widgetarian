@@ -5,6 +5,7 @@ import 'package:widgetarian/utils.dart';
 import 'package:widgetarian/anchor.dart';
 import 'event.dart';
 import 'style.dart';
+import 'fallback.dart';
 import 'theme.dart';
 
 /// Switches toggle the state of a single setting on or off.
@@ -185,7 +186,7 @@ class _SwitchRender extends StatefulWidget {
   final Curve curve;
   final Duration duration;
   final SwitchStyle style;
-  final SwitchStyle fallback;
+  final SwitchStyleFallback fallback;
 
   bool get enabled => !disabled;
 
@@ -210,12 +211,18 @@ class _SwitchRenderState extends State<_SwitchRender>
     final resStyle = DrivenSwitchStyle.evaluate(rawStyle, widgetEvents.value);
     style = SwitchStyle.from(resStyle);
 
-    final rawFallback = widget.fallback;
+    final rawFallback = widget.fallback.resolve(style.variant);
     final resFallback =
         DrivenSwitchStyle.evaluate(rawFallback, widgetEvents.value);
     fallback = SwitchStyle.from(resFallback);
     setState(() {});
   }
+
+  Color? get trackBorderColor => Colors.withTransparency(
+        style.trackBorderColor ?? fallback.trackBorderColor,
+        opacity: style.trackBorderOpacity,
+        alpha: style.trackBorderAlpha,
+      );
 
   Color? get trackColor => Colors.withTransparency(
         style.trackColor ?? fallback.trackColor,
@@ -229,12 +236,8 @@ class _SwitchRenderState extends State<_SwitchRender>
         alpha: style.thumbAlpha,
       );
 
-  ShapeBorder get trackShape {
-    return style.trackShape ?? const StadiumBorder();
-  }
-
   ShapeBorder get thumbShape {
-    return style.trackShape ?? const CircleBorder();
+    return style.thumbShape ?? const CircleBorder();
   }
 
   void onTap() {
@@ -293,13 +296,15 @@ class _SwitchRenderState extends State<_SwitchRender>
     Widget result = AnimatedSwitchmark(
       duration: widget.duration,
       curve: widget.curve,
-      padding: style.thumbInset,
-      trackShape: trackShape,
       trackColor: trackColor,
+      trackBorderColor: trackBorderColor,
+      trackBorderWidth: style.trackBorderWidth,
+      trackBorderRadius: style.trackBorderRadius,
       trackHeight: style.trackHeight,
       thumbShape: thumbShape,
       thumbColor: thumbColor,
-      thumbScale: style.thumbScale,
+      thumbInset: style.thumbInset,
+      thumbSize: style.thumbSize,
       thumbShadow: style.thumbShadow,
       thumbElevation: style.thumbElevation,
       overlayColor: style.overlayColor,

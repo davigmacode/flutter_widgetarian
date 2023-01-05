@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/tween.dart';
 
@@ -5,13 +6,17 @@ class AnimatedSwitchmark extends ImplicitlyAnimatedWidget {
   const AnimatedSwitchmark({
     Key? key,
     this.value,
-    this.padding,
-    this.trackShape,
+    this.thumbInset,
+    this.trackBorderColor,
+    this.trackBorderWidth,
+    this.trackBorderRadius,
     this.trackColor,
     this.trackHeight,
+    this.trackShadow,
+    this.trackElevation,
     this.thumbShape,
     this.thumbColor,
-    this.thumbScale,
+    this.thumbSize,
     this.thumbShadow,
     this.thumbElevation,
     this.overlayColor,
@@ -33,15 +38,18 @@ class AnimatedSwitchmark extends ImplicitlyAnimatedWidget {
   /// Defaults to [true].
   final bool? value;
 
-  final double? padding;
-
-  final ShapeBorder? trackShape;
+  final Color? trackBorderColor;
+  final double? trackBorderWidth;
+  final BorderRadiusGeometry? trackBorderRadius;
   final Color? trackColor;
   final double? trackHeight;
+  final Color? trackShadow;
+  final double? trackElevation;
 
   final ShapeBorder? thumbShape;
   final Color? thumbColor;
-  final double? thumbScale;
+  final double? thumbInset;
+  final double? thumbSize;
   final Color? thumbShadow;
   final double? thumbElevation;
 
@@ -65,15 +73,19 @@ class AnimatedSwitchmarkState
   SizeTween? size;
 
   Tween<double?>? progress;
-  Tween<double?>? padding;
 
-  ShapeBorderTween? trackShape;
+  ColorTween? trackBorderColor;
+  Tween<double?>? trackBorderWidth;
+  BorderRadiusTween? trackBorderRadius;
   ColorTween? trackColor;
   Tween<double?>? trackHeight;
+  ColorTween? trackShadow;
+  Tween<double?>? trackElevation;
 
   ShapeBorderTween? thumbShape;
   ColorTween? thumbColor;
-  Tween<double?>? thumbScale;
+  Tween<double?>? thumbInset;
+  Tween<double?>? thumbSize;
   ColorTween? thumbShadow;
   Tween<double?>? thumbElevation;
 
@@ -107,17 +119,23 @@ class AnimatedSwitchmarkState
       (dynamic value) => SizeTween(begin: value),
     ) as SizeTween?;
 
-    padding = visitor(
-      padding,
-      widget.padding ?? 0.0,
+    trackBorderColor = visitor(
+      trackBorderColor,
+      widget.trackBorderColor,
+      (dynamic value) => ColorTween(begin: value),
+    ) as ColorTween?;
+
+    trackBorderWidth = visitor(
+      trackBorderWidth,
+      widget.trackBorderWidth,
       (dynamic value) => Tween<double?>(begin: value),
     ) as Tween<double?>?;
 
-    trackShape = visitor(
-      trackShape,
-      widget.trackShape ?? defaultTrackShape,
-      (dynamic value) => ShapeBorderTween(begin: value),
-    ) as ShapeBorderTween?;
+    trackBorderRadius = visitor(
+      trackBorderRadius,
+      widget.trackBorderRadius,
+      (dynamic value) => BorderRadiusTween(begin: value),
+    ) as BorderRadiusTween?;
 
     trackColor = visitor(
       trackColor,
@@ -127,7 +145,19 @@ class AnimatedSwitchmarkState
 
     trackHeight = visitor(
       trackHeight,
-      widget.trackHeight ?? 1.0,
+      widget.trackHeight,
+      (dynamic value) => Tween<double?>(begin: value),
+    ) as Tween<double?>?;
+
+    trackShadow = visitor(
+      trackShadow,
+      widget.trackShadow,
+      (dynamic value) => ColorTween(begin: value),
+    ) as ColorTween?;
+
+    trackElevation = visitor(
+      trackElevation,
+      widget.trackElevation ?? 1.0,
       (dynamic value) => Tween<double?>(begin: value),
     ) as Tween<double?>?;
 
@@ -143,9 +173,15 @@ class AnimatedSwitchmarkState
       (dynamic value) => ColorTween(begin: value),
     ) as ColorTween?;
 
-    thumbScale = visitor(
-      thumbScale,
-      widget.thumbScale ?? 1.0,
+    thumbInset = visitor(
+      thumbInset,
+      widget.thumbInset,
+      (dynamic value) => Tween<double?>(begin: value),
+    ) as Tween<double?>?;
+
+    thumbSize = visitor(
+      thumbSize,
+      widget.thumbSize,
       (dynamic value) => Tween<double?>(begin: value),
     ) as Tween<double?>?;
 
@@ -184,13 +220,17 @@ class AnimatedSwitchmarkState
   Widget build(BuildContext context) {
     return Switchmark(
       progress: progress?.evaluate(animation),
-      padding: padding?.evaluate(animation),
-      trackShape: trackShape?.evaluate(animation),
+      trackBorderColor: trackBorderColor?.evaluate(animation),
+      trackBorderWidth: trackBorderWidth?.evaluate(animation),
+      trackBorderRadius: trackBorderRadius?.evaluate(animation),
       trackColor: trackColor?.evaluate(animation),
       trackHeight: trackHeight?.evaluate(animation),
+      trackShadow: trackShadow?.evaluate(animation),
+      trackElevation: trackElevation?.evaluate(animation),
       thumbShape: thumbShape?.evaluate(animation),
       thumbColor: thumbColor?.evaluate(animation),
-      thumbScale: thumbScale?.evaluate(animation),
+      thumbInset: thumbInset?.evaluate(animation),
+      thumbSize: thumbSize?.evaluate(animation),
       thumbShadow: thumbShadow?.evaluate(animation),
       thumbElevation: thumbElevation?.evaluate(animation),
       overlayColor: overlayColor?.evaluate(animation),
@@ -205,13 +245,17 @@ class Switchmark extends CustomPaint {
   Switchmark({
     Key? key,
     double? progress,
-    double? padding,
-    ShapeBorder? trackShape,
+    Color? trackBorderColor,
+    double? trackBorderWidth,
+    BorderRadiusGeometry? trackBorderRadius,
     Color? trackColor,
     double? trackHeight,
+    Color? trackShadow,
+    double? trackElevation,
     ShapeBorder? thumbShape,
     Color? thumbColor,
-    double? thumbScale,
+    double? thumbInset,
+    double? thumbSize,
     Color? thumbShadow,
     double? thumbElevation,
     Color? overlayColor,
@@ -223,13 +267,17 @@ class Switchmark extends CustomPaint {
           size: size ?? Size.zero,
           painter: SwitchmarkPainter(
             progress: progress,
-            padding: padding,
-            trackShape: trackShape,
+            trackBorderColor: trackBorderColor,
+            trackBorderWidth: trackBorderWidth,
+            trackBorderRadius: trackBorderRadius,
             trackColor: trackColor,
             trackHeight: trackHeight,
+            trackShadow: trackShadow,
+            trackElevation: trackElevation,
             thumbShape: thumbShape,
             thumbColor: thumbColor,
-            thumbScale: thumbScale,
+            thumbInset: thumbInset,
+            thumbSize: thumbSize,
             thumbShadow: thumbShadow,
             thumbElevation: thumbElevation,
             overlayColor: overlayColor,
@@ -239,47 +287,55 @@ class Switchmark extends CustomPaint {
         );
 }
 
-class SwitchmarkPainter extends CustomPainter {
+class SwitchmarkPainter extends CustomPainter with Diagnosticable {
   SwitchmarkPainter({
     double? progress,
-    double? padding,
-    ShapeBorder? trackShape,
+    Color? trackBorderColor,
+    double? trackBorderWidth,
+    this.trackBorderRadius,
     Color? trackColor,
-    double? trackHeight,
+    this.trackHeight,
+    Color? trackShadow,
+    double? trackElevation,
     ShapeBorder? thumbShape,
     Color? thumbColor,
-    double? thumbScale,
+    this.thumbInset,
+    this.thumbSize,
     Color? thumbShadow,
     double? thumbElevation,
     Color? overlayColor,
     double? overlayOpacity,
     double? overlayRadius,
   })  : progress = progress ?? 0.0,
-        padding = padding ?? 0.0,
-        trackShape = trackShape ?? const StadiumBorder(),
+        trackBorderColor = trackBorderColor ?? const Color(0xFF000000),
+        trackBorderWidth = trackBorderWidth ?? 0.0,
         trackColor = trackColor ?? const Color(0xFF000000),
-        trackHeight = trackHeight ?? 1.0,
+        trackElevation = trackElevation ?? 0.0,
+        trackShadow = trackShadow ?? const Color(0xFF000000),
         thumbShape = thumbShape ?? const CircleBorder(),
         thumbColor = thumbColor ?? const Color(0xFFFFFFFF),
-        thumbScale = thumbScale ?? 1.0,
-        thumbShadow = thumbShadow ?? const Color(0xFF000000),
         thumbElevation = thumbElevation ?? 1.0,
+        thumbShadow = thumbShadow ?? const Color(0xFF000000),
         overlayColor = overlayColor ?? const Color(0xFF000000),
         overlayOpacity = overlayOpacity ?? .15,
         overlayRadius = overlayRadius ?? 0.0;
 
   final double progress;
-  final double padding;
 
-  final ShapeBorder trackShape;
+  final Color trackBorderColor;
+  final double trackBorderWidth;
+  final BorderRadiusGeometry? trackBorderRadius;
   final Color trackColor;
-  final double trackHeight;
+  final double? trackHeight;
+  final double trackElevation;
+  final Color trackShadow;
 
   final ShapeBorder thumbShape;
   final Color thumbColor;
-  final double thumbScale;
-  final Color thumbShadow;
+  final double? thumbInset;
+  final double? thumbSize;
   final double thumbElevation;
+  final Color thumbShadow;
 
   final Color overlayColor;
   final double overlayOpacity;
@@ -288,17 +344,21 @@ class SwitchmarkPainter extends CustomPainter {
   @override
   bool shouldRepaint(SwitchmarkPainter oldDelegate) {
     return oldDelegate.progress != progress ||
-        oldDelegate.padding != padding ||
         oldDelegate.thumbShape != thumbShape ||
         oldDelegate.thumbColor != thumbColor ||
-        oldDelegate.thumbScale != thumbScale ||
+        oldDelegate.thumbInset != thumbInset ||
+        oldDelegate.thumbSize != thumbSize ||
         oldDelegate.thumbShadow != thumbShadow ||
         oldDelegate.thumbElevation != thumbElevation ||
         oldDelegate.overlayColor != overlayColor ||
         oldDelegate.overlayOpacity != overlayOpacity ||
         oldDelegate.overlayRadius != overlayRadius ||
-        oldDelegate.trackShape != trackShape ||
+        oldDelegate.trackBorderColor != trackBorderColor ||
+        oldDelegate.trackBorderWidth != trackBorderWidth ||
+        oldDelegate.trackBorderRadius != trackBorderRadius ||
         oldDelegate.trackColor != trackColor ||
+        oldDelegate.trackShadow != trackShadow ||
+        oldDelegate.trackElevation != trackElevation ||
         oldDelegate.trackHeight != trackHeight;
   }
 
@@ -309,24 +369,45 @@ class SwitchmarkPainter extends CustomPainter {
   }
 
   void _drawTrack(Canvas canvas, Size size) {
-    final track = Size(size.width, size.height * trackHeight);
-    final dy = size.height / 2 - track.height / 2;
+    final effectiveTrackHeight = trackHeight ?? size.height;
+    final track = Size(size.width, effectiveTrackHeight);
+    final dy = size.height / 2 - effectiveTrackHeight / 2;
     final offset = Offset(0, dy);
     final outer = offset & track;
 
+    final side = BorderSide(
+      color: trackBorderColor,
+      width: trackBorderWidth,
+      style: trackBorderWidth > 0 ? BorderStyle.solid : BorderStyle.none,
+    );
+    final shape = trackBorderRadius != null
+        ? RoundedRectangleBorder(side: side, borderRadius: trackBorderRadius!)
+        : StadiumBorder(side: side);
+
+    if (trackElevation > 0) {
+      canvas.drawShadow(
+        shape.getInnerPath(outer),
+        trackShadow,
+        trackElevation,
+        true,
+      );
+    }
+
     // draw fill
     final paint = Paint()..color = trackColor;
-    canvas.drawPath(trackShape.getOuterPath(outer), paint);
+    canvas.drawPath(shape.getOuterPath(outer), paint);
 
     // draw border
-    trackShape.paint(canvas, outer);
+    shape.paint(canvas, outer);
   }
 
   void _drawThumb(Canvas canvas, Size size) {
-    final thumb = Size.square((size.height - padding) * thumbScale);
+    final effectiveThumbSize = thumbSize ?? trackHeight ?? size.height;
+    final thumb = Size.square(effectiveThumbSize);
+    final inset = thumbInset ?? ((size.height - thumb.height) / 2);
 
-    final dxMin = padding;
-    final dxMax = size.width - thumb.width - padding;
+    final dxMin = inset;
+    final dxMax = size.width - thumb.width - inset;
     final dxRange = dxMax - dxMin;
     final dx = dxMin + dxRange * progress;
     final dy = size.height / 2 - thumb.height / 2;
@@ -368,5 +449,13 @@ class SwitchmarkPainter extends CustomPainter {
     if (overlayRadius > 0.0) {
       canvas.drawCircle(origin + offset, overlayRadius, paint);
     }
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DoubleProperty('progress', progress));
+    properties.add(DoubleProperty('thumbScale', thumbSize));
+    properties.add(DoubleProperty('thumbInset', thumbInset));
   }
 }

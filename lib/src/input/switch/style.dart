@@ -1,13 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/utils.dart';
-import 'package:widgetarian/button.dart';
 import 'package:widgetarian/event.dart';
 import 'event.dart';
+import 'variant.dart';
 
 /// The style to be applied to [Switch] widget
 @immutable
 class SwitchStyle with Diagnosticable {
+  /// The type of the [Switch] variant
+  final SwitchVariant? variant;
+
   /// The size of the [Switch].
   final Size? size;
 
@@ -17,7 +20,11 @@ class SwitchStyle with Diagnosticable {
   /// Empty space to increase the clickable area.
   final EdgeInsetsGeometry? padding;
 
-  final ShapeBorder? trackShape;
+  final Color? trackBorderColor;
+  final double? trackBorderOpacity;
+  final int? trackBorderAlpha;
+  final double? trackBorderWidth;
+  final BorderRadiusGeometry? trackBorderRadius;
   final Color? trackColor;
   final double? trackOpacity;
   final int? trackAlpha;
@@ -28,7 +35,7 @@ class SwitchStyle with Diagnosticable {
   final double? thumbOpacity;
   final int? thumbAlpha;
   final double? thumbInset;
-  final double? thumbScale;
+  final double? thumbSize;
   final Color? thumbShadow;
   final double? thumbElevation;
 
@@ -44,31 +51,21 @@ class SwitchStyle with Diagnosticable {
   /// The radius of the overlay.
   final double? overlayRadius;
 
-  static const defaults = DrivenSwitchStyle(
-    size: Size(40, 14),
-    padding: EdgeInsets.all(9),
-    thumbInset: -3,
-    trackOpacity: .5,
-    thumbColor: Colors.white,
-    thumbScale: 1.3,
-    thumbElevation: 2,
-    hoveredStyle: SwitchStyle(overlayRadius: 20.0),
-    pressedStyle: SwitchStyle(overlayRadius: 10.0),
-    disabledStyle: SwitchStyle(
-      trackAlpha: SwitchStyle.disabledTrackAlpha,
-      thumbAlpha: SwitchStyle.disabledThumbAlpha,
-    ),
-  );
-
+  static const disabledTrackBorderAlpha = 0x0c; // 38% * 12% = 5%
   static const disabledTrackAlpha = 0x0c; // 38% * 12% = 5%
   static const disabledThumbAlpha = 0x0c; // 38% * 12% = 5%
 
   /// Create a raw style of switch widget
   const SwitchStyle({
+    this.variant,
     this.size,
     this.margin,
     this.padding,
-    this.trackShape,
+    this.trackBorderColor,
+    this.trackBorderOpacity,
+    this.trackBorderAlpha,
+    this.trackBorderWidth,
+    this.trackBorderRadius,
     this.trackColor,
     this.trackOpacity,
     this.trackAlpha,
@@ -78,7 +75,7 @@ class SwitchStyle with Diagnosticable {
     this.thumbOpacity,
     this.thumbAlpha,
     this.thumbInset,
-    this.thumbScale,
+    this.thumbSize,
     this.thumbShadow,
     this.thumbElevation,
     this.overlayColor,
@@ -89,10 +86,15 @@ class SwitchStyle with Diagnosticable {
 
   /// Create a switch's style from another style
   SwitchStyle.from(SwitchStyle? other)
-      : size = other?.size,
+      : variant = other?.variant,
+        size = other?.size,
         margin = other?.margin,
         padding = other?.padding,
-        trackShape = other?.trackShape,
+        trackBorderColor = other?.trackBorderColor,
+        trackBorderOpacity = other?.trackBorderOpacity,
+        trackBorderAlpha = other?.trackBorderAlpha,
+        trackBorderWidth = other?.trackBorderWidth,
+        trackBorderRadius = other?.trackBorderRadius,
         trackColor = other?.trackColor,
         trackOpacity = other?.trackOpacity,
         trackAlpha = other?.trackAlpha,
@@ -102,7 +104,7 @@ class SwitchStyle with Diagnosticable {
         thumbOpacity = other?.thumbOpacity,
         thumbAlpha = other?.thumbAlpha,
         thumbInset = other?.thumbInset,
-        thumbScale = other?.thumbScale,
+        thumbSize = other?.thumbSize,
         thumbShadow = other?.thumbShadow,
         thumbElevation = other?.thumbElevation,
         overlayColor = other?.overlayColor,
@@ -113,10 +115,15 @@ class SwitchStyle with Diagnosticable {
   /// Creates a copy of this [SwitchStyle] but with
   /// the given fields replaced with the new values.
   SwitchStyle copyWith({
+    SwitchVariant? variant,
     Size? size,
     EdgeInsetsGeometry? margin,
     EdgeInsetsGeometry? padding,
-    ShapeBorder? trackShape,
+    Color? trackBorderColor,
+    double? trackBorderOpacity,
+    int? trackBorderAlpha,
+    double? trackBorderWidth,
+    BorderRadiusGeometry? trackBorderRadius,
     Color? trackColor,
     double? trackOpacity,
     int? trackAlpha,
@@ -126,7 +133,7 @@ class SwitchStyle with Diagnosticable {
     double? thumbOpacity,
     int? thumbAlpha,
     double? thumbInset,
-    double? thumbScale,
+    double? thumbSize,
     Color? thumbShadow,
     double? thumbElevation,
     Color? overlayColor,
@@ -142,10 +149,15 @@ class SwitchStyle with Diagnosticable {
     SwitchStyle? disabledStyle,
   }) {
     final style = SwitchStyle(
+      variant: variant ?? this.variant,
       size: size ?? this.size,
       margin: margin ?? this.margin,
       padding: padding ?? this.padding,
-      trackShape: trackShape ?? this.trackShape,
+      trackBorderColor: trackBorderColor ?? this.trackBorderColor,
+      trackBorderOpacity: trackBorderOpacity ?? this.trackBorderOpacity,
+      trackBorderAlpha: trackBorderAlpha ?? this.trackBorderAlpha,
+      trackBorderWidth: trackBorderWidth ?? this.trackBorderWidth,
+      trackBorderRadius: trackBorderRadius ?? this.trackBorderRadius,
       trackColor: trackColor ?? this.trackColor,
       trackOpacity: trackOpacity ?? this.trackOpacity,
       trackAlpha: trackAlpha ?? this.trackAlpha,
@@ -155,7 +167,7 @@ class SwitchStyle with Diagnosticable {
       thumbOpacity: thumbOpacity ?? this.thumbOpacity,
       thumbInset: thumbInset ?? this.thumbInset,
       thumbAlpha: thumbAlpha ?? this.thumbAlpha,
-      thumbScale: thumbScale ?? this.thumbScale,
+      thumbSize: thumbSize ?? this.thumbSize,
       thumbShadow: thumbShadow ?? this.thumbShadow,
       thumbElevation: thumbElevation ?? this.thumbElevation,
       overlayColor: overlayColor ?? this.overlayColor,
@@ -196,10 +208,15 @@ class SwitchStyle with Diagnosticable {
     if (other == null) return this;
 
     var style = copyWith(
+      variant: other.variant,
       size: other.size,
       margin: other.margin,
       padding: other.padding,
-      trackShape: other.trackShape,
+      trackBorderColor: other.trackBorderColor,
+      trackBorderOpacity: other.trackBorderOpacity,
+      trackBorderAlpha: other.trackBorderAlpha,
+      trackBorderWidth: other.trackBorderWidth,
+      trackBorderRadius: other.trackBorderRadius,
       trackColor: other.trackColor,
       trackOpacity: other.trackOpacity,
       trackAlpha: other.trackAlpha,
@@ -209,7 +226,7 @@ class SwitchStyle with Diagnosticable {
       thumbOpacity: other.thumbOpacity,
       thumbAlpha: other.thumbAlpha,
       thumbInset: other.thumbInset,
-      thumbScale: other.thumbScale,
+      thumbSize: other.thumbSize,
       thumbShadow: other.thumbShadow,
       thumbElevation: other.thumbElevation,
       overlayColor: other.overlayColor,
@@ -237,10 +254,17 @@ class SwitchStyle with Diagnosticable {
   static SwitchStyle? lerp(SwitchStyle? a, SwitchStyle? b, double t) {
     if (a == null && b == null) return null;
     return SwitchStyle(
+      variant: lerpEnum(a?.variant, b?.variant, t),
       size: Size.lerp(a?.size, b?.size, t),
       margin: EdgeInsetsGeometry.lerp(a?.margin, b?.margin, t),
       padding: EdgeInsetsGeometry.lerp(a?.padding, b?.padding, t),
-      trackShape: lerpEnum(a?.trackShape, b?.trackShape, t),
+      trackBorderRadius: BorderRadiusGeometry.lerp(
+          a?.trackBorderRadius, b?.trackBorderRadius, t),
+      trackBorderColor: Color.lerp(a?.trackBorderColor, b?.trackBorderColor, t),
+      trackBorderOpacity:
+          lerpDouble(a?.trackBorderOpacity, b?.trackBorderOpacity, t),
+      trackBorderAlpha: lerpInt(a?.trackBorderAlpha, b?.trackBorderAlpha, t),
+      trackBorderWidth: lerpDouble(a?.trackBorderWidth, b?.trackBorderWidth, t),
       trackColor: Color.lerp(a?.trackColor, b?.trackColor, t),
       trackOpacity: lerpDouble(a?.trackOpacity, b?.trackOpacity, t),
       trackAlpha: lerpInt(a?.trackAlpha, b?.trackAlpha, t),
@@ -250,7 +274,7 @@ class SwitchStyle with Diagnosticable {
       thumbOpacity: lerpDouble(a?.thumbOpacity, b?.thumbOpacity, t),
       thumbAlpha: lerpInt(a?.thumbAlpha, b?.thumbAlpha, t),
       thumbInset: lerpDouble(a?.thumbInset, b?.thumbInset, t),
-      thumbScale: lerpDouble(a?.thumbScale, b?.thumbScale, t),
+      thumbSize: lerpDouble(a?.thumbSize, b?.thumbSize, t),
       thumbShadow: Color.lerp(a?.thumbShadow, b?.thumbShadow, t),
       thumbElevation: lerpDouble(a?.thumbElevation, b?.thumbElevation, t),
       overlayColor: Color.lerp(a?.overlayColor, b?.overlayColor, t),
@@ -261,10 +285,15 @@ class SwitchStyle with Diagnosticable {
   }
 
   Map<String, dynamic> toMap() => {
+        'variant': variant,
         'size': size,
         'margin': margin,
         'padding': padding,
-        'trackShape': trackShape,
+        'trackBorderColor': trackBorderColor,
+        'trackBorderOpacity': trackBorderOpacity,
+        'trackBorderAlpha': trackBorderAlpha,
+        'trackBorderWidth': trackBorderWidth,
+        'trackBorderRadius': trackBorderRadius,
         'trackColor': trackColor,
         'trackOpacity': trackOpacity,
         'trackAlpha': trackAlpha,
@@ -274,7 +303,7 @@ class SwitchStyle with Diagnosticable {
         'thumbOpacity': thumbOpacity,
         'thumbAlpha': thumbAlpha,
         'thumbInset': thumbInset,
-        'thumbScale': thumbScale,
+        'thumbSize': thumbSize,
         'thumbShadow': thumbShadow,
         'thumbElevation': thumbElevation,
         'overlayColor': overlayColor,
@@ -344,10 +373,15 @@ class DrivenSwitchStyle extends SwitchStyle
 
   /// Create a raw of driven switch style
   const DrivenSwitchStyle({
+    super.variant,
     super.size,
     super.margin,
     super.padding,
-    super.trackShape,
+    super.trackBorderColor,
+    super.trackBorderOpacity,
+    super.trackBorderAlpha,
+    super.trackBorderWidth,
+    super.trackBorderRadius,
     super.trackColor,
     super.trackOpacity,
     super.trackAlpha,
@@ -357,7 +391,7 @@ class DrivenSwitchStyle extends SwitchStyle
     super.thumbOpacity,
     super.thumbAlpha,
     super.thumbInset,
-    super.thumbScale,
+    super.thumbSize,
     super.thumbShadow,
     super.thumbElevation,
     super.overlayColor,
@@ -372,6 +406,152 @@ class DrivenSwitchStyle extends SwitchStyle
     this.disabledStyle,
     this.mergeResolved,
   });
+
+  /// Create a material 2 switch style
+  DrivenSwitchStyle.m2({
+    super.size = const Size(36, 20),
+    super.margin,
+    super.padding = const EdgeInsets.all(9),
+    super.trackBorderColor,
+    super.trackBorderOpacity,
+    super.trackBorderAlpha,
+    super.trackBorderWidth = 0,
+    super.trackBorderRadius,
+    super.trackColor,
+    super.trackOpacity,
+    super.trackAlpha,
+    super.trackHeight = 14,
+    super.thumbShape,
+    super.thumbColor,
+    super.thumbOpacity,
+    super.thumbAlpha,
+    super.thumbInset,
+    super.thumbSize = 20,
+    super.thumbShadow,
+    super.thumbElevation = 2,
+    super.overlayColor,
+    super.overlayOpacity,
+    super.overlayDisabled,
+    super.overlayRadius,
+    SwitchStyle? selectedStyle,
+    this.indeterminateStyle,
+    this.focusedStyle,
+    SwitchStyle? hoveredStyle,
+    SwitchStyle? pressedStyle,
+    SwitchStyle? disabledStyle,
+    this.mergeResolved,
+  })  : selectedStyle = const SwitchStyle(
+          thumbSize: 20,
+        ).merge(selectedStyle),
+        hoveredStyle =
+            const SwitchStyle(overlayRadius: 20.0).merge(hoveredStyle),
+        pressedStyle =
+            const SwitchStyle(overlayRadius: 10.0).merge(pressedStyle),
+        disabledStyle = const SwitchStyle(
+          trackAlpha: SwitchStyle.disabledTrackAlpha,
+          thumbAlpha: SwitchStyle.disabledThumbAlpha,
+        ).merge(disabledStyle),
+        super(variant: SwitchVariant.m2);
+
+  /// Create a material 3 switch style
+  DrivenSwitchStyle.m3({
+    super.size = const Size(52, 32),
+    super.margin,
+    super.padding = const EdgeInsets.all(9),
+    super.trackBorderColor,
+    super.trackBorderOpacity,
+    super.trackBorderAlpha,
+    super.trackBorderWidth = 2,
+    super.trackBorderRadius,
+    super.trackColor,
+    super.trackOpacity,
+    super.trackAlpha,
+    super.trackHeight = 32,
+    super.thumbShape,
+    super.thumbColor,
+    super.thumbOpacity,
+    super.thumbAlpha,
+    super.thumbInset,
+    super.thumbSize = 16,
+    super.thumbShadow,
+    super.thumbElevation = 2,
+    super.overlayColor,
+    super.overlayOpacity,
+    super.overlayDisabled,
+    super.overlayRadius,
+    SwitchStyle? selectedStyle,
+    this.indeterminateStyle,
+    this.focusedStyle,
+    SwitchStyle? hoveredStyle,
+    SwitchStyle? pressedStyle,
+    SwitchStyle? disabledStyle,
+    this.mergeResolved,
+  })  : selectedStyle = const SwitchStyle(
+          thumbSize: 28,
+          trackBorderWidth: 0,
+        ).merge(selectedStyle),
+        hoveredStyle = const SwitchStyle(
+          overlayRadius: 20.0,
+        ).merge(hoveredStyle),
+        pressedStyle = const SwitchStyle(
+          overlayRadius: 10.0,
+          thumbSize: 30,
+        ).merge(pressedStyle),
+        disabledStyle = const SwitchStyle(
+          trackBorderAlpha: SwitchStyle.disabledTrackBorderAlpha,
+          trackAlpha: SwitchStyle.disabledTrackAlpha,
+          thumbAlpha: SwitchStyle.disabledThumbAlpha,
+        ).merge(disabledStyle),
+        super(variant: SwitchVariant.m3);
+
+  /// Create an ios switch style
+  DrivenSwitchStyle.ios({
+    super.size = const Size(52, 32),
+    super.margin,
+    super.padding = const EdgeInsets.all(9),
+    super.trackBorderColor,
+    super.trackBorderOpacity,
+    super.trackBorderAlpha,
+    super.trackBorderWidth = 0,
+    super.trackBorderRadius,
+    super.trackColor,
+    super.trackOpacity,
+    super.trackAlpha,
+    super.trackHeight = 32,
+    super.thumbShape,
+    super.thumbColor,
+    super.thumbOpacity,
+    super.thumbAlpha,
+    super.thumbInset,
+    super.thumbSize = 26,
+    super.thumbShadow,
+    super.thumbElevation = 2,
+    super.overlayColor,
+    super.overlayOpacity,
+    super.overlayDisabled,
+    super.overlayRadius,
+    SwitchStyle? selectedStyle,
+    this.indeterminateStyle,
+    this.focusedStyle,
+    SwitchStyle? hoveredStyle,
+    SwitchStyle? pressedStyle,
+    SwitchStyle? disabledStyle,
+    this.mergeResolved,
+  })  : selectedStyle = const SwitchStyle(
+          thumbSize: 26,
+        ).merge(selectedStyle),
+        hoveredStyle = const SwitchStyle(
+          overlayRadius: 20.0,
+        ).merge(hoveredStyle),
+        pressedStyle = const SwitchStyle(
+          overlayRadius: 10.0,
+          thumbSize: 26,
+        ).merge(pressedStyle),
+        disabledStyle = const SwitchStyle(
+          trackAlpha: SwitchStyle.disabledTrackAlpha,
+          thumbAlpha: SwitchStyle.disabledThumbAlpha,
+        ).merge(disabledStyle),
+        super(variant: SwitchVariant.ios);
 
   /// Create a [DrivenSwitchStyle] with value
   /// from another [SwitchStyle].
@@ -426,10 +606,15 @@ class DrivenSwitchStyle extends SwitchStyle
   /// the given fields replaced with the new values.
   @override
   DrivenSwitchStyle copyWith({
+    SwitchVariant? variant,
     Size? size,
     EdgeInsetsGeometry? margin,
     EdgeInsetsGeometry? padding,
-    ShapeBorder? trackShape,
+    Color? trackBorderColor,
+    double? trackBorderOpacity,
+    int? trackBorderAlpha,
+    double? trackBorderWidth,
+    BorderRadiusGeometry? trackBorderRadius,
     Color? trackColor,
     double? trackOpacity,
     int? trackAlpha,
@@ -439,7 +624,7 @@ class DrivenSwitchStyle extends SwitchStyle
     double? thumbOpacity,
     int? thumbAlpha,
     double? thumbInset,
-    double? thumbScale,
+    double? thumbSize,
     Color? thumbShadow,
     double? thumbElevation,
     Color? overlayColor,
@@ -455,10 +640,15 @@ class DrivenSwitchStyle extends SwitchStyle
     SwitchStyle? disabledStyle,
   }) {
     return DrivenSwitchStyle(
+      variant: variant ?? this.variant,
       size: size ?? this.size,
       margin: margin ?? this.margin,
       padding: padding ?? this.padding,
-      trackShape: trackShape ?? this.trackShape,
+      trackBorderColor: trackBorderColor ?? this.trackBorderColor,
+      trackBorderOpacity: trackBorderOpacity ?? this.trackBorderOpacity,
+      trackBorderAlpha: trackBorderAlpha ?? this.trackBorderAlpha,
+      trackBorderWidth: trackBorderWidth ?? this.trackBorderWidth,
+      trackBorderRadius: trackBorderRadius ?? this.trackBorderRadius,
       trackColor: trackColor ?? this.trackColor,
       trackOpacity: trackOpacity ?? this.trackOpacity,
       trackAlpha: trackAlpha ?? this.trackAlpha,
@@ -468,7 +658,7 @@ class DrivenSwitchStyle extends SwitchStyle
       thumbOpacity: thumbOpacity ?? this.thumbOpacity,
       thumbInset: thumbInset ?? this.thumbInset,
       thumbAlpha: thumbAlpha ?? this.thumbAlpha,
-      thumbScale: thumbScale ?? this.thumbScale,
+      thumbSize: thumbSize ?? this.thumbSize,
       thumbShadow: thumbShadow ?? this.thumbShadow,
       thumbElevation: thumbElevation ?? this.thumbElevation,
       overlayColor: overlayColor ?? this.overlayColor,

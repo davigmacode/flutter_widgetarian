@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/utils.dart';
 import 'package:widgetarian/theme.dart';
 import 'style.dart';
+import 'fallback.dart';
 
 /// Defines the visual properties of [Switch].
 ///
@@ -21,7 +22,7 @@ class SwitchThemeData with Diagnosticable {
   final SwitchStyle style;
 
   /// The [SwitchStyle] that provides fallback values.
-  final SwitchStyle fallback;
+  final SwitchStyleFallback fallback;
 
   /// Creates a theme data that can be used for [SwitchTheme].
   const SwitchThemeData({
@@ -32,11 +33,11 @@ class SwitchThemeData with Diagnosticable {
   });
 
   /// An [SwitchThemeData] with some reasonable default values.
-  static const defaults = SwitchThemeData(
+  static final defaults = SwitchThemeData(
     curve: Curves.linear,
-    duration: Duration(milliseconds: 200),
-    style: SwitchStyle.defaults,
-    fallback: SwitchStyle(),
+    duration: const Duration(milliseconds: 200),
+    style: DrivenSwitchStyle.m2(),
+    fallback: const SwitchStyleFallback(),
   );
 
   /// Creates a copy of this [SwitchThemeData] but with
@@ -45,7 +46,7 @@ class SwitchThemeData with Diagnosticable {
     Curve? curve,
     Duration? duration,
     SwitchStyle? style,
-    SwitchStyle? fallback,
+    SwitchStyleFallback? fallback,
   }) {
     return SwitchThemeData(
       curve: curve ?? this.curve,
@@ -116,7 +117,7 @@ class SwitchTheme extends InheritedTheme {
     Curve? curve,
     Duration? duration,
     SwitchStyle? style,
-    SwitchStyle? fallback,
+    SwitchStyleFallback? fallback,
     SwitchThemeData? data,
     required Widget child,
   }) {
@@ -154,16 +155,34 @@ class SwitchTheme extends InheritedTheme {
     final globalTheme = appTheme.extension<SwitchThemeData?>();
     return SwitchThemeData.defaults
         .copyWith(
-          fallback: DrivenSwitchStyle(
-            trackColor: appTheme.unselectedWidgetColor,
-            thumbColor: Colors.white,
-            selectedStyle: SwitchStyle(
-              trackColor: appTheme.brightness.isLight
-                  ? appTheme.colorScheme.primary
-                  : appTheme.colorScheme.inversePrimary,
+          fallback: SwitchStyleFallback(
+            m2: DrivenSwitchStyle(
+              trackColor: appTheme.unselectedWidgetColor,
+              thumbColor: Colors.white,
+              selectedStyle: SwitchStyle(
+                trackColor: appTheme.brightness.isLight
+                    ? appTheme.colorScheme.primary
+                    : appTheme.colorScheme.inversePrimary,
+              ),
+            ),
+            m3: DrivenSwitchStyle(
+              trackBorderColor: appTheme.colorScheme.outline,
+              trackColor: appTheme.colorScheme.surfaceVariant,
+              thumbColor: appTheme.colorScheme.onSurfaceVariant,
+              selectedStyle: SwitchStyle(
+                trackColor: appTheme.colorScheme.primary,
+                thumbColor: appTheme.colorScheme.onPrimary,
+              ),
+            ),
+            ios: DrivenSwitchStyle(
+              trackColor: appTheme.colorScheme.surfaceVariant,
               thumbColor: appTheme.brightness.isLight
-                  ? appTheme.colorScheme.primary
-                  : appTheme.colorScheme.inversePrimary,
+                  ? Colors.white
+                  : appTheme.colorScheme.onSurfaceVariant,
+              selectedStyle: SwitchStyle(
+                trackColor: appTheme.colorScheme.primary,
+                thumbColor: appTheme.colorScheme.onPrimary,
+              ),
             ),
           ),
         )
