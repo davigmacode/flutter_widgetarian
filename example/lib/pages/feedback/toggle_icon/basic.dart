@@ -110,10 +110,10 @@ const script = '''Choice(
             pressedStyle: AnchorStyle(radius: 0),
           ),
           child: ToggleIcon(
+            Icons.bookmark,
+            backIcon: Icons.bookmark_border,
             selected: choice.has('bookmark'),
             style: DrivenToggleIconStyle.fade(size: 30),
-            outerIcon: Icons.bookmark_border,
-            innerIcon: Icons.bookmark,
           ),
         ),
         Anchor(
@@ -124,10 +124,10 @@ const script = '''Choice(
             pressedStyle: AnchorStyle(radius: 0),
           ),
           child: ToggleIcon(
+            Icons.favorite,
+            backIcon: Icons.favorite_border,
             selected: choice.has('favorite'),
             style: DrivenToggleIconStyle.scaleUp(size: 30),
-            outerIcon: Icons.favorite_border,
-            innerIcon: Icons.favorite,
           ),
         ),
         Anchor(
@@ -138,10 +138,9 @@ const script = '''Choice(
             pressedStyle: AnchorStyle(radius: 0),
           ),
           child: ToggleIcon(
+            Icons.star,
             selected: choice.has('star'),
             style: DrivenToggleIconStyle.scaleDown(size: 30),
-            outerIcon: Icons.star,
-            innerIcon: Icons.star,
           ),
         ),
         Anchor(
@@ -152,19 +151,15 @@ const script = '''Choice(
             pressedStyle: AnchorStyle(radius: 0),
           ),
           child: ToggleIcon(
+            Icons.account_tree,
+            backIcon: Icons.account_tree_outlined,
             selected: choice.has('tree'),
-            style: DrivenToggleIconStyle(
+            style: const DrivenToggleIconStyle(
               size: 30,
-              outerColor: Theme.of(context).iconTheme.color,
-              outerOpacity: 1,
-              innerOpacity: 0,
-              selectedStyle: const ToggleIconStyle(
-                innerColor: Colors.orange,
-                innerOpacity: 1,
-              ),
+              opacity: 0,
+              color: Colors.orange,
+              selectedStyle: ToggleIconStyle(opacity: 1),
             ),
-            outerIcon: Icons.account_tree_outlined,
-            innerIcon: Icons.account_tree,
           ),
         ),
       ],
