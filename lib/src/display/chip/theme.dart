@@ -162,13 +162,17 @@ class ChipTheme extends InheritedTheme {
               shadowColor: appTheme.colorScheme.shadow,
               overlayColor: appTheme.brightness.isDark ? Colors.white : null,
             ),
+            tonal: DrivenChipStyle(
+              selectedStyle: ChipStyle(
+                foregroundColor: appTheme.colorScheme.primary,
+                backgroundColor: appTheme.colorScheme.primary,
+              ),
+            ),
             filled: DrivenChipStyle(
               foregroundColor: appTheme.colorScheme.onSurface,
               backgroundColor: appTheme.unselectedWidgetColor,
               selectedStyle: ChipStyle(
-                backgroundColor: appTheme.brightness.isLight
-                    ? appTheme.colorScheme.primary
-                    : appTheme.colorScheme.inversePrimary,
+                backgroundColor: appTheme.colorScheme.primary,
               ),
             ),
             outlined: DrivenChipStyle(

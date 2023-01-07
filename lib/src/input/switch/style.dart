@@ -487,7 +487,7 @@ class DrivenSwitchStyle extends SwitchStyle
     SwitchStyle? disabledStyle,
     this.mergeResolved,
   })  : selectedStyle = const SwitchStyle(
-          thumbSize: 28,
+          thumbSize: 24,
           trackBorderWidth: 0,
         ).merge(selectedStyle),
         hoveredStyle = const SwitchStyle(

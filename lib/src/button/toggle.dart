@@ -132,6 +132,13 @@ class ToggleButton extends StatelessWidget {
     final buttonTheme = ButtonTheme.of(context);
     final buttonStyle = buttonTheme.style.merge(style);
     final fallbackStyle = buttonTheme.fallback.copyWith(
+      base: DrivenButtonStyle(
+        foregroundStyle: appTheme.textTheme.labelLarge,
+        foregroundColor: appTheme.colorScheme.onSurface,
+        borderColor: appTheme.colorScheme.outline,
+        shadowColor: appTheme.colorScheme.shadow,
+        overlayColor: appTheme.brightness.isDark ? Colors.white : null,
+      ),
       filled: DrivenButtonStyle(
         backgroundColor: appTheme.unselectedWidgetColor,
         selectedStyle: ButtonStyle(

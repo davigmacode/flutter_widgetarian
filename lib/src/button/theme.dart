@@ -158,16 +158,18 @@ class ButtonTheme extends InheritedTheme {
           fallback: ButtonStyleFallback(
             base: DrivenButtonStyle(
               foregroundStyle: appTheme.textTheme.labelLarge,
-              foregroundColor: appTheme.colorScheme.onSurface,
+              foregroundColor: appTheme.colorScheme.primary,
               borderColor: appTheme.colorScheme.outline,
               shadowColor: appTheme.colorScheme.shadow,
               overlayColor: appTheme.brightness.isDark ? Colors.white : null,
             ),
+            tonal: DrivenButtonStyle(
+              foregroundColor: appTheme.colorScheme.primary,
+              backgroundColor: appTheme.colorScheme.primary,
+            ),
             filled: DrivenButtonStyle(
               foregroundColor: appTheme.colorScheme.onSurface,
-              backgroundColor: appTheme.brightness.isLight
-                  ? appTheme.colorScheme.primary
-                  : appTheme.colorScheme.inversePrimary,
+              backgroundColor: appTheme.colorScheme.primary,
             ),
             outlined: const DrivenButtonStyle(
               backgroundColor: Colors.transparent,
