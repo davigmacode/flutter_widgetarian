@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'template.dart';
+import 'package:widgetarian/layout.dart';
+import 'package:widgetarian/typography.dart';
+import 'menu.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({
     Key? key,
     required this.title,
@@ -10,16 +12,22 @@ class HomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
   Widget build(BuildContext context) {
-    return PageTemplate(
-      title: widget.title,
-      body: const Center(
-        child: Text('Home'),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Center(
+          child: SizedBox(
+            width: 300,
+            child: Column(
+              children: [
+                const Gap(20),
+                HeadlineText.large(title),
+                const Gap(20),
+                const PageMenu(),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

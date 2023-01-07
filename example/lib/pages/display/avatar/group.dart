@@ -21,6 +21,14 @@ class _AvatarGroupUsageState extends State<AvatarGroupUsage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _setWidth(MediaQuery.of(context).size.width / 3);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Sample(
       title: 'Grouped Usage',

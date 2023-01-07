@@ -48,6 +48,8 @@ class Sample extends StatelessWidget {
               alignment: Alignment.topRight,
               child: ExpansionButton(
                 style: ExpansionButtonStyle(
+                  margin: EdgeInsets.fromLTRB(0, 0, 2, 0),
+                  padding: EdgeInsets.all(6),
                   shape: BoxShape.circle,
                   radius: 18,
                 ),
@@ -120,8 +122,8 @@ class Sample extends StatelessWidget {
         children: [
           HeadlineText.large(title),
           const Gap(15),
-          Card(
-            clipBehavior: Clip.antiAlias,
+          Sheet(
+            style: const SheetStyle.elevated(),
             child: child,
           ),
         ],

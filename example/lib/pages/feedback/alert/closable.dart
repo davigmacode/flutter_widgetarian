@@ -83,29 +83,51 @@ class _AlertClosableUsageState extends State<AlertClosableUsage> {
   }
 }
 
-const script = '''Wrap(
-  spacing: 15,
-  runSpacing: 15,
+const script = '''Column(
   children: [
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.flat(),
-      child: const Text('Flat Button'),
+    Expansion(
+      value: _open,
+      onChanged: _setOpen,
+      child: const Alert(
+        style: AlertStyle.tonal(
+          foregroundColor: Colors.orange,
+          backgroundColor: Colors.orange,
+          padding: EdgeInsets.all(20),
+        ),
+        icon: Icon(Icons.warning),
+        action: ExpansionButton(
+          style: ExpansionButtonStyle(
+            shape: BoxShape.circle,
+            radius: 20,
+          ),
+          child: Icon(Icons.close),
+        ),
+        title: Text('Warning'),
+        message: Text('This is a warning alert — check it out!'),
+      ),
     ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.toned(),
-      child: const Text('Toned Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.outlined(),
-      child: const Text('Outlined Button'),
-    ),
-    Button(
-      onPressed: () => {},
-      style: ButtonStyle.filled(),
-      child: const Text('Filled Button'),
+    const Gap(20),
+    AnimatedSwitcher(
+      duration: const Duration(milliseconds: 200),
+      child: _open
+          ? Alert(
+              style: const AlertStyle.tonal(
+                foregroundColor: Colors.orange,
+                backgroundColor: Colors.orange,
+                padding: EdgeInsets.all(20),
+              ),
+              icon: const Icon(Icons.warning),
+              action: Anchor(
+                radius: 20,
+                onTap: _setOpen,
+                shape: BoxShape.circle,
+                child: const Icon(Icons.close),
+              ),
+              title: const Text('Warning'),
+              message:
+                  const Text('This is a warning alert — check it out!'),
+            )
+          : Container(),
     ),
   ],
 )''';
