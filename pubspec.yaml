@@ -1,6 +1,6 @@
 name: widgetarian
-description: A new Flutter package project.
-version: 0.0.1
+description: Widgetarian is a UI kit that simplifies common widget usage.
+version: 0.0.1-dev.1
 homepage: https://github.com/davigmacode/flutter_widgetarian
 
 environment:
