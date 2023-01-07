@@ -1,3 +1,3 @@
 library text;
 
-export 'src/text/constrained.dart';
+export 'src/text/main.dart';

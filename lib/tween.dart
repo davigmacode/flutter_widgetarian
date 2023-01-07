@@ -1,4 +1,3 @@
 library tween;
 
-export 'src/tween/border.dart';
-export 'src/tween/theme.dart';
+export 'src/tween/main.dart';

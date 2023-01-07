@@ -1,6 +1,3 @@
 library utils;
 
-export 'src/utils/colors.dart';
-export 'src/utils/lerp.dart';
-export 'src/utils/misc.dart';
-export 'src/utils/widget.dart';
+export 'src/utils/main.dart';
