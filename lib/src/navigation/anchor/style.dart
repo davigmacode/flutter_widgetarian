@@ -86,6 +86,7 @@ class AnchorStyle with Diagnosticable {
     shape: BoxShape.rectangle,
     overlayDisabled: false,
     overlayOpacity: 0,
+    focusedStyle: AnchorStyle(overlayOpacity: 0.15),
     hoveredStyle: AnchorStyle(overlayOpacity: 0.05),
     pressedStyle: AnchorStyle(overlayOpacity: 0.1),
   );
