@@ -27,11 +27,15 @@ class ChoiceController<T> extends ChangeNotifier {
 
   bool get isNotEmpty => _value.isNotEmpty;
 
-  bool get isIndeterminate => isNotEmpty && length < items.length;
+  bool get isIndeterminate => isNotEmpty && !isChecked;
 
-  bool get isChecked => length == items.length;
+  bool get isChecked => hasEvery(items);
 
   bool has(T value) => _value.contains(value);
+
+  bool hasAny(List<T> value) => value.any((e) => _value.contains(e));
+
+  bool hasEvery(List<T> value) => value.every((e) => _value.contains(e));
 
   ValueChanged<bool> selectAll({
     ValueChanged<bool>? onChanged,
@@ -96,5 +100,9 @@ class ChoiceController<T> extends ChangeNotifier {
     _value.clear();
     notifyListeners();
     onChanged?.call(value);
+  }
+
+  void fill() {
+    replace(items);
   }
 }
