@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/theme.dart';
+import 'package:widgetarian/src/theme/material.dart';
 import 'package:widgetarian/src/input/foundation.dart';
 import 'package:widgetarian/src/input/checkbox/style.dart';
 import 'package:widgetarian/src/button/style.dart';

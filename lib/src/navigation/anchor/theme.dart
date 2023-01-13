@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/theme.dart';
+import 'package:widgetarian/src/theme/material.dart';
 import 'style.dart';
 
 /// Defines the visual properties of [Anchor].
