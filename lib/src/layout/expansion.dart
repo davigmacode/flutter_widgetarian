@@ -89,30 +89,157 @@ class ExpansionConsumer extends StatelessWidget {
 //--------------------------------------------------------
 
 typedef ExpansionButtonStyle = AnchorStyle;
+typedef ExpansionButtonCallback = VoidCallback Function(
+    ExpansionController state);
+
+abstract class ExpansionButtonAction {
+  static const ExpansionButtonCallback toggle = _toggle;
+  static VoidCallback _toggle(ExpansionController state) => state.toggle;
+
+  static const ExpansionButtonCallback expand = _expand;
+  static VoidCallback _expand(ExpansionController state) => state.expand;
+
+  static const ExpansionButtonCallback collapse = _collapse;
+  static VoidCallback _collapse(ExpansionController state) => state.collapse;
+}
 
 class ExpansionButton extends StatelessWidget {
   const ExpansionButton({
     Key? key,
+    this.action,
     this.style,
+    this.padding,
+    this.margin,
+    this.borderRadius,
+    this.overlayDisabled,
+    this.disabled = false,
     required this.child,
-  }) : super(key: key);
+  })  : shape = null,
+        radius = null,
+        super(key: key);
 
+  const ExpansionButton.circle({
+    Key? key,
+    this.action,
+    this.style,
+    this.padding,
+    this.margin,
+    this.radius,
+    this.overlayDisabled,
+    this.disabled = false,
+    required this.child,
+  })  : shape = BoxShape.circle,
+        borderRadius = null,
+        super(key: key);
+
+  final ExpansionButtonCallback? action;
   final ExpansionButtonStyle? style;
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
+  final bool? overlayDisabled;
+  final BoxShape? shape;
+  final BorderRadius? borderRadius;
+  final double? radius;
+  final bool disabled;
   final Widget child;
+
+  ExpansionButtonStyle get effectiveStyle =>
+      ExpansionButtonStyle.from(style).copyWith(
+        shape: shape,
+        radius: radius,
+        borderRadius: borderRadius,
+        overlayDisabled: overlayDisabled,
+        padding: padding,
+        margin: margin,
+      );
 
   @override
   Widget build(BuildContext context) {
     return ExpansionConsumer(
       child: child,
       builder: (context, state, child) {
+        final callback = action ?? ExpansionButtonAction.toggle;
         return Anchor(
-          style: style,
-          onTap: state.toggle,
+          style: effectiveStyle,
+          onTap: callback(state),
+          disabled: disabled,
           child: child,
         );
       },
     );
   }
+}
+
+class ExpansionToggle extends ExpansionButton {
+  const ExpansionToggle({
+    Key? key,
+    super.style,
+    super.padding,
+    super.margin,
+    super.borderRadius,
+    super.overlayDisabled,
+    super.disabled = false,
+    required super.child,
+  }) : super(key: key, action: ExpansionButtonAction.toggle);
+
+  const ExpansionToggle.circle({
+    Key? key,
+    super.style,
+    super.padding,
+    super.margin,
+    super.radius,
+    super.overlayDisabled,
+    super.disabled = false,
+    required super.child,
+  }) : super.circle(key: key, action: ExpansionButtonAction.toggle);
+}
+
+class ExpansionExpand extends ExpansionButton {
+  const ExpansionExpand({
+    Key? key,
+    super.style,
+    super.padding,
+    super.margin,
+    super.borderRadius,
+    super.overlayDisabled,
+    super.disabled = false,
+    required super.child,
+  }) : super(key: key, action: ExpansionButtonAction.expand);
+
+  const ExpansionExpand.circle({
+    Key? key,
+    super.style,
+    super.padding,
+    super.margin,
+    super.radius,
+    super.overlayDisabled,
+    super.disabled = false,
+    required super.child,
+  }) : super.circle(key: key, action: ExpansionButtonAction.expand);
+}
+
+class ExpansionCollapse extends ExpansionButton {
+  const ExpansionCollapse({
+    Key? key,
+    super.style,
+    super.padding,
+    super.margin,
+    super.borderRadius,
+    super.overlayDisabled,
+    super.disabled = false,
+    required super.child,
+  }) : super(key: key, action: ExpansionButtonAction.collapse);
+
+  const ExpansionCollapse.circle({
+    Key? key,
+    super.style,
+    super.padding,
+    super.margin,
+    super.radius,
+    super.overlayDisabled,
+    super.disabled = false,
+    required super.child,
+  }) : super.circle(key: key, action: ExpansionButtonAction.collapse);
 }
 
 //--------------------------------------------------------
@@ -230,6 +357,35 @@ class ExpansionView extends StatelessWidget {
 
 //--------------------------------------------------------
 
+typedef ExpansionTransitionBuilder = AnimatedSwitcherTransitionBuilder;
+typedef ExpansionLayoutBuilder = AnimatedSwitcherLayoutBuilder;
+
+abstract class ExpansionTransition {
+  /// The new child is given a [FadeTransition] which increases opacity as
+  /// the animation goes from 0.0 to 1.0, and decreases when the animation is
+  /// reversed.
+  static const fade = AnimatedSwitcher.defaultTransitionBuilder;
+
+  static const scale = _scale;
+  static Widget _scale(Widget child, Animation<double> animation) {
+    return ScaleTransition(
+      scale: animation,
+      child: child,
+    );
+  }
+
+  static const ExpansionTransitionBuilder? crossFade = null;
+}
+
+abstract class ExpansionLayout {
+  /// The new child is placed in a [Stack] that sizes itself to match the
+  /// largest of the child or a previous child. The children are centered on
+  /// each other.
+  static const defaults = AnimatedSwitcher.defaultLayoutBuilder;
+}
+
+//--------------------------------------------------------
+
 class Expansion extends StatelessWidget {
   const Expansion({
     Key? key,
@@ -237,6 +393,8 @@ class Expansion extends StatelessWidget {
     this.onChanged,
     this.duration = defaultDuration,
     this.curve = defaultCurve,
+    this.transitionBuilder = ExpansionTransition.crossFade,
+    this.layoutBuilder = ExpansionLayout.defaults,
     this.header,
     this.divider,
     this.collapsed,
@@ -247,6 +405,12 @@ class Expansion extends StatelessWidget {
   final ValueChanged<bool>? onChanged;
   final Duration duration;
   final Curve curve;
+
+  /// A function that wraps a new [content] with an animation that transitions the [content] in when the animation runs in the forward direction and out when the animation runs in the reverse direction. This is only called when a new [content] is set (not for each build), or when a new [transitionBuilder] is set. If a new [transitionBuilder] is set, then the transition is rebuilt for the current content and all previous children using the new [transitionBuilder]. The function must not return null.
+  final ExpansionTransitionBuilder? transitionBuilder;
+
+  /// A function that wraps all of the children that are transitioning out, and the [child] that's transitioning in, with a widget that lays all of them out. This is called every time this widget is built. The function must not return null.
+  final ExpansionLayoutBuilder layoutBuilder;
 
   final Widget? header;
   final Widget? divider;
@@ -273,17 +437,28 @@ class Expansion extends StatelessWidget {
             children: [
               header,
               if (needDivider) divider,
-              AnimatedCrossFade(
-                firstChild: collapsed ?? const Box(),
-                secondChild: child,
-                crossFadeState: state.expanded
-                    ? CrossFadeState.showSecond
-                    : CrossFadeState.showFirst,
-                duration: duration,
-                sizeCurve: curve,
-                firstCurve: curve,
-                secondCurve: curve,
-              ),
+              transitionBuilder != null
+                  ? AnimatedSwitcher(
+                      duration: duration,
+                      switchInCurve: curve,
+                      switchOutCurve: curve,
+                      transitionBuilder: transitionBuilder!,
+                      layoutBuilder: layoutBuilder,
+                      child: state.expanded
+                          ? child
+                          : (collapsed ?? const SizedBox.shrink()),
+                    )
+                  : AnimatedCrossFade(
+                      firstChild: collapsed ?? const Box(),
+                      secondChild: child,
+                      crossFadeState: state.expanded
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
+                      duration: duration,
+                      sizeCurve: curve,
+                      firstCurve: curve,
+                      secondCurve: curve,
+                    ),
             ].whereType<Widget>().toList(growable: false),
           );
         },
