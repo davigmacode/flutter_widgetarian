@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:widgetarian/src/layout/sheet/style.dart';
-import 'package:widgetarian/src/layout/sheet/variant.dart';
+import 'package:widgetarian/src/layout/sheet/types.dart';
+
+typedef AlertVariant = SheetVariant;
+typedef AlertSeverity = SheetSeverity;
 
 /// The style to be applied to alert widget
 @immutable
@@ -9,10 +12,10 @@ class AlertStyle extends SheetStyle {
   /// Create a raw alert's style
   const AlertStyle({
     super.variant,
+    super.severity,
     super.margin,
     super.padding,
     super.clipBehavior,
-    super.overlayColor,
     super.shadowColor,
     super.elevation,
     super.foregroundStyle,
@@ -33,7 +36,6 @@ class AlertStyle extends SheetStyle {
     super.borderWidth,
     super.borderRadius,
     super.borderStyle,
-    super.shape,
     super.iconColor,
     super.iconOpacity,
     super.iconSize,
@@ -43,11 +45,11 @@ class AlertStyle extends SheetStyle {
   AlertStyle.from(AlertStyle? other)
       : super(
           variant: other?.variant,
+          severity: other?.severity,
           width: double.infinity,
           margin: other?.margin,
           padding: other?.padding,
           clipBehavior: other?.clipBehavior,
-          overlayColor: other?.overlayColor,
           shadowColor: other?.shadowColor,
           elevation: other?.elevation,
           foregroundStyle: other?.foregroundStyle,
@@ -68,7 +70,6 @@ class AlertStyle extends SheetStyle {
           borderWidth: other?.borderWidth,
           borderRadius: other?.borderRadius,
           borderStyle: other?.borderStyle,
-          shape: other?.shape,
           iconColor: other?.iconColor,
           iconOpacity: other?.iconOpacity,
           iconSize: other?.iconSize,
@@ -76,14 +77,14 @@ class AlertStyle extends SheetStyle {
 
   /// Create [AlertStyle] with default value for toned style.
   const AlertStyle.tonal({
+    Color? color,
+    super.severity,
     super.margin,
     super.padding,
     super.clipBehavior,
-    super.overlayColor,
     super.shadowColor,
     super.elevation,
     super.foregroundStyle,
-    super.foregroundColor,
     super.foregroundOpacity,
     super.foregroundAlpha,
     super.foregroundSpacing,
@@ -91,7 +92,6 @@ class AlertStyle extends SheetStyle {
     super.foregroundExpanded,
     super.foregroundAlign,
     super.foregroundJustify,
-    super.backgroundColor,
     super.backgroundOpacity = 0.12,
     super.backgroundAlpha,
     super.borderColor,
@@ -100,22 +100,23 @@ class AlertStyle extends SheetStyle {
     super.borderWidth = 1.0,
     super.borderRadius,
     super.borderStyle = BorderStyle.none,
-    super.shape,
     super.iconColor,
     super.iconOpacity,
     super.iconSize,
   }) : super(
           width: double.infinity,
           variant: SheetVariant.tonal,
+          backgroundColor: color,
+          foregroundColor: color,
         );
 
   /// Create [AlertStyle] with default value for filled style.
   const AlertStyle.filled({
     Color? color,
+    super.severity,
     super.margin,
     super.padding,
     super.clipBehavior,
-    super.overlayColor,
     super.shadowColor,
     super.elevation,
     super.foregroundStyle,
@@ -134,24 +135,23 @@ class AlertStyle extends SheetStyle {
     super.borderWidth = 0.0,
     super.borderRadius,
     super.borderStyle = BorderStyle.none,
-    super.shape,
     super.iconColor,
     super.iconOpacity,
     super.iconSize,
   }) : super(
           width: double.infinity,
+          variant: SheetVariant.filled,
           backgroundColor: color,
           borderColor: color,
-          variant: SheetVariant.filled,
         );
 
   /// Create [AlertStyle] with default value for outlined style.
   const AlertStyle.outlined({
     Color? color,
+    super.severity,
     super.margin,
     super.padding,
     super.clipBehavior,
-    super.overlayColor,
     super.shadowColor,
     super.elevation,
     super.foregroundStyle,
@@ -170,15 +170,14 @@ class AlertStyle extends SheetStyle {
     super.borderWidth = 1.0,
     super.borderRadius,
     super.borderStyle = BorderStyle.solid,
-    super.shape,
     super.iconColor,
     super.iconOpacity,
     super.iconSize,
   }) : super(
           width: double.infinity,
+          variant: SheetVariant.outlined,
           borderColor: color,
           foregroundColor: color,
-          variant: SheetVariant.outlined,
         );
 
   static const defaults = AlertStyle(
@@ -186,19 +185,19 @@ class AlertStyle extends SheetStyle {
     borderRadius: BorderRadius.all(Radius.circular(8)),
     margin: EdgeInsets.zero,
     padding: EdgeInsets.symmetric(horizontal: 16),
-    iconSize: 18.0,
+    iconSize: 20.0,
     foregroundSpacing: 15.0,
     foregroundLoosen: false,
     foregroundExpanded: true,
     foregroundAlign: CrossAxisAlignment.start,
-    foregroundStyle: TextStyle(height: 1),
   );
 
   /// Creates a copy of this [AlertStyle] but with
   /// the given fields replaced with the new values.
   @override
   AlertStyle copyWith({
-    SheetVariant? variant,
+    AlertVariant? variant,
+    AlertSeverity? severity,
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,
@@ -234,10 +233,10 @@ class AlertStyle extends SheetStyle {
   }) {
     return AlertStyle(
       variant: variant ?? this.variant,
+      severity: severity ?? this.severity,
       margin: margin ?? this.margin,
       padding: padding ?? this.padding,
       clipBehavior: clipBehavior ?? this.clipBehavior,
-      overlayColor: overlayColor ?? this.overlayColor,
       shadowColor: shadowColor ?? this.shadowColor,
       elevation: elevation ?? this.elevation,
       foregroundStyle: foregroundStyle ?? this.foregroundStyle,
@@ -258,7 +257,6 @@ class AlertStyle extends SheetStyle {
       borderWidth: borderWidth ?? this.borderWidth,
       borderRadius: borderRadius ?? this.borderRadius,
       borderStyle: borderStyle ?? this.borderStyle,
-      shape: shape ?? this.shape,
       iconColor: iconColor ?? this.iconColor,
       iconOpacity: iconOpacity ?? this.iconOpacity,
       iconSize: iconSize ?? this.iconSize,
@@ -273,10 +271,11 @@ class AlertStyle extends SheetStyle {
     if (other == null) return this;
 
     return copyWith(
+      variant: other.variant,
+      severity: other.severity,
       margin: other.margin,
       padding: other.padding,
       clipBehavior: other.clipBehavior,
-      overlayColor: other.overlayColor,
       shadowColor: other.shadowColor,
       elevation: other.elevation,
       foregroundStyle: other.foregroundStyle,
@@ -297,7 +296,6 @@ class AlertStyle extends SheetStyle {
       borderWidth: other.borderWidth,
       borderRadius: other.borderRadius,
       borderStyle: other.borderStyle,
-      shape: other.shape,
       iconColor: other.iconColor,
       iconOpacity: other.iconOpacity,
       iconSize: other.iconSize,

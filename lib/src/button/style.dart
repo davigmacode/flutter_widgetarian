@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/utils.dart';
 import 'package:widgetarian/src/layout/sheet/style.dart';
-import 'package:widgetarian/src/layout/sheet/variant.dart';
+import 'package:widgetarian/src/layout/sheet/types.dart';
 import 'event.dart';
 
 typedef ButtonVariant = SheetVariant;
@@ -135,7 +135,8 @@ class ButtonStyle extends SheetStyle {
   /// the given fields replaced with the new values.
   @override
   ButtonStyle copyWith({
-    SheetVariant? variant,
+    ButtonVariant? variant,
+    SheetSeverity? severity,
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,
@@ -426,6 +427,7 @@ class DrivenButtonStyle extends ButtonStyle
 
   /// Create a [DrivenButtonStyle] with default value for text style.
   DrivenButtonStyle.text({
+    Color? color,
     super.width,
     super.height,
     super.margin,
@@ -436,7 +438,6 @@ class DrivenButtonStyle extends ButtonStyle
     super.shadowColor,
     super.elevation,
     super.foregroundStyle,
-    super.foregroundColor,
     super.foregroundOpacity,
     super.foregroundAlpha,
     super.foregroundSpacing,
@@ -466,10 +467,14 @@ class DrivenButtonStyle extends ButtonStyle
   })  : disabledStyle = const ButtonStyle(
           foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
         ).merge(disabledStyle),
-        super(variant: SheetVariant.text);
+        super(
+          variant: SheetVariant.text,
+          foregroundColor: color,
+        );
 
   /// Create a [DrivenButtonStyle] with default value for tonal style.
   DrivenButtonStyle.tonal({
+    Color? color,
     super.width,
     super.height,
     super.margin,
@@ -480,7 +485,6 @@ class DrivenButtonStyle extends ButtonStyle
     super.shadowColor,
     super.elevation,
     super.foregroundStyle,
-    super.foregroundColor,
     super.foregroundOpacity,
     super.foregroundAlpha,
     super.foregroundSpacing,
@@ -488,7 +492,6 @@ class DrivenButtonStyle extends ButtonStyle
     super.foregroundExpanded,
     super.foregroundAlign,
     super.foregroundJustify,
-    super.backgroundColor,
     super.backgroundOpacity = .12,
     super.backgroundAlpha,
     super.borderColor,
@@ -512,7 +515,11 @@ class DrivenButtonStyle extends ButtonStyle
           backgroundAlpha: ButtonStyle.disabledBackgroundAlpha,
           borderAlpha: ButtonStyle.disabledBorderAlpha,
         ).merge(disabledStyle),
-        super(variant: SheetVariant.tonal);
+        super(
+          variant: SheetVariant.tonal,
+          foregroundColor: color,
+          backgroundColor: color,
+        );
 
   /// Create a [DrivenButtonStyle] with default value for filled style.
   DrivenButtonStyle.filled({
@@ -700,7 +707,8 @@ class DrivenButtonStyle extends ButtonStyle
   /// the given fields replaced with the new values.
   @override
   DrivenButtonStyle copyWith({
-    SheetVariant? variant,
+    ButtonVariant? variant,
+    SheetSeverity? severity,
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,

@@ -3,7 +3,7 @@ import 'package:widgetarian/event.dart';
 import 'package:widgetarian/feedback.dart';
 import 'package:widgetarian/src/display/avatar/style.dart';
 import 'package:widgetarian/src/layout/sheet/style.dart';
-import 'package:widgetarian/src/layout/sheet/variant.dart';
+import 'package:widgetarian/src/layout/sheet/types.dart';
 
 export 'package:widgetarian/feedback.dart' show StrokeStyle;
 
@@ -144,7 +144,8 @@ class ChipStyle extends SheetStyle {
   /// the given fields replaced with the new values.
   @override
   ChipStyle copyWith({
-    SheetVariant? variant,
+    ChipVariant? variant,
+    SheetSeverity? severity,
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,
@@ -413,6 +414,7 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
 
   /// Create a [DrivenChipStyle] with default value for toned style.
   DrivenChipStyle.tonal({
+    Color? color,
     super.height,
     super.margin,
     super.padding,
@@ -422,7 +424,6 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
     super.shadowColor,
     super.elevation,
     super.foregroundStyle,
-    super.foregroundColor,
     super.foregroundOpacity,
     super.foregroundAlpha,
     super.foregroundSpacing,
@@ -430,7 +431,6 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
     super.foregroundExpanded,
     super.foregroundAlign,
     super.foregroundJustify,
-    super.backgroundColor,
     super.backgroundOpacity = .12,
     super.backgroundAlpha,
     super.borderColor,
@@ -458,7 +458,11 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
           backgroundAlpha: ChipStyle.disabledBackgroundAlpha,
           borderAlpha: ChipStyle.disabledBorderAlpha,
         ).merge(disabledStyle),
-        super(variant: SheetVariant.tonal);
+        super(
+          variant: SheetVariant.tonal,
+          backgroundColor: color,
+          foregroundColor: color,
+        );
 
   /// Create a [DrivenChipStyle] with default value for filled style.
   DrivenChipStyle.filled({
@@ -605,7 +609,8 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
   /// the given fields replaced with the new values.
   @override
   DrivenChipStyle copyWith({
-    SheetVariant? variant,
+    ChipVariant? variant,
+    SheetSeverity? severity,
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,

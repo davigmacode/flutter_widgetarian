@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/theme.dart';
+import 'package:widgetarian/src/theme/material.dart';
+import 'package:widgetarian/src/theme/extension/severity.dart';
 import 'style.dart';
 
 /// Defines the visual properties of [Alert].
@@ -19,11 +20,27 @@ class AlertThemeData with Diagnosticable {
   /// The [AlertStyle] to be applied to the alert widget
   final AlertStyle style;
 
+  /// The [AlertStyle] to be applied to the alert widget
+  final AlertStyle errorStyle;
+
+  /// The [AlertStyle] to be applied to the alert widget
+  final AlertStyle warningStyle;
+
+  /// The [AlertStyle] to be applied to the alert widget
+  final AlertStyle successStyle;
+
+  /// The [AlertStyle] to be applied to the alert widget
+  final AlertStyle infoStyle;
+
   /// Creates a theme data that can be used for [AlertTheme].
   const AlertThemeData({
     required this.curve,
     required this.duration,
     required this.style,
+    required this.errorStyle,
+    required this.warningStyle,
+    required this.successStyle,
+    required this.infoStyle,
   });
 
   /// An [AlertThemeData] with some reasonable default values.
@@ -31,6 +48,10 @@ class AlertThemeData with Diagnosticable {
     curve: Curves.linear,
     duration: Duration(milliseconds: 200),
     style: AlertStyle.defaults,
+    errorStyle: AlertStyle(),
+    warningStyle: AlertStyle(),
+    successStyle: AlertStyle(),
+    infoStyle: AlertStyle(),
   );
 
   /// Creates a copy of this [AlertThemeData] but with
@@ -39,11 +60,19 @@ class AlertThemeData with Diagnosticable {
     Curve? curve,
     Duration? duration,
     AlertStyle? style,
+    AlertStyle? errorStyle,
+    AlertStyle? warningStyle,
+    AlertStyle? successStyle,
+    AlertStyle? infoStyle,
   }) {
     return AlertThemeData(
       curve: curve ?? this.curve,
       duration: duration ?? this.duration,
       style: this.style.merge(style),
+      errorStyle: this.errorStyle.merge(errorStyle),
+      warningStyle: this.warningStyle.merge(warningStyle),
+      successStyle: this.successStyle.merge(successStyle),
+      infoStyle: this.infoStyle.merge(infoStyle),
     );
   }
 
@@ -57,6 +86,10 @@ class AlertThemeData with Diagnosticable {
       curve: other.curve,
       duration: other.duration,
       style: other.style,
+      errorStyle: other.errorStyle,
+      warningStyle: other.warningStyle,
+      successStyle: other.successStyle,
+      infoStyle: other.infoStyle,
     );
   }
 
@@ -64,6 +97,10 @@ class AlertThemeData with Diagnosticable {
         'curve': curve,
         'duration': duration,
         'style': style,
+        'errorStyle': errorStyle,
+        'warningStyle': warningStyle,
+        'successStyle': successStyle,
+        'infoStyle': infoStyle,
       };
 
   @override
@@ -106,6 +143,10 @@ class AlertTheme extends InheritedTheme {
     Curve? curve,
     Duration? duration,
     AlertStyle? style,
+    AlertStyle? errorStyle,
+    AlertStyle? warningStyle,
+    AlertStyle? successStyle,
+    AlertStyle? infoStyle,
     AlertThemeData? data,
     required Widget child,
   }) {
@@ -118,6 +159,10 @@ class AlertTheme extends InheritedTheme {
                 curve: curve,
                 duration: duration,
                 style: style,
+                errorStyle: errorStyle,
+                warningStyle: warningStyle,
+                successStyle: successStyle,
+                infoStyle: infoStyle,
               ),
           child: child,
         );
@@ -137,9 +182,30 @@ class AlertTheme extends InheritedTheme {
     final sheetTheme = context.dependOnInheritedWidgetOfExactType<AlertTheme>();
     if (sheetTheme != null) return sheetTheme.data;
 
-    final theme = Theme.of(context);
-    final globalTheme = theme.extension<AlertThemeData?>();
-    return AlertThemeData.defaults.merge(globalTheme);
+    final appTheme = Theme.of(context);
+    final globalTheme = appTheme.extension<AlertThemeData?>();
+    final severityTheme = SeverityTheme.of(context);
+    return AlertThemeData.defaults
+        .copyWith(
+          style: const AlertStyle.tonal(padding: EdgeInsets.all(20)),
+          errorStyle: AlertStyle(
+            foregroundColor: severityTheme.danger,
+            backgroundColor: severityTheme.danger,
+          ),
+          warningStyle: AlertStyle(
+            foregroundColor: severityTheme.warning,
+            backgroundColor: severityTheme.warning,
+          ),
+          successStyle: AlertStyle(
+            foregroundColor: severityTheme.success,
+            backgroundColor: severityTheme.success,
+          ),
+          infoStyle: AlertStyle(
+            foregroundColor: severityTheme.info,
+            backgroundColor: severityTheme.info,
+          ),
+        )
+        .merge(globalTheme);
   }
 
   @override

@@ -5,6 +5,7 @@ export 'marks/switchmark.dart';
 export 'alert/style.dart';
 export 'alert/theme.dart';
 export 'alert/widget.dart';
+export 'alert/variant.dart';
 
 export 'overlay/style.dart';
 export 'overlay/theme.dart';

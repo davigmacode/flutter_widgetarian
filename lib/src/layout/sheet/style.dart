@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:widgetarian/utils.dart';
-import 'variant.dart';
+import 'types.dart';
 
 /// The style to be applied to the sheet widget
 @immutable
@@ -10,6 +10,11 @@ class SheetStyle with Diagnosticable {
   /// Type of the sheet variant
   /// {@endtemplate}
   final SheetVariant? variant;
+
+  /// {@template widgetarian.sheet.style.severity}
+  /// Type of the sheet severity
+  /// {@endtemplate}
+  final SheetSeverity? severity;
 
   /// {@template widgetarian.sheet.style.width}
   /// The horizontal extent of the sheet widget.
@@ -229,9 +234,22 @@ class SheetStyle with Diagnosticable {
   /// Whether or not this is outlined variant
   bool get isOutlined => variant == SheetVariant.outlined;
 
+  /// Whether or not this is danger severity
+  bool get isDanger => severity == SheetSeverity.danger;
+
+  /// Whether or not this is warning severity
+  bool get isWarning => severity == SheetSeverity.warning;
+
+  /// Whether or not this is success severity
+  bool get isSuccess => severity == SheetSeverity.success;
+
+  /// Whether or not this is info severity
+  bool get isInfo => severity == SheetSeverity.info;
+
   /// [SheetStyle] with an empty value.
   const SheetStyle({
     this.variant,
+    this.severity,
     this.width,
     this.height,
     this.margin,
@@ -269,6 +287,7 @@ class SheetStyle with Diagnosticable {
   /// Create a [SheetStyle] from another style
   SheetStyle.from(SheetStyle? other)
       : variant = other?.variant,
+        severity = other?.severity,
         width = other?.width,
         height = other?.height,
         margin = other?.margin,
@@ -304,6 +323,8 @@ class SheetStyle with Diagnosticable {
 
   /// Create [SheetStyle] with default value for toned style.
   const SheetStyle.tonal({
+    Color? color,
+    this.severity,
     this.width,
     this.height,
     this.margin,
@@ -315,7 +336,6 @@ class SheetStyle with Diagnosticable {
     this.shadowColor,
     this.elevation,
     this.foregroundStyle,
-    this.foregroundColor,
     this.foregroundOpacity,
     this.foregroundAlpha,
     this.foregroundSpacing,
@@ -323,7 +343,6 @@ class SheetStyle with Diagnosticable {
     this.foregroundExpanded,
     this.foregroundAlign,
     this.foregroundJustify,
-    this.backgroundColor,
     this.backgroundOpacity = .12,
     this.backgroundAlpha,
     this.borderColor,
@@ -336,11 +355,14 @@ class SheetStyle with Diagnosticable {
     this.iconColor,
     this.iconOpacity,
     this.iconSize,
-  }) : variant = SheetVariant.tonal;
+  })  : variant = SheetVariant.tonal,
+        backgroundColor = color,
+        foregroundColor = color;
 
   /// Create [SheetStyle] with default value for filled style.
   const SheetStyle.filled({
     Color? color,
+    this.severity,
     this.width,
     this.height,
     this.margin,
@@ -360,7 +382,7 @@ class SheetStyle with Diagnosticable {
     this.foregroundExpanded,
     this.foregroundAlign,
     this.foregroundJustify,
-    this.backgroundOpacity = .8,
+    this.backgroundOpacity = 1,
     this.backgroundAlpha,
     this.borderOpacity = 0,
     this.borderAlpha,
@@ -378,6 +400,7 @@ class SheetStyle with Diagnosticable {
   /// Create [SheetStyle] with default value for elevated style.
   const SheetStyle.elevated({
     Color? color,
+    this.severity,
     this.width,
     this.height,
     this.margin,
@@ -415,6 +438,7 @@ class SheetStyle with Diagnosticable {
   /// Create [SheetStyle] with default value for outlined style.
   const SheetStyle.outlined({
     Color? color,
+    this.severity,
     this.width,
     this.height,
     this.margin,
@@ -453,6 +477,7 @@ class SheetStyle with Diagnosticable {
   /// the given fields replaced with the new values.
   SheetStyle copyWith({
     SheetVariant? variant,
+    SheetSeverity? severity,
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,
@@ -488,6 +513,7 @@ class SheetStyle with Diagnosticable {
   }) {
     return SheetStyle(
       variant: variant ?? this.variant,
+      severity: severity ?? this.severity,
       width: width ?? this.width,
       height: height ?? this.height,
       margin: margin ?? this.margin,
@@ -531,6 +557,7 @@ class SheetStyle with Diagnosticable {
 
     return copyWith(
       variant: other.variant,
+      severity: other.severity,
       width: other.width,
       height: other.height,
       margin: other.margin,
@@ -571,6 +598,7 @@ class SheetStyle with Diagnosticable {
     if (a == null && b == null) return null;
     return SheetStyle(
       variant: lerpEnum(a?.variant, b?.variant, t),
+      severity: lerpEnum(a?.severity, b?.severity, t),
       shape: lerpEnum(a?.shape, b?.shape, t),
       width: lerpDouble(a?.width, b?.width, t),
       height: lerpDouble(a?.height, b?.height, t),
@@ -614,6 +642,7 @@ class SheetStyle with Diagnosticable {
 
   Map<String, dynamic> toMap() => {
         'variant': variant,
+        'severity': severity,
         'shape': shape,
         'width': width,
         'height': height,

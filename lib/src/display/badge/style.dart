@@ -1,15 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:widgetarian/src/layout/sheet/style.dart';
-import 'package:widgetarian/src/layout/sheet/variant.dart';
+import 'package:widgetarian/src/layout/sheet/types.dart';
 
 typedef BadgeVariant = SheetVariant;
+typedef BadgeSeverity = SheetSeverity;
 
 /// The style to be applied to badge widget
 @immutable
 class BadgeStyle extends SheetStyle {
   /// Create a raw badge's style
   const BadgeStyle({
+    super.severity,
     super.width,
     super.height,
     super.margin,
@@ -46,6 +48,7 @@ class BadgeStyle extends SheetStyle {
   BadgeStyle.from(BadgeStyle? other)
       : super(
           variant: SheetVariant.filled,
+          severity: other?.severity,
           width: other?.width,
           height: other?.height,
           margin: other?.margin,
@@ -81,6 +84,7 @@ class BadgeStyle extends SheetStyle {
   /// Create a raw badge's style
   const BadgeStyle.circle({
     double? size = 20,
+    super.severity,
     super.margin = EdgeInsets.zero,
     super.padding = EdgeInsets.zero,
     super.alignment = Alignment.center,
@@ -139,7 +143,8 @@ class BadgeStyle extends SheetStyle {
   /// the given fields replaced with the new values.
   @override
   BadgeStyle copyWith({
-    SheetVariant? variant,
+    BadgeVariant? variant,
+    BadgeSeverity? severity,
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,
@@ -174,6 +179,7 @@ class BadgeStyle extends SheetStyle {
     double? iconSize,
   }) {
     return BadgeStyle(
+      severity: severity ?? this.severity,
       width: width ?? this.width,
       height: height ?? this.height,
       margin: margin ?? this.margin,
@@ -215,6 +221,7 @@ class BadgeStyle extends SheetStyle {
     if (other == null) return this;
 
     return copyWith(
+      severity: other.severity,
       width: other.width,
       height: other.height,
       margin: other.margin,

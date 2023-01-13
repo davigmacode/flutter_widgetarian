@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/theme.dart';
+import 'package:widgetarian/src/theme/material.dart';
+import 'package:widgetarian/src/theme/extension/severity.dart';
 import 'style.dart';
+import 'types.dart';
 import 'fallback.dart';
 
 /// Defines the visual properties of [Sheet].
@@ -152,6 +154,7 @@ class SheetTheme extends InheritedTheme {
 
     final appTheme = Theme.of(context);
     final globalTheme = appTheme.extension<SheetThemeData?>();
+    final severityTheme = SeverityTheme.of(context);
     return SheetThemeData.defaults
         .copyWith(
           fallback: SheetStyleFallback(
@@ -161,15 +164,39 @@ class SheetTheme extends InheritedTheme {
               borderColor: appTheme.colorScheme.outline,
               shadowColor: appTheme.colorScheme.shadow,
             ),
-            filled: SheetStyle(
-              backgroundColor: appTheme.unselectedWidgetColor,
-            ),
-            elevated: SheetStyle(
-              backgroundColor: appTheme.colorScheme.surface,
-            ),
-            outlined: SheetStyle(
-              backgroundColor: appTheme.colorScheme.surface,
-            ),
+            variant: {
+              SheetVariant.filled: SheetStyle(
+                backgroundColor: appTheme.unselectedWidgetColor,
+              ),
+              SheetVariant.elevated: SheetStyle(
+                backgroundColor: appTheme.colorScheme.surface,
+              ),
+              SheetVariant.outlined: SheetStyle(
+                backgroundColor: appTheme.colorScheme.surface,
+              ),
+            },
+            severity: {
+              SheetSeverity.danger: SheetStyle(
+                borderColor: severityTheme.danger,
+                backgroundColor: severityTheme.danger,
+                foregroundColor: severityTheme.danger,
+              ),
+              SheetSeverity.warning: SheetStyle(
+                borderColor: severityTheme.warning,
+                backgroundColor: severityTheme.warning,
+                foregroundColor: severityTheme.warning,
+              ),
+              SheetSeverity.success: SheetStyle(
+                borderColor: severityTheme.success,
+                backgroundColor: severityTheme.success,
+                foregroundColor: severityTheme.success,
+              ),
+              SheetSeverity.info: SheetStyle(
+                borderColor: severityTheme.info,
+                backgroundColor: severityTheme.info,
+                foregroundColor: severityTheme.info,
+              ),
+            },
           ),
         )
         .merge(globalTheme);

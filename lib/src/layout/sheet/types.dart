@@ -20,3 +20,22 @@ enum SheetVariant {
   /// Whether or not this is outlined variant
   bool get isOutlined => this == SheetVariant.outlined;
 }
+
+enum SheetSeverity {
+  danger,
+  warning,
+  success,
+  info;
+
+  /// Whether or not this is danger severity
+  bool get isDanger => this == SheetSeverity.danger;
+
+  /// Whether or not this is warning severity
+  bool get isWarning => this == SheetSeverity.warning;
+
+  /// Whether or not this is success severity
+  bool get isSuccess => this == SheetSeverity.success;
+
+  /// Whether or not this is info severity
+  bool get isInfo => this == SheetSeverity.info;
+}
