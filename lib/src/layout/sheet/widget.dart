@@ -413,12 +413,11 @@ class Sheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sheetTheme = SheetTheme.of(context);
     return SheetRender(
-      curve: curve ?? sheetTheme.curve,
-      duration: duration ?? sheetTheme.duration,
-      style: sheetTheme.style.merge(effectiveStyle),
-      fallback: sheetTheme.fallback,
+      curve: curve,
+      duration: duration,
+      style: effectiveStyle,
+      theme: SheetTheme.of(context),
       tooltip: tooltip,
       child: child,
     );

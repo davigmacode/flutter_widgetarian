@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+export 'package:flutter/material.dart' show ElevationOverlay;
+
 abstract class Colors {
   /// Completely invisible.
   static const Color transparent = Color(0x00000000);

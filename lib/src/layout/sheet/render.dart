@@ -6,23 +6,23 @@ import 'package:widgetarian/src/layout/box.dart';
 import 'package:widgetarian/src/layout/tiles/tile/style.dart';
 import 'package:widgetarian/src/layout/tiles/tile/theme.dart';
 import 'style.dart';
-import 'fallback.dart';
+import 'theme_data.dart';
 
 class SheetRender extends StatefulWidget {
   const SheetRender({
     Key? key,
+    required this.theme,
+    this.style,
+    this.curve,
+    this.duration,
     this.tooltip,
-    required this.curve,
-    required this.duration,
-    required this.style,
-    required this.fallback,
-    required this.child,
+    this.child,
   }) : super(key: key);
 
-  final Curve curve;
-  final Duration duration;
-  final SheetStyle style;
-  final SheetStyleFallback fallback;
+  final SheetThemeData theme;
+  final SheetStyle? style;
+  final Curve? curve;
+  final Duration? duration;
   final String? tooltip;
   final Widget? child;
 
@@ -31,8 +31,13 @@ class SheetRender extends StatefulWidget {
 }
 
 class _SheetRenderState extends State<SheetRender> {
-  SheetStyle get style => widget.style;
-  SheetStyle get fallback => widget.fallback.resolve(
+  Curve get curve => widget.curve ?? widget.theme.curve;
+
+  Duration get duration => widget.duration ?? widget.theme.duration;
+
+  SheetStyle get style => SheetStyle.from(widget.style);
+
+  SheetStyle get fallback => widget.theme.resolve(
         variant: style.variant,
         severity: style.severity,
       );
@@ -55,11 +60,26 @@ class _SheetRenderState extends State<SheetRender> {
     return fallback.borderColor;
   }
 
-  Color? get backgroundColor => Colors.withTransparency(
-        style.backgroundColor ?? defaultBackgroundColor,
-        opacity: style.backgroundOpacity,
-        alpha: style.backgroundAlpha,
-      );
+  Color? get defaultSurfaceTint {
+    return fallback.surfaceTint;
+  }
+
+  Color? get backgroundColor {
+    final color = Colors.withTransparency(
+      style.backgroundColor ?? defaultBackgroundColor,
+      opacity: style.backgroundOpacity,
+      alpha: style.backgroundAlpha,
+    );
+
+    if (color == null || style.elevation == null) return color;
+
+    if (surfaceTint != null) {
+      return ElevationOverlay.applySurfaceTint(
+          color, surfaceTint, style.elevation!);
+    }
+
+    return ElevationOverlay.applyOverlay(context, color, style.elevation!);
+  }
 
   Color? get borderColor => Colors.withTransparency(
         style.borderColor ?? defaultBorderColor,
@@ -75,6 +95,10 @@ class _SheetRenderState extends State<SheetRender> {
 
   Color? get shadowColor {
     return style.shadowColor ?? defaultShadowColor;
+  }
+
+  Color? get surfaceTint {
+    return style.surfaceTint ?? defaultSurfaceTint;
   }
 
   Color? get iconColor {
@@ -103,20 +127,20 @@ class _SheetRenderState extends State<SheetRender> {
     return Semantics(
       container: true,
       child: AnimatedDefaultTextStyle(
-        curve: widget.curve,
-        duration: widget.duration,
+        curve: curve,
+        duration: duration,
         style: foregroundStyle,
         child: AnimatedIconTheme(
-          curve: widget.curve,
-          duration: widget.duration,
+          curve: curve,
+          duration: duration,
           data: IconThemeData(
             color: iconColor,
             size: style.iconSize,
             opacity: style.iconOpacity,
           ),
           child: AnimatedTileTheme(
-            curve: widget.curve,
-            duration: widget.duration,
+            curve: curve,
+            duration: duration,
             style: TileStyle(
               childExpanded: style.foregroundExpanded,
               crossAxisAlignment: style.foregroundAlign,
@@ -126,8 +150,8 @@ class _SheetRenderState extends State<SheetRender> {
               spacingEnforced: style.foregroundLoosen,
             ),
             child: AnimatedBox(
-              curve: widget.curve,
-              duration: widget.duration,
+              curve: curve,
+              duration: duration,
               tooltip: widget.tooltip,
               color: backgroundColor,
               shadowColor: shadowColor,

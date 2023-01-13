@@ -1,100 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
-import 'package:widgetarian/src/theme/extension/severity.dart';
-import 'style.dart';
 import 'types.dart';
-import 'fallback.dart';
-
-/// Defines the visual properties of [Sheet].
-///
-/// Descendant widgets obtain the current [SheetThemeData] object using
-/// `SheetTheme.of(context)`. Instances of [SheetThemeData]
-/// can be customized with [SheetThemeData.copyWith] or [SheetThemeData.merge].
-@immutable
-class SheetThemeData with Diagnosticable {
-  /// The curve to apply when animating the parameters of sheet widget.
-  final Curve curve;
-
-  /// The duration over which to animate the parameters of sheet widget.
-  final Duration duration;
-
-  /// The [SheetStyle] to be applied to the sheet widget
-  final SheetStyle style;
-
-  /// The [SheetStyle] that provides fallback values.
-  final SheetStyleFallback fallback;
-
-  /// Creates a theme data that can be used for [SheetTheme].
-  const SheetThemeData({
-    required this.curve,
-    required this.duration,
-    required this.style,
-    required this.fallback,
-  });
-
-  /// An [SheetThemeData] with some reasonable default values.
-  static const defaults = SheetThemeData(
-    curve: Curves.linear,
-    duration: Duration(milliseconds: 200),
-    style: SheetStyle.defaults,
-    fallback: SheetStyleFallback(),
-  );
-
-  /// Creates a copy of this [SheetThemeData] but with
-  /// the given fields replaced with the new values.
-  SheetThemeData copyWith({
-    Curve? curve,
-    Duration? duration,
-    SheetStyle? style,
-    SheetStyleFallback? fallback,
-  }) {
-    return SheetThemeData(
-      curve: curve ?? this.curve,
-      duration: duration ?? this.duration,
-      style: this.style.merge(style),
-      fallback: this.fallback.merge(fallback),
-    );
-  }
-
-  /// Creates a copy of this [SheetThemeData] but with
-  /// the given fields replaced with the new values.
-  SheetThemeData merge(SheetThemeData? other) {
-    // if null return current object
-    if (other == null) return this;
-
-    return copyWith(
-      curve: other.curve,
-      duration: other.duration,
-      style: other.style,
-      fallback: other.fallback,
-    );
-  }
-
-  Map<String, dynamic> toMap() => {
-        'curve': curve,
-        'duration': duration,
-        'style': style,
-        'fallback': fallback,
-      };
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) return false;
-    return other is SheetThemeData && mapEquals(other.toMap(), toMap());
-  }
-
-  @override
-  int get hashCode => Object.hashAll(toMap().values);
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    toMap().entries.forEach((el) {
-      properties.add(DiagnosticsProperty(el.key, el.value, defaultValue: null));
-    });
-  }
-}
+import 'style.dart';
+import 'theme_data.dart';
+import 'theme_preset.dart';
 
 /// A Widget that controls how descendant [Sheet]s should look like.
 class SheetTheme extends InheritedTheme {
@@ -118,7 +28,8 @@ class SheetTheme extends InheritedTheme {
     Curve? curve,
     Duration? duration,
     SheetStyle? style,
-    SheetStyleFallback? fallback,
+    Map<SheetVariant, SheetStyle?>? variants,
+    Map<SheetSeverity, SheetStyle?>? severities,
     SheetThemeData? data,
     required Widget child,
   }) {
@@ -131,7 +42,8 @@ class SheetTheme extends InheritedTheme {
                 curve: curve,
                 duration: duration,
                 style: style,
-                fallback: fallback,
+                variants: variants,
+                severities: severities,
               ),
           child: child,
         );
@@ -152,54 +64,10 @@ class SheetTheme extends InheritedTheme {
         context.dependOnInheritedWidgetOfExactType<SheetTheme>();
     if (parentTheme != null) return parentTheme.data;
 
-    final appTheme = Theme.of(context);
-    final globalTheme = appTheme.extension<SheetThemeData?>();
-    final severityTheme = SeverityTheme.of(context);
-    return SheetThemeData.defaults
-        .copyWith(
-          fallback: SheetStyleFallback(
-            base: SheetStyle(
-              foregroundColor: appTheme.colorScheme.onSurface,
-              backgroundColor: appTheme.unselectedWidgetColor,
-              borderColor: appTheme.colorScheme.outline,
-              shadowColor: appTheme.colorScheme.shadow,
-            ),
-            variant: {
-              SheetVariant.filled: SheetStyle(
-                backgroundColor: appTheme.unselectedWidgetColor,
-              ),
-              SheetVariant.elevated: SheetStyle(
-                backgroundColor: appTheme.colorScheme.surface,
-              ),
-              SheetVariant.outlined: SheetStyle(
-                backgroundColor: appTheme.colorScheme.surface,
-              ),
-            },
-            severity: {
-              SheetSeverity.danger: SheetStyle(
-                borderColor: severityTheme.danger,
-                backgroundColor: severityTheme.danger,
-                foregroundColor: severityTheme.danger,
-              ),
-              SheetSeverity.warning: SheetStyle(
-                borderColor: severityTheme.warning,
-                backgroundColor: severityTheme.warning,
-                foregroundColor: severityTheme.warning,
-              ),
-              SheetSeverity.success: SheetStyle(
-                borderColor: severityTheme.success,
-                backgroundColor: severityTheme.success,
-                foregroundColor: severityTheme.success,
-              ),
-              SheetSeverity.info: SheetStyle(
-                borderColor: severityTheme.info,
-                backgroundColor: severityTheme.info,
-                foregroundColor: severityTheme.info,
-              ),
-            },
-          ),
-        )
-        .merge(globalTheme);
+    final globalTheme = Theme.of(context).extension<SheetThemeData?>();
+    final severityTheme = SheetThemePreset.severity(context);
+    final defaultTheme = SheetThemePreset.m3(context);
+    return severityTheme.merge(defaultTheme).merge(globalTheme);
   }
 
   @override

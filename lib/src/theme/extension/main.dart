@@ -37,8 +37,10 @@ export 'package:widgetarian/src/input/switch_tile/theme.dart';
 
 export 'package:widgetarian/src/input/foundation.dart';
 
+export 'package:widgetarian/src/layout/sheet/types.dart';
 export 'package:widgetarian/src/layout/sheet/style.dart';
-export 'package:widgetarian/src/layout/sheet/fallback.dart';
+export 'package:widgetarian/src/layout/sheet/theme_data.dart';
+export 'package:widgetarian/src/layout/sheet/theme_preset.dart';
 export 'package:widgetarian/src/layout/sheet/theme.dart';
 
 export 'package:widgetarian/src/layout/tiles/tile/style.dart';

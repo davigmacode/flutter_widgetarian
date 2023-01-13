@@ -77,6 +77,17 @@ class SheetStyle with Diagnosticable {
   /// {@endtemplate}
   final Color? shadowColor;
 
+  /// {@template widgetarian.sheet.style.surfaceTint}
+  /// The color used as an overlay on [color] to indicate elevation.
+  ///
+  /// If this is null, no overlay will be applied. Otherwise the this
+  /// color will be composited on top of [color] with an opacity related
+  /// to [elevation] and used to paint the background of the card.
+  ///
+  /// The default is null.
+  /// {@endtemplate}
+  final Color? surfaceTint;
+
   /// {@template widgetarian.sheet.style.elevation}
   /// The sheet's z-coordinate relative to
   /// the parent at which to place this physical object.
@@ -259,6 +270,7 @@ class SheetStyle with Diagnosticable {
     this.overlayDisabled,
     this.overlayColor,
     this.shadowColor,
+    this.surfaceTint,
     this.elevation,
     this.foregroundStyle,
     this.foregroundColor,
@@ -297,6 +309,7 @@ class SheetStyle with Diagnosticable {
         overlayDisabled = other?.overlayDisabled,
         overlayColor = other?.overlayColor,
         shadowColor = other?.shadowColor,
+        surfaceTint = other?.surfaceTint,
         elevation = other?.elevation,
         foregroundStyle = other?.foregroundStyle,
         foregroundColor = other?.foregroundColor,
@@ -334,6 +347,7 @@ class SheetStyle with Diagnosticable {
     this.overlayDisabled,
     this.overlayColor,
     this.shadowColor,
+    this.surfaceTint,
     this.elevation,
     this.foregroundStyle,
     this.foregroundOpacity,
@@ -372,6 +386,7 @@ class SheetStyle with Diagnosticable {
     this.overlayDisabled,
     this.overlayColor,
     this.shadowColor,
+    this.surfaceTint,
     this.elevation,
     this.foregroundStyle,
     this.foregroundColor,
@@ -382,7 +397,7 @@ class SheetStyle with Diagnosticable {
     this.foregroundExpanded,
     this.foregroundAlign,
     this.foregroundJustify,
-    this.backgroundOpacity = 1,
+    this.backgroundOpacity = .9,
     this.backgroundAlpha,
     this.borderOpacity = 0,
     this.borderAlpha,
@@ -410,6 +425,7 @@ class SheetStyle with Diagnosticable {
     this.overlayDisabled,
     this.overlayColor,
     this.shadowColor,
+    this.surfaceTint,
     this.elevation = 1,
     this.foregroundStyle,
     this.foregroundColor,
@@ -448,6 +464,7 @@ class SheetStyle with Diagnosticable {
     this.overlayDisabled,
     this.overlayColor,
     this.shadowColor,
+    this.surfaceTint,
     this.elevation,
     this.foregroundStyle,
     this.foregroundOpacity,
@@ -487,6 +504,7 @@ class SheetStyle with Diagnosticable {
     bool? overlayDisabled,
     Color? overlayColor,
     Color? shadowColor,
+    Color? surfaceTint,
     double? elevation,
     TextStyle? foregroundStyle,
     Color? foregroundColor,
@@ -523,6 +541,7 @@ class SheetStyle with Diagnosticable {
       overlayDisabled: overlayDisabled ?? this.overlayDisabled,
       overlayColor: overlayColor ?? this.overlayColor,
       shadowColor: shadowColor ?? this.shadowColor,
+      surfaceTint: surfaceTint ?? this.surfaceTint,
       elevation: elevation ?? this.elevation,
       foregroundStyle: foregroundStyle ?? this.foregroundStyle,
       foregroundColor: foregroundColor ?? this.foregroundColor,
@@ -567,6 +586,7 @@ class SheetStyle with Diagnosticable {
       overlayDisabled: other.overlayDisabled,
       overlayColor: other.overlayColor,
       shadowColor: other.shadowColor,
+      surfaceTint: other.surfaceTint,
       elevation: other.elevation,
       foregroundStyle: other.foregroundStyle,
       foregroundColor: other.foregroundColor,
@@ -608,7 +628,8 @@ class SheetStyle with Diagnosticable {
       clipBehavior: lerpEnum(a?.clipBehavior, b?.clipBehavior, t),
       overlayDisabled: lerpBool(a?.overlayDisabled, b?.overlayDisabled, t),
       overlayColor: Color.lerp(a?.overlayColor, b?.overlayColor, t),
-      shadowColor: Color.lerp(a?.shadowColor, b?.overlayColor, t),
+      shadowColor: Color.lerp(a?.shadowColor, b?.shadowColor, t),
+      surfaceTint: Color.lerp(a?.surfaceTint, b?.surfaceTint, t),
       elevation: lerpDouble(a?.elevation, b?.elevation, t),
       foregroundStyle:
           TextStyle.lerp(a?.foregroundStyle, b?.foregroundStyle, t),
@@ -653,6 +674,7 @@ class SheetStyle with Diagnosticable {
         'overlayDisabled': overlayDisabled,
         'overlayColor': overlayColor,
         'shadowColor': shadowColor,
+        'surfaceTint': surfaceTint,
         'elevation': elevation,
         'foregroundStyle': foregroundStyle,
         'foregroundColor': foregroundColor,
