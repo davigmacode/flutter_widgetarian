@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../template.dart';
 import 'rectangle.dart';
 import 'circle.dart';
+import 'variant.dart';
 
 class SheetPage extends StatelessWidget {
   const SheetPage({
@@ -21,6 +22,7 @@ class SheetPage extends StatelessWidget {
         children: const [
           SheetRectangleUsage(),
           SheetCircleUsage(),
+          SheetVariantUsage(),
         ],
       ),
     );

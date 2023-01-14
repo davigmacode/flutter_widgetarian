@@ -48,48 +48,20 @@ class _AlertBasicUsageState extends State<AlertBasicUsage> {
       //   },
       // ),
       children: [
-        Alert(
-          style: AlertStyle.tonal(
-            foregroundColor: Colors.red,
-            backgroundColor: Colors.red,
-            padding: EdgeInsets.all(20),
-          ),
-          icon: Icon(Icons.error),
-          action: Icon(Icons.close),
+        Alert.danger(
+          message: Text('This is a danger alert — check it out!'),
+        ),
+        Gap(20),
+        Alert.warning(
           message: Text('This is a warning alert — check it out!'),
         ),
         Gap(20),
-        Alert(
-          style: AlertStyle.tonal(
-            foregroundColor: Colors.orange,
-            backgroundColor: Colors.orange,
-            padding: EdgeInsets.all(20),
-          ),
-          icon: Icon(Icons.warning),
-          action: Icon(Icons.close),
-          message: Text('This is a warning alert — check it out!'),
+        Alert.success(
+          message: Text('This is a success alert — check it out!'),
         ),
         Gap(20),
-        Alert(
-          style: AlertStyle.tonal(
-            foregroundColor: Colors.blue,
-            backgroundColor: Colors.blue,
-            padding: EdgeInsets.all(20),
-          ),
-          icon: Icon(Icons.info),
-          action: Icon(Icons.close),
-          message: Text('This is a warning alert — check it out!'),
-        ),
-        Gap(20),
-        Alert(
-          style: AlertStyle.tonal(
-            foregroundColor: Colors.green,
-            backgroundColor: Colors.green,
-            padding: EdgeInsets.all(20),
-          ),
-          icon: Icon(Icons.check_circle),
-          action: Icon(Icons.close),
-          message: Text('This is a warning alert — check it out!'),
+        Alert.info(
+          message: Text('This is a info alert — check it out!'),
         ),
       ],
     );
@@ -98,48 +70,24 @@ class _AlertBasicUsageState extends State<AlertBasicUsage> {
 
 const script = '''Column(
   children: [
-    Alert(
-      style: AlertStyle.tonal(
-        foregroundColor: Colors.red,
-        backgroundColor: Colors.red,
-        padding: EdgeInsets.all(20),
-      ),
-      icon: Icon(Icons.error),
-      action: Icon(Icons.close),
+    Alert.danger(
+      padding: EdgeInsets.all(20),
+      message: Text('This is a danger alert — check it out!'),
+    ),
+    Gap(20),
+    Alert.warning(
+      padding: EdgeInsets.all(20),
       message: Text('This is a warning alert — check it out!'),
     ),
     Gap(20),
-    Alert(
-      style: AlertStyle.tonal(
-        foregroundColor: Colors.orange,
-        backgroundColor: Colors.orange,
-        padding: EdgeInsets.all(20),
-      ),
-      icon: Icon(Icons.warning),
-      action: Icon(Icons.close),
-      message: Text('This is a warning alert — check it out!'),
+    Alert.success(
+      padding: EdgeInsets.all(20),
+      message: Text('This is a success alert — check it out!'),
     ),
     Gap(20),
-    Alert(
-      style: AlertStyle.tonal(
-        foregroundColor: Colors.blue,
-        backgroundColor: Colors.blue,
-        padding: EdgeInsets.all(20),
-      ),
-      icon: Icon(Icons.info),
-      action: Icon(Icons.close),
-      message: Text('This is a warning alert — check it out!'),
-    ),
-    Gap(20),
-    Alert(
-      style: AlertStyle.tonal(
-        foregroundColor: Colors.green,
-        backgroundColor: Colors.green,
-        padding: EdgeInsets.all(20),
-      ),
-      icon: Icon(Icons.check_circle),
-      action: Icon(Icons.close),
-      message: Text('This is a warning alert — check it out!'),
+    Alert.info(
+      padding: EdgeInsets.all(20),
+      message: Text('This is a info alert — check it out!'),
     ),
   ],
 )''';

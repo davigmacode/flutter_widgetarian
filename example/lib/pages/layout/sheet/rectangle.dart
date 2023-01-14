@@ -12,32 +12,20 @@ class SheetRectangleUsage extends StatelessWidget {
       title: 'Rectangle Shape',
       script: script,
       children: [
-        Sheet(
-          style: SheetStyle.tonal(
-            width: 100,
-            height: 100,
-          ),
+        TonalSheet.square(
+          size: 100,
           child: Center(child: Text('Tonal')),
         ),
-        Sheet(
-          style: SheetStyle.elevated(
-            width: 100,
-            height: 100,
-          ),
+        ElevatedSheet.square(
+          size: 100,
           child: Center(child: Text('Elevated')),
         ),
-        Sheet(
-          style: SheetStyle.filled(
-            width: 100,
-            height: 100,
-          ),
+        FilledSheet.square(
+          size: 100,
           child: Center(child: Text('Filled')),
         ),
-        Sheet(
-          style: SheetStyle.outlined(
-            width: 100,
-            height: 100,
-          ),
+        OutlinedSheet.square(
+          size: 100,
           child: Center(child: Text('Outlined')),
         ),
       ],
@@ -49,32 +37,20 @@ const script = '''Wrap(
   spacing: 15,
   runSpacing: 15,
   children: [
-    Sheet(
-      style: SheetStyle.tonal(
-        width: 100,
-        height: 100,
-      ),
+    TonalSheet.square(
+      size: 100,
       child: Center(child: Text('Tonal')),
     ),
-    Sheet(
-      style: SheetStyle.elevated(
-        width: 100,
-        height: 100,
-      ),
+    ElevatedSheet.square(
+      size: 100,
       child: Center(child: Text('Elevated')),
     ),
-    Sheet(
-      style: SheetStyle.filled(
-        width: 100,
-        height: 100,
-      ),
+    FilledSheet.square(
+      size: 100,
       child: Center(child: Text('Filled')),
     ),
-    Sheet(
-      style: SheetStyle.outlined(
-        width: 100,
-        height: 100,
-      ),
+    OutlinedSheet.square(
+      size: 100,
       child: Center(child: Text('Outlined')),
     ),
   ],

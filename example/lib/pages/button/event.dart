@@ -50,12 +50,11 @@ class ButtonEventUsage extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
             ),
             focusedStyle: const ButtonStyle(
-              backgroundColor: Colors.red,
+              borderColor: Colors.red,
               foregroundColor: Colors.red,
             ),
             hoveredStyle: DrivenButtonStyle.tonal(
-              backgroundColor: Colors.orange,
-              foregroundColor: Colors.orange,
+              color: Colors.orange,
               foregroundSpacing: 20,
               borderRadius: BorderRadius.circular(25),
             ),
