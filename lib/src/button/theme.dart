@@ -1,99 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
-import 'package:widgetarian/utils.dart';
 import 'style.dart';
-import 'fallback.dart';
-
-/// Defines the visual properties of [Button].
-///
-/// Descendant widgets obtain the current [ButtonThemeData] object using
-/// `ButtonTheme.of(context)`. Instances of [ButtonThemeData]
-/// can be customized with [ButtonThemeData.copyWith] or [ButtonThemeData.merge].
-@immutable
-class ButtonThemeData with Diagnosticable {
-  /// The curve to apply when animating the parameters of avatar widget.
-  final Curve curve;
-
-  /// The duration over which to animate the parameters of button widget.
-  final Duration duration;
-
-  /// The [ButtonStyle] to be applied to the button widget
-  final ButtonStyle style;
-
-  /// The [ButtonStyle] that provides fallback values.
-  final ButtonStyleFallback fallback;
-
-  /// Creates a theme data that can be used for [ButtonTheme].
-  const ButtonThemeData({
-    required this.curve,
-    required this.duration,
-    required this.style,
-    required this.fallback,
-  });
-
-  /// An [ButtonThemeData] with some reasonable default values.
-  static final defaults = ButtonThemeData(
-    curve: Curves.linear,
-    duration: const Duration(milliseconds: 200),
-    style: DrivenButtonStyle.text(),
-    fallback: const ButtonStyleFallback(),
-  );
-
-  /// Creates a copy of this [ButtonThemeData] but with
-  /// the given fields replaced with the new values.
-  ButtonThemeData copyWith({
-    Curve? curve,
-    Duration? duration,
-    ButtonStyle? style,
-    ButtonStyleFallback? fallback,
-  }) {
-    return ButtonThemeData(
-      curve: curve ?? this.curve,
-      duration: duration ?? this.duration,
-      style: this.style.merge(style),
-      fallback: this.fallback.merge(fallback),
-    );
-  }
-
-  /// Creates a copy of this [ButtonThemeData] but with
-  /// the given fields replaced with the new values.
-  ButtonThemeData merge(ButtonThemeData? other) {
-    // if null return current object
-    if (other == null) return this;
-
-    return copyWith(
-      curve: other.curve,
-      duration: other.duration,
-      style: other.style,
-      fallback: other.fallback,
-    );
-  }
-
-  Map<String, dynamic> toMap() => {
-        'curve': curve,
-        'duration': duration,
-        'style': style,
-        'fallback': fallback,
-      };
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) return false;
-    return other is ButtonThemeData && mapEquals(other.toMap(), toMap());
-  }
-
-  @override
-  int get hashCode => Object.hashAll(toMap().values);
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    toMap().entries.forEach((el) {
-      properties.add(DiagnosticsProperty(el.key, el.value, defaultValue: null));
-    });
-  }
-}
+import 'theme_data.dart';
+import 'theme_preset.dart';
 
 /// A Widget that controls how descendant buttons should look like.
 class ButtonTheme extends InheritedTheme {
@@ -117,7 +27,11 @@ class ButtonTheme extends InheritedTheme {
     Curve? curve,
     Duration? duration,
     ButtonStyle? style,
-    ButtonStyleFallback? fallback,
+    ButtonStyleByVariant? variantStyle,
+    ButtonStyleByVariant? dangerStyle,
+    ButtonStyleByVariant? warningStyle,
+    ButtonStyleByVariant? successStyle,
+    ButtonStyleByVariant? infoStyle,
     ButtonThemeData? data,
     required Widget child,
   }) {
@@ -130,7 +44,11 @@ class ButtonTheme extends InheritedTheme {
                 curve: curve,
                 duration: duration,
                 style: style,
-                fallback: fallback,
+                variantStyle: variantStyle,
+                dangerStyle: dangerStyle,
+                warningStyle: warningStyle,
+                successStyle: successStyle,
+                infoStyle: infoStyle,
               ),
           child: child,
         );
@@ -151,32 +69,9 @@ class ButtonTheme extends InheritedTheme {
         context.dependOnInheritedWidgetOfExactType<ButtonTheme>();
     if (parentTheme != null) return parentTheme.data;
 
-    final appTheme = Theme.of(context);
-    final globalTheme = appTheme.extension<ButtonThemeData?>();
-    return ButtonThemeData.defaults
-        .copyWith(
-          fallback: ButtonStyleFallback(
-            base: DrivenButtonStyle(
-              foregroundStyle: appTheme.textTheme.labelLarge,
-              foregroundColor: appTheme.colorScheme.primary,
-              borderColor: appTheme.colorScheme.outline,
-              shadowColor: appTheme.colorScheme.shadow,
-              overlayColor: appTheme.brightness.isDark ? Colors.white : null,
-            ),
-            tonal: DrivenButtonStyle(
-              foregroundColor: appTheme.colorScheme.primary,
-              backgroundColor: appTheme.colorScheme.primary,
-            ),
-            filled: DrivenButtonStyle(
-              foregroundColor: appTheme.colorScheme.onSurface,
-              backgroundColor: appTheme.colorScheme.primary,
-            ),
-            outlined: const DrivenButtonStyle(
-              backgroundColor: Colors.transparent,
-            ),
-          ),
-        )
-        .merge(globalTheme);
+    final globalTheme = Theme.of(context).extension<ButtonThemeData>();
+    final defaultTheme = ButtonThemePreset.defaults(context);
+    return defaultTheme.merge(globalTheme);
   }
 
   @override

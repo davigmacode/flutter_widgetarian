@@ -159,9 +159,9 @@ class VariantButton extends StatelessWidget {
     final buttonTheme = ButtonTheme.of(context);
     final buttonStyle = buttonTheme.style.merge(style);
     return ButtonRender(
-      curve: curve ?? buttonTheme.curve,
-      duration: duration ?? buttonTheme.duration,
-      fallback: buttonTheme.fallback,
+      curve: curve,
+      duration: duration,
+      theme: buttonTheme,
       style: buttonStyle.merge(preStyle).merge(postStyle),
       selected: false,
       loading: loading,
@@ -191,7 +191,7 @@ class VariantButton extends StatelessWidget {
 /// Text buttons are typically used for less-pronounced actions.
 class TextButton extends VariantButton {
   /// Create a text button
-  TextButton({
+  const TextButton({
     Key? key,
     super.loading = false,
     super.disabled = false,
@@ -213,7 +213,7 @@ class TextButton extends VariantButton {
     required super.child,
   }) : super(
           key: key,
-          preStyle: DrivenButtonStyle.text(),
+          preStyle: const DrivenButtonStyle.text(),
         );
 
   /// Create a block text button
@@ -242,7 +242,7 @@ class TextButton extends VariantButton {
     required super.child,
   }) : super(
           key: key,
-          preStyle: DrivenButtonStyle.text(),
+          preStyle: const DrivenButtonStyle.text(),
           postStyle: const ButtonStyle().block(
             alignChildren: alignChildren,
             justifyChildren: justifyChildren,
@@ -275,7 +275,7 @@ class TextButton extends VariantButton {
     required super.child,
   }) : super(
           key: key,
-          preStyle: DrivenButtonStyle.text(),
+          preStyle: const DrivenButtonStyle.text(),
           postStyle: const ButtonStyle().icon(
             shape: shape,
             size: size,
@@ -289,7 +289,7 @@ class TextButton extends VariantButton {
 /// Tonal buttons use the secondary color mapping.
 class TonalButton extends VariantButton {
   /// Create a tonal button
-  TonalButton({
+  const TonalButton({
     Key? key,
     super.loading = false,
     super.disabled = false,
@@ -311,7 +311,7 @@ class TonalButton extends VariantButton {
     required super.child,
   }) : super(
           key: key,
-          preStyle: DrivenButtonStyle.tonal(),
+          preStyle: const DrivenButtonStyle.tonal(),
         );
 
   /// Create a block tonal button
@@ -340,7 +340,7 @@ class TonalButton extends VariantButton {
     required super.child,
   }) : super(
           key: key,
-          preStyle: DrivenButtonStyle.tonal(),
+          preStyle: const DrivenButtonStyle.tonal(),
           postStyle: const ButtonStyle().block(
             alignChildren: alignChildren,
             justifyChildren: justifyChildren,
@@ -373,7 +373,7 @@ class TonalButton extends VariantButton {
     required super.child,
   }) : super(
           key: key,
-          preStyle: DrivenButtonStyle.tonal(),
+          preStyle: const DrivenButtonStyle.tonal(),
           postStyle: const ButtonStyle().icon(
             shape: shape,
             size: size,
@@ -386,7 +386,7 @@ class TonalButton extends VariantButton {
 /// They contain actions that are primary to your app.
 class FilledButton extends VariantButton {
   /// Create a filled button
-  FilledButton({
+  const FilledButton({
     Key? key,
     super.loading = false,
     super.disabled = false,
@@ -408,7 +408,7 @@ class FilledButton extends VariantButton {
     required super.child,
   }) : super(
           key: key,
-          preStyle: DrivenButtonStyle.filled(),
+          preStyle: const DrivenButtonStyle.filled(),
         );
 
   /// Create a block filled button
@@ -437,7 +437,7 @@ class FilledButton extends VariantButton {
     required super.child,
   }) : super(
           key: key,
-          preStyle: DrivenButtonStyle.filled(),
+          preStyle: const DrivenButtonStyle.filled(),
           postStyle: const ButtonStyle().block(
             alignChildren: alignChildren,
             justifyChildren: justifyChildren,
@@ -470,7 +470,7 @@ class FilledButton extends VariantButton {
     required super.child,
   }) : super(
           key: key,
-          preStyle: DrivenButtonStyle.filled(),
+          preStyle: const DrivenButtonStyle.filled(),
           postStyle: const ButtonStyle().icon(
             shape: shape,
             size: size,
@@ -483,7 +483,7 @@ class FilledButton extends VariantButton {
 /// They contain actions that are primary to your app.
 class ElevatedButton extends VariantButton {
   /// Create an elevated button
-  ElevatedButton({
+  const ElevatedButton({
     Key? key,
     super.loading = false,
     super.disabled = false,
@@ -505,7 +505,7 @@ class ElevatedButton extends VariantButton {
     required super.child,
   }) : super(
           key: key,
-          preStyle: DrivenButtonStyle.elevated(),
+          preStyle: const DrivenButtonStyle.elevated(),
         );
 
   /// Create a block elevated button
@@ -534,7 +534,7 @@ class ElevatedButton extends VariantButton {
     required super.child,
   }) : super(
           key: key,
-          preStyle: DrivenButtonStyle.elevated(),
+          preStyle: const DrivenButtonStyle.elevated(),
           postStyle: const ButtonStyle().block(
             alignChildren: alignChildren,
             justifyChildren: justifyChildren,
@@ -567,7 +567,7 @@ class ElevatedButton extends VariantButton {
     required super.child,
   }) : super(
           key: key,
-          preStyle: DrivenButtonStyle.elevated(),
+          preStyle: const DrivenButtonStyle.elevated(),
           postStyle: const ButtonStyle().icon(
             shape: shape,
             size: size,
@@ -580,7 +580,7 @@ class ElevatedButton extends VariantButton {
 /// but aren't the primary action in an app.
 class OutlinedButton extends VariantButton {
   /// Create a outlined button
-  OutlinedButton({
+  const OutlinedButton({
     Key? key,
     super.loading = false,
     super.disabled = false,
@@ -602,7 +602,7 @@ class OutlinedButton extends VariantButton {
     required super.child,
   }) : super(
           key: key,
-          preStyle: DrivenButtonStyle.outlined(),
+          preStyle: const DrivenButtonStyle.outlined(),
         );
 
   /// Create a block outlined button
@@ -631,7 +631,7 @@ class OutlinedButton extends VariantButton {
     required super.child,
   }) : super(
           key: key,
-          preStyle: DrivenButtonStyle.outlined(),
+          preStyle: const DrivenButtonStyle.outlined(),
           postStyle: const ButtonStyle().block(
             alignChildren: alignChildren,
             justifyChildren: justifyChildren,
@@ -664,7 +664,7 @@ class OutlinedButton extends VariantButton {
     required super.child,
   }) : super(
           key: key,
-          preStyle: DrivenButtonStyle.outlined(),
+          preStyle: const DrivenButtonStyle.outlined(),
           postStyle: const ButtonStyle().icon(
             shape: shape,
             size: size,

@@ -1,11 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/event.dart';
-import 'package:widgetarian/utils.dart';
-import 'package:widgetarian/feedback.dart';
-import 'package:widgetarian/anchor.dart';
 import 'event.dart';
 import 'style.dart';
 import 'theme.dart';
+import 'render.dart';
 
 /// Radio allow the user to select one item from a set.
 class Radio extends StatelessWidget {
@@ -129,8 +126,7 @@ class Radio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final radioTheme = RadioTheme.of(context);
-    return _RadioRender(
+    return RadioRender(
       tooltip: tooltip,
       onChanged: onChanged,
       selected: selected,
@@ -138,198 +134,10 @@ class Radio extends StatelessWidget {
       autofocus: autofocus,
       focusNode: focusNode,
       eventsController: eventsController,
-      duration: duration ?? radioTheme.duration,
-      curve: curve ?? radioTheme.curve,
-      style: radioTheme.style.merge(style),
-      fallback: radioTheme.fallback,
+      duration: duration,
+      curve: curve,
+      style: style,
+      theme: RadioTheme.of(context),
     );
-  }
-}
-
-/// Chip widget with smooth animation, event driven style, and many more.
-class _RadioRender extends StatefulWidget {
-  const _RadioRender({
-    Key? key,
-    this.tooltip,
-    this.onChanged,
-    this.selected = false,
-    this.disabled = false,
-    this.autofocus = false,
-    this.focusNode,
-    this.eventsController,
-    required this.duration,
-    required this.curve,
-    required this.style,
-    required this.fallback,
-  }) : super(key: key);
-
-  final String? tooltip;
-  final bool selected;
-  final bool disabled;
-  final bool autofocus;
-  final FocusNode? focusNode;
-  final ValueChanged<bool>? onChanged;
-  final RadioEventController? eventsController;
-  final Duration duration;
-  final Curve curve;
-  final RadioStyle style;
-  final RadioStyle fallback;
-
-  bool get enabled => !disabled;
-
-  bool get canTap => enabled && hasCallback;
-
-  bool get hasCallback {
-    return onChanged != null;
-  }
-
-  @override
-  _RadioRenderState createState() => _RadioRenderState();
-}
-
-class _RadioRenderState extends State<_RadioRender>
-    with WidgetEventMixin<_RadioRender> {
-  RadioStyle style = const RadioStyle();
-  RadioStyle fallback = const RadioStyle();
-
-  @protected
-  void setStyle() {
-    final rawStyle = widget.style;
-    final resStyle = DrivenRadioStyle.evaluate(rawStyle, widgetEvents.value);
-    style = RadioStyle.from(resStyle);
-
-    final rawFallback = widget.fallback;
-    final resFallback =
-        DrivenRadioStyle.evaluate(rawFallback, widgetEvents.value);
-    fallback = RadioStyle.from(resFallback);
-    setState(() {});
-  }
-
-  Color? get thumbColor => Colors.withTransparency(
-        style.thumbColor ?? fallback.thumbColor,
-        opacity: style.thumbOpacity,
-        alpha: style.thumbAlpha,
-      );
-
-  Color? get backgroundColor => Colors.withTransparency(
-        style.backgroundColor,
-        opacity: style.backgroundOpacity,
-        alpha: style.backgroundAlpha,
-      );
-
-  Color get borderColor => Colors.withTransparency(
-        style.borderColor ?? fallback.borderColor,
-        opacity: style.borderOpacity,
-        alpha: style.borderAlpha,
-      )!;
-
-  BorderSide get borderSide {
-    return BorderSide(
-      color: borderColor,
-      width: style.borderWidth!,
-      style: style.borderStyle!,
-    );
-  }
-
-  ShapeBorder get border {
-    return style.shape == BoxShape.rectangle
-        ? RoundedRectangleBorder(
-            borderRadius: style.borderRadius!,
-            side: borderSide,
-          )
-        : CircleBorder(side: borderSide);
-  }
-
-  void onTap() {
-    widgetEvents.toggle(RadioEvent.pressed, false);
-    widget.onChanged?.call(!widget.selected);
-  }
-
-  void onTapCancel() {
-    widgetEvents.toggle(RadioEvent.pressed, false);
-  }
-
-  void onTapDown(TapDownDetails details) {
-    widgetEvents.toggle(RadioEvent.pressed, true);
-  }
-
-  void onHover(bool value) {
-    widgetEvents.toggle(RadioEvent.hovered, value);
-  }
-
-  void onFocus(bool value) {
-    widgetEvents.toggle(RadioEvent.focused, value);
-  }
-
-  @override
-  void initState() {
-    initWidgetEvents(widget.eventsController);
-    widgetEvents.toggle(RadioEvent.selected, widget.selected);
-    widgetEvents.toggle(RadioEvent.disabled, widget.disabled);
-    setStyle();
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(_RadioRender oldWidget) {
-    if (mounted) {
-      updateWidgetEvents(oldWidget.eventsController, widget.eventsController);
-      widgetEvents.toggle(RadioEvent.selected, widget.selected);
-      widgetEvents.toggle(RadioEvent.disabled, widget.disabled);
-      setStyle();
-      super.didUpdateWidget(oldWidget);
-    }
-  }
-
-  @override
-  void didChangeWidgetEvents() {
-    if (mounted) {
-      setStyle();
-      super.didChangeWidgetEvents();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Widget result = AnimatedRadiomark(
-      duration: widget.duration,
-      curve: widget.curve,
-      color: thumbColor,
-      fill: backgroundColor,
-      shape: border,
-      padding: style.thumbInset,
-      size: style.size,
-    );
-
-    if (style.padding != null) {
-      result = Padding(
-        padding: style.padding!,
-        child: result,
-      );
-    }
-
-    if (widget.hasCallback) {
-      result = Anchor(
-        shape: BoxShape.circle,
-        overlayColor: style.overlayColor,
-        overlayOpacity: style.overlayOpacity,
-        overlayDisabled: style.overlayDisabled,
-        radius: style.overlayRadius,
-        onTap: onTap,
-        onTapDown: onTapDown,
-        onTapCancel: onTapCancel,
-        onHover: onHover,
-        child: result,
-      );
-    }
-
-    if (style.margin != null) {
-      result = Padding(
-        padding: style.margin!,
-        child: result,
-      );
-    }
-
-    return result;
   }
 }

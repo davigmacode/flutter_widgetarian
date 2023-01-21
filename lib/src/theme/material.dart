@@ -1,1 +1,19 @@
-export 'package:flutter/material.dart' show Theme, ThemeData, TextTheme;
+import 'dart:ui' show Brightness;
+export 'package:flutter/material.dart'
+    show Theme, ThemeData, ThemeExtension, TextTheme, Brightness;
+
+extension BrightnessFlag on Brightness {
+  /// Whether or not this is light
+  ///
+  /// ```dart
+  /// final isLight = Theme.of(context).brightness.isLight;
+  /// ```
+  bool get isLight => this == Brightness.light;
+
+  /// Whether or not this is dark
+  ///
+  /// ```dart
+  /// final isDark = Theme.of(context).brightness.isDark;
+  /// ```
+  bool get isDark => this == Brightness.dark;
+}

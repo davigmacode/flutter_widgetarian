@@ -1,108 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:widgetarian/src/input/switch_tile/theme_preset.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'package:widgetarian/src/input/foundation.dart';
 import 'package:widgetarian/src/input/switch/style.dart';
 import 'package:widgetarian/src/button/style.dart';
-
-/// Defines the visual properties of [SwitchTile].
-///
-/// Descendant widgets obtain the current [SwitchTileThemeData] object using
-/// `SwitchTheme.of(context)`. Instances of [SwitchTileThemeData]
-/// can be customized with [SwitchTileThemeData.copyWith] or [SwitchTileThemeData.merge].
-@immutable
-class SwitchTileThemeData with Diagnosticable {
-  /// The curve to apply when animating the parameters of switch tile widget.
-  final Curve curve;
-
-  /// The duration over which to animate the parameters of switch tile widget.
-  final Duration duration;
-
-  /// Where to place the control next to a label.
-  final ControlAffinity controlAffinity;
-
-  /// The [SwitchStyle] to be applied to the switch tile widget
-  final SwitchStyle switchStyle;
-
-  /// The [ButtonStyle] to be applied to the clickable area.
-  final ButtonStyle buttonStyle;
-
-  /// Creates a theme data that can be used for [SwitchTileTheme].
-  const SwitchTileThemeData({
-    required this.curve,
-    required this.duration,
-    required this.controlAffinity,
-    required this.switchStyle,
-    required this.buttonStyle,
-  });
-
-  /// An [SwitchTileThemeData] with some reasonable default values.
-  static final defaults = SwitchTileThemeData(
-    curve: Curves.linear,
-    duration: const Duration(milliseconds: 200),
-    controlAffinity: ControlAffinity.leading,
-    switchStyle: const DrivenSwitchStyle(padding: EdgeInsets.zero),
-    buttonStyle: DrivenButtonStyle.text(),
-  );
-
-  /// Creates a copy of this [SwitchTileThemeData] but with
-  /// the given fields replaced with the new values.
-  SwitchTileThemeData copyWith({
-    Curve? curve,
-    Duration? duration,
-    ControlAffinity? controlAffinity,
-    SwitchStyle? switchStyle,
-    ButtonStyle? buttonStyle,
-  }) {
-    return SwitchTileThemeData(
-      curve: curve ?? this.curve,
-      duration: duration ?? this.duration,
-      controlAffinity: controlAffinity ?? this.controlAffinity,
-      switchStyle: this.switchStyle.merge(switchStyle),
-      buttonStyle: this.buttonStyle.merge(buttonStyle),
-    );
-  }
-
-  /// Creates a copy of this [SwitchTileThemeData] but with
-  /// the given fields replaced with the new values.
-  SwitchTileThemeData merge(SwitchTileThemeData? other) {
-    // if null return current object
-    if (other == null) return this;
-
-    return copyWith(
-      curve: other.curve,
-      duration: other.duration,
-      controlAffinity: other.controlAffinity,
-      switchStyle: other.switchStyle,
-      buttonStyle: other.buttonStyle,
-    );
-  }
-
-  Map<String, dynamic> toMap() => {
-        'curve': curve,
-        'duration': duration,
-        'controlAffinity': controlAffinity,
-        'switchStyle': switchStyle,
-        'buttonStyle': buttonStyle,
-      };
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) return false;
-    return other is SwitchTileThemeData && mapEquals(other.toMap(), toMap());
-  }
-
-  @override
-  int get hashCode => Object.hashAll(toMap().values);
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    toMap().entries.forEach((el) {
-      properties.add(DiagnosticsProperty(el.key, el.value, defaultValue: null));
-    });
-  }
-}
+import 'theme_data.dart';
+import 'theme_preset.dart';
 
 /// A Widget that controls how descendant switch tile should look like.
 class SwitchTileTheme extends InheritedTheme {
@@ -162,9 +66,9 @@ class SwitchTileTheme extends InheritedTheme {
         context.dependOnInheritedWidgetOfExactType<SwitchTileTheme>();
     if (parentTheme != null) return parentTheme.data;
 
-    final appTheme = Theme.of(context);
-    final globalTheme = appTheme.extension<SwitchTileThemeData?>();
-    return SwitchTileThemeData.defaults.merge(globalTheme);
+    final globalTheme = Theme.of(context).extension<SwitchTileThemeData>();
+    final defaultTheme = SwitchTileThemePreset.defaults(context);
+    return defaultTheme.merge(globalTheme);
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/feedback.dart';
+import 'package:widgetarian/src/utils/lerp.dart';
 import 'package:widgetarian/src/display/avatar/style.dart';
 import 'package:widgetarian/src/layout/sheet/style.dart';
 import 'package:widgetarian/src/layout/sheet/types.dart';
@@ -8,6 +9,7 @@ import 'package:widgetarian/src/layout/sheet/types.dart';
 export 'package:widgetarian/feedback.dart' show StrokeStyle;
 
 typedef ChipVariant = SheetVariant;
+typedef ChipSeverity = SheetSeverity;
 
 /// The style to be applied to chip widget
 @immutable
@@ -114,26 +116,10 @@ class ChipStyle extends SheetStyle {
 
   /// An [ChipStyle] with some reasonable default values.
   static const defaults = ChipStyle(
-    height: 32.0,
     margin: EdgeInsets.zero,
     clipBehavior: Clip.antiAlias,
-    borderRadius: BorderRadius.all(Radius.circular(8)),
-    borderStyle: BorderStyle.solid,
-    borderWidth: 1.0,
-    foregroundSpacing: 8.0,
     foregroundLoosen: true,
     foregroundJustify: MainAxisAlignment.center,
-    foregroundStyle: TextStyle(height: 1),
-    checkmarkWeight: 2.0,
-    checkmarkSize: 18.0,
-    iconSize: 18.0,
-    avatarStyle: AvatarStyle(
-      size: 24.0,
-      foregroundStyle: TextStyle(
-        height: 1,
-        fontSize: 12,
-      ),
-    ),
   );
 
   static const defaultPadding = EdgeInsets.symmetric(horizontal: 8);
@@ -323,6 +309,55 @@ class ChipStyle extends SheetStyle {
       'checkmarkWeight': checkmarkWeight,
       'checkmarkStyle': checkmarkStyle,
     });
+
+  /// Linearly interpolate between two [ChipStyle] objects.
+  static ChipStyle? lerp(ChipStyle? a, ChipStyle? b, double t) {
+    if (a == null && b == null) return null;
+    return ChipStyle(
+      variant: lerpEnum(a?.variant, b?.variant, t),
+      height: lerpDouble(a?.height, b?.height, t),
+      margin: EdgeInsetsGeometry.lerp(a?.margin, b?.margin, t),
+      padding: EdgeInsetsGeometry.lerp(a?.padding, b?.padding, t),
+      clipBehavior: lerpEnum(a?.clipBehavior, b?.clipBehavior, t),
+      overlayDisabled: lerpBool(a?.overlayDisabled, b?.overlayDisabled, t),
+      overlayColor: Color.lerp(a?.overlayColor, b?.overlayColor, t),
+      shadowColor: Color.lerp(a?.shadowColor, b?.shadowColor, t),
+      surfaceTint: Color.lerp(a?.surfaceTint, b?.surfaceTint, t),
+      elevation: lerpDouble(a?.elevation, b?.elevation, t),
+      foregroundStyle:
+          TextStyle.lerp(a?.foregroundStyle, b?.foregroundStyle, t),
+      foregroundColor: Color.lerp(a?.foregroundColor, b?.foregroundColor, t),
+      foregroundOpacity:
+          lerpDouble(a?.foregroundOpacity, b?.foregroundOpacity, t),
+      foregroundAlpha: lerpInt(a?.foregroundAlpha, b?.foregroundAlpha, t),
+      foregroundSpacing:
+          lerpDouble(a?.foregroundSpacing, b?.foregroundSpacing, t),
+      foregroundLoosen: lerpBool(a?.foregroundLoosen, b?.foregroundLoosen, t),
+      foregroundExpanded:
+          lerpBool(a?.foregroundExpanded, b?.foregroundExpanded, t),
+      foregroundAlign: lerpEnum(a?.foregroundAlign, b?.foregroundAlign, t),
+      foregroundJustify:
+          lerpEnum(a?.foregroundJustify, b?.foregroundJustify, t),
+      backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t),
+      backgroundOpacity:
+          lerpDouble(a?.backgroundOpacity, b?.backgroundOpacity, t),
+      backgroundAlpha: lerpInt(a?.backgroundAlpha, b?.backgroundAlpha, t),
+      borderColor: Color.lerp(a?.borderColor, b?.backgroundColor, t),
+      borderOpacity: lerpDouble(a?.borderOpacity, b?.borderOpacity, t),
+      borderAlpha: lerpInt(a?.borderAlpha, b?.borderAlpha, t),
+      borderWidth: lerpDouble(a?.borderWidth, b?.borderWidth, t),
+      borderRadius: BorderRadius.lerp(a?.borderRadius, b?.borderRadius, t),
+      borderStyle: lerpEnum(a?.borderStyle, b?.borderStyle, t),
+      iconColor: Color.lerp(a?.iconColor, b?.iconColor, t),
+      iconOpacity: lerpDouble(a?.iconOpacity, b?.iconOpacity, t),
+      iconSize: lerpDouble(a?.iconSize, b?.iconSize, t),
+      avatarStyle: AvatarStyle.lerp(a?.avatarStyle, b?.avatarStyle, t),
+      checkmarkColor: Color.lerp(a?.checkmarkColor, b?.checkmarkColor, t),
+      checkmarkWeight: lerpDouble(a?.checkmarkWeight, b?.checkmarkWeight, t),
+      checkmarkSize: lerpDouble(a?.checkmarkSize, b?.checkmarkSize, t),
+      checkmarkStyle: lerpEnum(a?.checkmarkStyle, b?.checkmarkStyle, t),
+    );
+  }
 }
 
 /// Create a [ChipStyle] when some events occurs
@@ -407,7 +442,7 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
   });
 
   /// Create a [DrivenChipStyle] with value
-  /// from another [ButtonStyle].
+  /// from another [ChipStyle].
   DrivenChipStyle.from(
     ChipStyle? enabled, {
     this.selectedStyle,
@@ -419,7 +454,7 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
   }) : super.from(enabled);
 
   /// Create a [DrivenChipStyle] with default value for toned style.
-  DrivenChipStyle.tonal({
+  const DrivenChipStyle.tonal({
     Color? color,
     super.height,
     super.margin,
@@ -438,12 +473,12 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
     super.foregroundExpanded,
     super.foregroundAlign,
     super.foregroundJustify,
-    super.backgroundOpacity = .12,
+    super.backgroundOpacity,
     super.backgroundAlpha,
     super.borderColor,
-    super.borderOpacity = 1,
+    super.borderOpacity,
     super.borderAlpha,
-    super.borderWidth = 1,
+    super.borderWidth,
     super.borderRadius,
     super.borderStyle = BorderStyle.none,
     super.iconColor,
@@ -455,24 +490,19 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
     super.checkmarkStyle,
     super.avatarStyle,
     this.selectedStyle,
-    ChipStyle? disabledStyle,
+    this.disabledStyle,
     this.hoveredStyle,
     this.focusedStyle,
     this.pressedStyle,
     this.mergeResolved,
-  })  : disabledStyle = const ChipStyle(
-          foregroundAlpha: ChipStyle.disabledForegroundAlpha,
-          backgroundAlpha: ChipStyle.disabledBackgroundAlpha,
-          borderAlpha: ChipStyle.disabledBorderAlpha,
-        ).merge(disabledStyle),
-        super(
+  }) : super(
           variant: SheetVariant.tonal,
           backgroundColor: color,
           foregroundColor: color,
         );
 
   /// Create a [DrivenChipStyle] with default value for filled style.
-  DrivenChipStyle.filled({
+  const DrivenChipStyle.filled({
     Color? color,
     super.height,
     super.margin,
@@ -492,11 +522,11 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
     super.foregroundExpanded,
     super.foregroundAlign,
     super.foregroundJustify,
-    super.backgroundOpacity = 1,
+    super.backgroundOpacity,
     super.backgroundAlpha,
-    super.borderOpacity = 0,
+    super.borderOpacity,
     super.borderAlpha,
-    super.borderWidth = 0,
+    super.borderWidth,
     super.borderRadius,
     super.borderStyle = BorderStyle.none,
     super.iconColor,
@@ -508,19 +538,12 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
     super.checkmarkStyle,
     super.avatarStyle,
     this.selectedStyle,
-    ChipStyle? disabledStyle,
-    ChipStyle? hoveredStyle,
+    this.disabledStyle,
+    this.hoveredStyle,
     this.focusedStyle,
-    ChipStyle? pressedStyle,
+    this.pressedStyle,
     this.mergeResolved,
-  })  : disabledStyle = const ChipStyle(
-          foregroundAlpha: ChipStyle.disabledForegroundAlpha,
-          backgroundAlpha: ChipStyle.disabledBackgroundAlpha,
-          borderAlpha: ChipStyle.disabledBorderAlpha,
-        ).merge(disabledStyle),
-        hoveredStyle = const ChipStyle(elevation: 1).merge(hoveredStyle),
-        pressedStyle = const ChipStyle(elevation: 0).merge(pressedStyle),
-        super(
+  }) : super(
           variant: SheetVariant.filled,
           backgroundColor: color,
           borderColor: color,
@@ -549,9 +572,9 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
     super.backgroundColor,
     super.backgroundOpacity,
     super.backgroundAlpha,
-    super.borderOpacity = 1,
+    super.borderOpacity,
     super.borderAlpha,
-    super.borderWidth = 1,
+    super.borderWidth,
     super.borderRadius,
     super.borderStyle = BorderStyle.solid,
     super.iconColor,
@@ -563,18 +586,12 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
     super.checkmarkStyle,
     AvatarStyle? avatarStyle,
     this.selectedStyle,
-    ChipStyle? disabledStyle,
-    ChipStyle? hoveredStyle,
+    this.disabledStyle,
+    this.hoveredStyle,
     this.focusedStyle,
-    ChipStyle? pressedStyle,
+    this.pressedStyle,
     this.mergeResolved,
-  })  : disabledStyle = const ChipStyle(
-          foregroundAlpha: ChipStyle.disabledForegroundAlpha,
-          borderAlpha: ChipStyle.disabledBorderAlpha,
-        ).merge(disabledStyle),
-        hoveredStyle = const ChipStyle(elevation: 0).merge(hoveredStyle),
-        pressedStyle = const ChipStyle(elevation: 0).merge(pressedStyle),
-        super(
+  }) : super(
           variant: SheetVariant.outlined,
           foregroundColor: color,
           borderColor: color,

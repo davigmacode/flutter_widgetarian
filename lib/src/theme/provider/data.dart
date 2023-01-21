@@ -1,9 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// The theme config
 ///
 /// Contains light and dark theme data, and the theme mode
-class ThemeConfig {
+class ThemeConfig with Diagnosticable {
   /// Default constructor
   const ThemeConfig._({
     required this.data,
@@ -124,6 +125,15 @@ class ThemeConfig {
     return brightness == Brightness.dark
         ? darkData.colorScheme
         : data.colorScheme;
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<ThemeData>('data', data));
+    properties.add(DiagnosticsProperty<ThemeData>('lightData', lightData));
+    properties.add(DiagnosticsProperty<ThemeData>('darkData', darkData));
+    properties.add(StringProperty('description', description));
   }
 }
 

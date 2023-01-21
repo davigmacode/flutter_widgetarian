@@ -123,9 +123,9 @@ class Button extends StatelessWidget {
     final buttonTheme = ButtonTheme.of(context);
     final buttonStyle = style ?? buttonTheme.style;
     return ButtonRender(
-      curve: curve ?? buttonTheme.curve,
-      duration: duration ?? buttonTheme.duration,
-      fallback: buttonTheme.fallback,
+      curve: curve,
+      duration: duration,
+      theme: buttonTheme,
       style: buttonStyle.merge(_postStyle),
       selected: false,
       loading: loading,

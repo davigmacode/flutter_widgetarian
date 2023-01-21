@@ -1,99 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/utils.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'style.dart';
-import 'fallback.dart';
-
-/// Defines the visual properties of [Switch].
-///
-/// Descendant widgets obtain the current [SwitchThemeData] object using
-/// `SwitchTheme.of(context)`. Instances of [SwitchThemeData]
-/// can be customized with [SwitchThemeData.copyWith] or [SwitchThemeData.merge].
-@immutable
-class SwitchThemeData with Diagnosticable {
-  /// The curve to apply when animating the parameters of [Switch] widget.
-  final Curve curve;
-
-  /// The duration over which to animate the parameters of [Switch] widget.
-  final Duration duration;
-
-  /// The [SwitchStyle] to be applied to the [Switch] widget
-  final SwitchStyle style;
-
-  /// The [SwitchStyle] that provides fallback values.
-  final SwitchStyleFallback fallback;
-
-  /// Creates a theme data that can be used for [SwitchTheme].
-  const SwitchThemeData({
-    required this.curve,
-    required this.duration,
-    required this.style,
-    required this.fallback,
-  });
-
-  /// An [SwitchThemeData] with some reasonable default values.
-  static final defaults = SwitchThemeData(
-    curve: Curves.linear,
-    duration: const Duration(milliseconds: 200),
-    style: DrivenSwitchStyle.m2(),
-    fallback: const SwitchStyleFallback(),
-  );
-
-  /// Creates a copy of this [SwitchThemeData] but with
-  /// the given fields replaced with the new values.
-  SwitchThemeData copyWith({
-    Curve? curve,
-    Duration? duration,
-    SwitchStyle? style,
-    SwitchStyleFallback? fallback,
-  }) {
-    return SwitchThemeData(
-      curve: curve ?? this.curve,
-      duration: duration ?? this.duration,
-      style: this.style.merge(style),
-      fallback: this.fallback.merge(fallback),
-    );
-  }
-
-  /// Creates a copy of this [SwitchThemeData] but with
-  /// the given fields replaced with the new values.
-  SwitchThemeData merge(SwitchThemeData? other) {
-    // if null return current object
-    if (other == null) return this;
-
-    return copyWith(
-      curve: other.curve,
-      duration: other.duration,
-      style: other.style,
-      fallback: other.fallback,
-    );
-  }
-
-  Map<String, dynamic> toMap() => {
-        'curve': curve,
-        'duration': duration,
-        'style': style,
-        'fallback': fallback,
-      };
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) return false;
-    return other is SwitchThemeData && mapEquals(other.toMap(), toMap());
-  }
-
-  @override
-  int get hashCode => Object.hashAll(toMap().values);
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    toMap().entries.forEach((el) {
-      properties.add(DiagnosticsProperty(el.key, el.value, defaultValue: null));
-    });
-  }
-}
+import 'theme_data.dart';
+import 'theme_preset.dart';
 
 /// A Widget that controls how descendant [Switch] should look like.
 class SwitchTheme extends InheritedTheme {
@@ -117,7 +27,6 @@ class SwitchTheme extends InheritedTheme {
     Curve? curve,
     Duration? duration,
     SwitchStyle? style,
-    SwitchStyleFallback? fallback,
     SwitchThemeData? data,
     required Widget child,
   }) {
@@ -130,7 +39,6 @@ class SwitchTheme extends InheritedTheme {
                 curve: curve,
                 duration: duration,
                 style: style,
-                fallback: fallback,
               ),
           child: child,
         );
@@ -151,42 +59,9 @@ class SwitchTheme extends InheritedTheme {
         context.dependOnInheritedWidgetOfExactType<SwitchTheme>();
     if (parentTheme != null) return parentTheme.data;
 
-    final appTheme = Theme.of(context);
-    final globalTheme = appTheme.extension<SwitchThemeData?>();
-    return SwitchThemeData.defaults
-        .copyWith(
-          fallback: SwitchStyleFallback(
-            m2: DrivenSwitchStyle(
-              trackColor: appTheme.unselectedWidgetColor,
-              thumbColor: Colors.white,
-              selectedStyle: SwitchStyle(
-                trackColor: appTheme.brightness.isLight
-                    ? appTheme.colorScheme.primary
-                    : appTheme.colorScheme.inversePrimary,
-              ),
-            ),
-            m3: DrivenSwitchStyle(
-              trackBorderColor: appTheme.colorScheme.outline,
-              trackColor: appTheme.colorScheme.surfaceVariant,
-              thumbColor: appTheme.colorScheme.onSurfaceVariant,
-              selectedStyle: SwitchStyle(
-                trackColor: appTheme.colorScheme.primary,
-                thumbColor: appTheme.colorScheme.onPrimary,
-              ),
-            ),
-            ios: DrivenSwitchStyle(
-              trackColor: appTheme.colorScheme.surfaceVariant,
-              thumbColor: appTheme.brightness.isLight
-                  ? Colors.white
-                  : appTheme.colorScheme.onSurfaceVariant,
-              selectedStyle: SwitchStyle(
-                trackColor: appTheme.colorScheme.primary,
-                thumbColor: appTheme.colorScheme.onPrimary,
-              ),
-            ),
-          ),
-        )
-        .merge(globalTheme);
+    final globalTheme = Theme.of(context).extension<SwitchThemeData>();
+    final defaultTheme = SwitchThemePreset.defaults(context);
+    return defaultTheme.merge(globalTheme);
   }
 
   @override

@@ -1,18 +1,17 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/animation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'package:widgetarian/src/utils/lerp.dart';
 import 'style.dart';
-import 'types.dart';
 
-/// Map of [SheetStyle] by [SheetVariant] as key
-typedef SheetStyleByVariant = Map<SheetVariant, SheetStyle?>;
+/// Map of [ChipStyle] by [ChipVariant] as key
+typedef ChipStyleByVariant = Map<ChipVariant, ChipStyle?>;
 
-extension SheetStyleByVariantUtils on SheetStyleByVariant {
-  /// Creates a copy of this [SheetStyleByVariant] but with
+extension ChipStyleByVariantUtils on ChipStyleByVariant {
+  /// Creates a copy of this [ChipStyleByVariant] but with
   /// the given fields replaced with the new values.
-  SheetStyleByVariant merge(SheetStyleByVariant? variants) {
-    final entries = SheetVariant.values.map((key) {
+  ChipStyleByVariant merge(ChipStyleByVariant? variants) {
+    final entries = ChipVariant.values.map((key) {
       final other = variants?[key];
       final style = this[key]?.merge(other) ?? other;
       return MapEntry(key, style);
@@ -20,58 +19,57 @@ extension SheetStyleByVariantUtils on SheetStyleByVariant {
     return Map.fromEntries(entries);
   }
 
-  /// Linearly interpolate with another [SheetStyleByVariant] object.
-  SheetStyleByVariant lerp(SheetStyleByVariant? other, double t) {
-    final entries = SheetVariant.values.map((key) {
-      final style = SheetStyle.lerp(this[key], other?[key], t);
+  /// Linearly interpolate with another [ChipStyleByVariant] object.
+  ChipStyleByVariant lerp(ChipStyleByVariant? other, double t) {
+    final entries = ChipVariant.values.map((key) {
+      final style = ChipStyle.lerp(this[key], other?[key], t);
       return MapEntry(key, style);
     });
     return Map.fromEntries(entries);
   }
 }
 
-/// Defines the visual properties of [Sheet].
+/// Defines the visual properties of [Chip].
 ///
-/// Descendant widgets obtain the current [SheetThemeData] object using
-/// `SheetTheme.of(context)`. Instances of [SheetThemeData]
-/// can be customized with [SheetThemeData.copyWith] or [SheetThemeData.merge].
+/// Descendant widgets obtain the current [ChipThemeData] object using
+/// `ChipTheme.of(context)`. Instances of [ChipThemeData]
+/// can be customized with [ChipThemeData.copyWith] or [ChipThemeData.merge].
 @immutable
-class SheetThemeData extends ThemeExtension<SheetThemeData>
-    with Diagnosticable {
-  /// The curve to apply when animating the parameters of sheet widget.
+class ChipThemeData extends ThemeExtension<ChipThemeData> with Diagnosticable {
+  /// The curve to apply when animating the parameters of [Chip] widget.
   final Curve curve;
 
-  /// The duration over which to animate the parameters of sheet widget.
+  /// The duration over which to animate the parameters of [Chip] widget.
   final Duration duration;
 
-  /// The [SheetStyle] to be applied to the sheet widget
-  final SheetStyle style;
+  /// The [ChipStyle] to be applied to the [Chip] widget
+  final ChipStyle style;
 
-  /// The [SheetStyle] to be applied to the variant sheet widget
-  final SheetStyleByVariant variantStyle;
+  /// The [ChipStyle] to be applied to the variant sheet widget
+  final ChipStyleByVariant variantStyle;
 
-  /// The [SheetStyle] to be applied to the sheet widget with danger severity
-  final SheetStyleByVariant dangerStyle;
+  /// The [ChipStyle] to be applied to the sheet widget with danger severity
+  final ChipStyleByVariant dangerStyle;
 
-  /// The [SheetStyle] to be applied to the sheet widget with warning severity
-  final SheetStyleByVariant warningStyle;
+  /// The [ChipStyle] to be applied to the sheet widget with warning severity
+  final ChipStyleByVariant warningStyle;
 
-  /// The [SheetStyle] to be applied to the sheet widget with success severity
-  final SheetStyleByVariant successStyle;
+  /// The [ChipStyle] to be applied to the sheet widget with success severity
+  final ChipStyleByVariant successStyle;
 
-  /// The [SheetStyle] to be applied to the sheet widget with info severity
-  final SheetStyleByVariant infoStyle;
+  /// The [ChipStyle] to be applied to the sheet widget with info severity
+  final ChipStyleByVariant infoStyle;
 
-  /// The [SheetStyle] to be applied to the sheet widget with severity
-  Map<SheetSeverity, SheetStyleByVariant> get severityStyle => {
-        SheetSeverity.danger: dangerStyle,
-        SheetSeverity.warning: warningStyle,
-        SheetSeverity.success: successStyle,
-        SheetSeverity.info: infoStyle,
+  /// The [ChipStyle] to be applied to the sheet widget with severity
+  Map<ChipSeverity, ChipStyleByVariant> get severityStyle => {
+        ChipSeverity.danger: dangerStyle,
+        ChipSeverity.warning: warningStyle,
+        ChipSeverity.success: successStyle,
+        ChipSeverity.info: infoStyle,
       };
 
-  /// Creates a theme data that can be used for [SheetTheme].
-  const SheetThemeData({
+  /// Creates a theme data that can be used for [ChipTheme].
+  const ChipThemeData({
     required this.curve,
     required this.duration,
     required this.style,
@@ -82,38 +80,38 @@ class SheetThemeData extends ThemeExtension<SheetThemeData>
     this.infoStyle = const {},
   });
 
-  /// Create a [SheetThemeData] with some reasonable default values.
-  const SheetThemeData.defaults()
+  /// An [ChipThemeData] with some reasonable default values.
+  const ChipThemeData.defaults()
       : curve = Curves.linear,
         duration = const Duration(milliseconds: 200),
-        style = SheetStyle.defaults,
+        style = const DrivenChipStyle(),
         variantStyle = const {},
         dangerStyle = const {},
         warningStyle = const {},
         successStyle = const {},
         infoStyle = const {};
 
-  /// Return [SheetStyle] that depends on [variant] and [severity]
-  SheetStyle resolve({SheetVariant? variant, SheetSeverity? severity}) {
-    return SheetStyle.from(style)
+  /// Return [ChipStyle] that depends on [variant] and [severity]
+  ChipStyle resolve({ChipVariant? variant, ChipSeverity? severity}) {
+    return ChipStyle.from(style)
         .merge(variantStyle[variant])
         .merge(severityStyle[severity]?[variant]);
   }
 
-  /// Creates a copy of this [SheetThemeData] but with
+  /// Creates a copy of this [ChipThemeData] but with
   /// the given fields replaced with the new values.
   @override
-  SheetThemeData copyWith({
+  ChipThemeData copyWith({
     Curve? curve,
     Duration? duration,
-    SheetStyle? style,
-    SheetStyleByVariant? variantStyle,
-    SheetStyleByVariant? dangerStyle,
-    SheetStyleByVariant? warningStyle,
-    SheetStyleByVariant? successStyle,
-    SheetStyleByVariant? infoStyle,
+    ChipStyle? style,
+    ChipStyleByVariant? variantStyle,
+    ChipStyleByVariant? dangerStyle,
+    ChipStyleByVariant? warningStyle,
+    ChipStyleByVariant? successStyle,
+    ChipStyleByVariant? infoStyle,
   }) {
-    return SheetThemeData(
+    return ChipThemeData(
       curve: curve ?? this.curve,
       duration: duration ?? this.duration,
       style: this.style.merge(style),
@@ -125,9 +123,9 @@ class SheetThemeData extends ThemeExtension<SheetThemeData>
     );
   }
 
-  /// Creates a copy of this [SheetThemeData] but with
+  /// Creates a copy of this [ChipThemeData] but with
   /// the given fields replaced with the new values.
-  SheetThemeData merge(SheetThemeData? other) {
+  ChipThemeData merge(ChipThemeData? other) {
     // if null return current object
     if (other == null) return this;
 
@@ -144,12 +142,12 @@ class SheetThemeData extends ThemeExtension<SheetThemeData>
   }
 
   @override
-  SheetThemeData lerp(ThemeExtension<SheetThemeData>? other, double t) {
-    if (other is! SheetThemeData) return this;
-    return SheetThemeData(
+  ChipThemeData lerp(ThemeExtension<ChipThemeData>? other, double t) {
+    if (other is! ChipThemeData) return this;
+    return ChipThemeData(
       curve: lerpEnum(curve, other.curve, t) ?? curve,
       duration: lerpEnum(duration, other.duration, t) ?? duration,
-      style: SheetStyle.lerp(style, other.style, t) ?? style,
+      style: ChipStyle.lerp(style, other.style, t) ?? style,
       variantStyle: variantStyle.lerp(other.variantStyle, t),
       dangerStyle: dangerStyle.lerp(other.dangerStyle, t),
       warningStyle: warningStyle.lerp(other.warningStyle, t),
@@ -172,7 +170,7 @@ class SheetThemeData extends ThemeExtension<SheetThemeData>
   @override
   bool operator ==(Object other) {
     if (other.runtimeType != runtimeType) return false;
-    return other is SheetThemeData && mapEquals(other.toMap(), toMap());
+    return other is ChipThemeData && mapEquals(other.toMap(), toMap());
   }
 
   @override

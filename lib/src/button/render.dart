@@ -5,7 +5,7 @@ import 'package:widgetarian/anchor.dart';
 import 'package:widgetarian/utils.dart';
 import 'event.dart';
 import 'style.dart';
-import 'fallback.dart';
+import 'theme_data.dart';
 
 class ButtonRender extends StatefulWidget {
   const ButtonRender({
@@ -21,10 +21,10 @@ class ButtonRender extends StatefulWidget {
     this.onPressed,
     this.onSelected,
     this.eventsController,
-    required this.curve,
-    required this.duration,
-    required this.fallback,
-    required this.style,
+    this.curve,
+    this.duration,
+    this.style,
+    required this.theme,
     required this.child,
   }) : super(key: key);
 
@@ -143,17 +143,12 @@ class ButtonRender extends StatefulWidget {
   /// {@template widgetarian.button.curve}
   /// The curve to apply when animating the parameters of this widget.
   /// {@endtemplate}
-  final Curve curve;
+  final Curve? curve;
 
   /// {@template widgetarian.button.duration}
   /// The duration over which to animate the parameters of this widget.
   /// {@endtemplate}
-  final Duration duration;
-
-  /// {@template widgetarian.button.fallback}
-  /// The [ButtonStyle] that provides fallback values.
-  /// {@endtemplate}
-  final ButtonStyleFallback fallback;
+  final Duration? duration;
 
   /// {@template widgetarian.button.style}
   /// The style to be applied to the button.
@@ -167,7 +162,12 @@ class ButtonRender extends StatefulWidget {
   ///  * [ButtonEvent.pressed].
   ///  * [ButtonEvent.disabled].
   /// {@endtemplate}
-  final ButtonStyle style;
+  final ButtonStyle? style;
+
+  /// {@template widgetarian.button.theme}
+  /// The [ButtonThemeData] that provides fallback values.
+  /// {@endtemplate}
+  final ButtonThemeData theme;
 
   /// {@template widgetarian.button.tooltip}
   /// Tooltip string to be used for the body area of the button.
@@ -203,46 +203,37 @@ class ButtonRender extends StatefulWidget {
 
 class ButtonRenderState extends State<ButtonRender>
     with WidgetEventMixin<ButtonRender> {
-  ButtonStyle style = const ButtonStyle();
-  ButtonStyle fallback = const ButtonStyle();
-
-  @protected
-  void setStyle() {
-    final rawStyle = ButtonStyle.defaults.merge(widget.style);
-    final resStyle = DrivenButtonStyle.evaluate(rawStyle, widgetEvents.value);
-    style = ButtonStyle.from(resStyle);
-
-    final rawFallback = widget.fallback.resolve(style.variant);
-    final resFallback =
-        DrivenButtonStyle.evaluate(rawFallback, widgetEvents.value);
-    fallback = ButtonStyle.from(resFallback);
-    setState(() {});
+  ButtonStyle get style {
+    final raw = ButtonStyle.defaults.merge(widget.style);
+    final fallback = widget.theme.resolve(
+      variant: raw.variant,
+      severity: raw.severity,
+    );
+    final driven = fallback.merge(raw);
+    final evaluated = DrivenButtonStyle.evaluate(driven, widgetEvents.value);
+    return ButtonStyle.from(evaluated);
   }
 
-  Color? get defaultBackgroundColor {
-    return fallback.backgroundColor;
-  }
+  Curve get curve => widget.curve ?? widget.theme.curve;
 
-  Color? get defaultBorderColor {
-    return fallback.borderColor;
-  }
+  Duration get duration => widget.duration ?? widget.theme.duration;
 
   Color? get defaultForegroundColor {
-    return style.isFilled
+    return style.isFilled || style.isElevated
         ? widget.selected && widget.disabled
             ? backgroundColor
             : Colors.onSurface(backgroundColor)
-        : fallback.foregroundColor;
+        : null;
   }
 
   Color? get backgroundColor => Colors.withTransparency(
-        style.backgroundColor ?? defaultBackgroundColor,
+        style.backgroundColor,
         opacity: style.backgroundOpacity,
         alpha: style.backgroundAlpha,
       );
 
   Color? get borderColor => Colors.withTransparency(
-        style.borderColor ?? defaultBorderColor,
+        style.borderColor,
         opacity: style.borderOpacity,
         alpha: style.borderAlpha,
       );
@@ -254,9 +245,7 @@ class ButtonRenderState extends State<ButtonRender>
       );
 
   Color? get overlayColor =>
-      style.overlayColor ??
-      fallback.overlayColor ??
-      Colors.onSurface(backgroundColor);
+      style.overlayColor ?? Colors.onSurface(backgroundColor);
 
   EdgeInsetsGeometry get padding {
     final defaultPadding = style.shape == BoxShape.circle
@@ -300,7 +289,6 @@ class ButtonRenderState extends State<ButtonRender>
     widgetEvents.toggle(ButtonEvent.selected, widget.selected);
     widgetEvents.toggle(ButtonEvent.loading, widget.loading);
     widgetEvents.toggle(ButtonEvent.disabled, widget.disabled);
-    setStyle();
     super.initState();
   }
 
@@ -311,7 +299,6 @@ class ButtonRenderState extends State<ButtonRender>
       widgetEvents.toggle(ButtonEvent.selected, widget.selected);
       widgetEvents.toggle(ButtonEvent.loading, widget.loading);
       widgetEvents.toggle(ButtonEvent.disabled, widget.disabled);
-      setStyle();
       super.didUpdateWidget(oldWidget);
     }
   }
@@ -329,15 +316,17 @@ class ButtonRenderState extends State<ButtonRender>
       button: widget.canTap,
       enabled: widget.enabled,
       child: Sheet(
-        curve: widget.curve,
-        duration: widget.duration,
+        curve: curve,
+        duration: duration,
         style: style,
-        foregroundStyle: fallback.foregroundStyle?.merge(style.foregroundStyle),
+        foregroundStyle: style.foregroundStyle,
         foregroundColor: foregroundColor,
         backgroundColor: backgroundColor,
         borderColor: borderColor,
         padding: EdgeInsets.zero,
         child: Anchor(
+          curve: curve,
+          duration: duration,
           disabled: !widget.canTap,
           autofocus: widget.autofocus,
           focusNode: widget.focusNode,
@@ -349,8 +338,8 @@ class ButtonRenderState extends State<ButtonRender>
           onHover: onHover,
           onFocus: onFocus,
           child: AnimatedPadding(
-            curve: widget.curve,
-            duration: widget.duration,
+            curve: curve,
+            duration: duration,
             padding: padding,
             child: Tile(
               leading: widget.leading != null

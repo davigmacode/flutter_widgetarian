@@ -105,19 +105,3 @@ abstract class Colors {
     return color;
   }
 }
-
-extension BrightnessFlag on Brightness {
-  /// Whether or not this is light
-  ///
-  /// ```dart
-  /// final isLight = Theme.of(context).brightness.isLight;
-  /// ```
-  bool get isLight => this == Brightness.light;
-
-  /// Whether or not this is dark
-  ///
-  /// ```dart
-  /// final isDark = Theme.of(context).brightness.isDark;
-  /// ```
-  bool get isDark => this == Brightness.dark;
-}

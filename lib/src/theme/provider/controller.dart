@@ -87,83 +87,131 @@ class ThemeController extends ChangeNotifier {
     );
   }
 
+  /// {@template widgetarian.theme.controller.onAvailableChanged}
   /// Called when available themes changed
+  /// {@endtemplate}
   ThemeChanged? onAvailableChanged;
 
+  /// {@template widgetarian.theme.controller.onThemeChanged}
   /// Called when selected theme changed
+  /// {@endtemplate}
   ThemeChanged? onThemeChanged;
 
+  /// {@template widgetarian.theme.controller.onModeChanged}
   /// Called when theme mode changed
+  /// {@endtemplate}
   ThemeChanged? onModeChanged;
 
+  /// {@template widgetarian.theme.controller.onColorChanged}
   /// Called when theme color changed
+  /// {@endtemplate}
   ThemeChanged? onColorChanged;
 
+  /// {@template widgetarian.theme.controller.onChanged}
   /// Called when selected theme or theme mode or theme color changed
+  /// {@endtemplate}
   ThemeChanged? onChanged;
 
+  /// {@template widgetarian.theme.controller.initialTheme}
   /// Initial provided theme name/key
+  /// {@endtemplate}
   String initialTheme;
 
+  /// {@template widgetarian.theme.controller.initialMode}
   /// Initial provided theme mode
+  /// {@endtemplate}
   ThemeMode initialMode;
 
+  /// {@template widgetarian.theme.controller.selected}
   /// Current selected theme name/key
+  /// {@endtemplate}
   String selected;
 
+  /// {@template widgetarian.theme.controller.selectedIndex}
   /// Return the current selected index
+  /// {@endtemplate}
   int get selectedIndex =>
       availableEntries.indexWhere((e) => e.key == selected);
 
+  /// {@template widgetarian.theme.controller.available}
   /// Available themes to select
+  /// {@endtemplate}
   ThemeMap available;
 
+  /// {@template widgetarian.theme.controller.availableEntries}
   /// Return the list of available themes
+  /// {@endtemplate}
   ThemeList get availableEntries => available.entries.toList();
 
+  /// {@template widgetarian.theme.controller.mode}
   /// Current selected theme mode
+  /// {@endtemplate}
   ThemeMode mode;
 
+  /// {@template widgetarian.theme.controller.modeIcons}
   /// Map of the icons represent to the theme mode
+  /// {@endtemplate}
   final ThemeModeIcons modeIcons;
 
+  /// {@template widgetarian.theme.controller.defaultModeIcons}
   /// Default map of the icons represent to the theme mode
+  /// {@endtemplate}
   static ThemeModeIcons defaultModeIcons = {
     ThemeMode.system: Icons.brightness_auto_rounded,
     ThemeMode.light: Icons.brightness_low_rounded,
     ThemeMode.dark: Icons.brightness_2_rounded
   };
 
+  /// {@template widgetarian.theme.controller.modeIcon}
   /// Return the icon represent to the current theme mode
+  /// {@endtemplate}
   IconData get modeIcon {
     return modeIcons[mode]!;
   }
 
+  /// {@template widgetarian.theme.controller.color}
   /// This value will override the current theme color
+  /// {@endtemplate}
   Color? color;
 
+  /// {@template widgetarian.theme.controller.config}
   /// The current theme config
+  /// {@endtemplate}
   ThemeConfig get config => available[selected]!.toColor(color);
 
+  /// {@template widgetarian.theme.controller.description}
   /// The current theme description
+  /// {@endtemplate}
   String? get description => config.description;
 
+  /// {@template widgetarian.theme.controller.data}
   /// The current main/light theme data
+  /// {@endtemplate}
   ThemeData get data => config.data;
 
+  /// {@template widgetarian.theme.controller.lightData}
   /// The current light theme data
+  /// {@endtemplate}
   ThemeData get lightData => config.lightData;
 
+  /// {@template widgetarian.theme.controller.darkData}
   /// The current dark theme data
+  /// {@endtemplate}
   ThemeData get darkData => config.darkData;
 
+  /// {@template widgetarian.theme.controller.isLightMode}
   /// Whether the theme mode is [ThemeMode.light] or not
+  /// {@endtemplate}
   bool get isLightMode => mode == ThemeMode.light;
 
+  /// {@template widgetarian.theme.controller.isDarkMode}
   /// Whether the theme mode is [ThemeMode.dark] or not
+  /// {@endtemplate}
   bool get isDarkMode => mode == ThemeMode.dark;
 
+  /// {@template widgetarian.theme.controller.isSystemMode}
   /// Whether the theme mode is [ThemeMode.dark] or not
+  /// {@endtemplate}
   bool get isSystemMode => mode == ThemeMode.system;
 
   /// internal usage

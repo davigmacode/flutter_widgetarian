@@ -1,18 +1,17 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/animation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'package:widgetarian/src/utils/lerp.dart';
 import 'style.dart';
-import 'types.dart';
 
-/// Map of [SheetStyle] by [SheetVariant] as key
-typedef SheetStyleByVariant = Map<SheetVariant, SheetStyle?>;
+/// Map of [ButtonStyle] by [ButtonVariant] as key
+typedef ButtonStyleByVariant = Map<ButtonVariant, ButtonStyle?>;
 
-extension SheetStyleByVariantUtils on SheetStyleByVariant {
-  /// Creates a copy of this [SheetStyleByVariant] but with
+extension ButtonStyleByVariantUtils on ButtonStyleByVariant {
+  /// Creates a copy of this [ButtonStyleByVariant] but with
   /// the given fields replaced with the new values.
-  SheetStyleByVariant merge(SheetStyleByVariant? variants) {
-    final entries = SheetVariant.values.map((key) {
+  ButtonStyleByVariant merge(ButtonStyleByVariant? variants) {
+    final entries = ButtonVariant.values.map((key) {
       final other = variants?[key];
       final style = this[key]?.merge(other) ?? other;
       return MapEntry(key, style);
@@ -20,58 +19,58 @@ extension SheetStyleByVariantUtils on SheetStyleByVariant {
     return Map.fromEntries(entries);
   }
 
-  /// Linearly interpolate with another [SheetStyleByVariant] object.
-  SheetStyleByVariant lerp(SheetStyleByVariant? other, double t) {
-    final entries = SheetVariant.values.map((key) {
-      final style = SheetStyle.lerp(this[key], other?[key], t);
+  /// Linearly interpolate with another [ButtonStyleByVariant] object.
+  ButtonStyleByVariant lerp(ButtonStyleByVariant? other, double t) {
+    final entries = ButtonVariant.values.map((key) {
+      final style = ButtonStyle.lerp(this[key], other?[key], t);
       return MapEntry(key, style);
     });
     return Map.fromEntries(entries);
   }
 }
 
-/// Defines the visual properties of [Sheet].
+/// Defines the visual properties of [Button].
 ///
-/// Descendant widgets obtain the current [SheetThemeData] object using
-/// `SheetTheme.of(context)`. Instances of [SheetThemeData]
-/// can be customized with [SheetThemeData.copyWith] or [SheetThemeData.merge].
+/// Descendant widgets obtain the current [ButtonThemeData] object using
+/// `ButtonTheme.of(context)`. Instances of [ButtonThemeData]
+/// can be customized with [ButtonThemeData.copyWith] or [ButtonThemeData.merge].
 @immutable
-class SheetThemeData extends ThemeExtension<SheetThemeData>
+class ButtonThemeData extends ThemeExtension<ButtonThemeData>
     with Diagnosticable {
-  /// The curve to apply when animating the parameters of sheet widget.
+  /// The curve to apply when animating the parameters of avatar widget.
   final Curve curve;
 
-  /// The duration over which to animate the parameters of sheet widget.
+  /// The duration over which to animate the parameters of button widget.
   final Duration duration;
 
-  /// The [SheetStyle] to be applied to the sheet widget
-  final SheetStyle style;
+  /// The [ButtonStyle] to be applied to the button widget
+  final ButtonStyle style;
 
-  /// The [SheetStyle] to be applied to the variant sheet widget
-  final SheetStyleByVariant variantStyle;
+  /// The [ButtonStyle] to be applied to the variant sheet widget
+  final ButtonStyleByVariant variantStyle;
 
-  /// The [SheetStyle] to be applied to the sheet widget with danger severity
-  final SheetStyleByVariant dangerStyle;
+  /// The [ButtonStyle] to be applied to the sheet widget with danger severity
+  final ButtonStyleByVariant dangerStyle;
 
-  /// The [SheetStyle] to be applied to the sheet widget with warning severity
-  final SheetStyleByVariant warningStyle;
+  /// The [ButtonStyle] to be applied to the sheet widget with warning severity
+  final ButtonStyleByVariant warningStyle;
 
-  /// The [SheetStyle] to be applied to the sheet widget with success severity
-  final SheetStyleByVariant successStyle;
+  /// The [ButtonStyle] to be applied to the sheet widget with success severity
+  final ButtonStyleByVariant successStyle;
 
-  /// The [SheetStyle] to be applied to the sheet widget with info severity
-  final SheetStyleByVariant infoStyle;
+  /// The [ButtonStyle] to be applied to the sheet widget with info severity
+  final ButtonStyleByVariant infoStyle;
 
-  /// The [SheetStyle] to be applied to the sheet widget with severity
-  Map<SheetSeverity, SheetStyleByVariant> get severityStyle => {
-        SheetSeverity.danger: dangerStyle,
-        SheetSeverity.warning: warningStyle,
-        SheetSeverity.success: successStyle,
-        SheetSeverity.info: infoStyle,
+  /// The [ButtonStyle] to be applied to the sheet widget with severity
+  Map<ButtonSeverity, ButtonStyleByVariant> get severityStyle => {
+        ButtonSeverity.danger: dangerStyle,
+        ButtonSeverity.warning: warningStyle,
+        ButtonSeverity.success: successStyle,
+        ButtonSeverity.info: infoStyle,
       };
 
-  /// Creates a theme data that can be used for [SheetTheme].
-  const SheetThemeData({
+  /// Creates a theme data that can be used for [ButtonTheme].
+  const ButtonThemeData({
     required this.curve,
     required this.duration,
     required this.style,
@@ -82,38 +81,38 @@ class SheetThemeData extends ThemeExtension<SheetThemeData>
     this.infoStyle = const {},
   });
 
-  /// Create a [SheetThemeData] with some reasonable default values.
-  const SheetThemeData.defaults()
+  /// An [ButtonThemeData] with some reasonable default values.
+  const ButtonThemeData.defaults()
       : curve = Curves.linear,
         duration = const Duration(milliseconds: 200),
-        style = SheetStyle.defaults,
+        style = const DrivenButtonStyle(),
         variantStyle = const {},
         dangerStyle = const {},
         warningStyle = const {},
         successStyle = const {},
         infoStyle = const {};
 
-  /// Return [SheetStyle] that depends on [variant] and [severity]
-  SheetStyle resolve({SheetVariant? variant, SheetSeverity? severity}) {
-    return SheetStyle.from(style)
+  /// Return [ButtonStyle] that depends on [variant] and [severity]
+  ButtonStyle resolve({ButtonVariant? variant, ButtonSeverity? severity}) {
+    return ButtonStyle.from(style)
         .merge(variantStyle[variant])
         .merge(severityStyle[severity]?[variant]);
   }
 
-  /// Creates a copy of this [SheetThemeData] but with
+  /// Creates a copy of this [ButtonThemeData] but with
   /// the given fields replaced with the new values.
   @override
-  SheetThemeData copyWith({
+  ButtonThemeData copyWith({
     Curve? curve,
     Duration? duration,
-    SheetStyle? style,
-    SheetStyleByVariant? variantStyle,
-    SheetStyleByVariant? dangerStyle,
-    SheetStyleByVariant? warningStyle,
-    SheetStyleByVariant? successStyle,
-    SheetStyleByVariant? infoStyle,
+    ButtonStyle? style,
+    ButtonStyleByVariant? variantStyle,
+    ButtonStyleByVariant? dangerStyle,
+    ButtonStyleByVariant? warningStyle,
+    ButtonStyleByVariant? successStyle,
+    ButtonStyleByVariant? infoStyle,
   }) {
-    return SheetThemeData(
+    return ButtonThemeData(
       curve: curve ?? this.curve,
       duration: duration ?? this.duration,
       style: this.style.merge(style),
@@ -125,9 +124,9 @@ class SheetThemeData extends ThemeExtension<SheetThemeData>
     );
   }
 
-  /// Creates a copy of this [SheetThemeData] but with
+  /// Creates a copy of this [ButtonThemeData] but with
   /// the given fields replaced with the new values.
-  SheetThemeData merge(SheetThemeData? other) {
+  ButtonThemeData merge(ButtonThemeData? other) {
     // if null return current object
     if (other == null) return this;
 
@@ -144,12 +143,12 @@ class SheetThemeData extends ThemeExtension<SheetThemeData>
   }
 
   @override
-  SheetThemeData lerp(ThemeExtension<SheetThemeData>? other, double t) {
-    if (other is! SheetThemeData) return this;
-    return SheetThemeData(
+  ButtonThemeData lerp(ThemeExtension<ButtonThemeData>? other, double t) {
+    if (other is! ButtonThemeData) return this;
+    return ButtonThemeData(
       curve: lerpEnum(curve, other.curve, t) ?? curve,
       duration: lerpEnum(duration, other.duration, t) ?? duration,
-      style: SheetStyle.lerp(style, other.style, t) ?? style,
+      style: ButtonStyle.lerp(style, other.style, t) ?? style,
       variantStyle: variantStyle.lerp(other.variantStyle, t),
       dangerStyle: dangerStyle.lerp(other.dangerStyle, t),
       warningStyle: warningStyle.lerp(other.warningStyle, t),
@@ -172,7 +171,7 @@ class SheetThemeData extends ThemeExtension<SheetThemeData>
   @override
   bool operator ==(Object other) {
     if (other.runtimeType != runtimeType) return false;
-    return other is SheetThemeData && mapEquals(other.toMap(), toMap());
+    return other is ButtonThemeData && mapEquals(other.toMap(), toMap());
   }
 
   @override

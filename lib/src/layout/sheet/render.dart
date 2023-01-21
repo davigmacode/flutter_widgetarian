@@ -35,57 +35,43 @@ class _SheetRenderState extends State<SheetRender> {
 
   Duration get duration => widget.duration ?? widget.theme.duration;
 
-  SheetStyle get style => SheetStyle.from(widget.style);
-
-  SheetStyle get fallback => widget.theme.resolve(
-        variant: style.variant,
-        severity: style.severity,
-      );
-
-  Color? get defaultBackgroundColor {
-    return fallback.backgroundColor;
-  }
-
-  Color? get defaultBorderColor {
-    return fallback.borderColor;
+  SheetStyle get style {
+    final raw = SheetStyle.defaults.merge(widget.style);
+    final fallback = widget.theme.resolve(
+      variant: raw.variant,
+      severity: raw.severity,
+    );
+    return fallback.merge(raw);
   }
 
   Color? get defaultForegroundColor {
     return style.isFilled || style.isElevated
-        ? Colors.onSurface(backgroundColor)!
-        : fallback.foregroundColor;
+        ? Colors.onSurface(backgroundColor)
+        : null;
   }
 
-  Color? get defaultShadowColor {
-    return fallback.borderColor;
-  }
-
-  Color? get defaultSurfaceTint {
-    return fallback.surfaceTint;
-  }
+  Color? get borderColor => Colors.withTransparency(
+        style.borderColor,
+        opacity: style.borderOpacity,
+        alpha: style.borderAlpha,
+      );
 
   Color? get backgroundColor {
     final color = Colors.withTransparency(
-      style.backgroundColor ?? defaultBackgroundColor,
+      style.backgroundColor,
       opacity: style.backgroundOpacity,
       alpha: style.backgroundAlpha,
     );
 
-    if (color == null || style.elevation == null) return color;
+    final elevation = style.elevation;
+
+    if (color == null || elevation == null) return color;
 
     if (surfaceTint != null) {
-      return ElevationOverlay.applySurfaceTint(
-          color, surfaceTint, style.elevation!);
+      return ElevationOverlay.applySurfaceTint(color, surfaceTint, elevation);
     }
-
-    return ElevationOverlay.applyOverlay(context, color, style.elevation!);
+    return ElevationOverlay.applyOverlay(context, color, elevation);
   }
-
-  Color? get borderColor => Colors.withTransparency(
-        style.borderColor ?? defaultBorderColor,
-        opacity: style.borderOpacity,
-        alpha: style.borderAlpha,
-      );
 
   Color? get foregroundColor => Colors.withTransparency(
         style.foregroundColor ?? defaultForegroundColor,
@@ -94,11 +80,11 @@ class _SheetRenderState extends State<SheetRender> {
       );
 
   Color? get shadowColor {
-    return style.shadowColor ?? defaultShadowColor;
+    return style.shadowColor;
   }
 
   Color? get surfaceTint {
-    return style.surfaceTint ?? defaultSurfaceTint;
+    return style.surfaceTint;
   }
 
   Color? get iconColor {
@@ -178,9 +164,9 @@ class _SheetRenderState extends State<SheetRender> {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties
-        .add(ColorProperty('defaultBackgroundColor', defaultBackgroundColor));
-    properties.add(ColorProperty('defaultBorderColor', defaultBorderColor));
+    // properties
+    //     .add(ColorProperty('defaultBackgroundColor', defaultBackgroundColor));
+    // properties.add(ColorProperty('defaultBorderColor', defaultBorderColor));
     properties
         .add(ColorProperty('defaultForegroundColor', defaultForegroundColor));
     properties.add(ColorProperty('backgroundColor', backgroundColor));

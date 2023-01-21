@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/src/theme/material.dart';
-import 'package:widgetarian/utils.dart';
 import 'style.dart';
 import 'theme.dart';
 import 'event.dart';
@@ -128,37 +126,37 @@ class ToggleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appTheme = Theme.of(context);
+    // final appTheme = Theme.of(context);
     final buttonTheme = ButtonTheme.of(context);
     final buttonStyle = buttonTheme.style.merge(style);
-    final fallbackStyle = buttonTheme.fallback.copyWith(
-      base: DrivenButtonStyle(
-        foregroundStyle: appTheme.textTheme.labelLarge,
-        foregroundColor: appTheme.colorScheme.onSurface,
-        borderColor: appTheme.colorScheme.outline,
-        shadowColor: appTheme.colorScheme.shadow,
-        overlayColor: appTheme.brightness.isDark ? Colors.white : null,
-      ),
-      filled: DrivenButtonStyle(
-        backgroundColor: appTheme.unselectedWidgetColor,
-        selectedStyle: ButtonStyle(
-          backgroundColor: appTheme.brightness.isLight
-              ? appTheme.colorScheme.primary
-              : appTheme.colorScheme.inversePrimary,
-        ),
-      ),
-      outlined: DrivenButtonStyle(
-        backgroundColor: Colors.transparent,
-        selectedStyle: ButtonStyle(
-          foregroundColor: appTheme.colorScheme.primary,
-          borderColor: appTheme.colorScheme.primary,
-        ),
-      ),
-    );
+    // final fallbackStyle = buttonTheme.theme.copyWith(
+    //   base: DrivenButtonStyle(
+    //     foregroundStyle: appTheme.textTheme.labelLarge,
+    //     foregroundColor: appTheme.colorScheme.onSurface,
+    //     borderColor: appTheme.colorScheme.outline,
+    //     shadowColor: appTheme.colorScheme.shadow,
+    //     overlayColor: appTheme.brightness.isDark ? Colors.white : null,
+    //   ),
+    //   filled: DrivenButtonStyle(
+    //     backgroundColor: appTheme.unselectedWidgetColor,
+    //     selectedStyle: ButtonStyle(
+    //       backgroundColor: appTheme.brightness.isLight
+    //           ? appTheme.colorScheme.primary
+    //           : appTheme.colorScheme.inversePrimary,
+    //     ),
+    //   ),
+    //   outlined: DrivenButtonStyle(
+    //     backgroundColor: Colors.transparent,
+    //     selectedStyle: ButtonStyle(
+    //       foregroundColor: appTheme.colorScheme.primary,
+    //       borderColor: appTheme.colorScheme.primary,
+    //     ),
+    //   ),
+    // );
     return ButtonRender(
-      curve: curve ?? buttonTheme.curve,
-      duration: duration ?? buttonTheme.duration,
-      fallback: fallbackStyle,
+      curve: curve,
+      duration: duration,
+      theme: buttonTheme,
       style: buttonStyle.merge(_postStyle),
       selected: selected,
       loading: loading,

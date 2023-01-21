@@ -1,99 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/utils.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'style.dart';
-import 'fallback.dart';
-
-/// Defines the visual properties of [Chip].
-///
-/// Descendant widgets obtain the current [ChipThemeData] object using
-/// `ChipTheme.of(context)`. Instances of [ChipThemeData]
-/// can be customized with [ChipThemeData.copyWith] or [ChipThemeData.merge].
-@immutable
-class ChipThemeData with Diagnosticable {
-  /// The curve to apply when animating the parameters of [Chip] widget.
-  final Curve curve;
-
-  /// The duration over which to animate the parameters of [Chip] widget.
-  final Duration duration;
-
-  /// The [ChipStyle] to be applied to the [Chip] widget
-  final ChipStyle style;
-
-  /// The [ChipStyle] that provides fallback values.
-  final ChipStyleFallback fallback;
-
-  /// Creates a theme data that can be used for [ChipTheme].
-  const ChipThemeData({
-    required this.curve,
-    required this.duration,
-    required this.style,
-    required this.fallback,
-  });
-
-  /// An [ChipThemeData] with some reasonable default values.
-  static final defaults = ChipThemeData(
-    curve: Curves.linear,
-    duration: const Duration(milliseconds: 200),
-    style: DrivenChipStyle.tonal(),
-    fallback: const ChipStyleFallback(),
-  );
-
-  /// Creates a copy of this [ChipThemeData] but with
-  /// the given fields replaced with the new values.
-  ChipThemeData copyWith({
-    Curve? curve,
-    Duration? duration,
-    ChipStyle? style,
-    ChipStyleFallback? fallback,
-  }) {
-    return ChipThemeData(
-      curve: curve ?? this.curve,
-      duration: duration ?? this.duration,
-      style: this.style.merge(style),
-      fallback: this.fallback.merge(fallback),
-    );
-  }
-
-  /// Creates a copy of this [ChipThemeData] but with
-  /// the given fields replaced with the new values.
-  ChipThemeData merge(ChipThemeData? other) {
-    // if null return current object
-    if (other == null) return this;
-
-    return copyWith(
-      curve: other.curve,
-      duration: other.duration,
-      style: other.style,
-      fallback: other.fallback,
-    );
-  }
-
-  Map<String, dynamic> toMap() => {
-        'curve': curve,
-        'duration': duration,
-        'style': style,
-        'fallback': fallback,
-      };
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) return false;
-    return other is ChipThemeData && mapEquals(other.toMap(), toMap());
-  }
-
-  @override
-  int get hashCode => Object.hashAll(toMap().values);
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    toMap().entries.forEach((el) {
-      properties.add(DiagnosticsProperty(el.key, el.value, defaultValue: null));
-    });
-  }
-}
+import 'theme_data.dart';
+import 'theme_preset.dart';
 
 /// A Widget that controls how descendant [Chip]s should look like.
 class ChipTheme extends InheritedTheme {
@@ -117,7 +27,11 @@ class ChipTheme extends InheritedTheme {
     Curve? curve,
     Duration? duration,
     ChipStyle? style,
-    ChipStyleFallback? fallback,
+    ChipStyleByVariant? variantStyle,
+    ChipStyleByVariant? dangerStyle,
+    ChipStyleByVariant? warningStyle,
+    ChipStyleByVariant? successStyle,
+    ChipStyleByVariant? infoStyle,
     ChipThemeData? data,
     required Widget child,
   }) {
@@ -130,7 +44,11 @@ class ChipTheme extends InheritedTheme {
                 curve: curve,
                 duration: duration,
                 style: style,
-                fallback: fallback,
+                variantStyle: variantStyle,
+                dangerStyle: dangerStyle,
+                warningStyle: warningStyle,
+                successStyle: successStyle,
+                infoStyle: infoStyle,
               ),
           child: child,
         );
@@ -150,41 +68,9 @@ class ChipTheme extends InheritedTheme {
     final parentTheme = context.dependOnInheritedWidgetOfExactType<ChipTheme>();
     if (parentTheme != null) return parentTheme.data;
 
-    final appTheme = Theme.of(context);
-    final globalTheme = appTheme.extension<ChipThemeData?>();
-    return ChipThemeData.defaults
-        .copyWith(
-          fallback: ChipStyleFallback(
-            base: DrivenChipStyle(
-              foregroundStyle: appTheme.textTheme.labelLarge,
-              foregroundColor: appTheme.colorScheme.onSurface,
-              borderColor: appTheme.colorScheme.outline,
-              shadowColor: appTheme.colorScheme.shadow,
-              overlayColor: appTheme.brightness.isDark ? Colors.white : null,
-            ),
-            tonal: DrivenChipStyle(
-              selectedStyle: ChipStyle(
-                foregroundColor: appTheme.colorScheme.primary,
-                backgroundColor: appTheme.colorScheme.primary,
-              ),
-            ),
-            filled: DrivenChipStyle(
-              foregroundColor: appTheme.colorScheme.onSurface,
-              backgroundColor: appTheme.unselectedWidgetColor,
-              selectedStyle: ChipStyle(
-                backgroundColor: appTheme.colorScheme.primary,
-              ),
-            ),
-            outlined: DrivenChipStyle(
-              backgroundColor: appTheme.colorScheme.surface,
-              selectedStyle: ChipStyle(
-                foregroundColor: appTheme.colorScheme.primary,
-                borderColor: appTheme.colorScheme.primary,
-              ),
-            ),
-          ),
-        )
-        .merge(globalTheme);
+    final globalTheme = Theme.of(context).extension<ChipThemeData>();
+    final defaultTheme = ChipThemePreset.defaults(context);
+    return defaultTheme.merge(globalTheme);
   }
 
   @override

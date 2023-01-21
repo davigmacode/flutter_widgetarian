@@ -7,6 +7,7 @@ import 'package:widgetarian/src/layout/sheet/types.dart';
 import 'event.dart';
 
 typedef ButtonVariant = SheetVariant;
+typedef ButtonSeverity = SheetSeverity;
 
 /// The style to be applied to button widget
 @immutable
@@ -88,16 +89,16 @@ class ButtonStyle extends SheetStyle {
 
   /// An [ButtonStyle] with some reasonable default values.
   static const defaults = ButtonStyle(
-    clipBehavior: Clip.antiAlias,
-    borderRadius: BorderRadius.all(Radius.circular(25)),
-    margin: EdgeInsets.zero,
+    // clipBehavior: Clip.antiAlias,
+    // borderRadius: BorderRadius.all(Radius.circular(25)),
+    // margin: EdgeInsets.zero,
     padding: EdgeInsets.symmetric(horizontal: 16),
-    height: 40.0,
-    iconSize: 18.0,
-    foregroundSpacing: 8.0,
-    foregroundLoosen: true,
-    foregroundJustify: MainAxisAlignment.center,
-    foregroundStyle: TextStyle(height: 1),
+    // height: 40.0,
+    // iconSize: 18.0,
+    // foregroundSpacing: 8.0,
+    // foregroundLoosen: true,
+    // foregroundJustify: MainAxisAlignment.center,
+    // foregroundStyle: TextStyle(height: 1),
   );
 
   static const disabledForegroundAlpha = 0x61; // 38%
@@ -296,7 +297,8 @@ class ButtonStyle extends SheetStyle {
   }
 
   /// Linearly interpolate between two [ButtonStyle] objects.
-  static ButtonStyle lerp(ButtonStyle? a, ButtonStyle? b, double t) {
+  static ButtonStyle? lerp(ButtonStyle? a, ButtonStyle? b, double t) {
+    if (a == null && b == null) return null;
     return ButtonStyle(
       variant: lerpEnum(a?.variant, b?.variant, t),
       shape: lerpEnum(a?.shape, b?.shape, t),
@@ -433,7 +435,7 @@ class DrivenButtonStyle extends ButtonStyle
   }) : super.from(enabled);
 
   /// Create a [DrivenButtonStyle] with default value for text style.
-  DrivenButtonStyle.text({
+  const DrivenButtonStyle.text({
     Color? color,
     super.width,
     super.height,
@@ -454,7 +456,7 @@ class DrivenButtonStyle extends ButtonStyle
     super.foregroundAlign,
     super.foregroundJustify,
     super.backgroundColor,
-    super.backgroundOpacity = 0,
+    super.backgroundOpacity,
     super.backgroundAlpha,
     super.borderColor,
     super.borderOpacity,
@@ -467,21 +469,18 @@ class DrivenButtonStyle extends ButtonStyle
     super.iconOpacity,
     super.iconSize,
     this.selectedStyle,
-    ButtonStyle? disabledStyle,
+    this.disabledStyle,
     this.hoveredStyle,
     this.focusedStyle,
     this.pressedStyle,
     this.mergeResolved,
-  })  : disabledStyle = const ButtonStyle(
-          foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
-        ).merge(disabledStyle),
-        super(
+  }) : super(
           variant: SheetVariant.text,
           foregroundColor: color,
         );
 
   /// Create a [DrivenButtonStyle] with default value for tonal style.
-  DrivenButtonStyle.tonal({
+  const DrivenButtonStyle.tonal({
     Color? color,
     super.width,
     super.height,
@@ -501,12 +500,12 @@ class DrivenButtonStyle extends ButtonStyle
     super.foregroundExpanded,
     super.foregroundAlign,
     super.foregroundJustify,
-    super.backgroundOpacity = .12,
+    super.backgroundOpacity,
     super.backgroundAlpha,
     super.borderColor,
-    super.borderOpacity = 1,
+    super.borderOpacity,
     super.borderAlpha,
-    super.borderWidth = 1,
+    super.borderWidth,
     super.borderRadius,
     super.borderStyle = BorderStyle.none,
     super.shape,
@@ -514,24 +513,19 @@ class DrivenButtonStyle extends ButtonStyle
     super.iconOpacity,
     super.iconSize,
     this.selectedStyle,
-    ButtonStyle? disabledStyle,
+    this.disabledStyle,
     this.hoveredStyle,
     this.focusedStyle,
     this.pressedStyle,
     this.mergeResolved,
-  })  : disabledStyle = const ButtonStyle(
-          foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
-          backgroundAlpha: ButtonStyle.disabledBackgroundAlpha,
-          borderAlpha: ButtonStyle.disabledBorderAlpha,
-        ).merge(disabledStyle),
-        super(
+  }) : super(
           variant: SheetVariant.tonal,
           foregroundColor: color,
           backgroundColor: color,
         );
 
   /// Create a [DrivenButtonStyle] with default value for filled style.
-  DrivenButtonStyle.filled({
+  const DrivenButtonStyle.filled({
     Color? color,
     super.width,
     super.height,
@@ -552,11 +546,11 @@ class DrivenButtonStyle extends ButtonStyle
     super.foregroundExpanded,
     super.foregroundAlign,
     super.foregroundJustify,
-    super.backgroundOpacity = 1,
+    super.backgroundOpacity,
     super.backgroundAlpha,
-    super.borderOpacity = 0,
+    super.borderOpacity,
     super.borderAlpha,
-    super.borderWidth = 0,
+    super.borderWidth,
     super.borderRadius,
     super.borderStyle = BorderStyle.none,
     super.shape,
@@ -564,26 +558,19 @@ class DrivenButtonStyle extends ButtonStyle
     super.iconOpacity,
     super.iconSize,
     this.selectedStyle,
-    ButtonStyle? disabledStyle,
-    ButtonStyle? hoveredStyle,
+    this.disabledStyle,
+    this.hoveredStyle,
     this.focusedStyle,
-    ButtonStyle? pressedStyle,
+    this.pressedStyle,
     this.mergeResolved,
-  })  : disabledStyle = const ButtonStyle(
-          foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
-          backgroundAlpha: ButtonStyle.disabledBackgroundAlpha,
-          borderAlpha: ButtonStyle.disabledBorderAlpha,
-        ).merge(disabledStyle),
-        hoveredStyle = const ButtonStyle(elevation: 1).merge(hoveredStyle),
-        pressedStyle = const ButtonStyle(elevation: 0).merge(pressedStyle),
-        super(
+  }) : super(
           backgroundColor: color,
           borderColor: color,
           variant: SheetVariant.filled,
         );
 
   /// Create a [DrivenButtonStyle] with default value for elevated style.
-  DrivenButtonStyle.elevated({
+  const DrivenButtonStyle.elevated({
     Color? color,
     super.width,
     super.height,
@@ -594,7 +581,7 @@ class DrivenButtonStyle extends ButtonStyle
     super.overlayColor,
     super.shadowColor,
     super.surfaceTint,
-    super.elevation = 1,
+    super.elevation,
     super.foregroundStyle,
     super.foregroundColor,
     super.foregroundOpacity,
@@ -604,11 +591,11 @@ class DrivenButtonStyle extends ButtonStyle
     super.foregroundExpanded,
     super.foregroundAlign,
     super.foregroundJustify,
-    super.backgroundOpacity = 1,
+    super.backgroundOpacity,
     super.backgroundAlpha,
-    super.borderOpacity = 0,
+    super.borderOpacity,
     super.borderAlpha,
-    super.borderWidth = 0,
+    super.borderWidth,
     super.borderRadius,
     super.borderStyle = BorderStyle.none,
     super.shape,
@@ -616,26 +603,19 @@ class DrivenButtonStyle extends ButtonStyle
     super.iconOpacity,
     super.iconSize,
     this.selectedStyle,
-    ButtonStyle? disabledStyle,
-    ButtonStyle? hoveredStyle,
+    this.disabledStyle,
+    this.hoveredStyle,
     this.focusedStyle,
-    ButtonStyle? pressedStyle,
+    this.pressedStyle,
     this.mergeResolved,
-  })  : disabledStyle = const ButtonStyle(
-          foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
-          backgroundAlpha: ButtonStyle.disabledBackgroundAlpha,
-          borderAlpha: ButtonStyle.disabledBorderAlpha,
-        ).merge(disabledStyle),
-        hoveredStyle = const ButtonStyle(elevation: 3).merge(hoveredStyle),
-        pressedStyle = const ButtonStyle(elevation: 1).merge(pressedStyle),
-        super(
+  }) : super(
           backgroundColor: color,
           borderColor: color,
           variant: SheetVariant.elevated,
         );
 
   /// Create a [DrivenButtonStyle] with default value for outlined style.
-  DrivenButtonStyle.outlined({
+  const DrivenButtonStyle.outlined({
     Color? color,
     super.width,
     super.height,
@@ -656,11 +636,11 @@ class DrivenButtonStyle extends ButtonStyle
     super.foregroundAlign,
     super.foregroundJustify,
     super.backgroundColor,
-    super.backgroundOpacity = 0,
+    super.backgroundOpacity,
     super.backgroundAlpha,
-    super.borderOpacity = 1,
+    super.borderOpacity,
     super.borderAlpha,
-    super.borderWidth = 1,
+    super.borderWidth,
     super.borderRadius,
     super.borderStyle = BorderStyle.solid,
     super.shape,
@@ -668,16 +648,12 @@ class DrivenButtonStyle extends ButtonStyle
     super.iconOpacity,
     super.iconSize,
     this.selectedStyle,
-    ButtonStyle? disabledStyle,
+    this.disabledStyle,
     this.hoveredStyle,
     this.focusedStyle,
     this.pressedStyle,
     this.mergeResolved,
-  })  : disabledStyle = const ButtonStyle(
-          foregroundAlpha: ButtonStyle.disabledForegroundAlpha,
-          borderAlpha: ButtonStyle.disabledBorderAlpha,
-        ).merge(disabledStyle),
-        super(
+  }) : super(
           foregroundColor: color,
           borderColor: color,
           variant: SheetVariant.outlined,

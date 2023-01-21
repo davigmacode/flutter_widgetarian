@@ -1,12 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/event.dart';
-import 'package:widgetarian/feedback.dart';
-import 'package:widgetarian/utils.dart';
-import 'package:widgetarian/anchor.dart';
 import 'event.dart';
 import 'style.dart';
-import 'fallback.dart';
 import 'theme.dart';
+import 'render.dart';
 
 /// Switches toggle the state of a single setting on or off.
 class Switch extends StatelessWidget {
@@ -139,8 +135,7 @@ class Switch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = SwitchTheme.of(context);
-    return _SwitchRender(
+    return SwitchRender(
       tooltip: tooltip,
       selected: selected,
       onChanged: onChanged,
@@ -149,196 +144,10 @@ class Switch extends StatelessWidget {
       autofocus: autofocus,
       focusNode: focusNode,
       eventsController: eventsController,
-      duration: duration ?? theme.duration,
-      curve: curve ?? theme.curve,
-      style: theme.style.merge(style),
-      fallback: theme.fallback,
+      duration: duration,
+      curve: curve,
+      style: style,
+      theme: SwitchTheme.of(context),
     );
-  }
-}
-
-/// Chip widget with smooth animation, event driven style, and many more.
-class _SwitchRender extends StatefulWidget {
-  const _SwitchRender({
-    Key? key,
-    this.tooltip,
-    this.selected = false,
-    this.indeterminate = false,
-    this.disabled = false,
-    this.autofocus = false,
-    this.focusNode,
-    this.onChanged,
-    this.eventsController,
-    required this.duration,
-    required this.curve,
-    required this.style,
-    required this.fallback,
-  }) : super(key: key);
-
-  final String? tooltip;
-  final bool selected;
-  final bool indeterminate;
-  final bool disabled;
-  final bool autofocus;
-  final FocusNode? focusNode;
-  final ValueChanged<bool>? onChanged;
-  final SwitchEventController? eventsController;
-  final Curve curve;
-  final Duration duration;
-  final SwitchStyle style;
-  final SwitchStyleFallback fallback;
-
-  bool get enabled => !disabled;
-
-  bool get canTap => enabled && hasCallback;
-
-  bool get hasCallback {
-    return onChanged != null;
-  }
-
-  @override
-  _SwitchRenderState createState() => _SwitchRenderState();
-}
-
-class _SwitchRenderState extends State<_SwitchRender>
-    with WidgetEventMixin<_SwitchRender> {
-  SwitchStyle style = const SwitchStyle();
-  SwitchStyle fallback = const SwitchStyle();
-
-  @protected
-  void setStyle() {
-    final rawStyle = widget.style;
-    final resStyle = DrivenSwitchStyle.evaluate(rawStyle, widgetEvents.value);
-    style = SwitchStyle.from(resStyle);
-
-    final rawFallback = widget.fallback.resolve(style.variant);
-    final resFallback =
-        DrivenSwitchStyle.evaluate(rawFallback, widgetEvents.value);
-    fallback = SwitchStyle.from(resFallback);
-    setState(() {});
-  }
-
-  Color? get trackBorderColor => Colors.withTransparency(
-        style.trackBorderColor ?? fallback.trackBorderColor,
-        opacity: style.trackBorderOpacity,
-        alpha: style.trackBorderAlpha,
-      );
-
-  Color? get trackColor => Colors.withTransparency(
-        style.trackColor ?? fallback.trackColor,
-        opacity: style.trackOpacity,
-        alpha: style.trackAlpha,
-      );
-
-  Color? get thumbColor => Colors.withTransparency(
-        style.thumbColor ?? fallback.thumbColor,
-        opacity: style.thumbOpacity,
-        alpha: style.thumbAlpha,
-      );
-
-  ShapeBorder get thumbShape {
-    return style.thumbShape ?? const CircleBorder();
-  }
-
-  void onTap() {
-    widgetEvents.toggle(SwitchEvent.pressed, false);
-    widget.onChanged?.call(!widget.selected);
-  }
-
-  void onTapCancel() {
-    widgetEvents.toggle(SwitchEvent.pressed, false);
-  }
-
-  void onTapDown(TapDownDetails details) {
-    widgetEvents.toggle(SwitchEvent.pressed, true);
-  }
-
-  void onHover(bool value) {
-    widgetEvents.toggle(SwitchEvent.hovered, value);
-  }
-
-  void onFocus(bool value) {
-    widgetEvents.toggle(SwitchEvent.focused, value);
-  }
-
-  @override
-  void initState() {
-    initWidgetEvents(widget.eventsController);
-    widgetEvents.toggle(SwitchEvent.indeterminate, widget.indeterminate);
-    widgetEvents.toggle(SwitchEvent.selected, widget.selected);
-    widgetEvents.toggle(SwitchEvent.disabled, widget.disabled);
-    setStyle();
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(_SwitchRender oldWidget) {
-    if (mounted) {
-      updateWidgetEvents(oldWidget.eventsController, widget.eventsController);
-      widgetEvents.toggle(SwitchEvent.indeterminate, widget.indeterminate);
-      widgetEvents.toggle(SwitchEvent.selected, widget.selected);
-      widgetEvents.toggle(SwitchEvent.disabled, widget.disabled);
-      setStyle();
-      super.didUpdateWidget(oldWidget);
-    }
-  }
-
-  @override
-  void didChangeWidgetEvents() {
-    if (mounted) {
-      setStyle();
-      super.didChangeWidgetEvents();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Widget result = AnimatedSwitchmark(
-      duration: widget.duration,
-      curve: widget.curve,
-      trackColor: trackColor,
-      trackBorderColor: trackBorderColor,
-      trackBorderWidth: style.trackBorderWidth,
-      trackBorderRadius: style.trackBorderRadius,
-      trackHeight: style.trackHeight,
-      thumbShape: thumbShape,
-      thumbColor: thumbColor,
-      thumbInset: style.thumbInset,
-      thumbSize: style.thumbSize,
-      thumbShadow: style.thumbShadow,
-      thumbElevation: style.thumbElevation,
-      overlayColor: style.overlayColor,
-      overlayOpacity: style.overlayOpacity,
-      overlayRadius: style.overlayRadius,
-      size: style.size,
-      value: widget.indeterminate ? null : widget.selected,
-    );
-    if (style.padding != null) {
-      result = Padding(
-        padding: style.padding!,
-        child: result,
-      );
-    }
-
-    if (widget.hasCallback) {
-      result = Anchor(
-        shape: BoxShape.circle,
-        overlayDisabled: true,
-        onTap: onTap,
-        onTapDown: onTapDown,
-        onTapCancel: onTapCancel,
-        onHover: onHover,
-        child: result,
-      );
-    }
-
-    if (style.margin != null) {
-      result = Padding(
-        padding: style.margin!,
-        child: result,
-      );
-    }
-
-    return result;
   }
 }

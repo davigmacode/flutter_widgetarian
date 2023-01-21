@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/event.dart';
+import 'package:widgetarian/src/utils/lerp.dart';
 import 'event.dart';
 
 /// The style to be applied to [Radio] widget
@@ -266,6 +267,77 @@ class RadioStyle with Diagnosticable {
 
     return style;
   }
+
+  /// Linearly interpolate between two [RadioStyle] objects.
+  static RadioStyle? lerp(RadioStyle? a, RadioStyle? b, double t) {
+    if (a == null && b == null) return null;
+    return RadioStyle(
+      size: lerpDouble(a?.size, b?.size, t),
+      shape: lerpEnum(a?.shape, b?.shape, t),
+      margin: EdgeInsetsGeometry.lerp(a?.margin, b?.margin, t),
+      padding: EdgeInsetsGeometry.lerp(a?.padding, b?.padding, t),
+      backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t),
+      backgroundOpacity:
+          lerpDouble(a?.backgroundOpacity, b?.backgroundOpacity, t),
+      backgroundAlpha: lerpInt(a?.backgroundAlpha, b?.backgroundAlpha, t),
+      borderColor: Color.lerp(a?.borderColor, b?.borderColor, t),
+      borderOpacity: lerpDouble(a?.borderOpacity, b?.borderOpacity, t),
+      borderAlpha: lerpInt(a?.borderAlpha, b?.borderAlpha, t),
+      borderWidth: lerpDouble(a?.borderWidth, b?.borderWidth, t),
+      borderRadius:
+          BorderRadiusGeometry.lerp(a?.borderRadius, b?.borderRadius, t),
+      borderStyle: lerpEnum(a?.borderStyle, b?.borderStyle, t),
+      thumbInset: lerpDouble(a?.thumbInset, b?.thumbInset, t),
+      thumbColor: Color.lerp(a?.thumbColor, b?.thumbColor, t),
+      thumbOpacity: lerpDouble(a?.thumbOpacity, b?.thumbOpacity, t),
+      thumbAlpha: lerpInt(a?.thumbAlpha, b?.thumbAlpha, t),
+      overlayColor: Color.lerp(a?.overlayColor, b?.overlayColor, t),
+      overlayOpacity: lerpDouble(a?.overlayOpacity, b?.overlayOpacity, t),
+      overlayDisabled: lerpBool(a?.overlayDisabled, b?.overlayDisabled, t),
+      overlayRadius: lerpDouble(a?.overlayRadius, b?.overlayRadius, t),
+    );
+  }
+
+  Map<String, dynamic> toMap() => {
+        'size': size,
+        'shape': shape,
+        'margin': margin,
+        'padding': padding,
+        'backgroundColor': backgroundColor,
+        'backgroundOpacity': backgroundOpacity,
+        'backgroundAlpha': backgroundAlpha,
+        'borderColor': borderColor,
+        'borderOpacity': borderOpacity,
+        'borderAlpha': borderAlpha,
+        'borderWidth': borderWidth,
+        'borderRadius': borderRadius,
+        'borderStyle': borderStyle,
+        'thumbInset': thumbInset,
+        'thumbColor': thumbColor,
+        'thumbOpacity': thumbOpacity,
+        'thumbAlpha': thumbAlpha,
+        'overlayColor': overlayColor,
+        'overlayOpacity': overlayOpacity,
+        'overlayDisabled': overlayDisabled,
+        'overlayRadius': overlayRadius,
+      };
+
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) return false;
+    return other is RadioStyle && mapEquals(other.toMap(), toMap());
+  }
+
+  @override
+  int get hashCode => Object.hashAll(toMap().values);
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    toMap().entries.forEach((el) {
+      properties.add(DiagnosticsProperty(el.key, el.value));
+    });
+  }
 }
 
 /// Create a [RadioStyle] that handle the widget events
@@ -335,7 +407,7 @@ class DrivenRadioStyle extends RadioStyle
   });
 
   /// Create a [DrivenRadioStyle] with value
-  /// from another [CheckboxStyle].
+  /// from another [RadioStyle].
   DrivenRadioStyle.from(
     RadioStyle? enabledStyle, {
     this.selectedStyle,

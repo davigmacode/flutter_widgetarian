@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
-import 'types.dart';
 import 'style.dart';
 import 'theme_data.dart';
 import 'theme_preset.dart';
@@ -28,8 +27,11 @@ class SheetTheme extends InheritedTheme {
     Curve? curve,
     Duration? duration,
     SheetStyle? style,
-    Map<SheetVariant, SheetStyle?>? variants,
-    Map<SheetSeverity, SheetStyle?>? severities,
+    SheetStyleByVariant? variantStyle,
+    SheetStyleByVariant? dangerStyle,
+    SheetStyleByVariant? warningStyle,
+    SheetStyleByVariant? successStyle,
+    SheetStyleByVariant? infoStyle,
     SheetThemeData? data,
     required Widget child,
   }) {
@@ -42,8 +44,11 @@ class SheetTheme extends InheritedTheme {
                 curve: curve,
                 duration: duration,
                 style: style,
-                variants: variants,
-                severities: severities,
+                variantStyle: variantStyle,
+                dangerStyle: dangerStyle,
+                warningStyle: warningStyle,
+                successStyle: successStyle,
+                infoStyle: infoStyle,
               ),
           child: child,
         );
@@ -64,10 +69,9 @@ class SheetTheme extends InheritedTheme {
         context.dependOnInheritedWidgetOfExactType<SheetTheme>();
     if (parentTheme != null) return parentTheme.data;
 
-    final globalTheme = Theme.of(context).extension<SheetThemeData?>();
-    final severityTheme = SheetThemePreset.severity(context);
-    final defaultTheme = SheetThemePreset.m3(context);
-    return severityTheme.merge(defaultTheme).merge(globalTheme);
+    final globalTheme = Theme.of(context).extension<SheetThemeData>();
+    final defaultTheme = SheetThemePreset.defaults(context);
+    return defaultTheme.merge(globalTheme);
   }
 
   @override

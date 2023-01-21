@@ -215,21 +215,6 @@ class SheetStyle with Diagnosticable {
   /// {@endtemplate}
   final double? iconSize;
 
-  /// An [SheetStyle] with some reasonable default values.
-  static const defaults = SheetStyle(
-    shape: BoxShape.rectangle,
-    clipBehavior: Clip.antiAlias,
-    borderStyle: BorderStyle.solid,
-    borderWidth: 1.0,
-  );
-
-  /// An [SheetStyle] with some reasonable disabled values.
-  static const disabled = SheetStyle(
-    foregroundAlpha: 0x61, // 38%
-    backgroundAlpha: 0x0c, // 38% * 12% = 5%
-    borderAlpha: 0x0c, // 38% * 12% = 5%
-  );
-
   /// Whether or not this is text variant
   bool get isText => variant == SheetVariant.text;
 
@@ -245,17 +230,19 @@ class SheetStyle with Diagnosticable {
   /// Whether or not this is outlined variant
   bool get isOutlined => variant == SheetVariant.outlined;
 
-  /// Whether or not this is danger severity
-  bool get isDanger => severity == SheetSeverity.danger;
+  /// An [SheetStyle] with some reasonable default values.
+  static const defaults = SheetStyle(
+    variant: SheetVariant.text,
+    shape: BoxShape.rectangle,
+    clipBehavior: Clip.antiAlias,
+  );
 
-  /// Whether or not this is warning severity
-  bool get isWarning => severity == SheetSeverity.warning;
-
-  /// Whether or not this is success severity
-  bool get isSuccess => severity == SheetSeverity.success;
-
-  /// Whether or not this is info severity
-  bool get isInfo => severity == SheetSeverity.info;
+  /// An [SheetStyle] with some reasonable disabled values.
+  static const disabled = SheetStyle(
+    foregroundAlpha: 0x61, // 38%
+    backgroundAlpha: 0x0c, // 38% * 12% = 5%
+    borderAlpha: 0x0c, // 38% * 12% = 5%
+  );
 
   /// [SheetStyle] with an empty value.
   const SheetStyle({
@@ -357,14 +344,14 @@ class SheetStyle with Diagnosticable {
     this.foregroundExpanded,
     this.foregroundAlign,
     this.foregroundJustify,
-    this.backgroundOpacity = .12,
+    this.backgroundOpacity,
     this.backgroundAlpha,
     this.borderColor,
-    this.borderOpacity = 1,
+    this.borderOpacity,
     this.borderAlpha,
-    this.borderWidth = 1,
+    this.borderWidth,
     this.borderRadius,
-    this.borderStyle = BorderStyle.none,
+    this.borderStyle,
     this.shape,
     this.iconColor,
     this.iconOpacity,
@@ -397,13 +384,13 @@ class SheetStyle with Diagnosticable {
     this.foregroundExpanded,
     this.foregroundAlign,
     this.foregroundJustify,
-    this.backgroundOpacity = .9,
+    this.backgroundOpacity,
     this.backgroundAlpha,
-    this.borderOpacity = 0,
+    this.borderOpacity,
     this.borderAlpha,
-    this.borderWidth = 0,
+    this.borderWidth,
     this.borderRadius,
-    this.borderStyle = BorderStyle.none,
+    this.borderStyle,
     this.shape,
     this.iconColor,
     this.iconOpacity,
@@ -426,7 +413,7 @@ class SheetStyle with Diagnosticable {
     this.overlayColor,
     this.shadowColor,
     this.surfaceTint,
-    this.elevation = 1,
+    this.elevation,
     this.foregroundStyle,
     this.foregroundColor,
     this.foregroundOpacity,
@@ -436,13 +423,13 @@ class SheetStyle with Diagnosticable {
     this.foregroundExpanded,
     this.foregroundAlign,
     this.foregroundJustify,
-    this.backgroundOpacity = 1,
+    this.backgroundOpacity,
     this.backgroundAlpha,
-    this.borderOpacity = 0,
+    this.borderOpacity,
     this.borderAlpha,
-    this.borderWidth = 0,
+    this.borderWidth,
     this.borderRadius,
-    this.borderStyle = BorderStyle.none,
+    this.borderStyle,
     this.shape,
     this.iconColor,
     this.iconOpacity,
@@ -475,13 +462,13 @@ class SheetStyle with Diagnosticable {
     this.foregroundAlign,
     this.foregroundJustify,
     this.backgroundColor,
-    this.backgroundOpacity = 0,
+    this.backgroundOpacity,
     this.backgroundAlpha,
-    this.borderOpacity = 1,
+    this.borderOpacity,
     this.borderAlpha,
-    this.borderWidth = 1,
+    this.borderWidth,
     this.borderRadius,
-    this.borderStyle = BorderStyle.solid,
+    this.borderStyle,
     this.shape,
     this.iconColor,
     this.iconOpacity,

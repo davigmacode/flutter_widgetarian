@@ -1,11 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/event.dart';
-import 'package:widgetarian/utils.dart';
-import 'package:widgetarian/feedback.dart';
-import 'package:widgetarian/anchor.dart';
 import 'style.dart';
 import 'theme.dart';
 import 'event.dart';
+import 'render.dart';
 
 /// Checkboxes allow the user to select one or more items from a set.
 class Checkbox extends StatelessWidget {
@@ -137,8 +134,7 @@ class Checkbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final checkboxTheme = CheckboxTheme.of(context);
-    return _CheckboxRender(
+    return CheckboxRender(
       tooltip: tooltip,
       onChanged: onChanged,
       selected: selected,
@@ -147,203 +143,10 @@ class Checkbox extends StatelessWidget {
       autofocus: autofocus,
       focusNode: focusNode,
       eventsController: eventsController,
-      duration: duration ?? checkboxTheme.duration,
-      curve: curve ?? checkboxTheme.curve,
-      style: checkboxTheme.style.merge(style),
-      fallback: checkboxTheme.fallback,
+      duration: duration,
+      curve: curve,
+      style: style,
+      theme: CheckboxTheme.of(context),
     );
-  }
-}
-
-class _CheckboxRender extends StatefulWidget {
-  const _CheckboxRender({
-    Key? key,
-    this.tooltip,
-    this.selected = false,
-    this.indeterminate = false,
-    this.disabled = false,
-    this.autofocus = false,
-    this.focusNode,
-    this.onChanged,
-    this.eventsController,
-    required this.duration,
-    required this.curve,
-    required this.style,
-    required this.fallback,
-  }) : super(key: key);
-
-  final String? tooltip;
-  final bool selected;
-  final bool indeterminate;
-  final bool disabled;
-  final bool autofocus;
-  final FocusNode? focusNode;
-  final ValueChanged<bool>? onChanged;
-  final CheckboxEventController? eventsController;
-  final Duration duration;
-  final Curve curve;
-  final CheckboxStyle style;
-  final CheckboxStyle fallback;
-
-  bool get enabled => !disabled;
-
-  bool get hasCallback {
-    return onChanged != null;
-  }
-
-  @override
-  _CheckboxRenderState createState() => _CheckboxRenderState();
-}
-
-class _CheckboxRenderState extends State<_CheckboxRender>
-    with WidgetEventMixin<_CheckboxRender> {
-  CheckboxStyle style = const CheckboxStyle();
-  CheckboxStyle fallback = const CheckboxStyle();
-
-  @protected
-  void setStyle() {
-    final rawStyle = widget.style;
-    final resStyle = DrivenCheckboxStyle.evaluate(rawStyle, widgetEvents.value);
-    style = CheckboxStyle.from(resStyle);
-
-    final rawFallback = widget.fallback;
-    final resFallback =
-        DrivenCheckboxStyle.evaluate(rawFallback, widgetEvents.value);
-    fallback = CheckboxStyle.from(resFallback);
-    setState(() {});
-  }
-
-  Color? get checkmarkColor => Colors.withTransparency(
-        style.checkmarkColor ?? Colors.onSurface(backgroundColor),
-        opacity: style.checkmarkOpacity,
-        alpha: style.checkmarkAlpha,
-      );
-
-  Color? get backgroundColor => Colors.withTransparency(
-        style.backgroundColor ?? fallback.backgroundColor,
-        opacity: style.backgroundOpacity,
-        alpha: style.backgroundAlpha,
-      );
-
-  Color get borderColor {
-    return Colors.withTransparency(
-      style.borderColor ?? fallback.borderColor,
-      opacity: style.borderOpacity,
-      alpha: style.borderAlpha,
-    )!;
-  }
-
-  BorderSide get borderSide {
-    return BorderSide(
-      color: borderColor,
-      width: style.borderWidth!,
-      style: style.borderStyle!,
-    );
-  }
-
-  ShapeBorder get border {
-    return style.shape == BoxShape.rectangle
-        ? RoundedRectangleBorder(
-            borderRadius: style.borderRadius!,
-            side: borderSide,
-          )
-        : CircleBorder(side: borderSide);
-  }
-
-  void onTap() {
-    widgetEvents.toggle(CheckboxEvent.pressed, false);
-    widget.onChanged?.call(!widget.selected);
-  }
-
-  void onTapCancel() {
-    widgetEvents.toggle(CheckboxEvent.pressed, false);
-  }
-
-  void onTapDown(TapDownDetails details) {
-    widgetEvents.toggle(CheckboxEvent.pressed, true);
-  }
-
-  void onHover(bool value) {
-    widgetEvents.toggle(CheckboxEvent.hovered, value);
-  }
-
-  void onFocus(bool value) {
-    widgetEvents.toggle(CheckboxEvent.focused, value);
-  }
-
-  @override
-  void initState() {
-    initWidgetEvents(widget.eventsController);
-    widgetEvents.toggle(CheckboxEvent.indeterminate, widget.indeterminate);
-    widgetEvents.toggle(CheckboxEvent.selected, widget.selected);
-    widgetEvents.toggle(CheckboxEvent.disabled, widget.disabled);
-    setStyle();
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(_CheckboxRender oldWidget) {
-    if (mounted) {
-      updateWidgetEvents(oldWidget.eventsController, widget.eventsController);
-      widgetEvents.toggle(CheckboxEvent.indeterminate, widget.indeterminate);
-      widgetEvents.toggle(CheckboxEvent.selected, widget.selected);
-      widgetEvents.toggle(CheckboxEvent.disabled, widget.disabled);
-      setStyle();
-      super.didUpdateWidget(oldWidget);
-    }
-  }
-
-  @override
-  void didChangeWidgetEvents() {
-    if (mounted) {
-      setStyle();
-      super.didChangeWidgetEvents();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Widget result = AnimatedCheckmark(
-      duration: widget.duration,
-      curve: widget.curve,
-      color: checkmarkColor,
-      weight: style.checkmarkWeight,
-      size: style.size,
-      fill: backgroundColor,
-      shape: border,
-      value: widget.indeterminate ? null : widget.selected,
-    );
-
-    if (style.padding != null) {
-      result = Padding(
-        padding: style.padding!,
-        child: result,
-      );
-    }
-
-    if (widget.hasCallback) {
-      result = Anchor(
-        disabled: widget.disabled,
-        shape: BoxShape.circle,
-        overlayColor: style.overlayColor,
-        overlayOpacity: style.overlayOpacity,
-        overlayDisabled: style.overlayDisabled,
-        radius: style.overlayRadius,
-        onTap: onTap,
-        onTapDown: onTapDown,
-        onTapCancel: onTapCancel,
-        onHover: onHover,
-        child: result,
-      );
-    }
-
-    if (style.margin != null) {
-      result = Padding(
-        padding: style.margin!,
-        child: result,
-      );
-    }
-
-    return result;
   }
 }
