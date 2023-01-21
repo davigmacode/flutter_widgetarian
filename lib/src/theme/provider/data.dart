@@ -1,45 +1,35 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-/// The theme config
-///
-/// Contains light and dark theme data, and the theme mode
+/// The theme config contains light and dark theme data
 class ThemeConfig with Diagnosticable {
-  /// Default constructor
-  const ThemeConfig._({
-    required this.data,
-    required this.darkData,
-    this.description,
-  });
-
-  factory ThemeConfig({
+  /// Create a theme config
+  ThemeConfig({
     ThemeData? data,
+    this.description,
+  })  : data = data ?? ThemeData.light(),
+        darkData = ThemeData.dark();
+
+  /// Create a theme config for each theme mode
+  ThemeConfig.mode({
     ThemeData? light,
     ThemeData? dark,
-    String? description,
-  }) =>
-      ThemeConfig._(
-        data: data ?? light ?? ThemeData.light(),
-        darkData: dark ?? ThemeData.dark(),
-        description: description,
-      );
+    this.description,
+  })  : data = light ?? ThemeData.light(),
+        darkData = dark ?? ThemeData.dark();
 
-  factory ThemeConfig.fromColor(
+  /// Create a theme config from color
+  ThemeConfig.fromColor(
     Color color, {
-    String? description,
-  }) =>
-      ThemeConfig._(
-        data: ThemeData(
+    this.description,
+  })  : data = ThemeData(
           brightness: Brightness.light,
           colorSchemeSeed: color,
         ),
-        darkData: ThemeData(
+        darkData = ThemeData(
           brightness: Brightness.dark,
           colorSchemeSeed: color,
-          toggleableActiveColor: color,
-        ),
-        description: description,
-      );
+        );
 
   @override
   bool operator ==(Object other) =>
@@ -73,8 +63,8 @@ class ThemeConfig with Diagnosticable {
     ThemeData? dark,
     String? description,
   }) {
-    return ThemeConfig(
-      data: data ?? light ?? this.data,
+    return ThemeConfig.mode(
+      light: data ?? light ?? lightData,
       dark: dark ?? darkData,
       description: description ?? this.description,
     );
@@ -86,8 +76,8 @@ class ThemeConfig with Diagnosticable {
     // if null return current object
     if (other == null) return this;
 
-    return ThemeConfig(
-      data: other.data,
+    return copyWith(
+      light: other.lightData,
       dark: other.darkData,
       description: other.description,
     );

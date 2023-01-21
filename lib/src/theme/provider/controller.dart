@@ -1,14 +1,12 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'model.dart';
+import 'types.dart';
 import 'data.dart';
 
 class ThemeController extends ChangeNotifier {
   /// Internal Constructor
   ThemeController._({
-    required this.selected,
     required this.available,
-    required this.mode,
     required this.modeIcons,
     this.initialMode = ThemeMode.system,
     this.initialTheme = 'default',
@@ -17,7 +15,8 @@ class ThemeController extends ChangeNotifier {
     this.onModeChanged,
     this.onColorChanged,
     this.onChanged,
-  });
+  })  : mode = initialMode,
+        selected = initialTheme;
 
   /// Controller which handles updating and controlling current theme.
   ///
@@ -55,30 +54,28 @@ class ThemeController extends ChangeNotifier {
     final bool hasDefaultTheme = light != null || dark != null;
     final ThemeMap defaultTheme = hasDefaultTheme
         ? {
-            'default': ThemeConfig(
+            'default': ThemeConfig.mode(
               description: 'Default Theme',
               light: light,
               dark: dark,
             )
           }
         : {};
-    final ThemeMap available = defaultTheme..addAll(themes);
+    final ThemeMap availableTheme = defaultTheme..addAll(themes);
     assert(
-      available.isNotEmpty,
+      availableTheme.isNotEmpty,
       'The available themes should not empty, provide [themes] or [light] or [dark]',
     );
-    initialTheme ??= available.entries.first.key;
+    initialTheme ??= availableTheme.entries.first.key;
     assert(
-      available[initialTheme] != null,
+      availableTheme[initialTheme] != null,
       'The [initialTheme] should include in provided [themes]',
     );
     return ThemeController._(
       initialTheme: initialTheme,
       initialMode: initialMode,
-      selected: initialTheme,
-      mode: initialMode,
+      available: availableTheme,
       modeIcons: modeIcons ?? defaultModeIcons,
-      available: available,
       onAvailableChanged: onAvailableChanged,
       onThemeChanged: onThemeChanged,
       onModeChanged: onModeChanged,
@@ -156,7 +153,7 @@ class ThemeController extends ChangeNotifier {
   /// {@template widgetarian.theme.controller.defaultModeIcons}
   /// Default map of the icons represent to the theme mode
   /// {@endtemplate}
-  static ThemeModeIcons defaultModeIcons = {
+  static const ThemeModeIcons defaultModeIcons = {
     ThemeMode.system: Icons.brightness_auto_rounded,
     ThemeMode.light: Icons.brightness_low_rounded,
     ThemeMode.dark: Icons.brightness_2_rounded

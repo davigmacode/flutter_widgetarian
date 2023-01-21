@@ -1,4 +1,4 @@
 export 'widget.dart';
 export 'controller.dart';
-export 'model.dart';
+export 'types.dart';
 export 'data.dart';
