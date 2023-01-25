@@ -177,7 +177,8 @@ class AvatarStyle with Diagnosticable {
   );
 
   /// Linearly interpolate between two icon theme data objects.
-  static AvatarStyle lerp(AvatarStyle? a, AvatarStyle? b, double t) {
+  static AvatarStyle? lerp(AvatarStyle? a, AvatarStyle? b, double t) {
+    if (a == null && b == null) return null;
     return AvatarStyle(
       size: lerpDouble(a?.size, b?.size, t),
       shape: t < 0.5 ? a?.shape : b?.shape,

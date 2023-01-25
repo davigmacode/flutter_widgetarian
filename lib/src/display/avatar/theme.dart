@@ -2,87 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'style.dart';
-
-/// Defines the visual properties of [Avatar].
-///
-/// Descendant widgets obtain the current [AvatarThemeData] object using
-/// `AvatarTheme.of(context)`. Instances of [AvatarThemeData]
-/// can be customized with [AvatarThemeData.copyWith] or [AvatarThemeData.merge].
-@immutable
-class AvatarThemeData with Diagnosticable {
-  /// The curve to apply when animating the parameters of avatar widget.
-  final Curve curve;
-
-  /// The duration over which to animate the parameters of avatar widget.
-  final Duration duration;
-
-  /// The [AvatarStyle] to be applied to the avatar widget
-  final AvatarStyle style;
-
-  /// Creates a theme data that can be used for [AvatarTheme].
-  const AvatarThemeData({
-    required this.curve,
-    required this.duration,
-    required this.style,
-  });
-
-  /// An [AvatarThemeData] with some reasonable default values.
-  static const defaults = AvatarThemeData(
-    curve: Curves.linear,
-    duration: Duration(milliseconds: 200),
-    style: AvatarStyle.defaults,
-  );
-
-  /// Creates a copy of this [AvatarThemeData] but with
-  /// the given fields replaced with the new values.
-  AvatarThemeData copyWith({
-    Curve? curve,
-    Duration? duration,
-    AvatarStyle? style,
-  }) {
-    return AvatarThemeData(
-      curve: curve ?? this.curve,
-      duration: duration ?? this.duration,
-      style: this.style.merge(style),
-    );
-  }
-
-  /// Creates a copy of this [AvatarThemeData] but with
-  /// the given fields replaced with the new values.
-  AvatarThemeData merge(AvatarThemeData? other) {
-    // if null return current object
-    if (other == null) return this;
-
-    return copyWith(
-      curve: other.curve,
-      duration: other.duration,
-      style: other.style,
-    );
-  }
-
-  Map<String, dynamic> toMap() => {
-        'curve': curve,
-        'duration': duration,
-        'style': style,
-      };
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) return false;
-    return other is AvatarThemeData && mapEquals(other.toMap(), toMap());
-  }
-
-  @override
-  int get hashCode => Object.hashAll(toMap().values);
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    toMap().entries.forEach((el) {
-      properties.add(DiagnosticsProperty(el.key, el.value, defaultValue: null));
-    });
-  }
-}
+import 'theme_data.dart';
 
 /// A Widget that controls how descendant avatar should look like.
 class AvatarTheme extends InheritedTheme {
@@ -138,9 +58,9 @@ class AvatarTheme extends InheritedTheme {
         context.dependOnInheritedWidgetOfExactType<AvatarTheme>();
     if (parentTheme != null) return parentTheme.data;
 
-    final appTheme = Theme.of(context);
-    final globalTheme = appTheme.extension<AvatarThemeData?>();
-    return AvatarThemeData.defaults.merge(globalTheme);
+    final globalTheme = Theme.of(context).extension<AvatarThemeData>();
+    final defaultTheme = AvatarThemeData.defaults(context);
+    return defaultTheme.merge(globalTheme);
   }
 
   @override
