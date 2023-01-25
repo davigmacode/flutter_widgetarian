@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'extension/severity.dart';
+import 'extension/color/main.dart';
 
 abstract class ThemePreset {
   @protected
@@ -9,10 +9,11 @@ abstract class ThemePreset {
   ThemeData get appTheme => Theme.of(context);
 
   @protected
-  SeverityThemeData get severityTheme => SeverityTheme.of(context);
+  TextTheme get textTheme => appTheme.textTheme;
 
   @protected
-  ColorScheme get colorScheme => appTheme.colorScheme;
+  ColorThemeDefaults get colorTheme =>
+      ColorThemeDefaults(context, ColorTheme.of(context));
 
   @protected
   bool get isLight => appTheme.brightness == Brightness.light;

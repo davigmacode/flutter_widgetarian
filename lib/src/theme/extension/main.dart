@@ -1,4 +1,4 @@
-export 'severity.dart';
+export 'color/main.dart';
 
 export 'package:widgetarian/src/button/style.dart';
 export 'package:widgetarian/src/button/theme_data.dart';
@@ -6,9 +6,13 @@ export 'package:widgetarian/src/button/theme_preset.dart';
 export 'package:widgetarian/src/button/theme.dart';
 
 export 'package:widgetarian/src/display/avatar/style.dart';
+export 'package:widgetarian/src/display/avatar/theme_data.dart';
+export 'package:widgetarian/src/display/avatar/theme_preset.dart';
 export 'package:widgetarian/src/display/avatar/theme.dart';
 
 export 'package:widgetarian/src/display/badge/style.dart';
+export 'package:widgetarian/src/display/badge/theme_data.dart';
+export 'package:widgetarian/src/display/badge/theme_preset.dart';
 export 'package:widgetarian/src/display/badge/theme.dart';
 
 export 'package:widgetarian/src/display/chip/style.dart';
@@ -17,6 +21,8 @@ export 'package:widgetarian/src/display/chip/theme_preset.dart';
 export 'package:widgetarian/src/display/chip/theme.dart';
 
 export 'package:widgetarian/src/feedback/alert/style.dart';
+export 'package:widgetarian/src/feedback/alert/theme_data.dart';
+export 'package:widgetarian/src/feedback/alert/theme_preset.dart';
 export 'package:widgetarian/src/feedback/alert/theme.dart';
 
 export 'package:widgetarian/src/feedback/overlay/style.dart';
