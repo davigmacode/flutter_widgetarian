@@ -5,6 +5,7 @@ import 'package:widgetarian/src/utils/lerp.dart';
 import 'package:widgetarian/src/input/foundation.dart';
 import 'package:widgetarian/src/input/radio/style.dart';
 import 'package:widgetarian/src/button/style.dart';
+import 'theme_preset.dart';
 
 /// Defines the visual properties of [RadioTile].
 ///
@@ -38,13 +39,26 @@ class RadioTileThemeData extends ThemeExtension<RadioTileThemeData>
     required this.buttonStyle,
   });
 
-  /// An [RadioTileThemeData] with some reasonable default values.
-  const RadioTileThemeData.defaults()
-      : curve = Curves.linear,
-        duration = const Duration(milliseconds: 200),
-        controlAffinity = ControlAffinity.leading,
-        radioStyle = const DrivenRadioStyle(padding: EdgeInsets.zero),
-        buttonStyle = const DrivenButtonStyle.text();
+  /// A [RadioTileThemeData] with some reasonable default values.
+  static const fallback = RadioTileThemeData(
+    curve: Curves.linear,
+    duration: Duration(milliseconds: 200),
+    controlAffinity: ControlAffinity.leading,
+    radioStyle: RadioStyle(padding: EdgeInsets.zero),
+    buttonStyle: ButtonStyle.defaults,
+  );
+
+  /// Creates a [RadioTileThemeData] from another one that probably null.
+  RadioTileThemeData.from([RadioTileThemeData? other])
+      : curve = other?.curve ?? fallback.curve,
+        duration = other?.duration ?? fallback.duration,
+        controlAffinity = other?.controlAffinity ?? fallback.controlAffinity,
+        radioStyle = other?.radioStyle ?? fallback.radioStyle,
+        buttonStyle = other?.buttonStyle ?? fallback.buttonStyle;
+
+  /// A [RadioTileThemeData] with default values.
+  factory RadioTileThemeData.defaults(BuildContext context) =>
+      RadioTileThemeDefaults(context);
 
   /// Creates a copy of this [RadioTileThemeData] but with
   /// the given fields replaced with the new values.

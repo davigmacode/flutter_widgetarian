@@ -65,7 +65,7 @@ class RadioTileTheme extends InheritedTheme {
     if (parentTheme != null) return parentTheme.data;
 
     final globalTheme = Theme.of(context).extension<RadioTileThemeData>();
-    const defaultTheme = RadioTileThemeData.defaults();
+    final defaultTheme = RadioTileThemeData.defaults(context);
     return defaultTheme.merge(globalTheme);
   }
 

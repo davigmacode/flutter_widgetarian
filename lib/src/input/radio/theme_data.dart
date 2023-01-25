@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'package:widgetarian/src/utils/lerp.dart';
 import 'style.dart';
+import 'theme_preset.dart';
 
 /// Defines the visual properties of [Radio].
 ///
@@ -28,11 +29,28 @@ class RadioThemeData extends ThemeExtension<RadioThemeData>
     required this.style,
   });
 
-  /// An [RadioThemeData] with some reasonable default values.
-  const RadioThemeData.defaults()
-      : curve = Curves.linear,
-        duration = const Duration(milliseconds: 200),
-        style = RadioStyle.defaults;
+  /// A [RadioThemeData] with some reasonable default values.
+  static const fallback = RadioThemeData(
+    curve: Curves.linear,
+    duration: Duration(milliseconds: 200),
+    style: RadioStyle(),
+  );
+
+  /// Creates a [RadioThemeData] from another one that probably null.
+  RadioThemeData.from([RadioThemeData? other])
+      : curve = other?.curve ?? fallback.curve,
+        duration = other?.duration ?? fallback.duration,
+        style = other?.style ?? fallback.style;
+
+  /// A [RadioThemeData] with default values.
+  factory RadioThemeData.defaults(BuildContext context) =>
+      RadioThemeDefaults(context);
+
+  /// A [RadioThemeData] with material 2 default values.
+  factory RadioThemeData.m2(BuildContext context) => RadioThemeM2(context);
+
+  /// A [RadioThemeData] with material 3 default values.
+  factory RadioThemeData.m3(BuildContext context) => RadioThemeM3(context);
 
   /// Creates a copy of this [RadioThemeData] but with
   /// the given fields replaced with the new values.

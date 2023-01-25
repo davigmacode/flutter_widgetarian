@@ -72,28 +72,6 @@ class RadioStyle with Diagnosticable {
   /// The radius of the overlay.
   final double? overlayRadius;
 
-  /// An [RadioStyle] with some reasonable default values.
-  static const defaults = DrivenRadioStyle(
-    size: 18.0,
-    shape: BoxShape.circle,
-    padding: EdgeInsets.all(9),
-    borderStyle: BorderStyle.solid,
-    borderRadius: BorderRadius.zero,
-    borderWidth: 2.0,
-    thumbOpacity: 0,
-    thumbInset: 1,
-    selectedStyle: RadioStyle(
-      thumbInset: .45,
-      thumbOpacity: 1,
-    ),
-    hoveredStyle: RadioStyle(overlayRadius: 20.0),
-    pressedStyle: RadioStyle(overlayRadius: 10.0),
-    disabledStyle: RadioStyle(
-      backgroundAlpha: RadioStyle.disabledBackgroundAlpha,
-      borderAlpha: RadioStyle.disabledBorderAlpha,
-    ),
-  );
-
   static const disabledBackgroundAlpha = 0x0c; // 38% * 12% = 5%
   static const disabledBorderAlpha = 0x0c; // 38% * 12% = 5%
 

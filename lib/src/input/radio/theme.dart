@@ -59,7 +59,7 @@ class RadioTheme extends InheritedTheme {
     if (parentTheme != null) return parentTheme.data;
 
     final globalTheme = Theme.of(context).extension<RadioThemeData>();
-    const defaultTheme = RadioThemeData.defaults();
+    final defaultTheme = RadioThemeData.defaults(context);
     return defaultTheme.merge(globalTheme);
   }
 

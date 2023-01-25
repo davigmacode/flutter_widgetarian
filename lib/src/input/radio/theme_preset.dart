@@ -5,23 +5,41 @@ import 'style.dart';
 import 'theme_data.dart';
 
 @immutable
-abstract class RadioThemePreset extends RadioThemeData with ThemePreset {
-  @protected
-  const RadioThemePreset(this.context) : super.defaults();
+class RadioThemeDefaults extends RadioThemeData with ThemePreset {
+  RadioThemeDefaults(this.context, [RadioThemeData? other]) : super.from(other);
 
   @override
   final BuildContext context;
 
-  /// A [RadioThemeData] with material 2 default values.
-  static RadioThemeData m2(BuildContext context) => RadioThemeM2(context);
-
-  /// A [RadioThemeData] with material 3 default values.
-  static RadioThemeData m3(BuildContext context) => RadioThemeM3(context);
+  @override
+  get style => const DrivenRadioStyle(
+        size: 18.0,
+        shape: BoxShape.circle,
+        padding: EdgeInsets.all(9),
+        borderStyle: BorderStyle.solid,
+        borderRadius: BorderRadius.zero,
+        borderWidth: 2.0,
+        thumbOpacity: 0,
+        thumbInset: 1,
+        selectedStyle: RadioStyle(
+          thumbInset: .45,
+          thumbOpacity: 1,
+        ),
+        hoveredStyle: RadioStyle(overlayRadius: 20.0),
+        pressedStyle: RadioStyle(overlayRadius: 10.0),
+        disabledStyle: RadioStyle(
+          backgroundAlpha: RadioStyle.disabledBackgroundAlpha,
+          borderAlpha: RadioStyle.disabledBorderAlpha,
+        ),
+      ).merge(super.style);
 }
 
 @immutable
-class RadioThemeM2 extends RadioThemePreset {
-  const RadioThemeM2(super.context);
+class RadioThemeM2 extends RadioThemeData with ThemePreset {
+  RadioThemeM2(this.context, [RadioThemeData? other]) : super.from(other);
+
+  @override
+  final BuildContext context;
 
   @override
   get style => DrivenRadioStyle(
@@ -35,12 +53,15 @@ class RadioThemeM2 extends RadioThemePreset {
               ? appTheme.colorScheme.primary
               : appTheme.colorScheme.inversePrimary,
         ),
-      );
+      ).merge(super.style);
 }
 
 @immutable
-class RadioThemeM3 extends RadioThemePreset {
-  const RadioThemeM3(super.context);
+class RadioThemeM3 extends RadioThemeData with ThemePreset {
+  RadioThemeM3(this.context, [RadioThemeData? other]) : super.from(other);
+
+  @override
+  final BuildContext context;
 
   @override
   get style => DrivenRadioStyle(
@@ -54,5 +75,5 @@ class RadioThemeM3 extends RadioThemePreset {
               ? appTheme.colorScheme.primary
               : appTheme.colorScheme.inversePrimary,
         ),
-      );
+      ).merge(super.style);
 }

@@ -6,19 +6,10 @@ import 'package:widgetarian/src/theme/preset.dart';
 import 'theme_data.dart';
 
 @immutable
-class RadioTileThemePreset extends RadioTileThemeData with ThemePreset {
-  @protected
-  const RadioTileThemePreset(this.context) : super.defaults();
+class RadioTileThemeDefaults extends RadioTileThemeData with ThemePreset {
+  RadioTileThemeDefaults(this.context, [RadioTileThemeData? other])
+      : super.from(other);
 
   @override
   final BuildContext context;
-
-  /// A [RadioTileThemeData] with default values.
-  static RadioTileThemeData defaults(BuildContext context) =>
-      RadioTileThemeDefaults(context);
-}
-
-@immutable
-class RadioTileThemeDefaults extends RadioTileThemePreset {
-  const RadioTileThemeDefaults(super.context);
 }
