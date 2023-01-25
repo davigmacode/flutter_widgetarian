@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:widgetarian/src/layout/sheet/style.dart';
 import 'package:widgetarian/src/layout/sheet/types.dart';
+import 'package:widgetarian/src/utils/lerp.dart';
 
 typedef BadgeVariant = SheetVariant;
 typedef BadgeSeverity = SheetSeverity;
@@ -43,12 +44,12 @@ class BadgeStyle extends SheetStyle {
     super.iconColor,
     super.iconOpacity,
     super.iconSize,
-  }) : super(variant: SheetVariant.filled);
+  }) : super(variant: BadgeVariant.filled);
 
   /// Create a badge's style from another style
   BadgeStyle.from(BadgeStyle? other)
       : super(
-          variant: SheetVariant.filled,
+          variant: BadgeVariant.filled,
           severity: other?.severity,
           width: other?.width,
           height: other?.height,
@@ -116,7 +117,7 @@ class BadgeStyle extends SheetStyle {
     super.iconOpacity,
     super.iconSize,
   }) : super(
-          variant: SheetVariant.filled,
+          variant: BadgeVariant.filled,
           shape: BoxShape.circle,
           width: size,
           height: size,
@@ -257,6 +258,51 @@ class BadgeStyle extends SheetStyle {
       iconColor: other.iconColor,
       iconOpacity: other.iconOpacity,
       iconSize: other.iconSize,
+    );
+  }
+
+  /// Linearly interpolate between two [BadgeStyle] objects.
+  static BadgeStyle? lerp(BadgeStyle? a, BadgeStyle? b, double t) {
+    if (a == null && b == null) return null;
+    return BadgeStyle(
+      severity: lerpEnum(a?.severity, b?.severity, t),
+      shape: lerpEnum(a?.shape, b?.shape, t),
+      width: lerpDouble(a?.width, b?.width, t),
+      height: lerpDouble(a?.height, b?.height, t),
+      margin: EdgeInsetsGeometry.lerp(a?.margin, b?.margin, t),
+      padding: EdgeInsetsGeometry.lerp(a?.padding, b?.padding, t),
+      alignment: lerpEnum(a?.alignment, b?.alignment, t),
+      clipBehavior: lerpEnum(a?.clipBehavior, b?.clipBehavior, t),
+      overlayColor: Color.lerp(a?.overlayColor, b?.overlayColor, t),
+      shadowColor: Color.lerp(a?.shadowColor, b?.shadowColor, t),
+      surfaceTint: Color.lerp(a?.surfaceTint, b?.surfaceTint, t),
+      elevation: lerpDouble(a?.elevation, b?.elevation, t),
+      foregroundStyle:
+          TextStyle.lerp(a?.foregroundStyle, b?.foregroundStyle, t),
+      foregroundColor: Color.lerp(a?.foregroundColor, b?.foregroundColor, t),
+      foregroundOpacity:
+          lerpDouble(a?.foregroundOpacity, b?.foregroundOpacity, t),
+      foregroundAlpha: lerpInt(a?.foregroundAlpha, b?.foregroundAlpha, t),
+      foregroundSpacing:
+          lerpDouble(a?.foregroundSpacing, b?.foregroundSpacing, t),
+      foregroundExpanded:
+          lerpBool(a?.foregroundExpanded, b?.foregroundExpanded, t),
+      foregroundAlign: lerpEnum(a?.foregroundAlign, b?.foregroundAlign, t),
+      foregroundJustify:
+          lerpEnum(a?.foregroundJustify, b?.foregroundJustify, t),
+      backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t),
+      backgroundOpacity:
+          lerpDouble(a?.backgroundOpacity, b?.backgroundOpacity, t),
+      backgroundAlpha: lerpInt(a?.backgroundAlpha, b?.backgroundAlpha, t),
+      borderColor: Color.lerp(a?.borderColor, b?.backgroundColor, t),
+      borderOpacity: lerpDouble(a?.borderOpacity, b?.borderOpacity, t),
+      borderAlpha: lerpInt(a?.borderAlpha, b?.borderAlpha, t),
+      borderWidth: lerpDouble(a?.borderWidth, b?.borderWidth, t),
+      borderRadius: BorderRadius.lerp(a?.borderRadius, b?.borderRadius, t),
+      borderStyle: lerpEnum(a?.borderStyle, b?.borderStyle, t),
+      iconColor: Color.lerp(a?.iconColor, b?.iconColor, t),
+      iconOpacity: lerpDouble(a?.iconOpacity, b?.iconOpacity, t),
+      iconSize: lerpDouble(a?.iconSize, b?.iconSize, t),
     );
   }
 }

@@ -4,30 +4,10 @@ import 'package:widgetarian/layout.dart';
 import 'style.dart';
 import 'theme.dart';
 
-typedef BadgeTransitionBuilder = AnimatedSwitcherTransitionBuilder;
-typedef BadgeLayoutBuilder = AnimatedSwitcherLayoutBuilder;
-
-abstract class BadgeTransition {
-  /// The new child is given a [FadeTransition] which increases opacity as
-  /// the animation goes from 0.0 to 1.0, and decreases when the animation is
-  /// reversed.
-  static const fade = AnimatedSwitcher.defaultTransitionBuilder;
-
-  static const scale = _scale;
-  static Widget _scale(Widget child, Animation<double> animation) {
-    return ScaleTransition(
-      scale: animation,
-      child: child,
-    );
-  }
-}
-
-abstract class BadgeLayout {
-  /// The new child is placed in a [Stack] that sizes itself to match the
-  /// largest of the child or a previous child. The children are centered on
-  /// each other.
-  static const defaults = AnimatedSwitcher.defaultLayoutBuilder;
-}
+typedef BadgeTransitionBuilder = ExpansionTransitionBuilder;
+typedef BadgeLayoutBuilder = ExpansionLayoutBuilder;
+typedef BadgeTransition = ExpansionTransition;
+typedef BadgeLayout = ExpansionLayout;
 
 /// Display element at the corner of another element
 class Badge extends StatelessWidget {
@@ -98,21 +78,19 @@ class Badge extends StatelessWidget {
         Positioned(
           child: Transform.translate(
             offset: effectiveOffset,
-            child: AnimatedSwitcher(
+            child: Expansion(
               duration: effectiveDuration,
-              switchInCurve: effectiveCurve,
-              switchOutCurve: effectiveCurve,
+              curve: effectiveCurve,
               transitionBuilder: transitionBuilder,
               layoutBuilder: layoutBuilder,
-              child: visible
-                  ? Sheet(
-                      key: ValueKey(content),
-                      curve: effectiveCurve,
-                      duration: effectiveDuration,
-                      style: badgeStyle,
-                      child: hasContent ? Text(content!) : null,
-                    )
-                  : const SizedBox.shrink(),
+              value: visible,
+              child: Sheet(
+                key: ValueKey(content),
+                curve: effectiveCurve,
+                duration: effectiveDuration,
+                style: badgeStyle,
+                child: hasContent ? Text(content!) : null,
+              ),
             ),
           ),
         ),

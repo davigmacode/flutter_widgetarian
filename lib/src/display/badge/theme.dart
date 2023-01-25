@@ -2,105 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'style.dart';
-
-/// Defines the visual properties of [Badge].
-///
-/// Descendant widgets obtain the current [BadgeThemeData] object using
-/// `BadgeTheme.of(context)`. Instances of [BadgeThemeData]
-/// can be customized with [BadgeThemeData.copyWith] or [BadgeThemeData.merge].
-@immutable
-class BadgeThemeData with Diagnosticable {
-  /// The curve to apply when animating the parameters of badge widget.
-  final Curve curve;
-
-  /// The duration over which to animate the parameters of badge widget.
-  final Duration duration;
-
-  /// Align the badge content within the child.
-  final AlignmentGeometry alignment;
-
-  /// Offset of the badge content
-  final Offset offset;
-
-  /// The [BadgeStyle] to be applied to the badge widget
-  final BadgeStyle style;
-
-  /// Creates a theme data that can be used for [BadgeTheme].
-  const BadgeThemeData({
-    required this.curve,
-    required this.duration,
-    required this.alignment,
-    required this.offset,
-    required this.style,
-  });
-
-  /// An [BadgeThemeData] with some reasonable default values.
-  static const defaults = BadgeThemeData(
-    curve: Curves.linear,
-    duration: Duration(milliseconds: 200),
-    alignment: Alignment.topRight,
-    offset: Offset.zero,
-    style: BadgeStyle.defaults,
-  );
-
-  /// Creates a copy of this [BadgeThemeData] but with
-  /// the given fields replaced with the new values.
-  BadgeThemeData copyWith({
-    Curve? curve,
-    Duration? duration,
-    AlignmentGeometry? alignment,
-    Offset? offset,
-    BadgeStyle? style,
-  }) {
-    return BadgeThemeData(
-      curve: curve ?? this.curve,
-      duration: duration ?? this.duration,
-      alignment: alignment ?? this.alignment,
-      offset: offset ?? this.offset,
-      style: this.style.merge(style),
-    );
-  }
-
-  /// Creates a copy of this [BadgeThemeData] but with
-  /// the given fields replaced with the new values.
-  BadgeThemeData merge(BadgeThemeData? other) {
-    // if null return current object
-    if (other == null) return this;
-
-    return copyWith(
-      curve: other.curve,
-      duration: other.duration,
-      alignment: other.alignment,
-      offset: other.offset,
-      style: other.style,
-    );
-  }
-
-  Map<String, dynamic> toMap() => {
-        'curve': curve,
-        'duration': duration,
-        'alignment': alignment,
-        'offset': offset,
-        'style': style,
-      };
-
-  @override
-  bool operator ==(Object other) {
-    if (other.runtimeType != runtimeType) return false;
-    return other is BadgeThemeData && mapEquals(other.toMap(), toMap());
-  }
-
-  @override
-  int get hashCode => Object.hashAll(toMap().values);
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    toMap().entries.forEach((el) {
-      properties.add(DiagnosticsProperty(el.key, el.value, defaultValue: null));
-    });
-  }
-}
+import 'theme_data.dart';
 
 /// A Widget that controls how descendant badges should look like.
 class BadgeTheme extends InheritedTheme {
@@ -160,9 +62,9 @@ class BadgeTheme extends InheritedTheme {
         context.dependOnInheritedWidgetOfExactType<BadgeTheme>();
     if (parentTheme != null) return parentTheme.data;
 
-    final appTheme = Theme.of(context);
-    final globalTheme = appTheme.extension<BadgeThemeData?>();
-    return BadgeThemeData.defaults.merge(globalTheme);
+    final globalTheme = Theme.of(context).extension<BadgeThemeData>();
+    final defaultTheme = BadgeThemeData.defaults(context);
+    return defaultTheme.merge(globalTheme);
   }
 
   @override
