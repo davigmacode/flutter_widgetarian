@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'style.dart';
 import 'theme_data.dart';
-import 'theme_preset.dart';
 
 /// A Widget that controls how descendant [Sheet]s should look like.
 class SheetTheme extends InheritedTheme {
@@ -70,7 +69,7 @@ class SheetTheme extends InheritedTheme {
     if (parentTheme != null) return parentTheme.data;
 
     final globalTheme = Theme.of(context).extension<SheetThemeData>();
-    final defaultTheme = SheetThemePreset.defaults(context);
+    final defaultTheme = SheetThemeData.defaults(context);
     return defaultTheme.merge(globalTheme);
   }
 

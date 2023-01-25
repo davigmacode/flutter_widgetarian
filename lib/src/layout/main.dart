@@ -21,5 +21,7 @@ export 'tiles/list_tile/widget.dart';
 
 export 'sheet/style.dart';
 export 'sheet/types.dart';
+export 'sheet/theme_data.dart';
+export 'sheet/theme_preset.dart';
 export 'sheet/theme.dart';
 export 'sheet/widget.dart';

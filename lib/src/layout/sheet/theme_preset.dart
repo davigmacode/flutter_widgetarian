@@ -5,27 +5,12 @@ import 'style.dart';
 import 'theme_data.dart';
 
 @immutable
-abstract class SheetThemePreset extends SheetThemeData with ThemePreset {
+class SheetThemeDefaults extends SheetThemeData with ThemePreset {
   @protected
-  const SheetThemePreset(this.context) : super.defaults();
+  SheetThemeDefaults(this.context, [SheetThemeData? other]) : super.from(other);
 
   @override
   final BuildContext context;
-
-  /// A [SheetThemeData] with some default values.
-  static SheetThemeData defaults(BuildContext context) =>
-      SheetThemeDefaults(context);
-
-  /// A [SheetThemeData] with material 2 default values.
-  static SheetThemeData m2(BuildContext context) => SheetThemeM2(context);
-
-  /// A [SheetThemeData] with material 3 default values.
-  static SheetThemeData m3(BuildContext context) => SheetThemeM3(context);
-}
-
-@immutable
-class SheetThemeDefaults extends SheetThemePreset {
-  const SheetThemeDefaults(super.context);
 
   @override
   get variantStyle => {
@@ -52,177 +37,183 @@ class SheetThemeDefaults extends SheetThemePreset {
           borderWidth: 1,
           borderStyle: BorderStyle.solid,
         ),
-      };
+      }.merge(super.variantStyle);
 
   @override
   get dangerStyle => {
         SheetVariant.text: SheetStyle(
-          foregroundColor: severityTheme.danger,
-          backgroundColor: colorScheme.surface,
+          foregroundColor: colorTheme.danger,
+          backgroundColor: colorTheme.surface,
         ),
         SheetVariant.tonal: SheetStyle(
-          foregroundColor: severityTheme.danger,
-          backgroundColor: severityTheme.danger,
+          foregroundColor: colorTheme.danger,
+          backgroundColor: colorTheme.danger,
         ),
         SheetVariant.filled: SheetStyle(
-          backgroundColor: severityTheme.danger,
-          borderColor: severityTheme.danger,
+          backgroundColor: colorTheme.danger,
+          borderColor: colorTheme.danger,
         ),
         SheetVariant.elevated: SheetStyle(
-          shadowColor: severityTheme.danger,
-          foregroundColor: severityTheme.danger,
-          backgroundColor: colorScheme.surface,
+          shadowColor: colorTheme.danger,
+          foregroundColor: colorTheme.danger,
+          backgroundColor: colorTheme.surface,
         ),
         SheetVariant.outlined: SheetStyle(
-          foregroundColor: severityTheme.danger,
-          backgroundColor: colorScheme.surface,
-          borderColor: severityTheme.danger,
+          foregroundColor: colorTheme.danger,
+          backgroundColor: colorTheme.surface,
+          borderColor: colorTheme.danger,
         ),
-      };
+      }.merge(super.dangerStyle);
 
   @override
   get warningStyle => {
         SheetVariant.text: SheetStyle(
-          foregroundColor: severityTheme.warning,
-          backgroundColor: colorScheme.surface,
+          foregroundColor: colorTheme.warning,
+          backgroundColor: colorTheme.surface,
         ),
         SheetVariant.tonal: SheetStyle(
-          foregroundColor: severityTheme.warning,
-          backgroundColor: severityTheme.warning,
+          foregroundColor: colorTheme.warning,
+          backgroundColor: colorTheme.warning,
         ),
         SheetVariant.filled: SheetStyle(
-          backgroundColor: severityTheme.warning,
-          borderColor: severityTheme.warning,
+          backgroundColor: colorTheme.warning,
+          borderColor: colorTheme.warning,
         ),
         SheetVariant.elevated: SheetStyle(
-          shadowColor: severityTheme.warning,
-          foregroundColor: severityTheme.warning,
-          backgroundColor: colorScheme.surface,
+          shadowColor: colorTheme.warning,
+          foregroundColor: colorTheme.warning,
+          backgroundColor: colorTheme.surface,
         ),
         SheetVariant.outlined: SheetStyle(
-          foregroundColor: severityTheme.warning,
-          backgroundColor: colorScheme.surface,
-          borderColor: severityTheme.warning,
+          foregroundColor: colorTheme.warning,
+          backgroundColor: colorTheme.surface,
+          borderColor: colorTheme.warning,
         ),
-      };
+      }.merge(super.warningStyle);
 
   @override
   get successStyle => {
         SheetVariant.text: SheetStyle(
-          foregroundColor: severityTheme.success,
-          backgroundColor: colorScheme.surface,
+          foregroundColor: colorTheme.success,
+          backgroundColor: colorTheme.surface,
         ),
         SheetVariant.tonal: SheetStyle(
-          foregroundColor: severityTheme.success,
-          backgroundColor: severityTheme.success,
+          foregroundColor: colorTheme.success,
+          backgroundColor: colorTheme.success,
         ),
         SheetVariant.filled: SheetStyle(
-          backgroundColor: severityTheme.success,
-          borderColor: severityTheme.success,
+          backgroundColor: colorTheme.success,
+          borderColor: colorTheme.success,
         ),
         SheetVariant.elevated: SheetStyle(
-          shadowColor: severityTheme.success,
-          foregroundColor: severityTheme.success,
-          backgroundColor: colorScheme.surface,
+          shadowColor: colorTheme.success,
+          foregroundColor: colorTheme.success,
+          backgroundColor: colorTheme.surface,
         ),
         SheetVariant.outlined: SheetStyle(
-          foregroundColor: severityTheme.success,
-          backgroundColor: colorScheme.surface,
-          borderColor: severityTheme.success,
+          foregroundColor: colorTheme.success,
+          backgroundColor: colorTheme.surface,
+          borderColor: colorTheme.success,
         ),
-      };
+      }.merge(super.successStyle);
 
   @override
   get infoStyle => {
         SheetVariant.text: SheetStyle(
-          foregroundColor: severityTheme.info,
-          backgroundColor: colorScheme.surface,
+          foregroundColor: colorTheme.info,
+          backgroundColor: colorTheme.surface,
         ),
         SheetVariant.tonal: SheetStyle(
-          foregroundColor: severityTheme.info,
-          backgroundColor: severityTheme.info,
+          foregroundColor: colorTheme.info,
+          backgroundColor: colorTheme.info,
         ),
         SheetVariant.filled: SheetStyle(
-          backgroundColor: severityTheme.info,
-          borderColor: severityTheme.info,
+          backgroundColor: colorTheme.info,
+          borderColor: colorTheme.info,
         ),
         SheetVariant.elevated: SheetStyle(
-          shadowColor: severityTheme.info,
-          foregroundColor: severityTheme.info,
-          backgroundColor: colorScheme.surface,
+          shadowColor: colorTheme.info,
+          foregroundColor: colorTheme.info,
+          backgroundColor: colorTheme.surface,
         ),
         SheetVariant.outlined: SheetStyle(
-          foregroundColor: severityTheme.info,
-          backgroundColor: colorScheme.surface,
-          borderColor: severityTheme.info,
+          foregroundColor: colorTheme.info,
+          backgroundColor: colorTheme.surface,
+          borderColor: colorTheme.info,
         ),
-      };
+      }.merge(super.infoStyle);
 }
 
 @immutable
-class SheetThemeM2 extends SheetThemePreset {
-  const SheetThemeM2(super.context);
+class SheetThemeM2 extends SheetThemeData with ThemePreset {
+  SheetThemeM2(this.context, [SheetThemeData? other]) : super.from(other);
+
+  @override
+  final BuildContext context;
 
   @override
   get style => SheetStyle(
-        borderColor: colorScheme.outline,
+        borderColor: colorTheme.outline,
         shadowColor: appTheme.shadowColor,
-      );
+      ).merge(super.style);
 
   @override
   get variantStyle => {
         SheetVariant.text: SheetStyle(
-          foregroundColor: colorScheme.onSurface,
-          backgroundColor: colorScheme.surface,
+          foregroundColor: colorTheme.onSurface,
+          backgroundColor: colorTheme.surface,
         ),
         SheetVariant.tonal: SheetStyle(
-          foregroundColor: colorScheme.onSurface,
+          foregroundColor: colorTheme.onSurface,
           backgroundColor: appTheme.unselectedWidgetColor,
         ),
         SheetVariant.filled: SheetStyle(
           backgroundColor: appTheme.unselectedWidgetColor,
         ),
         SheetVariant.elevated: SheetStyle(
-          backgroundColor: colorScheme.surface,
+          backgroundColor: colorTheme.surface,
         ),
         SheetVariant.outlined: SheetStyle(
-          foregroundColor: colorScheme.onSurface,
-          backgroundColor: colorScheme.surface,
+          foregroundColor: colorTheme.onSurface,
+          backgroundColor: colorTheme.surface,
         ),
-      };
+      }.merge(super.variantStyle);
 }
 
 @immutable
-class SheetThemeM3 extends SheetThemePreset {
-  const SheetThemeM3(super.context);
+class SheetThemeM3 extends SheetThemeData with ThemePreset {
+  SheetThemeM3(this.context, [SheetThemeData? other]) : super.from(other);
+
+  @override
+  final BuildContext context;
 
   @override
   get style => SheetStyle(
-        borderColor: colorScheme.outline,
-        shadowColor: colorScheme.shadow,
-      );
+        borderColor: colorTheme.outline,
+        shadowColor: colorTheme.shadow,
+      ).merge(super.style);
 
   @override
   get variantStyle => {
         SheetVariant.text: SheetStyle(
-          foregroundColor: appTheme.colorScheme.onSurface,
-          backgroundColor: colorScheme.surface,
+          foregroundColor: colorTheme.onSurface,
+          backgroundColor: colorTheme.surface,
         ),
         SheetVariant.tonal: SheetStyle(
           backgroundOpacity: .3,
-          foregroundColor: appTheme.colorScheme.onSurface,
-          backgroundColor: appTheme.colorScheme.surfaceVariant,
+          foregroundColor: colorTheme.onSurface,
+          backgroundColor: colorTheme.surfaceVariant,
         ),
         SheetVariant.filled: SheetStyle(
-          backgroundColor: appTheme.colorScheme.surfaceVariant,
+          backgroundColor: colorTheme.surfaceVariant,
         ),
         SheetVariant.elevated: SheetStyle(
-          surfaceTint: appTheme.colorScheme.surfaceTint,
-          backgroundColor: appTheme.colorScheme.surface,
+          surfaceTint: colorTheme.surfaceTint,
+          backgroundColor: colorTheme.surface,
         ),
         SheetVariant.outlined: SheetStyle(
-          foregroundColor: appTheme.colorScheme.onSurface,
-          backgroundColor: appTheme.colorScheme.surface,
+          foregroundColor: colorTheme.onSurface,
+          backgroundColor: colorTheme.surface,
         ),
-      };
+      }.merge(super.variantStyle);
 }

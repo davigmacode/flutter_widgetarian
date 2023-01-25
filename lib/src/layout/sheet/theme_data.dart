@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/animation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'package:widgetarian/src/utils/lerp.dart';
 import 'style.dart';
 import 'types.dart';
+import 'theme_preset.dart';
 
 /// Map of [SheetStyle] by [SheetVariant] as key
 typedef SheetStyleByVariant = Map<SheetVariant, SheetStyle?>;
@@ -83,15 +84,37 @@ class SheetThemeData extends ThemeExtension<SheetThemeData>
   });
 
   /// Create a [SheetThemeData] with some reasonable default values.
-  const SheetThemeData.defaults()
-      : curve = Curves.linear,
-        duration = const Duration(milliseconds: 200),
-        style = SheetStyle.defaults,
-        variantStyle = const {},
-        dangerStyle = const {},
-        warningStyle = const {},
-        successStyle = const {},
-        infoStyle = const {};
+  static const fallback = SheetThemeData(
+    curve: Curves.linear,
+    duration: Duration(milliseconds: 200),
+    style: SheetStyle.defaults,
+    variantStyle: {},
+    dangerStyle: {},
+    warningStyle: {},
+    successStyle: {},
+    infoStyle: {},
+  );
+
+  /// Creates a [SheetThemeData] from another one that probably null.
+  SheetThemeData.from([SheetThemeData? other])
+      : curve = other?.curve ?? fallback.curve,
+        duration = other?.duration ?? fallback.duration,
+        style = other?.style ?? fallback.style,
+        variantStyle = other?.variantStyle ?? fallback.variantStyle,
+        dangerStyle = other?.dangerStyle ?? fallback.dangerStyle,
+        warningStyle = other?.warningStyle ?? fallback.warningStyle,
+        successStyle = other?.successStyle ?? fallback.successStyle,
+        infoStyle = other?.infoStyle ?? fallback.infoStyle;
+
+  /// A [SheetThemeData] with some default values.
+  static SheetThemeData defaults(BuildContext context) =>
+      SheetThemeDefaults(context);
+
+  /// A [SheetThemeData] with material 2 default values.
+  static SheetThemeData m2(BuildContext context) => SheetThemeM2(context);
+
+  /// A [SheetThemeData] with material 3 default values.
+  static SheetThemeData m3(BuildContext context) => SheetThemeM3(context);
 
   /// Return [SheetStyle] that depends on [variant] and [severity]
   SheetStyle resolve({SheetVariant? variant, SheetSeverity? severity}) {
