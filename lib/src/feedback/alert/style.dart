@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:widgetarian/src/layout/sheet/style.dart';
 import 'package:widgetarian/src/layout/sheet/types.dart';
+import 'package:widgetarian/src/utils/lerp.dart';
 
 typedef AlertVariant = SheetVariant;
 typedef AlertSeverity = SheetSeverity;
@@ -95,12 +96,12 @@ class AlertStyle extends SheetStyle {
     super.foregroundExpanded,
     super.foregroundAlign,
     super.foregroundJustify,
-    super.backgroundOpacity = 0.12,
+    super.backgroundOpacity,
     super.backgroundAlpha,
     super.borderColor,
-    super.borderOpacity = 1.0,
+    super.borderOpacity,
     super.borderAlpha,
-    super.borderWidth = 1.0,
+    super.borderWidth,
     super.borderRadius,
     super.borderStyle = BorderStyle.none,
     super.iconColor,
@@ -108,7 +109,7 @@ class AlertStyle extends SheetStyle {
     super.iconSize,
   }) : super(
           width: double.infinity,
-          variant: SheetVariant.tonal,
+          variant: AlertVariant.tonal,
           backgroundColor: color,
           foregroundColor: color,
         );
@@ -132,11 +133,11 @@ class AlertStyle extends SheetStyle {
     super.foregroundExpanded,
     super.foregroundAlign,
     super.foregroundJustify,
-    super.backgroundOpacity = 0.8,
+    super.backgroundOpacity,
     super.backgroundAlpha,
-    super.borderOpacity = 0.0,
+    super.borderOpacity,
     super.borderAlpha,
-    super.borderWidth = 0.0,
+    super.borderWidth,
     super.borderRadius,
     super.borderStyle = BorderStyle.none,
     super.iconColor,
@@ -144,7 +145,7 @@ class AlertStyle extends SheetStyle {
     super.iconSize,
   }) : super(
           width: double.infinity,
-          variant: SheetVariant.filled,
+          variant: AlertVariant.filled,
           backgroundColor: color,
           borderColor: color,
         );
@@ -168,11 +169,11 @@ class AlertStyle extends SheetStyle {
     super.foregroundAlign,
     super.foregroundJustify,
     super.backgroundColor,
-    super.backgroundOpacity = 0.0,
+    super.backgroundOpacity,
     super.backgroundAlpha,
-    super.borderOpacity = 1.0,
+    super.borderOpacity,
     super.borderAlpha,
-    super.borderWidth = 1.0,
+    super.borderWidth,
     super.borderRadius,
     super.borderStyle = BorderStyle.solid,
     super.iconColor,
@@ -180,18 +181,14 @@ class AlertStyle extends SheetStyle {
     super.iconSize,
   }) : super(
           width: double.infinity,
-          variant: SheetVariant.outlined,
+          variant: AlertVariant.outlined,
           borderColor: color,
           foregroundColor: color,
         );
 
   static const defaults = AlertStyle(
     clipBehavior: Clip.antiAlias,
-    borderRadius: BorderRadius.all(Radius.circular(8)),
     margin: EdgeInsets.zero,
-    padding: EdgeInsets.symmetric(horizontal: 16),
-    iconSize: 20.0,
-    foregroundSpacing: 15.0,
     foregroundLoosen: false,
     foregroundExpanded: true,
     foregroundAlign: CrossAxisAlignment.start,
@@ -307,6 +304,48 @@ class AlertStyle extends SheetStyle {
       iconColor: other.iconColor,
       iconOpacity: other.iconOpacity,
       iconSize: other.iconSize,
+    );
+  }
+
+  /// Linearly interpolate between two [AlertStyle] objects.
+  static AlertStyle? lerp(AlertStyle? a, AlertStyle? b, double t) {
+    if (a == null && b == null) return null;
+    return AlertStyle(
+      variant: lerpEnum(a?.variant, b?.variant, t),
+      severity: lerpEnum(a?.severity, b?.severity, t),
+      margin: EdgeInsetsGeometry.lerp(a?.margin, b?.margin, t),
+      padding: EdgeInsetsGeometry.lerp(a?.padding, b?.padding, t),
+      clipBehavior: lerpEnum(a?.clipBehavior, b?.clipBehavior, t),
+      shadowColor: Color.lerp(a?.shadowColor, b?.shadowColor, t),
+      surfaceTint: Color.lerp(a?.surfaceTint, b?.surfaceTint, t),
+      elevation: lerpDouble(a?.elevation, b?.elevation, t),
+      foregroundStyle:
+          TextStyle.lerp(a?.foregroundStyle, b?.foregroundStyle, t),
+      foregroundColor: Color.lerp(a?.foregroundColor, b?.foregroundColor, t),
+      foregroundOpacity:
+          lerpDouble(a?.foregroundOpacity, b?.foregroundOpacity, t),
+      foregroundAlpha: lerpInt(a?.foregroundAlpha, b?.foregroundAlpha, t),
+      foregroundSpacing:
+          lerpDouble(a?.foregroundSpacing, b?.foregroundSpacing, t),
+      foregroundLoosen: lerpBool(a?.foregroundLoosen, b?.foregroundLoosen, t),
+      foregroundExpanded:
+          lerpBool(a?.foregroundExpanded, b?.foregroundExpanded, t),
+      foregroundAlign: lerpEnum(a?.foregroundAlign, b?.foregroundAlign, t),
+      foregroundJustify:
+          lerpEnum(a?.foregroundJustify, b?.foregroundJustify, t),
+      backgroundColor: Color.lerp(a?.backgroundColor, b?.backgroundColor, t),
+      backgroundOpacity:
+          lerpDouble(a?.backgroundOpacity, b?.backgroundOpacity, t),
+      backgroundAlpha: lerpInt(a?.backgroundAlpha, b?.backgroundAlpha, t),
+      borderColor: Color.lerp(a?.borderColor, b?.backgroundColor, t),
+      borderOpacity: lerpDouble(a?.borderOpacity, b?.borderOpacity, t),
+      borderAlpha: lerpInt(a?.borderAlpha, b?.borderAlpha, t),
+      borderWidth: lerpDouble(a?.borderWidth, b?.borderWidth, t),
+      borderRadius: BorderRadius.lerp(a?.borderRadius, b?.borderRadius, t),
+      borderStyle: lerpEnum(a?.borderStyle, b?.borderStyle, t),
+      iconColor: Color.lerp(a?.iconColor, b?.iconColor, t),
+      iconOpacity: lerpDouble(a?.iconOpacity, b?.iconOpacity, t),
+      iconSize: lerpDouble(a?.iconSize, b?.iconSize, t),
     );
   }
 

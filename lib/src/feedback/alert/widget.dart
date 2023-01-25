@@ -292,26 +292,37 @@ class Alert extends StatelessWidget {
       onChanged: onChanged,
       transitionBuilder: transitionBuilder,
       layoutBuilder: layoutBuilder,
-      child: Sheet(
-        curve: alertCurve,
-        duration: alertDuration,
-        style: alertStyle,
-        child: AnimatedListTileTheme(
+      child: SheetTheme.merge(
+        data: SheetThemeData(
           curve: alertCurve,
           duration: alertDuration,
-          style: ListTileStyle(
-            childExpanded: alertStyle.foregroundExpanded,
-            crossAxisAlignment: alertStyle.foregroundAlign,
-            mainAxisAlignment: alertStyle.foregroundJustify,
-            mainAxisExpanded: alertStyle.width == double.infinity,
-            spacing: alertStyle.foregroundSpacing,
-            spacingEnforced: alertStyle.foregroundLoosen,
-          ),
-          child: ListTile(
-            leading: icon,
-            trailing: action,
-            title: title,
-            subtitle: message,
+          style: alertStyle,
+          dangerStyle: alertTheme.dangerStyle,
+          warningStyle: alertTheme.warningStyle,
+          successStyle: alertTheme.successStyle,
+          infoStyle: alertTheme.infoStyle,
+        ),
+        child: Sheet(
+          curve: alertCurve,
+          duration: alertDuration,
+          style: alertStyle,
+          child: AnimatedListTileTheme(
+            curve: alertCurve,
+            duration: alertDuration,
+            style: ListTileStyle(
+              childExpanded: alertStyle.foregroundExpanded,
+              crossAxisAlignment: alertStyle.foregroundAlign,
+              mainAxisAlignment: alertStyle.foregroundJustify,
+              mainAxisExpanded: alertStyle.width == double.infinity,
+              spacing: alertStyle.foregroundSpacing,
+              spacingEnforced: alertStyle.foregroundLoosen,
+            ),
+            child: ListTile(
+              leading: icon,
+              trailing: action,
+              title: title,
+              subtitle: message,
+            ),
           ),
         ),
       ),
