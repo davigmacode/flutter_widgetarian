@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'style.dart';
 import 'theme_data.dart';
-import 'theme_preset.dart';
 
 /// A Widget that controls how descendant [Switch] should look like.
 class SwitchTheme extends InheritedTheme {
@@ -60,7 +59,7 @@ class SwitchTheme extends InheritedTheme {
     if (parentTheme != null) return parentTheme.data;
 
     final globalTheme = Theme.of(context).extension<SwitchThemeData>();
-    final defaultTheme = SwitchThemePreset.defaults(context);
+    final defaultTheme = SwitchThemeData.defaults(context);
     return defaultTheme.merge(globalTheme);
   }
 

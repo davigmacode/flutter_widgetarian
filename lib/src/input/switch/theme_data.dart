@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'package:widgetarian/src/utils/lerp.dart';
 import 'style.dart';
+import 'theme_preset.dart';
 
 /// Defines the visual properties of [Switch].
 ///
@@ -28,11 +29,31 @@ class SwitchThemeData extends ThemeExtension<SwitchThemeData>
     required this.style,
   });
 
-  /// An [SwitchThemeData] with some reasonable default values.
-  const SwitchThemeData.defaults()
-      : curve = Curves.linear,
-        duration = const Duration(milliseconds: 200),
-        style = const SwitchStyle();
+  /// A [SwitchThemeData] with some reasonable default values.
+  static const fallback = SwitchThemeData(
+    curve: Curves.linear,
+    duration: Duration(milliseconds: 200),
+    style: SwitchStyle(),
+  );
+
+  /// Creates a [SwitchThemeData] from another one that probably null.
+  SwitchThemeData.from([SwitchThemeData? other])
+      : curve = other?.curve ?? fallback.curve,
+        duration = other?.duration ?? fallback.duration,
+        style = other?.style ?? fallback.style;
+
+  /// A [SwitchThemeData] with default values.
+  factory SwitchThemeData.defaults(BuildContext context) =>
+      SwitchThemeDefaults(context);
+
+  /// A [SwitchThemeData] with material 2 default values.
+  factory SwitchThemeData.m2(BuildContext context) => SwitchThemeM2(context);
+
+  /// A [SwitchThemeData] with material 3 default values.
+  factory SwitchThemeData.m3(BuildContext context) => SwitchThemeM3(context);
+
+  /// A [SwitchThemeData] with ios default values.
+  factory SwitchThemeData.ios(BuildContext context) => SwitchThemeIos(context);
 
   /// Creates a copy of this [SwitchThemeData] but with
   /// the given fields replaced with the new values.

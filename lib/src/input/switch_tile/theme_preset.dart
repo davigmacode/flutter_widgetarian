@@ -2,23 +2,26 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/preset.dart';
 // import 'package:widgetarian/src/input/foundation.dart';
 // import 'package:widgetarian/src/input/switch/style.dart';
-// import 'package:widgetarian/src/button/style.dart';
+import 'package:widgetarian/src/button/style.dart';
 import 'theme_data.dart';
 
 @immutable
-class SwitchTileThemePreset extends SwitchTileThemeData with ThemePreset {
-  @protected
-  const SwitchTileThemePreset(this.context) : super.defaults();
+class SwitchTileThemeDefaults extends SwitchTileThemeData with ThemePreset {
+  SwitchTileThemeDefaults(this.context, [SwitchTileThemeData? other])
+      : super.from(other);
+
+  @override
+  final BuildContext context;
+}
+
+@immutable
+class SwitchTileThemeM3 extends SwitchTileThemeData with ThemePreset {
+  SwitchTileThemeM3(this.context, [SwitchTileThemeData? other])
+      : super.from(other);
 
   @override
   final BuildContext context;
 
-  /// A [SwitchTileThemeData] with default values.
-  static SwitchTileThemeData defaults(BuildContext context) =>
-      SwitchTileThemeDefaults(context);
-}
-
-@immutable
-class SwitchTileThemeDefaults extends SwitchTileThemePreset {
-  const SwitchTileThemeDefaults(super.context);
+  @override
+  get buttonStyle => const ButtonStyle(overlayDisabled: true);
 }

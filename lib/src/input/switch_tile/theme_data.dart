@@ -5,6 +5,7 @@ import 'package:widgetarian/src/utils/lerp.dart';
 import 'package:widgetarian/src/input/foundation.dart';
 import 'package:widgetarian/src/input/switch/style.dart';
 import 'package:widgetarian/src/button/style.dart';
+import 'theme_preset.dart';
 
 /// Defines the visual properties of [SwitchTile].
 ///
@@ -38,13 +39,30 @@ class SwitchTileThemeData extends ThemeExtension<SwitchTileThemeData>
     required this.buttonStyle,
   });
 
-  /// An [SwitchTileThemeData] with some reasonable default values.
-  const SwitchTileThemeData.defaults()
-      : curve = Curves.linear,
-        duration = const Duration(milliseconds: 200),
-        controlAffinity = ControlAffinity.leading,
-        switchStyle = const DrivenSwitchStyle(padding: EdgeInsets.zero),
-        buttonStyle = const DrivenButtonStyle.text();
+  /// A [SwitchTileThemeData] with some reasonable default values.
+  static const fallback = SwitchTileThemeData(
+    curve: Curves.linear,
+    duration: Duration(milliseconds: 200),
+    controlAffinity: ControlAffinity.leading,
+    switchStyle: SwitchStyle(padding: EdgeInsets.zero),
+    buttonStyle: ButtonStyle.defaults,
+  );
+
+  /// Creates a [SwitchTileThemeData] from another one that probably null.
+  SwitchTileThemeData.from([SwitchTileThemeData? other])
+      : curve = other?.curve ?? fallback.curve,
+        duration = other?.duration ?? fallback.duration,
+        controlAffinity = other?.controlAffinity ?? fallback.controlAffinity,
+        switchStyle = other?.switchStyle ?? fallback.switchStyle,
+        buttonStyle = other?.buttonStyle ?? fallback.buttonStyle;
+
+  /// A [SwitchTileThemeData] with default values.
+  factory SwitchTileThemeData.defaults(BuildContext context) =>
+      SwitchTileThemeDefaults(context);
+
+  /// A [SwitchTileThemeData] with material 3 default values.
+  factory SwitchTileThemeData.m3(BuildContext context) =>
+      SwitchTileThemeM3(context);
 
   /// Creates a copy of this [SwitchTileThemeData] but with
   /// the given fields replaced with the new values.

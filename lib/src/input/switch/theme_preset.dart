@@ -5,35 +5,20 @@ import 'style.dart';
 import 'theme_data.dart';
 
 @immutable
-abstract class SwitchThemePreset extends SwitchThemeData with ThemePreset {
-  @protected
-  const SwitchThemePreset(this.context) : super.defaults();
+class SwitchThemeDefaults extends SwitchThemeData with ThemePreset {
+  SwitchThemeDefaults(this.context, [SwitchThemeData? other])
+      : super.from(other);
 
   @override
   final BuildContext context;
-
-  /// A [SwitchThemeData] with default values.
-  static SwitchThemeData defaults(BuildContext context) =>
-      SwitchThemeDefaults(context);
-
-  /// A [SwitchThemeData] with material 2 default values.
-  static SwitchThemeData m2(BuildContext context) => SwitchThemeM2(context);
-
-  /// A [SwitchThemeData] with material 3 default values.
-  static SwitchThemeData m3(BuildContext context) => SwitchThemeM3(context);
-
-  /// A [SwitchThemeData] with ios default values.
-  static SwitchThemeData ios(BuildContext context) => SwitchThemeIos(context);
 }
 
 @immutable
-class SwitchThemeDefaults extends SwitchThemePreset {
-  const SwitchThemeDefaults(super.context);
-}
+class SwitchThemeM2 extends SwitchThemeData with ThemePreset {
+  SwitchThemeM2(this.context, [SwitchThemeData? other]) : super.from(other);
 
-@immutable
-class SwitchThemeM2 extends SwitchThemePreset {
-  const SwitchThemeM2(super.context);
+  @override
+  final BuildContext context;
 
   @override
   get style => DrivenSwitchStyle(
@@ -57,12 +42,15 @@ class SwitchThemeM2 extends SwitchThemePreset {
           trackAlpha: SwitchStyle.disabledTrackAlpha,
           thumbAlpha: SwitchStyle.disabledThumbAlpha,
         ),
-      );
+      ).merge(super.style);
 }
 
 @immutable
-class SwitchThemeM3 extends SwitchThemePreset {
-  const SwitchThemeM3(super.context);
+class SwitchThemeM3 extends SwitchThemeData with ThemePreset {
+  SwitchThemeM3(this.context, [SwitchThemeData? other]) : super.from(other);
+
+  @override
+  final BuildContext context;
 
   @override
   get style => DrivenSwitchStyle(
@@ -93,12 +81,15 @@ class SwitchThemeM3 extends SwitchThemePreset {
           trackAlpha: SwitchStyle.disabledTrackAlpha,
           thumbAlpha: SwitchStyle.disabledThumbAlpha,
         ),
-      );
+      ).merge(super.style);
 }
 
 @immutable
-class SwitchThemeIos extends SwitchThemePreset {
-  const SwitchThemeIos(super.context);
+class SwitchThemeIos extends SwitchThemeData with ThemePreset {
+  SwitchThemeIos(this.context, [SwitchThemeData? other]) : super.from(other);
+
+  @override
+  final BuildContext context;
 
   @override
   get style => DrivenSwitchStyle(
@@ -127,5 +118,5 @@ class SwitchThemeIos extends SwitchThemePreset {
           trackAlpha: SwitchStyle.disabledTrackAlpha,
           thumbAlpha: SwitchStyle.disabledThumbAlpha,
         ),
-      );
+      ).merge(super.style);
 }

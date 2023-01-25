@@ -1,12 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/src/input/switch_tile/theme_preset.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'package:widgetarian/src/input/foundation.dart';
 import 'package:widgetarian/src/input/switch/style.dart';
 import 'package:widgetarian/src/button/style.dart';
 import 'theme_data.dart';
-import 'theme_preset.dart';
 
 /// A Widget that controls how descendant switch tile should look like.
 class SwitchTileTheme extends InheritedTheme {
@@ -67,7 +65,7 @@ class SwitchTileTheme extends InheritedTheme {
     if (parentTheme != null) return parentTheme.data;
 
     final globalTheme = Theme.of(context).extension<SwitchTileThemeData>();
-    final defaultTheme = SwitchTileThemePreset.defaults(context);
+    final defaultTheme = SwitchTileThemeData.defaults(context);
     return defaultTheme.merge(globalTheme);
   }
 
