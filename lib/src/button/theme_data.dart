@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'package:widgetarian/src/utils/lerp.dart';
 import 'style.dart';
+import 'theme_preset.dart';
 
 /// Map of [ButtonStyle] by [ButtonVariant] as key
 typedef ButtonStyleByVariant = Map<ButtonVariant, ButtonStyle?>;
@@ -81,16 +82,38 @@ class ButtonThemeData extends ThemeExtension<ButtonThemeData>
     this.infoStyle = const {},
   });
 
-  /// An [ButtonThemeData] with some reasonable default values.
-  const ButtonThemeData.defaults()
-      : curve = Curves.linear,
-        duration = const Duration(milliseconds: 200),
-        style = const DrivenButtonStyle(),
-        variantStyle = const {},
-        dangerStyle = const {},
-        warningStyle = const {},
-        successStyle = const {},
-        infoStyle = const {};
+  /// Create a [ButtonThemeData] with some reasonable default values.
+  static const fallback = ButtonThemeData(
+    curve: Curves.linear,
+    duration: Duration(milliseconds: 200),
+    style: ButtonStyle.defaults,
+    variantStyle: {},
+    dangerStyle: {},
+    warningStyle: {},
+    successStyle: {},
+    infoStyle: {},
+  );
+
+  /// Creates a [ButtonThemeData] from another one that probably null.
+  ButtonThemeData.from([ButtonThemeData? other])
+      : curve = other?.curve ?? fallback.curve,
+        duration = other?.duration ?? fallback.duration,
+        style = other?.style ?? fallback.style,
+        variantStyle = other?.variantStyle ?? fallback.variantStyle,
+        dangerStyle = other?.dangerStyle ?? fallback.dangerStyle,
+        warningStyle = other?.warningStyle ?? fallback.warningStyle,
+        successStyle = other?.successStyle ?? fallback.successStyle,
+        infoStyle = other?.infoStyle ?? fallback.infoStyle;
+
+  /// A [ButtonThemeData] with default values.
+  factory ButtonThemeData.defaults(BuildContext context) =>
+      ButtonThemeDefaults(context);
+
+  /// A [ButtonThemeData] with material 2 default values.
+  factory ButtonThemeData.m2(BuildContext context) => ButtonThemeM2(context);
+
+  /// A [ButtonThemeData] with material 3 default values.
+  factory ButtonThemeData.m3(BuildContext context) => ButtonThemeM3(context);
 
   /// Return [ButtonStyle] that depends on [variant] and [severity]
   ButtonStyle resolve({ButtonVariant? variant, ButtonSeverity? severity}) {

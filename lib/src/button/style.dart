@@ -89,16 +89,11 @@ class ButtonStyle extends SheetStyle {
 
   /// An [ButtonStyle] with some reasonable default values.
   static const defaults = ButtonStyle(
-    // clipBehavior: Clip.antiAlias,
-    // borderRadius: BorderRadius.all(Radius.circular(25)),
-    // margin: EdgeInsets.zero,
-    padding: EdgeInsets.symmetric(horizontal: 16),
-    // height: 40.0,
-    // iconSize: 18.0,
-    // foregroundSpacing: 8.0,
-    // foregroundLoosen: true,
-    // foregroundJustify: MainAxisAlignment.center,
-    // foregroundStyle: TextStyle(height: 1),
+    variant: ButtonVariant.text,
+    clipBehavior: Clip.antiAlias,
+    margin: EdgeInsets.zero,
+    foregroundLoosen: true,
+    foregroundJustify: MainAxisAlignment.center,
   );
 
   static const disabledForegroundAlpha = 0x61; // 38%

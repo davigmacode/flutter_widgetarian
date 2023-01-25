@@ -248,10 +248,7 @@ class ButtonRenderState extends State<ButtonRender>
       style.overlayColor ?? Colors.onSurface(backgroundColor);
 
   EdgeInsetsGeometry get padding {
-    final defaultPadding = style.shape == BoxShape.circle
-        ? EdgeInsets.zero
-        : ButtonStyle.defaults.padding!;
-    final padding = style.padding ?? defaultPadding;
+    final padding = style.padding ?? EdgeInsets.zero;
     return padding.clamp(
       EdgeInsets.only(right: hasTrailing ? 8 : 0),
       EdgeInsetsGeometry.infinity,
@@ -319,7 +316,6 @@ class ButtonRenderState extends State<ButtonRender>
         curve: curve,
         duration: duration,
         style: style,
-        foregroundStyle: style.foregroundStyle,
         foregroundColor: foregroundColor,
         backgroundColor: backgroundColor,
         borderColor: borderColor,

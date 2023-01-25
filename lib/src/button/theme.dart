@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'style.dart';
 import 'theme_data.dart';
-import 'theme_preset.dart';
 
 /// A Widget that controls how descendant buttons should look like.
 class ButtonTheme extends InheritedTheme {
@@ -70,7 +69,7 @@ class ButtonTheme extends InheritedTheme {
     if (parentTheme != null) return parentTheme.data;
 
     final globalTheme = Theme.of(context).extension<ButtonThemeData>();
-    final defaultTheme = ButtonThemePreset.defaults(context);
+    final defaultTheme = ButtonThemeData.defaults(context);
     return defaultTheme.merge(globalTheme);
   }
 
