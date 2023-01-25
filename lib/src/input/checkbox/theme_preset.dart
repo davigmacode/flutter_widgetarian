@@ -4,23 +4,40 @@ import 'style.dart';
 import 'theme_data.dart';
 
 @immutable
-abstract class CheckboxThemePreset extends CheckboxThemeData with ThemePreset {
-  @protected
-  const CheckboxThemePreset(this.context) : super.defaults();
+class CheckboxThemeDefaults extends CheckboxThemeData with ThemePreset {
+  CheckboxThemeDefaults(this.context, [CheckboxThemeData? other])
+      : super.from(other);
 
   @override
   final BuildContext context;
 
-  /// A [CheckboxThemeData] with material 2 default values.
-  static CheckboxThemeData m2(BuildContext context) => CheckboxThemeM2(context);
-
-  /// A [CheckboxThemeData] with material 3 default values.
-  static CheckboxThemeData m3(BuildContext context) => CheckboxThemeM3(context);
+  @override
+  get style => const DrivenCheckboxStyle(
+        size: 18.0,
+        padding: EdgeInsets.all(9),
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.all(Radius.circular(2)),
+        borderStyle: BorderStyle.solid,
+        borderWidth: 2.0,
+        checkmarkWeight: 2.0,
+        selectedStyle: CheckboxStyle(borderStyle: BorderStyle.none),
+        indeterminateStyle: CheckboxStyle(borderStyle: BorderStyle.none),
+        hoveredStyle: CheckboxStyle(overlayRadius: 20.0),
+        pressedStyle: CheckboxStyle(overlayRadius: 10.0),
+        disabledStyle: CheckboxStyle(
+          checkmarkAlpha: CheckboxStyle.disabledCheckmarkAlpha,
+          backgroundAlpha: CheckboxStyle.disabledBackgroundAlpha,
+          borderAlpha: CheckboxStyle.disabledBorderAlpha,
+        ),
+      ).merge(super.style);
 }
 
 @immutable
-class CheckboxThemeM2 extends CheckboxThemePreset {
-  const CheckboxThemeM2(super.context);
+class CheckboxThemeM2 extends CheckboxThemeData with ThemePreset {
+  CheckboxThemeM2(this.context, [CheckboxThemeData? other]) : super.from(other);
+
+  @override
+  final BuildContext context;
 
   @override
   get style => DrivenCheckboxStyle(
@@ -35,12 +52,15 @@ class CheckboxThemeM2 extends CheckboxThemePreset {
               ? appTheme.colorScheme.primary
               : appTheme.colorScheme.inversePrimary,
         ),
-      );
+      ).merge(super.style);
 }
 
 @immutable
-class CheckboxThemeM3 extends CheckboxThemePreset {
-  const CheckboxThemeM3(super.context);
+class CheckboxThemeM3 extends CheckboxThemeData with ThemePreset {
+  CheckboxThemeM3(this.context, [CheckboxThemeData? other]) : super.from(other);
+
+  @override
+  final BuildContext context;
 
   @override
   get style => DrivenCheckboxStyle(
@@ -55,5 +75,5 @@ class CheckboxThemeM3 extends CheckboxThemePreset {
               ? appTheme.colorScheme.primary
               : appTheme.colorScheme.inversePrimary,
         ),
-      );
+      ).merge(super.style);
 }

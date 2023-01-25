@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'package:widgetarian/src/utils/lerp.dart';
 import 'style.dart';
+import 'theme_preset.dart';
 
 /// Defines the visual properties of [Checkbox].
 ///
@@ -29,10 +30,29 @@ class CheckboxThemeData extends ThemeExtension<CheckboxThemeData>
   });
 
   /// A [CheckboxThemeData] with some reasonable default values.
-  const CheckboxThemeData.defaults()
-      : curve = Curves.linear,
-        duration = const Duration(milliseconds: 200),
-        style = CheckboxStyle.defaults;
+  static const fallback = CheckboxThemeData(
+    curve: Curves.linear,
+    duration: Duration(milliseconds: 200),
+    style: CheckboxStyle(),
+  );
+
+  /// Creates a [CheckboxThemeData] from another one that probably null.
+  CheckboxThemeData.from([CheckboxThemeData? other])
+      : curve = other?.curve ?? fallback.curve,
+        duration = other?.duration ?? fallback.duration,
+        style = other?.style ?? fallback.style;
+
+  /// A [CheckboxThemeData] with default values.
+  factory CheckboxThemeData.defaults(BuildContext context) =>
+      CheckboxThemeDefaults(context);
+
+  /// A [CheckboxThemeData] with material 2 default values.
+  factory CheckboxThemeData.m2(BuildContext context) =>
+      CheckboxThemeM2(context);
+
+  /// A [CheckboxThemeData] with material 3 default values.
+  factory CheckboxThemeData.m3(BuildContext context) =>
+      CheckboxThemeM3(context);
 
   /// Creates a copy of this [CheckboxThemeData] but with
   /// the given fields replaced with the new values.

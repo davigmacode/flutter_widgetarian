@@ -85,26 +85,6 @@ class CheckboxStyle with Diagnosticable {
   /// If the checkbox doesn't have a label.
   final double? overlayRadius;
 
-  /// An [CheckboxStyle] with some reasonable default values.
-  static const defaults = DrivenCheckboxStyle(
-    padding: EdgeInsets.all(9),
-    shape: BoxShape.rectangle,
-    borderRadius: BorderRadius.all(Radius.circular(2)),
-    borderStyle: BorderStyle.solid,
-    borderWidth: 2.0,
-    size: 18.0,
-    checkmarkWeight: 2.0,
-    selectedStyle: CheckboxStyle(borderStyle: BorderStyle.none),
-    indeterminateStyle: CheckboxStyle(borderStyle: BorderStyle.none),
-    hoveredStyle: CheckboxStyle(overlayRadius: 20.0),
-    pressedStyle: CheckboxStyle(overlayRadius: 10.0),
-    disabledStyle: CheckboxStyle(
-      checkmarkAlpha: CheckboxStyle.disabledCheckmarkAlpha,
-      backgroundAlpha: CheckboxStyle.disabledBackgroundAlpha,
-      borderAlpha: CheckboxStyle.disabledBorderAlpha,
-    ),
-  );
-
   static const disabledCheckmarkAlpha = 0x61; // 38%
   static const disabledBackgroundAlpha = 0x0c; // 38% * 12% = 5%
   static const disabledBorderAlpha = 0x0c; // 38% * 12% = 5%

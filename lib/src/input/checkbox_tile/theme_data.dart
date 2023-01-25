@@ -5,6 +5,7 @@ import 'package:widgetarian/src/utils/lerp.dart';
 import 'package:widgetarian/src/input/foundation.dart';
 import 'package:widgetarian/src/input/checkbox/style.dart';
 import 'package:widgetarian/src/button/style.dart';
+import 'theme_preset.dart';
 
 /// Defines the visual properties of [CheckboxTile].
 ///
@@ -39,12 +40,25 @@ class CheckboxTileThemeData extends ThemeExtension<CheckboxTileThemeData>
   });
 
   /// A [CheckboxTileThemeData] with some reasonable default values.
-  const CheckboxTileThemeData.defaults()
-      : curve = Curves.linear,
-        duration = const Duration(milliseconds: 200),
-        controlAffinity = ControlAffinity.leading,
-        checkboxStyle = const DrivenCheckboxStyle(padding: EdgeInsets.zero),
-        buttonStyle = const DrivenButtonStyle.text();
+  static const fallback = CheckboxTileThemeData(
+    curve: Curves.linear,
+    duration: Duration(milliseconds: 200),
+    controlAffinity: ControlAffinity.leading,
+    checkboxStyle: CheckboxStyle(padding: EdgeInsets.zero),
+    buttonStyle: ButtonStyle.defaults,
+  );
+
+  /// Creates a [CheckboxTileThemeData] from another one that probably null.
+  CheckboxTileThemeData.from([CheckboxTileThemeData? other])
+      : curve = other?.curve ?? fallback.curve,
+        duration = other?.duration ?? fallback.duration,
+        controlAffinity = other?.controlAffinity ?? fallback.controlAffinity,
+        checkboxStyle = other?.checkboxStyle ?? fallback.checkboxStyle,
+        buttonStyle = other?.buttonStyle ?? fallback.buttonStyle;
+
+  /// A [CheckboxTileThemeData] with default values.
+  factory CheckboxTileThemeData.defaults(BuildContext context) =>
+      CheckboxTileThemeDefaults(context);
 
   /// Creates a copy of this [CheckboxTileThemeData] but with
   /// the given fields replaced with the new values.

@@ -65,7 +65,7 @@ class CheckboxTileTheme extends InheritedTheme {
     if (parentTheme != null) return parentTheme.data;
 
     final globalTheme = Theme.of(context).extension<CheckboxTileThemeData>();
-    const defaultTheme = CheckboxTileThemeData.defaults();
+    final defaultTheme = CheckboxTileThemeData.defaults(context);
     return defaultTheme.merge(globalTheme);
   }
 
