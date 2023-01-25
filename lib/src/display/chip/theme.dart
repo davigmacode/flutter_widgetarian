@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'style.dart';
 import 'theme_data.dart';
-import 'theme_preset.dart';
 
 /// A Widget that controls how descendant [Chip]s should look like.
 class ChipTheme extends InheritedTheme {
@@ -69,7 +68,7 @@ class ChipTheme extends InheritedTheme {
     if (parentTheme != null) return parentTheme.data;
 
     final globalTheme = Theme.of(context).extension<ChipThemeData>();
-    final defaultTheme = ChipThemePreset.defaults(context);
+    final defaultTheme = ChipThemeData.defaults(context);
     return defaultTheme.merge(globalTheme);
   }
 

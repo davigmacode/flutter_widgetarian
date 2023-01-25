@@ -6,27 +6,11 @@ import 'style.dart';
 import 'theme_data.dart';
 
 @immutable
-abstract class ChipThemePreset extends ChipThemeData with ThemePreset {
-  @protected
-  const ChipThemePreset(this.context) : super.defaults();
+class ChipThemeDefaults extends ChipThemeData with ThemePreset {
+  ChipThemeDefaults(this.context, [ChipThemeData? other]) : super.from(other);
 
   @override
   final BuildContext context;
-
-  /// A [ChipThemeData] with default values.
-  static ChipThemeData defaults(BuildContext context) =>
-      ChipThemeDefaults(context);
-
-  /// A [ChipThemeData] with material 2 default values.
-  static ChipThemeData m2(BuildContext context) => ChipThemeM2(context);
-
-  /// A [ChipThemeData] with material 3 default values.
-  static ChipThemeData m3(BuildContext context) => ChipThemeM3(context);
-}
-
-@immutable
-class ChipThemeDefaults extends ChipThemePreset {
-  const ChipThemeDefaults(super.context);
 
   @override
   ChipStyle get style => const ChipStyle(
@@ -34,7 +18,7 @@ class ChipThemeDefaults extends ChipThemePreset {
         margin: EdgeInsets.zero,
         foregroundLoosen: true,
         foregroundJustify: MainAxisAlignment.center,
-      );
+      ).merge(super.style);
 
   @override
   get variantStyle => {
@@ -87,123 +71,126 @@ class ChipThemeDefaults extends ChipThemePreset {
             borderAlpha: ChipStyle.disabledBorderAlpha,
           ),
         ),
-      };
+      }.merge(super.variantStyle);
 
   @override
   get dangerStyle => {
         ChipVariant.text: ChipStyle(
-          foregroundColor: severityTheme.danger,
-          backgroundColor: colorScheme.surface,
+          foregroundColor: colorTheme.danger,
+          backgroundColor: colorTheme.surface,
         ),
         ChipVariant.tonal: ChipStyle(
-          foregroundColor: severityTheme.danger,
-          backgroundColor: severityTheme.danger,
+          foregroundColor: colorTheme.danger,
+          backgroundColor: colorTheme.danger,
         ),
         ChipVariant.filled: ChipStyle(
-          backgroundColor: severityTheme.danger,
-          borderColor: severityTheme.danger,
+          backgroundColor: colorTheme.danger,
+          borderColor: colorTheme.danger,
         ),
         ChipVariant.elevated: ChipStyle(
-          shadowColor: severityTheme.danger,
-          foregroundColor: severityTheme.danger,
-          backgroundColor: colorScheme.surface,
+          shadowColor: colorTheme.danger,
+          foregroundColor: colorTheme.danger,
+          backgroundColor: colorTheme.surface,
         ),
         ChipVariant.outlined: ChipStyle(
-          foregroundColor: severityTheme.danger,
-          backgroundColor: colorScheme.surface,
-          borderColor: severityTheme.danger,
+          foregroundColor: colorTheme.danger,
+          backgroundColor: colorTheme.surface,
+          borderColor: colorTheme.danger,
         ),
-      };
+      }.merge(super.dangerStyle);
 
   @override
   get warningStyle => {
         ChipVariant.text: ChipStyle(
-          foregroundColor: severityTheme.warning,
-          backgroundColor: colorScheme.surface,
+          foregroundColor: colorTheme.warning,
+          backgroundColor: colorTheme.surface,
         ),
         ChipVariant.tonal: ChipStyle(
-          foregroundColor: severityTheme.warning,
-          backgroundColor: severityTheme.warning,
+          foregroundColor: colorTheme.warning,
+          backgroundColor: colorTheme.warning,
         ),
         ChipVariant.filled: ChipStyle(
-          backgroundColor: severityTheme.warning,
-          borderColor: severityTheme.warning,
+          backgroundColor: colorTheme.warning,
+          borderColor: colorTheme.warning,
         ),
         ChipVariant.elevated: ChipStyle(
-          shadowColor: severityTheme.warning,
-          foregroundColor: severityTheme.warning,
-          backgroundColor: colorScheme.surface,
+          shadowColor: colorTheme.warning,
+          foregroundColor: colorTheme.warning,
+          backgroundColor: colorTheme.surface,
         ),
         ChipVariant.outlined: ChipStyle(
-          foregroundColor: severityTheme.warning,
-          backgroundColor: colorScheme.surface,
-          borderColor: severityTheme.warning,
+          foregroundColor: colorTheme.warning,
+          backgroundColor: colorTheme.surface,
+          borderColor: colorTheme.warning,
         ),
-      };
+      }.merge(super.warningStyle);
 
   @override
   get successStyle => {
         ChipVariant.text: ChipStyle(
-          foregroundColor: severityTheme.success,
-          backgroundColor: colorScheme.surface,
+          foregroundColor: colorTheme.success,
+          backgroundColor: colorTheme.surface,
         ),
         ChipVariant.tonal: ChipStyle(
-          foregroundColor: severityTheme.success,
-          backgroundColor: severityTheme.success,
+          foregroundColor: colorTheme.success,
+          backgroundColor: colorTheme.success,
         ),
         ChipVariant.filled: ChipStyle(
-          backgroundColor: severityTheme.success,
-          borderColor: severityTheme.success,
+          backgroundColor: colorTheme.success,
+          borderColor: colorTheme.success,
         ),
         ChipVariant.elevated: ChipStyle(
-          shadowColor: severityTheme.success,
-          foregroundColor: severityTheme.success,
-          backgroundColor: colorScheme.surface,
+          shadowColor: colorTheme.success,
+          foregroundColor: colorTheme.success,
+          backgroundColor: colorTheme.surface,
         ),
         ChipVariant.outlined: ChipStyle(
-          foregroundColor: severityTheme.success,
-          backgroundColor: colorScheme.surface,
-          borderColor: severityTheme.success,
+          foregroundColor: colorTheme.success,
+          backgroundColor: colorTheme.surface,
+          borderColor: colorTheme.success,
         ),
-      };
+      }.merge(super.successStyle);
 
   @override
   get infoStyle => {
         ChipVariant.text: ChipStyle(
-          foregroundColor: severityTheme.info,
-          backgroundColor: colorScheme.surface,
+          foregroundColor: colorTheme.info,
+          backgroundColor: colorTheme.surface,
         ),
         ChipVariant.tonal: ChipStyle(
-          foregroundColor: severityTheme.info,
-          backgroundColor: severityTheme.info,
+          foregroundColor: colorTheme.info,
+          backgroundColor: colorTheme.info,
         ),
         ChipVariant.filled: ChipStyle(
-          backgroundColor: severityTheme.info,
-          borderColor: severityTheme.info,
+          backgroundColor: colorTheme.info,
+          borderColor: colorTheme.info,
         ),
         ChipVariant.elevated: ChipStyle(
-          shadowColor: severityTheme.info,
-          foregroundColor: severityTheme.info,
-          backgroundColor: colorScheme.surface,
+          shadowColor: colorTheme.info,
+          foregroundColor: colorTheme.info,
+          backgroundColor: colorTheme.surface,
         ),
         ChipVariant.outlined: ChipStyle(
-          foregroundColor: severityTheme.info,
-          backgroundColor: colorScheme.surface,
-          borderColor: severityTheme.info,
+          foregroundColor: colorTheme.info,
+          backgroundColor: colorTheme.surface,
+          borderColor: colorTheme.info,
         ),
-      };
+      }.merge(super.infoStyle);
 }
 
 @immutable
-class ChipThemeM2 extends ChipThemePreset {
-  const ChipThemeM2(super.context);
+class ChipThemeM2 extends ChipThemeData with ThemePreset {
+  ChipThemeM2(this.context, [ChipThemeData? other]) : super.from(other);
+
+  @override
+  final BuildContext context;
 
   @override
   get style => ChipStyle(
         height: 32.0,
         borderRadius: const BorderRadius.all(Radius.circular(8)),
         foregroundSpacing: 8.0,
-        foregroundStyle: appTheme.textTheme.labelLarge?.copyWith(height: 1),
+        foregroundStyle: textTheme.labelLarge?.copyWith(height: 1),
         checkmarkWeight: 2.0,
         checkmarkSize: 18.0,
         iconSize: 18.0,
@@ -214,65 +201,68 @@ class ChipThemeM2 extends ChipThemePreset {
             fontSize: 12,
           ),
         ),
-      );
+      ).merge(super.style);
 
   @override
   get variantStyle => {
         ChipVariant.text: DrivenChipStyle(
-          foregroundColor: colorScheme.onSurface,
-          backgroundColor: colorScheme.surface,
-          overlayColor: colorScheme.onSurface,
+          foregroundColor: colorTheme.onSurface,
+          backgroundColor: colorTheme.surface,
+          overlayColor: colorTheme.onSurface,
           selectedStyle: ChipStyle(
-            foregroundColor: colorScheme.primary,
-            backgroundColor: colorScheme.primary,
+            foregroundColor: colorTheme.primary,
+            backgroundColor: colorTheme.primary,
           ),
         ),
         ChipVariant.tonal: DrivenChipStyle(
-          foregroundColor: colorScheme.onSurface,
+          foregroundColor: colorTheme.onSurface,
           backgroundColor: appTheme.unselectedWidgetColor,
-          overlayColor: colorScheme.onSurface,
+          overlayColor: colorTheme.onSurface,
           selectedStyle: ChipStyle(
-            foregroundColor: colorScheme.primary,
-            backgroundColor: colorScheme.primary,
+            foregroundColor: colorTheme.primary,
+            backgroundColor: colorTheme.primary,
           ),
         ),
         ChipVariant.elevated: DrivenChipStyle(
-          backgroundColor: colorScheme.surface,
+          backgroundColor: colorTheme.surface,
           selectedStyle: ChipStyle(
-            foregroundColor: colorScheme.primary,
-            backgroundColor: colorScheme.surface,
+            foregroundColor: colorTheme.primary,
+            backgroundColor: colorTheme.surface,
           ),
         ),
         ChipVariant.filled: DrivenChipStyle(
           backgroundColor: appTheme.unselectedWidgetColor,
           selectedStyle: ChipStyle(
-            backgroundColor: colorScheme.primary,
+            backgroundColor: colorTheme.primary,
           ),
         ),
         ChipVariant.outlined: DrivenChipStyle(
           backgroundColor: Colors.transparent,
-          foregroundColor: colorScheme.onSurface,
-          borderColor: colorScheme.outline,
-          overlayColor: colorScheme.onSurface,
+          foregroundColor: colorTheme.onSurface,
+          borderColor: colorTheme.outline,
+          overlayColor: colorTheme.onSurface,
           selectedStyle: ChipStyle(
-            foregroundColor: colorScheme.primary,
-            borderColor: colorScheme.primary,
-            overlayColor: colorScheme.primary,
+            foregroundColor: colorTheme.primary,
+            borderColor: colorTheme.primary,
+            overlayColor: colorTheme.primary,
           ),
         ),
-      };
+      }.merge(super.variantStyle);
 }
 
 @immutable
-class ChipThemeM3 extends ChipThemePreset {
-  const ChipThemeM3(super.context);
+class ChipThemeM3 extends ChipThemeData with ThemePreset {
+  ChipThemeM3(this.context, [ChipThemeData? other]) : super.from(other);
+
+  @override
+  final BuildContext context;
 
   @override
   get style => ChipStyle(
         height: 32.0,
         borderRadius: const BorderRadius.all(Radius.circular(8)),
         foregroundSpacing: 8.0,
-        foregroundStyle: appTheme.textTheme.labelLarge?.copyWith(height: 1),
+        foregroundStyle: textTheme.labelLarge?.copyWith(height: 1),
         checkmarkWeight: 2.0,
         checkmarkSize: 18.0,
         iconSize: 18.0,
@@ -283,32 +273,32 @@ class ChipThemeM3 extends ChipThemePreset {
             fontSize: 12,
           ),
         ),
-      );
+      ).merge(super.style);
 
   @override
   get variantStyle => {
         ChipVariant.text: ChipStyle(
-          foregroundColor: appTheme.colorScheme.onSurface,
-          backgroundColor: colorScheme.surface,
-          overlayColor: colorScheme.onSurface,
+          foregroundColor: colorTheme.onSurface,
+          backgroundColor: colorTheme.surface,
+          overlayColor: colorTheme.onSurface,
         ),
         ChipVariant.tonal: ChipStyle(
           backgroundOpacity: .3,
-          foregroundColor: appTheme.colorScheme.onSurface,
-          backgroundColor: appTheme.colorScheme.surfaceVariant,
-          overlayColor: colorScheme.onSurface,
+          foregroundColor: colorTheme.onSurface,
+          backgroundColor: colorTheme.surfaceVariant,
+          overlayColor: colorTheme.onSurface,
         ),
         ChipVariant.filled: ChipStyle(
-          backgroundColor: appTheme.colorScheme.surfaceVariant,
+          backgroundColor: colorTheme.surfaceVariant,
         ),
         ChipVariant.elevated: ChipStyle(
-          surfaceTint: appTheme.colorScheme.surfaceTint,
-          backgroundColor: appTheme.colorScheme.surface,
+          surfaceTint: colorTheme.surfaceTint,
+          backgroundColor: colorTheme.surface,
         ),
         ChipVariant.outlined: ChipStyle(
-          foregroundColor: appTheme.colorScheme.onSurface,
-          backgroundColor: appTheme.colorScheme.surface,
-          overlayColor: colorScheme.onSurface,
+          foregroundColor: colorTheme.onSurface,
+          backgroundColor: colorTheme.surface,
+          overlayColor: colorTheme.onSurface,
         ),
-      };
+      }.merge(super.variantStyle);
 }

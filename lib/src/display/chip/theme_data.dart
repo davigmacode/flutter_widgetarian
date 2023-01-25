@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'package:widgetarian/src/utils/lerp.dart';
 import 'style.dart';
+import 'theme_preset.dart';
 
 /// Map of [ChipStyle] by [ChipVariant] as key
 typedef ChipStyleByVariant = Map<ChipVariant, ChipStyle?>;
@@ -80,16 +81,38 @@ class ChipThemeData extends ThemeExtension<ChipThemeData> with Diagnosticable {
     this.infoStyle = const {},
   });
 
-  /// An [ChipThemeData] with some reasonable default values.
-  const ChipThemeData.defaults()
-      : curve = Curves.linear,
-        duration = const Duration(milliseconds: 200),
-        style = const DrivenChipStyle(),
-        variantStyle = const {},
-        dangerStyle = const {},
-        warningStyle = const {},
-        successStyle = const {},
-        infoStyle = const {};
+  /// Create a [ChipThemeData] with some reasonable default values.
+  static const fallback = ChipThemeData(
+    curve: Curves.linear,
+    duration: Duration(milliseconds: 200),
+    style: ChipStyle.defaults,
+    variantStyle: {},
+    dangerStyle: {},
+    warningStyle: {},
+    successStyle: {},
+    infoStyle: {},
+  );
+
+  /// Creates a [ChipThemeData] from another one that probably null.
+  ChipThemeData.from([ChipThemeData? other])
+      : curve = other?.curve ?? fallback.curve,
+        duration = other?.duration ?? fallback.duration,
+        style = other?.style ?? fallback.style,
+        variantStyle = other?.variantStyle ?? fallback.variantStyle,
+        dangerStyle = other?.dangerStyle ?? fallback.dangerStyle,
+        warningStyle = other?.warningStyle ?? fallback.warningStyle,
+        successStyle = other?.successStyle ?? fallback.successStyle,
+        infoStyle = other?.infoStyle ?? fallback.infoStyle;
+
+  /// A [ChipThemeData] with default values.
+  factory ChipThemeData.defaults(BuildContext context) =>
+      ChipThemeDefaults(context);
+
+  /// A [ChipThemeData] with material 2 default values.
+  factory ChipThemeData.m2(BuildContext context) => ChipThemeM2(context);
+
+  /// A [ChipThemeData] with material 3 default values.
+  factory ChipThemeData.m3(BuildContext context) => ChipThemeM3(context);
 
   /// Return [ChipStyle] that depends on [variant] and [severity]
   ChipStyle resolve({ChipVariant? variant, ChipSeverity? severity}) {
