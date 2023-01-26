@@ -81,16 +81,6 @@ class AnchorStyle with Diagnosticable {
         overlayOpacity = other?.overlayOpacity,
         overlayDisabled = other?.overlayDisabled;
 
-  /// An [AnchorStyle] with some reasonable default values.
-  static const defaults = DrivenAnchorStyle(
-    shape: BoxShape.rectangle,
-    overlayDisabled: false,
-    overlayOpacity: 0,
-    focusedStyle: AnchorStyle(overlayOpacity: 0.15),
-    hoveredStyle: AnchorStyle(overlayOpacity: 0.05),
-    pressedStyle: AnchorStyle(overlayOpacity: 0.1),
-  );
-
   /// Creates a copy of this [AnchorStyle] but with
   /// the given fields replaced with the new values.
   AnchorStyle copyWith({
