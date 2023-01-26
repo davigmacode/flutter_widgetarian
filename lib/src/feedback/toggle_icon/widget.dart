@@ -109,14 +109,10 @@ class _RenderToggleIcon extends StatefulWidget {
 
 class _RenderToggleIconState extends State<_RenderToggleIcon>
     with WidgetEventMixin {
-  ToggleIconStyle style = const ToggleIconStyle();
-
-  @protected
-  void setStyle() {
-    final raw = ToggleIconStyle.defaults.merge(widget.style);
+  ToggleIconStyle get style {
+    final raw = widget.style;
     final res = DrivenToggleIconStyle.evaluate(raw, widgetEvents.value);
-    style = ToggleIconStyle.from(res);
-    setState(() {});
+    return ToggleIconStyle.from(res);
   }
 
   @override
@@ -124,7 +120,6 @@ class _RenderToggleIconState extends State<_RenderToggleIcon>
     initWidgetEvents(widget.eventsController);
     widgetEvents.toggle(WidgetEvent.selected, widget.selected);
     widgetEvents.toggle(WidgetEvent.disabled, widget.disabled);
-    setStyle();
     super.initState();
   }
 
@@ -140,7 +135,6 @@ class _RenderToggleIconState extends State<_RenderToggleIcon>
       updateWidgetEvents(oldWidget.eventsController, widget.eventsController);
       widgetEvents.toggle(WidgetEvent.selected, widget.selected);
       widgetEvents.toggle(WidgetEvent.disabled, widget.disabled);
-      setStyle();
       super.didUpdateWidget(oldWidget);
     }
   }
@@ -148,7 +142,6 @@ class _RenderToggleIconState extends State<_RenderToggleIcon>
   @override
   void didChangeWidgetEvents() {
     if (mounted) {
-      setStyle();
       super.didChangeWidgetEvents();
     }
   }

@@ -26,9 +26,6 @@ class ToggleIconStyle with Diagnosticable {
   /// Opacity to be apply to [backColor].
   final double? backOpacity;
 
-  /// An [ToggleIconStyle] with some reasonable default values.
-  static final defaults = DrivenToggleIconStyle.fade();
-
   /// Create a style to be applied to [ToggleIcon] widget
   const ToggleIconStyle({
     this.size,
