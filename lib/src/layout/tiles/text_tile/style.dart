@@ -31,13 +31,6 @@ class TextTileStyle with Diagnosticable {
     this.align,
   });
 
-  /// An [TextTileStyle] with some reasonable default values.
-  static const defaults = TextTileStyle(
-    spacing: 0.0,
-    margin: EdgeInsets.zero,
-    align: TextTileAlign.left,
-  );
-
   /// Create a [TextTileStyle] from another style
   TextTileStyle.from(TextTileStyle? other)
       : spacing = other?.spacing,

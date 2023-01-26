@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'style.dart';
+import 'theme_data.dart';
 import 'tween.dart';
 
 /// A Widget that controls how descendant tile should look like.
@@ -9,14 +10,14 @@ import 'tween.dart';
 /// Descendant widgets obtain the current [TileStyle] object using `TileTheme.of(context)`.
 /// Instances of [TileStyle] can be customized with [TileStyle.copyWith] or [TileStyle.merge].
 class TileTheme extends InheritedTheme {
-  /// The [TileStyle] to be applied to descendant [Tile]s
-  final TileStyle style;
+  /// The [TileThemeData] to be applied to descendant [Tile]s
+  final TileThemeData data;
 
   /// Creates a theme that controls
   /// how descendant [TileTheme]s should look like.
   const TileTheme({
     Key? key,
-    required this.style,
+    required this.data,
     required Widget child,
   }) : super(key: key, child: child);
 
@@ -27,6 +28,7 @@ class TileTheme extends InheritedTheme {
   static Widget merge({
     Key? key,
     TileStyle? style,
+    TileThemeData? data,
     required Widget child,
   }) {
     return Builder(
@@ -34,62 +36,62 @@ class TileTheme extends InheritedTheme {
         final parent = TileTheme.of(context);
         return TileTheme(
           key: key,
-          style: parent.merge(style),
+          data: parent.merge(data).copyWith(style: style),
           child: child,
         );
       },
     );
   }
 
-  /// The [TileStyle] from the closest instance of
+  /// The [TileThemeData] from the closest instance of
   /// this class that encloses the given context.
   ///
   /// Typical usage is as follows:
   ///
   /// ```dart
-  /// TileStyle style = TileTheme.of(context);
+  /// TileThemeData theme = TileTheme.of(context);
   /// ```
-  static TileStyle of(BuildContext context) {
+  static TileThemeData of(BuildContext context) {
     final parentTheme = context.dependOnInheritedWidgetOfExactType<TileTheme>();
-    if (parentTheme != null) return parentTheme.style;
+    if (parentTheme != null) return parentTheme.data;
 
-    final appTheme = Theme.of(context);
-    final globalTheme = appTheme.extension<TileStyle?>();
-    return TileStyle.defaults.merge(globalTheme);
+    final globalTheme = Theme.of(context).extension<TileThemeData>();
+    final defaultTheme = TileThemeData.defaults(context);
+    return defaultTheme.merge(globalTheme);
   }
 
   @override
   Widget wrap(BuildContext context, Widget child) {
-    return TileTheme(style: style, child: child);
+    return TileTheme(data: data, child: child);
   }
 
   @override
   bool updateShouldNotify(TileTheme oldWidget) {
-    return oldWidget.style != style;
+    return oldWidget.data != data;
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    style.debugFillProperties(properties);
+    data.debugFillProperties(properties);
   }
 }
 
-/// A widget that animates the [TileStyle] implicitly.
+/// A widget that animates the [TileThemeData] implicitly.
 class AnimatedTileTheme extends ImplicitlyAnimatedWidget {
-  /// The [TileStyle] to be applied to descendant [Tile]s
-  final TileStyle style;
+  /// The [TileThemeData] to be applied to descendant [Tile]s
+  final TileThemeData data;
 
   /// The widget below this widget in the tree.
   final Widget child;
 
-  /// Creates a widget that animates the [style] implicitly.
+  /// Creates a widget that animates the [data] implicitly.
   const AnimatedTileTheme({
     Key? key,
     Curve curve = Curves.linear,
     Duration duration = const Duration(milliseconds: 200),
     VoidCallback? onEnd,
-    required this.style,
+    required this.data,
     required this.child,
   }) : super(
           key: key,
@@ -105,21 +107,21 @@ class AnimatedTileTheme extends ImplicitlyAnimatedWidget {
 
 class _AnimatedIconThemeState
     extends AnimatedWidgetBaseState<AnimatedTileTheme> {
-  TileStyleTween? _styleTween;
+  TileThemeDataTween? _dataTween;
 
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
-    _styleTween = visitor(
-      _styleTween,
-      widget.style,
-      (dynamic value) => TileStyleTween(begin: value),
-    ) as TileStyleTween?;
+    _dataTween = visitor(
+      _dataTween,
+      widget.data,
+      (dynamic value) => TileThemeDataTween(begin: value),
+    ) as TileThemeDataTween?;
   }
 
   @override
   Widget build(BuildContext context) {
     return TileTheme.merge(
-      style: _styleTween?.evaluate(animation),
+      data: _dataTween?.evaluate(animation),
       child: widget.child,
     );
   }

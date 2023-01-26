@@ -26,18 +26,6 @@ class TileStyle with Diagnosticable {
     this.childExpanded,
   });
 
-  /// A [TileStyle] with some reasonable default values.
-  static const defaults = TileStyle(
-    direction: Axis.horizontal,
-    margin: EdgeInsets.zero,
-    spacing: 0.0,
-    spacingEnforced: false,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    mainAxisAlignment: MainAxisAlignment.start,
-    mainAxisExpanded: false,
-    childExpanded: false,
-  );
-
   /// Create a [TileStyle] from another style
   TileStyle.from(TileStyle? other)
       : direction = other?.direction,

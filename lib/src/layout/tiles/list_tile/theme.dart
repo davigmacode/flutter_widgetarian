@@ -2,21 +2,22 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'style.dart';
+import 'theme_data.dart';
 import 'tween.dart';
 
 /// A Widget that controls how descendant tile should look like.
 ///
-/// Descendant widgets obtain the current [ListTileStyle] object using `ListTileTheme.of(context)`.
-/// Instances of [ListTileStyle] can be customized with [ListTileStyle.copyWith] or [ListTileStyle.merge].
+/// Descendant widgets obtain the current [ListTileThemeData] object using `ListTileTheme.of(context)`.
+/// Instances of [ListTileThemeData] can be customized with [ListTileThemeData.copyWith] or [ListTileThemeData.merge].
 class ListTileTheme extends InheritedTheme {
-  /// The [ListTileStyle] to be applied to descendant [ListTile]s
-  final ListTileStyle style;
+  /// The [ListTileThemeData] to be applied to descendant [ListTile]s
+  final ListTileThemeData data;
 
   /// Creates a theme that controls
   /// how descendant [ListTileTheme]s should look like.
   const ListTileTheme({
     Key? key,
-    required this.style,
+    required this.data,
     required Widget child,
   }) : super(key: key, child: child);
 
@@ -27,6 +28,7 @@ class ListTileTheme extends InheritedTheme {
   static Widget merge({
     Key? key,
     ListTileStyle? style,
+    ListTileThemeData? data,
     required Widget child,
   }) {
     return Builder(
@@ -34,63 +36,63 @@ class ListTileTheme extends InheritedTheme {
         final parent = ListTileTheme.of(context);
         return ListTileTheme(
           key: key,
-          style: parent.merge(style),
+          data: parent.merge(data),
           child: child,
         );
       },
     );
   }
 
-  /// The [style] from the closest instance of
+  /// The [data] from the closest instance of
   /// this class that encloses the given context.
   ///
   /// Typical usage is as follows:
   ///
   /// ```dart
-  /// ListTileStyle style = ListTileTheme.of(context);
+  /// ListTileThemeData data = ListTileTheme.of(context);
   /// ```
-  static ListTileStyle of(BuildContext context) {
+  static ListTileThemeData of(BuildContext context) {
     final parentTheme =
         context.dependOnInheritedWidgetOfExactType<ListTileTheme>();
-    if (parentTheme != null) return parentTheme.style;
+    if (parentTheme != null) return parentTheme.data;
 
-    final appTheme = Theme.of(context);
-    final globalTheme = appTheme.extension<ListTileStyle?>();
-    return ListTileStyle.defaults.merge(globalTheme);
+    final globalTheme = Theme.of(context).extension<ListTileThemeData>();
+    final defaultTheme = ListTileThemeData.defaults(context);
+    return defaultTheme.merge(globalTheme);
   }
 
   @override
   Widget wrap(BuildContext context, Widget child) {
-    return ListTileTheme(style: style, child: child);
+    return ListTileTheme(data: data, child: child);
   }
 
   @override
   bool updateShouldNotify(ListTileTheme oldWidget) {
-    return oldWidget.style != style;
+    return oldWidget.data != data;
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    style.debugFillProperties(properties);
+    data.debugFillProperties(properties);
   }
 }
 
-/// A widget that animates the [ListTileStyle] implicitly.
+/// A widget that animates the [ListTileThemeData] implicitly.
 class AnimatedListTileTheme extends ImplicitlyAnimatedWidget {
-  /// The [ListTileStyle] to be applied to descendant [ListTile]s
-  final ListTileStyle style;
+  /// The [ListTileThemeData] to be applied to descendant [ListTile]s
+  final ListTileThemeData data;
 
   /// The widget below this widget in the tree.
   final Widget child;
 
-  /// Creates a widget that animates the [style] implicitly.
+  /// Creates a widget that animates the [data] implicitly.
   const AnimatedListTileTheme({
     Key? key,
     Curve curve = Curves.linear,
     Duration duration = const Duration(milliseconds: 200),
     VoidCallback? onEnd,
-    required this.style,
+    required this.data,
     required this.child,
   }) : super(
           key: key,
@@ -106,21 +108,21 @@ class AnimatedListTileTheme extends ImplicitlyAnimatedWidget {
 
 class _AnimatedIconThemeState
     extends AnimatedWidgetBaseState<AnimatedListTileTheme> {
-  ListTileStyleTween? _styleTween;
+  ListTileThemeDataTween? _dataTween;
 
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
-    _styleTween = visitor(
-      _styleTween,
-      widget.style,
-      (dynamic value) => ListTileStyleTween(begin: value),
-    ) as ListTileStyleTween?;
+    _dataTween = visitor(
+      _dataTween,
+      widget.data,
+      (dynamic value) => ListTileThemeDataTween(begin: value),
+    ) as ListTileThemeDataTween?;
   }
 
   @override
   Widget build(BuildContext context) {
     return ListTileTheme.merge(
-      style: _styleTween?.evaluate(animation),
+      data: _dataTween?.evaluate(animation),
       child: widget.child,
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:widgetarian/utils.dart';
-import '../text_tile/style.dart';
+import 'package:widgetarian/src/layout/tiles/text_tile/style.dart';
 
 /// The style to be applied to [ListTile] widget
 @immutable

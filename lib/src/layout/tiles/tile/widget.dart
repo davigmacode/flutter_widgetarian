@@ -53,7 +53,8 @@ class Tile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themedStyle = TileTheme.of(context).merge(effectiveStyle);
+    final theme = TileTheme.of(context);
+    final themedStyle = theme.style.merge(effectiveStyle);
 
     final isSpacingEnforced = themedStyle.spacingEnforced!;
     final isMainAxisExpanded = themedStyle.mainAxisExpanded!;

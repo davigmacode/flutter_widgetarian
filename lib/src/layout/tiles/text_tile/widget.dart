@@ -32,7 +32,8 @@ class TextTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themedStyle = TextTileTheme.of(context).merge(effectiveStyle);
+    final theme = TextTileTheme.of(context);
+    final themedStyle = theme.style.merge(effectiveStyle);
     return Tile(
       direction: Axis.vertical,
       mainAxisAlignment: MainAxisAlignment.start,

@@ -4,6 +4,7 @@ import 'package:widgetarian/animation.dart';
 import 'package:widgetarian/utils.dart';
 import 'package:widgetarian/src/layout/box.dart';
 import 'package:widgetarian/src/layout/tiles/tile/style.dart';
+import 'package:widgetarian/src/layout/tiles/tile/theme_data.dart';
 import 'package:widgetarian/src/layout/tiles/tile/theme.dart';
 import 'style.dart';
 import 'theme_data.dart';
@@ -127,13 +128,15 @@ class _SheetRenderState extends State<SheetRender> {
           child: AnimatedTileTheme(
             curve: curve,
             duration: duration,
-            style: TileStyle(
-              childExpanded: style.foregroundExpanded,
-              crossAxisAlignment: style.foregroundAlign,
-              mainAxisAlignment: style.foregroundJustify,
-              mainAxisExpanded: width == double.infinity,
-              spacing: style.foregroundSpacing,
-              spacingEnforced: style.foregroundLoosen,
+            data: TileThemeData(
+              style: TileStyle(
+                childExpanded: style.foregroundExpanded,
+                crossAxisAlignment: style.foregroundAlign,
+                mainAxisAlignment: style.foregroundJustify,
+                mainAxisExpanded: width == double.infinity,
+                spacing: style.foregroundSpacing,
+                spacingEnforced: style.foregroundLoosen,
+              ),
             ),
             child: AnimatedBox(
               curve: curve,
@@ -164,9 +167,6 @@ class _SheetRenderState extends State<SheetRender> {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    // properties
-    //     .add(ColorProperty('defaultBackgroundColor', defaultBackgroundColor));
-    // properties.add(ColorProperty('defaultBorderColor', defaultBorderColor));
     properties
         .add(ColorProperty('defaultForegroundColor', defaultForegroundColor));
     properties.add(ColorProperty('backgroundColor', backgroundColor));
