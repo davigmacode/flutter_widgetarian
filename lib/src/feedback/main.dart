@@ -3,6 +3,8 @@ export 'marks/radiomark.dart';
 export 'marks/switchmark.dart';
 
 export 'alert/style.dart';
+export 'alert/theme_data.dart';
+export 'alert/theme_preset.dart';
 export 'alert/theme.dart';
 export 'alert/widget.dart';
 export 'alert/variant.dart';
@@ -14,6 +16,8 @@ export 'overlay/widget.dart';
 
 export 'toggle_icon/event.dart';
 export 'toggle_icon/style.dart';
+export 'toggle_icon/theme_data.dart';
+export 'toggle_icon/theme_preset.dart';
 export 'toggle_icon/theme.dart';
 export 'toggle_icon/widget.dart';
 

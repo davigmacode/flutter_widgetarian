@@ -309,13 +309,15 @@ class Alert extends StatelessWidget {
           child: AnimatedListTileTheme(
             curve: alertCurve,
             duration: alertDuration,
-            style: ListTileStyle(
-              childExpanded: alertStyle.foregroundExpanded,
-              crossAxisAlignment: alertStyle.foregroundAlign,
-              mainAxisAlignment: alertStyle.foregroundJustify,
-              mainAxisExpanded: alertStyle.width == double.infinity,
-              spacing: alertStyle.foregroundSpacing,
-              spacingEnforced: alertStyle.foregroundLoosen,
+            data: ListTileThemeData(
+              style: ListTileStyle(
+                childExpanded: alertStyle.foregroundExpanded,
+                crossAxisAlignment: alertStyle.foregroundAlign,
+                mainAxisAlignment: alertStyle.foregroundJustify,
+                mainAxisExpanded: alertStyle.width == double.infinity,
+                spacing: alertStyle.foregroundSpacing,
+                spacingEnforced: alertStyle.foregroundLoosen,
+              ),
             ),
             child: ListTile(
               leading: icon,

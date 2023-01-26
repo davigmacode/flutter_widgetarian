@@ -29,6 +29,8 @@ export 'package:widgetarian/src/feedback/overlay/style.dart';
 export 'package:widgetarian/src/feedback/overlay/theme.dart';
 
 export 'package:widgetarian/src/feedback/toggle_icon/style.dart';
+export 'package:widgetarian/src/feedback/toggle_icon/theme_data.dart';
+export 'package:widgetarian/src/feedback/toggle_icon/theme_preset.dart';
 export 'package:widgetarian/src/feedback/toggle_icon/theme.dart';
 
 export 'package:widgetarian/src/input/checkbox/style.dart';
@@ -64,13 +66,21 @@ export 'package:widgetarian/src/layout/sheet/theme_preset.dart';
 export 'package:widgetarian/src/layout/sheet/theme.dart';
 
 export 'package:widgetarian/src/layout/tiles/tile/style.dart';
+export 'package:widgetarian/src/layout/tiles/tile/theme_data.dart';
+export 'package:widgetarian/src/layout/tiles/tile/theme_preset.dart';
 export 'package:widgetarian/src/layout/tiles/tile/theme.dart';
 
 export 'package:widgetarian/src/layout/tiles/text_tile/style.dart';
+export 'package:widgetarian/src/layout/tiles/text_tile/theme_data.dart';
+export 'package:widgetarian/src/layout/tiles/text_tile/theme_preset.dart';
 export 'package:widgetarian/src/layout/tiles/text_tile/theme.dart';
 
 export 'package:widgetarian/src/layout/tiles/list_tile/style.dart';
+export 'package:widgetarian/src/layout/tiles/list_tile/theme_data.dart';
+export 'package:widgetarian/src/layout/tiles/list_tile/theme_preset.dart';
 export 'package:widgetarian/src/layout/tiles/list_tile/theme.dart';
 
 export 'package:widgetarian/src/navigation/anchor/style.dart';
+export 'package:widgetarian/src/navigation/anchor/theme_data.dart';
+export 'package:widgetarian/src/navigation/anchor/theme_preset.dart';
 export 'package:widgetarian/src/navigation/anchor/theme.dart';
