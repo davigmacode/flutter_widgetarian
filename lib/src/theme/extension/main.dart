@@ -5,6 +5,10 @@ export 'package:widgetarian/src/button/theme_data.dart';
 export 'package:widgetarian/src/button/theme_preset.dart';
 export 'package:widgetarian/src/button/theme.dart';
 
+export 'package:widgetarian/src/button/toggle/theme_data.dart';
+export 'package:widgetarian/src/button/toggle/theme_preset.dart';
+export 'package:widgetarian/src/button/toggle/theme.dart';
+
 export 'package:widgetarian/src/display/avatar/style.dart';
 export 'package:widgetarian/src/display/avatar/theme_data.dart';
 export 'package:widgetarian/src/display/avatar/theme_preset.dart';

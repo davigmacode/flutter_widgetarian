@@ -26,6 +26,7 @@ abstract class ThemePreset {
   static Iterable<ThemeExtension> m2(BuildContext context) => [
         // ColorThemeData.defaults(context),
         SheetThemeData.m2(context),
+        ToggleButtonThemeData.m2(context),
         ButtonThemeData.m2(context),
         // AvatarThemeData.defaults(context),
         // BadgeThemeData.defaults(context),
@@ -43,6 +44,7 @@ abstract class ThemePreset {
   static Iterable<ThemeExtension> m3(BuildContext context) => [
         // ColorThemeData.defaults(context),
         SheetThemeData.m3(context),
+        ToggleButtonThemeData.m3(context),
         ButtonThemeData.m3(context),
         // AvatarThemeData.defaults(context),
         // BadgeThemeData.defaults(context),

@@ -13,6 +13,7 @@ class ButtonRender extends StatefulWidget {
     this.leading,
     this.trailing,
     this.tooltip,
+    this.severity,
     this.selected = false,
     this.loading = false,
     this.disabled = false,
@@ -27,6 +28,11 @@ class ButtonRender extends StatefulWidget {
     required this.theme,
     required this.child,
   }) : super(key: key);
+
+  /// {@template widgetarian.button.severity}
+  /// Type of the sheet severity
+  /// {@endtemplate}
+  final SheetSeverity? severity;
 
   /// {@macro flutter.widgets.Focus.autofocus}
   final bool autofocus;
@@ -204,7 +210,7 @@ class ButtonRender extends StatefulWidget {
 class ButtonRenderState extends State<ButtonRender>
     with WidgetEventMixin<ButtonRender> {
   ButtonStyle get style {
-    final raw = ButtonStyle.defaults.merge(widget.style);
+    final raw = ButtonStyle(severity: widget.severity).merge(widget.style);
     final fallback = widget.theme.resolve(
       variant: raw.variant,
       severity: raw.severity,

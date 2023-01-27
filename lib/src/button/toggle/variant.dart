@@ -1,18 +1,19 @@
 import 'package:flutter/widgets.dart';
-import 'style.dart';
+import 'package:widgetarian/src/button/style.dart';
 import 'widget.dart';
 
 /// Buttons allow users to take actions, and make choices, with a single tap
-class VariantButton extends Button {
+class VariantToggleButton extends ToggleButton {
   /// Create a variant button
-  VariantButton({
+  VariantToggleButton({
     super.key,
     super.severity,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -38,17 +39,18 @@ class VariantButton extends Button {
         );
 
   /// Create a block variant button
-  VariantButton.block({
+  VariantToggleButton.block({
     super.key,
     super.severity,
     CrossAxisAlignment? alignChildren,
     MainAxisAlignment? justifyChildren,
     bool expanded = true,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -81,16 +83,17 @@ class VariantButton extends Button {
         );
 
   /// Create an icon variant button
-  VariantButton.icon({
+  VariantToggleButton.icon({
     super.key,
     super.severity,
     BoxShape shape = BoxShape.circle,
     double? size,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -123,16 +126,17 @@ class VariantButton extends Button {
 }
 
 /// Text buttons are typically used for less-pronounced actions.
-class TextButton extends VariantButton {
+class TextToggleButton extends VariantToggleButton {
   /// Create a text button
-  TextButton({
+  TextToggleButton({
     super.key,
     super.severity,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -149,17 +153,18 @@ class TextButton extends VariantButton {
   }) : super(variantStyle: const DrivenButtonStyle.text());
 
   /// Create a block text button
-  TextButton.block({
+  TextToggleButton.block({
     super.key,
     super.severity,
     CrossAxisAlignment? alignChildren,
     MainAxisAlignment? justifyChildren,
     bool expanded = true,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -181,16 +186,17 @@ class TextButton extends VariantButton {
         );
 
   /// Create an icon text button
-  TextButton.icon({
+  TextToggleButton.icon({
     super.key,
     super.severity,
     BoxShape shape = BoxShape.circle,
     double? size,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -215,16 +221,17 @@ class TextButton extends VariantButton {
 /// They’re useful in contexts where a lower-priority button requires slightly more emphasis
 /// than an outline would give, such as "Next" in an onboarding flow.
 /// Tonal buttons use the secondary color mapping.
-class TonalButton extends VariantButton {
+class TonalToggleButton extends VariantToggleButton {
   /// Create a tonal button
-  TonalButton({
+  TonalToggleButton({
     super.key,
     super.severity,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -241,17 +248,18 @@ class TonalButton extends VariantButton {
   }) : super(variantStyle: const DrivenButtonStyle.tonal());
 
   /// Create a block tonal button
-  TonalButton.block({
+  TonalToggleButton.block({
     super.key,
     super.severity,
     CrossAxisAlignment? alignChildren,
     MainAxisAlignment? justifyChildren,
     bool expanded = true,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -273,16 +281,17 @@ class TonalButton extends VariantButton {
         );
 
   /// Create an icon tonal button
-  TonalButton.icon({
+  TonalToggleButton.icon({
     super.key,
     super.severity,
     BoxShape shape = BoxShape.circle,
     double? size,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -306,16 +315,17 @@ class TonalButton extends VariantButton {
 /// Filled buttons are high-emphasis,
 /// distinguished by their use of elevation and fill.
 /// They contain actions that are primary to your app.
-class FilledButton extends VariantButton {
+class FilledToggleButton extends VariantToggleButton {
   /// Create a filled button
-  FilledButton({
+  FilledToggleButton({
     super.key,
     super.severity,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -332,17 +342,18 @@ class FilledButton extends VariantButton {
   }) : super(variantStyle: const DrivenButtonStyle.filled());
 
   /// Create a block filled button
-  FilledButton.block({
+  FilledToggleButton.block({
     super.key,
     super.severity,
     CrossAxisAlignment? alignChildren,
     MainAxisAlignment? justifyChildren,
     bool expanded = true,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -364,16 +375,17 @@ class FilledButton extends VariantButton {
         );
 
   /// Create an icon filled button
-  FilledButton.icon({
+  FilledToggleButton.icon({
     super.key,
     super.severity,
     BoxShape shape = BoxShape.circle,
     double? size,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -397,16 +409,17 @@ class FilledButton extends VariantButton {
 /// Elevated buttons are high-emphasis,
 /// distinguished by their use of elevation and fill.
 /// They contain actions that are primary to your app.
-class ElevatedButton extends VariantButton {
+class ElevatedToggleButton extends VariantToggleButton {
   /// Create an elevated button
-  ElevatedButton({
+  ElevatedToggleButton({
     super.key,
     super.severity,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -423,17 +436,18 @@ class ElevatedButton extends VariantButton {
   }) : super(variantStyle: const DrivenButtonStyle.elevated());
 
   /// Create a block elevated button
-  ElevatedButton.block({
+  ElevatedToggleButton.block({
     super.key,
     super.severity,
     CrossAxisAlignment? alignChildren,
     MainAxisAlignment? justifyChildren,
     bool expanded = true,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -455,16 +469,17 @@ class ElevatedButton extends VariantButton {
         );
 
   /// Create an icon elevated button
-  ElevatedButton.icon({
+  ElevatedToggleButton.icon({
     super.key,
     super.severity,
     BoxShape shape = BoxShape.circle,
     double? size,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -488,16 +503,17 @@ class ElevatedButton extends VariantButton {
 /// Outlined buttons are medium-emphasis buttons.
 /// They contain actions that are important
 /// but aren't the primary action in an app.
-class OutlinedButton extends VariantButton {
+class OutlinedToggleButton extends VariantToggleButton {
   /// Create a outlined button
-  OutlinedButton({
+  OutlinedToggleButton({
     super.key,
     super.severity,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -514,17 +530,18 @@ class OutlinedButton extends VariantButton {
   }) : super(variantStyle: const DrivenButtonStyle.outlined());
 
   /// Create a block outlined button
-  OutlinedButton.block({
+  OutlinedToggleButton.block({
     super.key,
     super.severity,
     CrossAxisAlignment? alignChildren,
     MainAxisAlignment? justifyChildren,
     bool expanded = true,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,
@@ -546,16 +563,17 @@ class OutlinedButton extends VariantButton {
         );
 
   /// Create an icon outlined button
-  OutlinedButton.icon({
+  OutlinedToggleButton.icon({
     super.key,
     super.severity,
     BoxShape shape = BoxShape.circle,
     double? size,
+    super.selected = false,
     super.loading = false,
     super.disabled = false,
     super.autofocus = false,
     super.focusNode,
-    super.onPressed,
+    super.onSelected,
     super.eventsController,
     super.curve,
     super.duration,

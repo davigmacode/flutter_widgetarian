@@ -9,12 +9,38 @@ import 'event.dart';
 typedef ButtonVariant = SheetVariant;
 typedef ButtonSeverity = SheetSeverity;
 
+/// Map of [ButtonStyle] by [ButtonVariant] as key
+typedef ButtonStyleByVariant = Map<ButtonVariant, ButtonStyle?>;
+
+extension ButtonStyleByVariantUtils on ButtonStyleByVariant {
+  /// Creates a copy of this [ButtonStyleByVariant] but with
+  /// the given fields replaced with the new values.
+  ButtonStyleByVariant merge(ButtonStyleByVariant? variants) {
+    final entries = ButtonVariant.values.map((key) {
+      final other = variants?[key];
+      final style = this[key]?.merge(other) ?? other;
+      return MapEntry(key, style);
+    });
+    return Map.fromEntries(entries);
+  }
+
+  /// Linearly interpolate with another [ButtonStyleByVariant] object.
+  ButtonStyleByVariant lerp(ButtonStyleByVariant? other, double t) {
+    final entries = ButtonVariant.values.map((key) {
+      final style = ButtonStyle.lerp(this[key], other?[key], t);
+      return MapEntry(key, style);
+    });
+    return Map.fromEntries(entries);
+  }
+}
+
 /// The style to be applied to button widget
 @immutable
 class ButtonStyle extends SheetStyle {
   /// Create a raw button's style
   const ButtonStyle({
     super.variant,
+    super.severity,
     super.width,
     super.height,
     super.margin,
@@ -53,6 +79,7 @@ class ButtonStyle extends SheetStyle {
   ButtonStyle.from(ButtonStyle? other)
       : super(
           variant: other?.variant,
+          severity: other?.severity,
           width: other?.width,
           height: other?.height,
           margin: other?.margin,
@@ -177,6 +204,7 @@ class ButtonStyle extends SheetStyle {
   }) {
     final style = ButtonStyle(
       variant: variant ?? this.variant,
+      severity: severity ?? this.severity,
       width: width ?? this.width,
       height: height ?? this.height,
       margin: margin ?? this.margin,
@@ -243,6 +271,7 @@ class ButtonStyle extends SheetStyle {
 
     var style = copyWith(
       variant: other.variant,
+      severity: other.severity,
       width: other.width,
       height: other.height,
       margin: other.margin,
@@ -296,6 +325,7 @@ class ButtonStyle extends SheetStyle {
     if (a == null && b == null) return null;
     return ButtonStyle(
       variant: lerpEnum(a?.variant, b?.variant, t),
+      severity: lerpEnum(a?.severity, b?.severity, t),
       shape: lerpEnum(a?.shape, b?.shape, t),
       width: lerpDouble(a?.width, b?.width, t),
       height: lerpDouble(a?.height, b?.height, t),
@@ -377,6 +407,7 @@ class DrivenButtonStyle extends ButtonStyle
   /// Create a raw [DrivenButtonStyle].
   const DrivenButtonStyle({
     super.variant,
+    super.severity,
     super.width,
     super.height,
     super.margin,
@@ -432,6 +463,7 @@ class DrivenButtonStyle extends ButtonStyle
   /// Create a [DrivenButtonStyle] with default value for text style.
   const DrivenButtonStyle.text({
     Color? color,
+    super.severity,
     super.width,
     super.height,
     super.margin,
@@ -477,6 +509,7 @@ class DrivenButtonStyle extends ButtonStyle
   /// Create a [DrivenButtonStyle] with default value for tonal style.
   const DrivenButtonStyle.tonal({
     Color? color,
+    super.severity,
     super.width,
     super.height,
     super.margin,
@@ -522,6 +555,7 @@ class DrivenButtonStyle extends ButtonStyle
   /// Create a [DrivenButtonStyle] with default value for filled style.
   const DrivenButtonStyle.filled({
     Color? color,
+    super.severity,
     super.width,
     super.height,
     super.margin,
@@ -567,6 +601,7 @@ class DrivenButtonStyle extends ButtonStyle
   /// Create a [DrivenButtonStyle] with default value for elevated style.
   const DrivenButtonStyle.elevated({
     Color? color,
+    super.severity,
     super.width,
     super.height,
     super.margin,
@@ -612,6 +647,7 @@ class DrivenButtonStyle extends ButtonStyle
   /// Create a [DrivenButtonStyle] with default value for outlined style.
   const DrivenButtonStyle.outlined({
     Color? color,
+    super.severity,
     super.width,
     super.height,
     super.margin,

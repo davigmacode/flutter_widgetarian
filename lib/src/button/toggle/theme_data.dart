@@ -2,16 +2,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/src/theme/material.dart';
 import 'package:widgetarian/src/utils/lerp.dart';
-import 'style.dart';
+import 'package:widgetarian/src/button/style.dart';
 import 'theme_preset.dart';
 
 /// Defines the visual properties of [Button].
 ///
-/// Descendant widgets obtain the current [ButtonThemeData] object using
-/// `ButtonTheme.of(context)`. Instances of [ButtonThemeData]
-/// can be customized with [ButtonThemeData.copyWith] or [ButtonThemeData.merge].
+/// Descendant widgets obtain the current [ToggleButtonThemeData] object using
+/// `ToggleButtonTheme.of(context)`. Instances of [ToggleButtonThemeData]
+/// can be customized with [ToggleButtonThemeData.copyWith] or [ToggleButtonThemeData.merge].
 @immutable
-class ButtonThemeData extends ThemeExtension<ButtonThemeData>
+class ToggleButtonThemeData extends ThemeExtension<ToggleButtonThemeData>
     with Diagnosticable {
   /// The curve to apply when animating the parameters of avatar widget.
   final Curve curve;
@@ -45,8 +45,8 @@ class ButtonThemeData extends ThemeExtension<ButtonThemeData>
         ButtonSeverity.info: infoStyle,
       };
 
-  /// Creates a theme data that can be used for [ButtonTheme].
-  const ButtonThemeData({
+  /// Creates a theme data that can be used for [ToggleButtonTheme].
+  const ToggleButtonThemeData({
     required this.curve,
     required this.duration,
     required this.style,
@@ -57,8 +57,8 @@ class ButtonThemeData extends ThemeExtension<ButtonThemeData>
     this.infoStyle = const {},
   });
 
-  /// Create a [ButtonThemeData] with some reasonable default values.
-  static const fallback = ButtonThemeData(
+  /// Create a [ToggleButtonThemeData] with some reasonable default values.
+  static const fallback = ToggleButtonThemeData(
     curve: Curves.linear,
     duration: Duration(milliseconds: 200),
     style: ButtonStyle.defaults,
@@ -69,8 +69,8 @@ class ButtonThemeData extends ThemeExtension<ButtonThemeData>
     infoStyle: {},
   );
 
-  /// Creates a [ButtonThemeData] from another one that probably null.
-  ButtonThemeData.from([ButtonThemeData? other])
+  /// Creates a [ToggleButtonThemeData] from another one that probably null.
+  ToggleButtonThemeData.from([ToggleButtonThemeData? other])
       : curve = other?.curve ?? fallback.curve,
         duration = other?.duration ?? fallback.duration,
         style = other?.style ?? fallback.style,
@@ -80,15 +80,17 @@ class ButtonThemeData extends ThemeExtension<ButtonThemeData>
         successStyle = other?.successStyle ?? fallback.successStyle,
         infoStyle = other?.infoStyle ?? fallback.infoStyle;
 
-  /// A [ButtonThemeData] with default values.
-  factory ButtonThemeData.defaults(BuildContext context) =>
-      ButtonThemeDefaults(context);
+  /// A [ToggleButtonThemeData] with default values.
+  factory ToggleButtonThemeData.defaults(BuildContext context) =>
+      ToggleButtonThemeDefaults(context);
 
-  /// A [ButtonThemeData] with material 2 default values.
-  factory ButtonThemeData.m2(BuildContext context) => ButtonThemeM2(context);
+  /// A [ToggleButtonThemeData] with material 2 default values.
+  factory ToggleButtonThemeData.m2(BuildContext context) =>
+      ToggleButtonThemeM2(context);
 
-  /// A [ButtonThemeData] with material 3 default values.
-  factory ButtonThemeData.m3(BuildContext context) => ButtonThemeM3(context);
+  /// A [ToggleButtonThemeData] with material 3 default values.
+  factory ToggleButtonThemeData.m3(BuildContext context) =>
+      ToggleButtonThemeM3(context);
 
   /// Return [ButtonStyle] that depends on [variant] and [severity]
   ButtonStyle resolve({ButtonVariant? variant, ButtonSeverity? severity}) {
@@ -97,10 +99,10 @@ class ButtonThemeData extends ThemeExtension<ButtonThemeData>
         .merge(severityStyle[severity]?[variant]);
   }
 
-  /// Creates a copy of this [ButtonThemeData] but with
+  /// Creates a copy of this [ToggleButtonThemeData] but with
   /// the given fields replaced with the new values.
   @override
-  ButtonThemeData copyWith({
+  ToggleButtonThemeData copyWith({
     Curve? curve,
     Duration? duration,
     ButtonStyle? style,
@@ -110,7 +112,7 @@ class ButtonThemeData extends ThemeExtension<ButtonThemeData>
     ButtonStyleByVariant? successStyle,
     ButtonStyleByVariant? infoStyle,
   }) {
-    return ButtonThemeData(
+    return ToggleButtonThemeData(
       curve: curve ?? this.curve,
       duration: duration ?? this.duration,
       style: this.style.merge(style),
@@ -122,9 +124,9 @@ class ButtonThemeData extends ThemeExtension<ButtonThemeData>
     );
   }
 
-  /// Creates a copy of this [ButtonThemeData] but with
+  /// Creates a copy of this [ToggleButtonThemeData] but with
   /// the given fields replaced with the new values.
-  ButtonThemeData merge(ButtonThemeData? other) {
+  ToggleButtonThemeData merge(ToggleButtonThemeData? other) {
     // if null return current object
     if (other == null) return this;
 
@@ -141,9 +143,10 @@ class ButtonThemeData extends ThemeExtension<ButtonThemeData>
   }
 
   @override
-  ButtonThemeData lerp(ThemeExtension<ButtonThemeData>? other, double t) {
-    if (other is! ButtonThemeData) return this;
-    return ButtonThemeData(
+  ToggleButtonThemeData lerp(
+      ThemeExtension<ToggleButtonThemeData>? other, double t) {
+    if (other is! ToggleButtonThemeData) return this;
+    return ToggleButtonThemeData(
       curve: lerpEnum(curve, other.curve, t) ?? curve,
       duration: lerpEnum(duration, other.duration, t) ?? duration,
       style: ButtonStyle.lerp(style, other.style, t) ?? style,
@@ -169,7 +172,7 @@ class ButtonThemeData extends ThemeExtension<ButtonThemeData>
   @override
   bool operator ==(Object other) {
     if (other.runtimeType != runtimeType) return false;
-    return other is ButtonThemeData && mapEquals(other.toMap(), toMap());
+    return other is ToggleButtonThemeData && mapEquals(other.toMap(), toMap());
   }
 
   @override
