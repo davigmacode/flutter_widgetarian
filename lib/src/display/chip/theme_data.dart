@@ -43,6 +43,9 @@ class ChipThemeData extends ThemeExtension<ChipThemeData> with Diagnosticable {
   /// The duration over which to animate the parameters of [Chip] widget.
   final Duration duration;
 
+  /// The icon displayed when [onDeleted] is set.
+  final IconData deleteIcon;
+
   /// The [ChipStyle] to be applied to the [Chip] widget
   final ChipStyle style;
 
@@ -74,6 +77,7 @@ class ChipThemeData extends ThemeExtension<ChipThemeData> with Diagnosticable {
     required this.curve,
     required this.duration,
     required this.style,
+    this.deleteIcon = fallbackDeleteIcon,
     this.variantStyle = const {},
     this.dangerStyle = const {},
     this.warningStyle = const {},
@@ -81,11 +85,16 @@ class ChipThemeData extends ThemeExtension<ChipThemeData> with Diagnosticable {
     this.infoStyle = const {},
   });
 
+  /// The default icon displayed when [onDeleted] is set.
+  static const fallbackDeleteIcon =
+      IconData(0xe16a, fontFamily: 'MaterialIcons');
+
   /// Create a [ChipThemeData] with some reasonable default values.
   static const fallback = ChipThemeData(
     curve: Curves.linear,
     duration: Duration(milliseconds: 200),
-    style: ChipStyle.defaults,
+    style: ChipStyle(),
+    deleteIcon: fallbackDeleteIcon,
     variantStyle: {},
     dangerStyle: {},
     warningStyle: {},
@@ -98,6 +107,7 @@ class ChipThemeData extends ThemeExtension<ChipThemeData> with Diagnosticable {
       : curve = other?.curve ?? fallback.curve,
         duration = other?.duration ?? fallback.duration,
         style = other?.style ?? fallback.style,
+        deleteIcon = other?.deleteIcon ?? fallback.deleteIcon,
         variantStyle = other?.variantStyle ?? fallback.variantStyle,
         dangerStyle = other?.dangerStyle ?? fallback.dangerStyle,
         warningStyle = other?.warningStyle ?? fallback.warningStyle,
@@ -116,7 +126,10 @@ class ChipThemeData extends ThemeExtension<ChipThemeData> with Diagnosticable {
 
   /// Return [ChipStyle] that depends on [variant] and [severity]
   ChipStyle resolve({ChipVariant? variant, ChipSeverity? severity}) {
-    return ChipStyle.from(style)
+    variant ??= style.variant;
+    severity ??= style.severity;
+    return const ChipStyle()
+        .merge(style)
         .merge(variantStyle[variant])
         .merge(severityStyle[severity]?[variant]);
   }
@@ -127,6 +140,7 @@ class ChipThemeData extends ThemeExtension<ChipThemeData> with Diagnosticable {
   ChipThemeData copyWith({
     Curve? curve,
     Duration? duration,
+    IconData? deleteIcon,
     ChipStyle? style,
     ChipStyleByVariant? variantStyle,
     ChipStyleByVariant? dangerStyle,
@@ -137,6 +151,7 @@ class ChipThemeData extends ThemeExtension<ChipThemeData> with Diagnosticable {
     return ChipThemeData(
       curve: curve ?? this.curve,
       duration: duration ?? this.duration,
+      deleteIcon: deleteIcon ?? this.deleteIcon,
       style: this.style.merge(style),
       variantStyle: this.variantStyle.merge(variantStyle),
       dangerStyle: this.dangerStyle.merge(dangerStyle),
@@ -155,6 +170,7 @@ class ChipThemeData extends ThemeExtension<ChipThemeData> with Diagnosticable {
     return copyWith(
       curve: other.curve,
       duration: other.duration,
+      deleteIcon: other.deleteIcon,
       style: other.style,
       variantStyle: other.variantStyle,
       dangerStyle: other.dangerStyle,
@@ -170,6 +186,7 @@ class ChipThemeData extends ThemeExtension<ChipThemeData> with Diagnosticable {
     return ChipThemeData(
       curve: lerpEnum(curve, other.curve, t) ?? curve,
       duration: lerpEnum(duration, other.duration, t) ?? duration,
+      deleteIcon: lerpEnum(deleteIcon, other.deleteIcon, t) ?? deleteIcon,
       style: ChipStyle.lerp(style, other.style, t) ?? style,
       variantStyle: variantStyle.lerp(other.variantStyle, t),
       dangerStyle: dangerStyle.lerp(other.dangerStyle, t),
@@ -182,6 +199,7 @@ class ChipThemeData extends ThemeExtension<ChipThemeData> with Diagnosticable {
   Map<String, dynamic> toMap() => {
         'curve': curve,
         'duration': duration,
+        'deleteIcon': deleteIcon,
         'style': style,
         'variantStyle': variantStyle,
         'dangerStyle': dangerStyle,

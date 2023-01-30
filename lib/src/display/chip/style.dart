@@ -35,6 +35,7 @@ class ChipStyle extends SheetStyle {
 
   /// Create a raw chip's style
   const ChipStyle({
+    super.severity,
     super.variant,
     super.height,
     super.margin,
@@ -81,6 +82,7 @@ class ChipStyle extends SheetStyle {
         checkmarkStyle = other?.checkmarkStyle,
         avatarStyle = other?.avatarStyle,
         super(
+          severity: other?.severity,
           variant: other?.variant,
           height: other?.height,
           margin: other?.margin,
@@ -114,16 +116,6 @@ class ChipStyle extends SheetStyle {
           iconSize: other?.iconSize,
         );
 
-  /// An [ChipStyle] with some reasonable default values.
-  static const defaults = ChipStyle(
-    margin: EdgeInsets.zero,
-    clipBehavior: Clip.antiAlias,
-    foregroundLoosen: true,
-    foregroundJustify: MainAxisAlignment.center,
-  );
-
-  static const defaultPadding = EdgeInsets.symmetric(horizontal: 8);
-  static const defaultPaddingWithAvatar = EdgeInsets.symmetric(horizontal: 4);
   static const disabledForegroundAlpha = 0x61; // 38%
   static const disabledBackgroundAlpha = 0x0c; // 38% * 12% = 5%
   static const disabledBorderAlpha = 0x0c; // 38% * 12% = 5%
@@ -133,7 +125,7 @@ class ChipStyle extends SheetStyle {
   @override
   ChipStyle copyWith({
     ChipVariant? variant,
-    SheetSeverity? severity,
+    ChipSeverity? severity,
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,
@@ -181,6 +173,7 @@ class ChipStyle extends SheetStyle {
   }) {
     final style = ChipStyle(
       variant: variant ?? this.variant,
+      severity: severity ?? this.severity,
       height: height ?? this.height,
       margin: margin ?? this.margin,
       padding: padding ?? this.padding,
@@ -250,6 +243,7 @@ class ChipStyle extends SheetStyle {
 
     var style = copyWith(
       variant: other.variant,
+      severity: other.severity,
       height: other.height,
       margin: other.margin,
       padding: other.padding,
@@ -315,6 +309,7 @@ class ChipStyle extends SheetStyle {
     if (a == null && b == null) return null;
     return ChipStyle(
       variant: lerpEnum(a?.variant, b?.variant, t),
+      severity: lerpEnum(a?.severity, b?.severity, t),
       height: lerpDouble(a?.height, b?.height, t),
       margin: EdgeInsetsGeometry.lerp(a?.margin, b?.margin, t),
       padding: EdgeInsetsGeometry.lerp(a?.padding, b?.padding, t),
@@ -398,6 +393,7 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
   /// Create a raw [DrivenChipStyle].
   const DrivenChipStyle({
     super.variant,
+    super.severity,
     super.height,
     super.margin,
     super.padding,
@@ -456,6 +452,7 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
   /// Create a [DrivenChipStyle] with default value for toned style.
   const DrivenChipStyle.tonal({
     Color? color,
+    super.severity,
     super.height,
     super.margin,
     super.padding,
@@ -496,7 +493,7 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
     this.pressedStyle,
     this.mergeResolved,
   }) : super(
-          variant: SheetVariant.tonal,
+          variant: ChipVariant.tonal,
           backgroundColor: color,
           foregroundColor: color,
         );
@@ -504,6 +501,7 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
   /// Create a [DrivenChipStyle] with default value for filled style.
   const DrivenChipStyle.filled({
     Color? color,
+    super.severity,
     super.height,
     super.margin,
     super.padding,
@@ -544,7 +542,56 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
     this.pressedStyle,
     this.mergeResolved,
   }) : super(
-          variant: SheetVariant.filled,
+          variant: ChipVariant.filled,
+          backgroundColor: color,
+          borderColor: color,
+        );
+
+  /// Create a [DrivenChipStyle] with default value for elevated style.
+  const DrivenChipStyle.elevated({
+    Color? color,
+    super.severity,
+    super.height,
+    super.margin,
+    super.padding,
+    super.clipBehavior,
+    super.overlayDisabled,
+    super.overlayColor,
+    super.shadowColor,
+    super.surfaceTint,
+    super.elevation,
+    super.foregroundStyle,
+    super.foregroundColor,
+    super.foregroundOpacity,
+    super.foregroundAlpha,
+    super.foregroundSpacing,
+    super.foregroundLoosen,
+    super.foregroundExpanded,
+    super.foregroundAlign,
+    super.foregroundJustify,
+    super.backgroundOpacity,
+    super.backgroundAlpha,
+    super.borderOpacity,
+    super.borderAlpha,
+    super.borderWidth,
+    super.borderRadius,
+    super.borderStyle = BorderStyle.none,
+    super.iconColor,
+    super.iconOpacity,
+    super.iconSize,
+    super.checkmarkColor,
+    super.checkmarkSize,
+    super.checkmarkWeight,
+    super.checkmarkStyle,
+    super.avatarStyle,
+    this.selectedStyle,
+    this.disabledStyle,
+    this.hoveredStyle,
+    this.focusedStyle,
+    this.pressedStyle,
+    this.mergeResolved,
+  }) : super(
+          variant: ChipVariant.elevated,
           backgroundColor: color,
           borderColor: color,
         );
@@ -552,6 +599,7 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
   /// Create a [DrivenChipStyle] with default value for outlined style.
   DrivenChipStyle.outlined({
     Color? color,
+    super.severity,
     super.height,
     super.margin,
     super.padding,
@@ -592,7 +640,7 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
     this.pressedStyle,
     this.mergeResolved,
   }) : super(
-          variant: SheetVariant.outlined,
+          variant: ChipVariant.outlined,
           foregroundColor: color,
           borderColor: color,
           avatarStyle:
@@ -636,7 +684,7 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
   @override
   DrivenChipStyle copyWith({
     ChipVariant? variant,
-    SheetSeverity? severity,
+    ChipSeverity? severity,
     double? width,
     double? height,
     EdgeInsetsGeometry? margin,
@@ -684,6 +732,7 @@ class DrivenChipStyle extends ChipStyle implements DrivenProperty<ChipStyle?> {
   }) {
     return DrivenChipStyle(
       variant: variant ?? this.variant,
+      severity: severity ?? this.severity,
       height: height ?? this.height,
       margin: margin ?? this.margin,
       padding: padding ?? this.padding,

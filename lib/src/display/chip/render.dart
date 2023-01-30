@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/event.dart';
 import 'package:widgetarian/feedback.dart';
@@ -14,7 +15,7 @@ import 'theme_data.dart';
 /// Chip widget with smooth animation, event driven style, and many more.
 class ChipRender extends ImplicitlyAnimatedWidget {
   const ChipRender({
-    Key? key,
+    super.key,
     required this.label,
     this.avatarImage,
     this.avatarText,
@@ -32,37 +33,215 @@ class ChipRender extends ImplicitlyAnimatedWidget {
     this.onDeleted,
     this.onSelected,
     this.eventsController,
+    this.variant,
+    this.severity,
     required this.style,
     required this.theme,
-    required Curve curve,
-    required Duration duration,
-  }) : super(
-          key: key,
-          duration: duration,
-          curve: curve,
-        );
+    required super.curve,
+    required super.duration,
+  });
 
+  /// {@template widgetarian.chip.label}
+  /// The primary content of the chip.
+  ///
+  /// Typically a [Text] widget.
+  /// {@endtemplate}
   final Widget label;
-  final ImageProvider? avatarImage;
-  final Widget? avatarText;
-  final Widget? leading;
-  final Widget? trailing;
-  final String? tooltip;
-  final Widget? deleteIcon;
-  final String? deleteTooltip;
-  final bool selected;
-  final bool disabled;
-  final bool checkmark;
-  final bool autofocus;
-  final FocusNode? focusNode;
-  final VoidCallback? onPressed;
-  final VoidCallback? onDeleted;
-  final ValueChanged<bool>? onSelected;
-  final ChipStyle? style;
-  final ChipThemeData theme;
-  final ChipEventController? eventsController;
 
-  static const deleteIconData = IconData(0xe16a, fontFamily: 'MaterialIcons');
+  /// {@template widgetarian.chip.avatarImage}
+  /// Typically used as profile image.
+  ///
+  /// If the avatar is to have the user's initials, use [avatarText] instead.
+  /// {@endtemplate}
+  final ImageProvider? avatarImage;
+
+  /// {@template widgetarian.chip.avatarText}
+  /// The primary content of the chip avatar.
+  ///
+  /// Typically a [Text] widget.
+  /// {@endtemplate}
+  final Widget? avatarText;
+
+  /// {@template widgetarian.chip.leading}
+  /// A custom widget to display prior to the chip's [label].
+  /// {@endtemplate}
+  final Widget? leading;
+
+  /// {@template widgetarian.chip.trailing}
+  /// A custom widget to display next to the chip's [label].
+  /// {@endtemplate}
+  final Widget? trailing;
+
+  /// {@template widgetarian.chip.tooltip}
+  /// Tooltip string to be used for the body area
+  /// (where the label and avatar are) of the chip.
+  /// {@endtemplate}
+  final String? tooltip;
+
+  /// {@template widgetarian.chip.deleteIcon}
+  /// The icon displayed when [onDeleted] is set.
+  ///
+  /// Defaults to an [Icon] widget set to use [Icons.cancel].
+  /// {@endtemplate}
+  final Widget? deleteIcon;
+
+  /// {@template widgetarian.chip.deleteTooltip}
+  /// The message to be used for the chip's delete button tooltip.
+  ///
+  /// If provided with an empty string, the tooltip of the delete button will be
+  /// disabled.
+  ///
+  /// If null, the default [MaterialLocalizations.deleteButtonTooltip] will be
+  /// used.
+  /// {@endtemplate}
+  final String? deleteTooltip;
+
+  /// {@template widgetarian.chip.selected}
+  /// Whether or not this chip is selected.
+  ///
+  /// Must not be null. Defaults to false.
+  /// {@endtemplate}
+  final bool selected;
+
+  /// {@template widgetarian.chip.disabled}
+  /// Whether or not this chip is disabled for input.
+  ///
+  /// Defaults to false. Cannot be null.
+  /// {@endtemplate}
+  final bool disabled;
+
+  /// {@template widgetarian.chip.checkmark}
+  /// Whether or not to show a checkmark when [selected] is true.
+  ///
+  /// Defaults to false. Cannot ve null.
+  /// {@endtemplate}
+  final bool checkmark;
+
+  /// {@macro flutter.widgets.Focus.autofocus}
+  final bool autofocus;
+
+  /// {@macro flutter.widgets.Focus.focusNode}
+  final FocusNode? focusNode;
+
+  /// {@template widgetarian.chip.onPressed}
+  /// Called when the user taps the chip.
+  ///
+  /// If [onPressed] is set, then this callback will be called when the user
+  /// taps on the label or avatar parts of the chip. If [onPressed] is null,
+  /// then the chip will be disabled.
+  ///
+  /// ```dart
+  /// class Blacksmith extends StatelessWidget {
+  ///   const Blacksmith({Key? key}) : super(key: key);
+  ///
+  ///   void startHammering() {
+  ///     print('bang bang bang');
+  ///   }
+  ///
+  ///   @override
+  ///   Widget build(BuildContext context) {
+  ///     return Chip(
+  ///       label: const Text('Apply Hammer'),
+  ///       onPressed: startHammering,
+  ///     );
+  ///   }
+  /// }
+  /// ```
+  /// {@endtemplate}
+  final VoidCallback? onPressed;
+
+  /// {@template widgetarian.chip.onDeleted}
+  /// Called when the user taps the [deleteIcon] to delete the chip.
+  ///
+  /// If null, the delete button will not appear on the chip.
+  ///
+  /// The chip will not automatically remove itself: this just tells the app
+  /// that the user tapped the delete button.
+  /// {@endtemplate}
+  final VoidCallback? onDeleted;
+
+  /// {@template widgetarian.chip.onSelected}
+  /// Called when the chip should change between selected and de-selected
+  /// states.
+  ///
+  /// When the chip is tapped, then the [onSelected] callback, if set, will be
+  /// applied to `!selected` (see [selected]).
+  ///
+  /// The chip passes the new value to the callback but does not actually
+  /// change state until the parent widget rebuilds the chip with the new
+  /// value.
+  ///
+  /// The callback provided to [onSelected] should update the state of the
+  /// parent [StatefulWidget] using the [State.setState] method, so that the
+  /// parent gets rebuilt.
+  ///
+  /// The [onSelected] and [onPressed] callbacks must not
+  /// both be specified at the same time.
+  ///
+  /// A [StatefulWidget] that illustrates use of onSelected in an [InputChip].
+  ///
+  /// ```dart
+  /// class Wood extends StatefulWidget {
+  ///   const Wood({Key? key}) : super(key: key);
+  ///
+  ///   @override
+  ///   State<StatefulWidget> createState() => WoodState();
+  /// }
+  ///
+  /// class WoodState extends State<Wood> {
+  ///   bool _useChisel = false;
+  ///
+  ///   @override
+  ///   Widget build(BuildContext context) {
+  ///     return Chip(
+  ///       label: const Text('Use Chisel'),
+  ///       selected: _useChisel,
+  ///       onSelected: (bool newValue) {
+  ///         setState(() {
+  ///           _useChisel = newValue;
+  ///         });
+  ///       },
+  ///     );
+  ///   }
+  /// }
+  /// ```
+  /// {@endtemplate}
+  final ValueChanged<bool>? onSelected;
+
+  /// {@template widgetarian.chip.variant}
+  /// Type of the chip variant
+  /// {@endtemplate}
+  final SheetVariant? variant;
+
+  /// {@template widgetarian.chip.severity}
+  /// Type of the chip severity
+  /// {@endtemplate}
+  final ChipSeverity? severity;
+
+  /// {@template widgetarian.chip.style}
+  /// The style to be applied to the chip.
+  ///
+  /// If [style] is an event driven [DrivenChipStyle],
+  /// then [DrivenChipStyle.evaluate] is used for the following [ChipEvent]s:
+  ///
+  ///  * [ChipEvent.disabled].
+  ///  * [ChipEvent.selected].
+  ///  * [ChipEvent.hovered].
+  ///  * [ChipEvent.focused].
+  ///  * [ChipEvent.pressed].
+  /// {@endtemplate}
+  final ChipStyle? style;
+
+  /// {@template widgetarian.chip.theme}
+  /// The [ChipThemeData] that provides fallback values.
+  /// {@endtemplate}
+  final ChipThemeData theme;
+
+  /// {@template widgetarian.chip.eventsController}
+  /// Used by widgets that expose their internal event
+  /// for the sake of extensions that add support for additional events.
+  /// {@endtemplate}
+  final ChipEventController? eventsController;
 
   bool get enabled => !disabled;
 
@@ -80,58 +259,24 @@ class ChipRender extends ImplicitlyAnimatedWidget {
 
 class ChipRenderState extends AnimatedWidgetBaseState<ChipRender>
     with WidgetEventMixin<ChipRender> {
-  // ChipStyle style = const ChipStyle();
-  // ChipStyle fallback = const ChipStyle();
-
-  // @protected
-  // void setStyle() {
-  //   final rawStyle = ChipStyle.defaults.merge(widget.style);
-  //   final resStyle = DrivenChipStyle.evaluate(rawStyle, widgetEvents.value);
-  //   style = ChipStyle.from(resStyle);
-
-  //   final rawFallback = widget.fallback.resolve(style.variant);
-  //   final resFallback =
-  //       DrivenChipStyle.evaluate(rawFallback, widgetEvents.value);
-  //   fallback = ChipStyle.from(resFallback);
-  //   setState(() {});
-  // }
-
-  // Color? get defaultBackgroundColor {
-  //   return fallback.backgroundColor;
-  // }
-
-  // Color? get defaultBorderColor {
-  //   return fallback.borderColor;
-  // }
+  Curve get curve => widget.curve;
+  Duration get duration => widget.duration;
 
   ChipStyle get style {
-    final raw = ChipStyle.defaults.merge(widget.style);
-    final fallback = widget.theme.resolve(
-      variant: raw.variant,
-      severity: raw.severity,
+    final fromProps = ChipStyle(
+      variant: widget.variant,
+      severity: widget.severity,
     );
-    final driven = fallback.merge(raw);
-    final evaluated = DrivenChipStyle.evaluate(driven, widgetEvents.value);
-    return ChipStyle.from(evaluated);
+    final raw = fromProps.merge(widget.style);
+    final specs = DrivenChipStyle.evaluate(raw, widgetEvents.value);
+    final fallback = widget.theme.resolve(
+      variant: specs?.variant,
+      severity: specs?.severity,
+    );
+    final withFallback = fallback.merge(raw);
+    final result = DrivenChipStyle.evaluate(withFallback, widgetEvents.value);
+    return ChipStyle.from(result);
   }
-
-  // @protected
-  // void setStyle() {
-
-  //   final rawStyle = ChipStyle.defaults.merge(widget.style);
-  //   final resStyle = DrivenChipStyle.evaluate(rawStyle, widgetEvents.value);
-  //   style = ChipStyle.from(resStyle);
-
-  //   final rawFallback = widget.theme.resolve(style.variant);
-  //   final resFallback =
-  //       DrivenChipStyle.evaluate(rawFallback, widgetEvents.value);
-  //   fallback = ChipStyle.from(resFallback);
-  //   setState(() {});
-  // }
-
-  Curve get curve => widget.curve;
-
-  Duration get duration => widget.duration;
 
   Color? get defaultForegroundColor {
     return style.isFilled || style.isElevated
@@ -163,10 +308,7 @@ class ChipRenderState extends AnimatedWidgetBaseState<ChipRender>
       style.overlayColor ?? Colors.onSurface(backgroundColor);
 
   EdgeInsetsGeometry get padding {
-    final fallback = hasAvatar
-        ? ChipStyle.defaultPaddingWithAvatar
-        : ChipStyle.defaultPadding;
-    final padding = style.padding ?? fallback;
+    final padding = style.padding ?? EdgeInsets.zero;
     return padding.clamp(
       EdgeInsets.only(right: hasTrailing ? 8 : 0),
       EdgeInsetsGeometry.infinity,
@@ -272,7 +414,7 @@ class ChipRenderState extends AnimatedWidgetBaseState<ChipRender>
             // tooltip: widget.deleteTooltip,
             disabled: !widget.canDelete || widget.disabled,
             onTap: widget.onDeleted!,
-            child: widget.deleteIcon ?? const Icon(ChipRender.deleteIconData),
+            child: widget.deleteIcon ?? Icon(widget.theme.deleteIcon),
           )
         : null;
   }
@@ -304,7 +446,6 @@ class ChipRenderState extends AnimatedWidgetBaseState<ChipRender>
     initWidgetEvents(widget.eventsController);
     widgetEvents.toggle(ChipEvent.disabled, widget.disabled);
     widgetEvents.toggle(ChipEvent.selected, widget.selected);
-    // setStyle();
     super.initState();
   }
 
@@ -320,7 +461,6 @@ class ChipRenderState extends AnimatedWidgetBaseState<ChipRender>
       updateWidgetEvents(oldWidget.eventsController, widget.eventsController);
       widgetEvents.toggle(ChipEvent.disabled, widget.disabled);
       widgetEvents.toggle(ChipEvent.selected, widget.selected);
-      // setStyle();
       super.didUpdateWidget(oldWidget);
     }
   }
@@ -414,5 +554,11 @@ class ChipRenderState extends AnimatedWidgetBaseState<ChipRender>
         ),
       ),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<ChipStyle>('style', style));
   }
 }

@@ -12,6 +12,8 @@ class ColorThemeDefaults extends ColorThemeData with ThemePreset {
 
   Brightness get brightness => appTheme.colorScheme.brightness;
 
+  Color get unselectedWidgetColor => appTheme.unselectedWidgetColor;
+
   Color get background => appTheme.colorScheme.background;
   Color get outline => appTheme.colorScheme.outline;
   Color get shadow => appTheme.colorScheme.shadow;

@@ -7,7 +7,7 @@ import 'render.dart';
 /// Chips are compact elements that represent an input, attribute, or action.
 class Chip extends StatelessWidget {
   const Chip({
-    Key? key,
+    super.key,
     required this.label,
     this.avatarImage,
     this.avatarText,
@@ -16,6 +16,8 @@ class Chip extends StatelessWidget {
     this.tooltip,
     this.deleteIcon,
     this.deleteTooltip,
+    this.variant,
+    this.severity,
     this.style,
     this.selected = false,
     this.disabled = false,
@@ -28,185 +30,66 @@ class Chip extends StatelessWidget {
     this.eventsController,
     this.curve,
     this.duration,
-  }) : super(key: key);
+  });
 
-  /// The primary content of the chip.
-  ///
-  /// Typically a [Text] widget.
+  /// {@macro widgetarian.chip.label}
   final Widget label;
 
-  /// Typically used as profile image.
-  ///
-  /// If the avatar is to have the user's initials, use [avatarText] instead.
+  /// {@macro widgetarian.chip.avatarImage}
   final ImageProvider? avatarImage;
 
-  /// The primary content of the chip avatar.
-  ///
-  /// Typically a [Text] widget.
+  /// {@macro widgetarian.chip.avatarText}
   final Widget? avatarText;
 
-  /// A custom widget to display prior to the chip's [label].
+  /// {@macro widgetarian.chip.leading}
   final Widget? leading;
 
-  /// A custom widget to display next to the chip's [label].
+  /// {@macro widgetarian.chip.trailing}
   final Widget? trailing;
 
-  /// Tooltip string to be used for the body area (where the label and avatar
-  /// are) of the chip.
+  /// {@macro widgetarian.chip.tooltip}
   final String? tooltip;
 
-  /// The icon displayed when [onDeleted] is set.
-  ///
-  /// Defaults to an [Icon] widget set to use [Icons.cancel].
+  /// {@macro widgetarian.chip.deleteIcon}
   final Widget? deleteIcon;
 
-  /// The message to be used for the chip's delete button tooltip.
-  ///
-  /// If provided with an empty string, the tooltip of the delete button will be
-  /// disabled.
-  ///
-  /// If null, the default [MaterialLocalizations.deleteButtonTooltip] will be
-  /// used.
+  /// {@macro widgetarian.chip.deleteTooltip}
   final String? deleteTooltip;
 
-  /// Whether or not this chip is selected.
-  ///
-  /// Must not be null. Defaults to false.
+  /// {@macro widgetarian.chip.selected}
   final bool selected;
 
-  /// Whether or not this chip is disabled for input.
-  ///
-  /// Defaults to false. Cannot be null.
+  /// {@macro widgetarian.chip.disabled}
   final bool disabled;
 
-  /// Whether or not to show a checkmark when [selected] is true.
-  ///
-  /// Defaults to false. Cannot ve null.
+  /// {@macro widgetarian.chip.checkmark}
   final bool checkmark;
 
-  /// True if this widget will be selected as the initial focus
-  /// when no other node in its scope is currently focused.
-  ///
-  /// Ideally, there is only one widget with autofocus set in each [FocusScope].
-  /// If there is more than one widget with autofocus set,
-  /// then the first one added to the tree will get focus.
-  ///
-  /// Must not be null. Defaults to false.
+  /// {@macro flutter.widgets.Focus.autofocus}
   final bool autofocus;
 
-  /// An optional focus node to use as the focus node for this widget.
-  ///
-  /// If one is not supplied, then one will be automatically allocated, owned,
-  /// and managed by this widget. The widget will be focusable even if a [focusNode] is not supplied.
-  /// If supplied, the given focusNode will be hosted by this widget, but not owned.
-  /// See [FocusNode] for more information on what being hosted and/or owned implies.
-  ///
-  /// Supplying a focus node is sometimes useful if an ancestor
-  /// to this widget wants to control when this widget has the focus.
-  /// The owner will be responsible for calling [FocusNode.dispose]
-  /// on the focus node when it is done with it, but this widget
-  /// will attach/detach and reparent the node when needed.
+  /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode;
 
-  /// Called when the user taps the chip.
-  ///
-  /// If [onPressed] is set, then this callback will be called when the user
-  /// taps on the label or avatar parts of the chip. If [onPressed] is null,
-  /// then the chip will be disabled.
-  ///
-  /// {@tool snippet}
-  ///
-  /// ```dart
-  /// class Blacksmith extends StatelessWidget {
-  ///   const Blacksmith({Key? key}) : super(key: key);
-  ///
-  ///   void startHammering() {
-  ///     print('bang bang bang');
-  ///   }
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return Chip(
-  ///       label: const Text('Apply Hammer'),
-  ///       onPressed: startHammering,
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  /// {@end-tool}
+  /// {@macro widgetarian.chip.onPressed}
   final VoidCallback? onPressed;
 
-  /// Called when the user taps the [deleteIcon] to delete the chip.
-  ///
-  /// If null, the delete button will not appear on the chip.
-  ///
-  /// The chip will not automatically remove itself: this just tells the app
-  /// that the user tapped the delete button.
+  /// {@macro widgetarian.chip.onDeleted}
   final VoidCallback? onDeleted;
 
-  /// Called when the chip should change between selected and de-selected
-  /// states.
-  ///
-  /// When the chip is tapped, then the [onSelected] callback, if set, will be
-  /// applied to `!selected` (see [selected]).
-  ///
-  /// The chip passes the new value to the callback but does not actually
-  /// change state until the parent widget rebuilds the chip with the new
-  /// value.
-  ///
-  /// The callback provided to [onSelected] should update the state of the
-  /// parent [StatefulWidget] using the [State.setState] method, so that the
-  /// parent gets rebuilt.
-  ///
-  /// The [onSelected] and [onPressed] callbacks must not
-  /// both be specified at the same time.
-  ///
-  /// {@tool snippet}
-  ///
-  /// A [StatefulWidget] that illustrates use of onSelected in an [InputChip].
-  ///
-  /// ```dart
-  /// class Wood extends StatefulWidget {
-  ///   const Wood({Key? key}) : super(key: key);
-  ///
-  ///   @override
-  ///   State<StatefulWidget> createState() => WoodState();
-  /// }
-  ///
-  /// class WoodState extends State<Wood> {
-  ///   bool _useChisel = false;
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return Chip(
-  ///       label: const Text('Use Chisel'),
-  ///       selected: _useChisel,
-  ///       onSelected: (bool newValue) {
-  ///         setState(() {
-  ///           _useChisel = newValue;
-  ///         });
-  ///       },
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  /// {@end-tool}
+  /// {@macro widgetarian.chip.onSelected}
   final ValueChanged<bool>? onSelected;
 
-  /// The style to be applied to the chip.
-  ///
-  /// If [style] is an event driven [DrivenChipStyle],
-  /// then [DrivenChipStyle.evaluate] is used for the following [ChipEvent]s:
-  ///
-  ///  * [ChipEvent.disabled].
-  ///  * [ChipEvent.selected].
-  ///  * [ChipEvent.hovered].
-  ///  * [ChipEvent.focused].
-  ///  * [ChipEvent.pressed].
+  /// {@macro widgetarian.chip.variant}
+  final ChipVariant? variant;
+
+  /// {@macro widgetarian.chip.severity}
+  final ChipSeverity? severity;
+
+  /// {@macro widgetarian.chip.style}
   final ChipStyle? style;
 
-  /// Used by widgets that expose their internal event
-  /// for the sake of extensions that add support for additional events.
+  /// {@macro widgetarian.chip.eventsController}
   final ChipEventController? eventsController;
 
   /// The curve to apply when animating the parameters of this widget.
@@ -225,16 +108,16 @@ class Chip extends StatelessWidget {
     return onPressed != null || onSelected != null;
   }
 
-  static const deleteIconData = IconData(0xe16a, fontFamily: 'MaterialIcons');
-
   @override
   Widget build(BuildContext context) {
     final theme = ChipTheme.of(context);
     return ChipRender(
       curve: curve ?? theme.curve,
       duration: duration ?? theme.duration,
-      style: theme.style.merge(style),
       theme: theme,
+      style: style,
+      variant: variant,
+      severity: severity,
       label: label,
       avatarImage: avatarImage,
       avatarText: avatarText,

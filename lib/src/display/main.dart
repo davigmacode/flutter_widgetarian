@@ -16,5 +16,6 @@ export 'chip/theme_data.dart';
 export 'chip/theme_preset.dart';
 export 'chip/theme.dart';
 export 'chip/widget.dart';
+export 'chip/variant.dart';
 
 export 'spoiler/widget.dart';

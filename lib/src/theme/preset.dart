@@ -36,7 +36,7 @@ abstract class ThemePreset {
         // CheckboxTileThemeData.defaults(context),
         RadioThemeData.m2(context),
         // RadioTileThemeData.defaults(context),
-        SwitchThemeData.m3(context),
+        SwitchThemeData.m2(context),
         // SwitchTileThemeData.defaults(context),
       ];
 
