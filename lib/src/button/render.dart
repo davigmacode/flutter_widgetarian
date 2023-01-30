@@ -13,6 +13,7 @@ class ButtonRender extends StatefulWidget {
     this.leading,
     this.trailing,
     this.tooltip,
+    this.variant,
     this.severity,
     this.selected = false,
     this.loading = false,
@@ -29,10 +30,15 @@ class ButtonRender extends StatefulWidget {
     required this.child,
   }) : super(key: key);
 
-  /// {@template widgetarian.button.severity}
-  /// Type of the sheet severity
+  /// {@template widgetarian.button.variant}
+  /// Type of the button variant
   /// {@endtemplate}
-  final SheetSeverity? severity;
+  final ButtonVariant? variant;
+
+  /// {@template widgetarian.button.severity}
+  /// Type of the button severity
+  /// {@endtemplate}
+  final ButtonSeverity? severity;
 
   /// {@macro flutter.widgets.Focus.autofocus}
   final bool autofocus;
@@ -209,20 +215,24 @@ class ButtonRender extends StatefulWidget {
 
 class ButtonRenderState extends State<ButtonRender>
     with WidgetEventMixin<ButtonRender> {
-  ButtonStyle get style {
-    final raw = ButtonStyle(severity: widget.severity).merge(widget.style);
-    final fallback = widget.theme.resolve(
-      variant: raw.variant,
-      severity: raw.severity,
-    );
-    final driven = fallback.merge(raw);
-    final evaluated = DrivenButtonStyle.evaluate(driven, widgetEvents.value);
-    return ButtonStyle.from(evaluated);
-  }
-
   Curve get curve => widget.curve ?? widget.theme.curve;
-
   Duration get duration => widget.duration ?? widget.theme.duration;
+
+  ButtonStyle get style {
+    final fromProps = ButtonStyle(
+      variant: widget.variant,
+      severity: widget.severity,
+    );
+    final raw = fromProps.merge(widget.style);
+    final specs = DrivenButtonStyle.evaluate(raw, widgetEvents.value);
+    final fallback = widget.theme.resolve(
+      variant: specs?.variant,
+      severity: specs?.severity,
+    );
+    final withFallback = fallback.merge(raw);
+    final result = DrivenButtonStyle.evaluate(withFallback, widgetEvents.value);
+    return ButtonStyle.from(result);
+  }
 
   Color? get defaultForegroundColor {
     return style.isFilled || style.isElevated
@@ -344,13 +354,13 @@ class ButtonRenderState extends State<ButtonRender>
             duration: duration,
             padding: padding,
             child: Tile(
-              leading: widget.leading != null
+              leading: hasLeading
                   ? DrivenWidget.evaluate(
                       widget.leading!,
                       widgetEvents.value,
                     )
                   : null,
-              trailing: widget.trailing != null
+              trailing: hasTrailing
                   ? DrivenWidget.evaluate(
                       widget.trailing!,
                       widgetEvents.value,

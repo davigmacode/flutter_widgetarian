@@ -19,12 +19,13 @@ class Button extends StatelessWidget {
     this.curve,
     this.duration,
     this.style,
+    this.variant,
     this.severity,
     this.tooltip,
     this.leading,
     this.trailing,
     required this.child,
-  });
+  }) : additionalStyle = null;
 
   /// Create a block button
   Button.block({
@@ -40,13 +41,14 @@ class Button extends StatelessWidget {
     this.eventsController,
     this.curve,
     this.duration,
+    this.variant,
     this.severity,
-    ButtonStyle? style,
+    this.style,
     this.tooltip,
     this.leading,
     this.trailing,
     required this.child,
-  }) : style = DrivenButtonStyle.from(style).block(
+  }) : additionalStyle = const ButtonStyle().block(
           alignChildren: alignChildren,
           justifyChildren: justifyChildren,
           expanded: expanded,
@@ -65,13 +67,14 @@ class Button extends StatelessWidget {
     this.eventsController,
     this.curve,
     this.duration,
+    this.variant,
     this.severity,
-    ButtonStyle? style,
+    this.style,
     this.tooltip,
     this.leading,
     this.trailing,
     required this.child,
-  }) : style = DrivenButtonStyle.from(style).icon(
+  }) : additionalStyle = const ButtonStyle().icon(
           shape: shape,
           size: size,
         );
@@ -88,7 +91,10 @@ class Button extends StatelessWidget {
   /// {@macro widgetarian.button.tooltip}
   final String? tooltip;
 
-  /// {@macro widgetarian.button.tooltip}
+  /// {@macro widgetarian.button.variant}
+  final ButtonVariant? variant;
+
+  /// {@macro widgetarian.button.severity}
   final ButtonSeverity? severity;
 
   /// {@macro widgetarian.button.loading}
@@ -118,17 +124,22 @@ class Button extends StatelessWidget {
   /// {@macro widgetarian.button.duration}
   final Duration? duration;
 
+  /// Additional style to be merge with [style]
+  final ButtonStyle? additionalStyle;
+
+  /// The [style] merged with [additionalStyle]
+  get effectiveStyle =>
+      const DrivenButtonStyle().merge(style).merge(additionalStyle);
+
   @override
   Widget build(BuildContext context) {
-    final buttonTheme = ButtonTheme.of(context);
-    final buttonStyle = buttonTheme.style.merge(style);
     return ButtonRender(
       curve: curve,
       duration: duration,
-      theme: buttonTheme,
-      style: buttonStyle,
+      theme: ButtonTheme.of(context),
+      style: effectiveStyle,
+      variant: variant,
       severity: severity,
-      selected: false,
       loading: loading,
       disabled: disabled,
       autofocus: autofocus,

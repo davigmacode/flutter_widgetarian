@@ -73,110 +73,6 @@ class ButtonThemeDefaults extends ButtonThemeData with ThemePreset {
           ),
         ),
       }.merge(super.variantStyle);
-
-  @override
-  get dangerStyle => {
-        ButtonVariant.text: ButtonStyle(
-          foregroundColor: colorTheme.danger,
-          backgroundColor: colorTheme.surface,
-        ),
-        ButtonVariant.tonal: ButtonStyle(
-          foregroundColor: colorTheme.danger,
-          backgroundColor: colorTheme.danger,
-        ),
-        ButtonVariant.filled: ButtonStyle(
-          backgroundColor: colorTheme.danger,
-          borderColor: colorTheme.danger,
-        ),
-        ButtonVariant.elevated: ButtonStyle(
-          shadowColor: colorTheme.danger,
-          foregroundColor: colorTheme.danger,
-          backgroundColor: colorTheme.surface,
-        ),
-        ButtonVariant.outlined: ButtonStyle(
-          foregroundColor: colorTheme.danger,
-          backgroundColor: colorTheme.surface,
-          borderColor: colorTheme.danger,
-        ),
-      }.merge(super.dangerStyle);
-
-  @override
-  get warningStyle => {
-        ButtonVariant.text: ButtonStyle(
-          foregroundColor: colorTheme.warning,
-          backgroundColor: colorTheme.surface,
-        ),
-        ButtonVariant.tonal: ButtonStyle(
-          foregroundColor: colorTheme.warning,
-          backgroundColor: colorTheme.warning,
-        ),
-        ButtonVariant.filled: ButtonStyle(
-          backgroundColor: colorTheme.warning,
-          borderColor: colorTheme.warning,
-        ),
-        ButtonVariant.elevated: ButtonStyle(
-          shadowColor: colorTheme.warning,
-          foregroundColor: colorTheme.warning,
-          backgroundColor: colorTheme.surface,
-        ),
-        ButtonVariant.outlined: ButtonStyle(
-          foregroundColor: colorTheme.warning,
-          backgroundColor: colorTheme.surface,
-          borderColor: colorTheme.warning,
-        ),
-      }.merge(super.warningStyle);
-
-  @override
-  get successStyle => {
-        ButtonVariant.text: ButtonStyle(
-          foregroundColor: colorTheme.success,
-          backgroundColor: colorTheme.surface,
-        ),
-        ButtonVariant.tonal: ButtonStyle(
-          foregroundColor: colorTheme.success,
-          backgroundColor: colorTheme.success,
-        ),
-        ButtonVariant.filled: ButtonStyle(
-          backgroundColor: colorTheme.success,
-          borderColor: colorTheme.success,
-        ),
-        ButtonVariant.elevated: ButtonStyle(
-          shadowColor: colorTheme.success,
-          foregroundColor: colorTheme.success,
-          backgroundColor: colorTheme.surface,
-        ),
-        ButtonVariant.outlined: ButtonStyle(
-          foregroundColor: colorTheme.success,
-          backgroundColor: colorTheme.surface,
-          borderColor: colorTheme.success,
-        ),
-      }.merge(super.successStyle);
-
-  @override
-  get infoStyle => {
-        ButtonVariant.text: ButtonStyle(
-          foregroundColor: colorTheme.info,
-          backgroundColor: colorTheme.surface,
-        ),
-        ButtonVariant.tonal: ButtonStyle(
-          foregroundColor: colorTheme.info,
-          backgroundColor: colorTheme.info,
-        ),
-        ButtonVariant.filled: ButtonStyle(
-          backgroundColor: colorTheme.info,
-          borderColor: colorTheme.info,
-        ),
-        ButtonVariant.elevated: ButtonStyle(
-          shadowColor: colorTheme.info,
-          foregroundColor: colorTheme.info,
-          backgroundColor: colorTheme.surface,
-        ),
-        ButtonVariant.outlined: ButtonStyle(
-          foregroundColor: colorTheme.info,
-          backgroundColor: colorTheme.surface,
-          borderColor: colorTheme.info,
-        ),
-      }.merge(super.infoStyle);
 }
 
 @immutable
@@ -223,6 +119,90 @@ class ButtonThemeM2 extends ButtonThemeData with ThemePreset {
           overlayColor: colorTheme.onSurface,
         ),
       }.merge(super.variantStyle);
+
+  @override
+  get dangerStyle => {
+        ButtonVariant.text: ButtonStyle(
+          foregroundColor: colorTheme.danger,
+        ),
+        ButtonVariant.tonal: ButtonStyle(
+          foregroundColor: colorTheme.danger,
+          backgroundColor: colorTheme.danger,
+        ),
+        ButtonVariant.filled: ButtonStyle(
+          backgroundColor: colorTheme.danger,
+        ),
+        ButtonVariant.elevated: ButtonStyle(
+          foregroundColor: colorTheme.danger,
+        ),
+        ButtonVariant.outlined: ButtonStyle(
+          foregroundColor: colorTheme.danger,
+          borderColor: colorTheme.danger,
+        ),
+      }.merge(super.dangerStyle);
+
+  @override
+  get warningStyle => {
+        ButtonVariant.text: ButtonStyle(
+          foregroundColor: colorTheme.warning,
+        ),
+        ButtonVariant.tonal: ButtonStyle(
+          foregroundColor: colorTheme.warning,
+          backgroundColor: colorTheme.warning,
+        ),
+        ButtonVariant.filled: ButtonStyle(
+          backgroundColor: colorTheme.warning,
+        ),
+        ButtonVariant.elevated: ButtonStyle(
+          foregroundColor: colorTheme.warning,
+        ),
+        ButtonVariant.outlined: ButtonStyle(
+          foregroundColor: colorTheme.warning,
+          borderColor: colorTheme.warning,
+        ),
+      }.merge(super.warningStyle);
+
+  @override
+  get successStyle => {
+        ButtonVariant.text: ButtonStyle(
+          foregroundColor: colorTheme.success,
+        ),
+        ButtonVariant.tonal: ButtonStyle(
+          foregroundColor: colorTheme.success,
+          backgroundColor: colorTheme.success,
+        ),
+        ButtonVariant.filled: ButtonStyle(
+          backgroundColor: colorTheme.success,
+        ),
+        ButtonVariant.elevated: ButtonStyle(
+          foregroundColor: colorTheme.success,
+        ),
+        ButtonVariant.outlined: ButtonStyle(
+          foregroundColor: colorTheme.success,
+          borderColor: colorTheme.success,
+        ),
+      }.merge(super.successStyle);
+
+  @override
+  get infoStyle => {
+        ButtonVariant.text: ButtonStyle(
+          foregroundColor: colorTheme.info,
+        ),
+        ButtonVariant.tonal: ButtonStyle(
+          foregroundColor: colorTheme.info,
+          backgroundColor: colorTheme.info,
+        ),
+        ButtonVariant.filled: ButtonStyle(
+          backgroundColor: colorTheme.info,
+        ),
+        ButtonVariant.elevated: ButtonStyle(
+          foregroundColor: colorTheme.info,
+        ),
+        ButtonVariant.outlined: ButtonStyle(
+          foregroundColor: colorTheme.info,
+          borderColor: colorTheme.info,
+        ),
+      }.merge(super.infoStyle);
 }
 
 @immutable
@@ -248,13 +228,11 @@ class ButtonThemeM3 extends ButtonThemeData with ThemePreset {
   @override
   get variantStyle => {
         ButtonVariant.text: ButtonStyle(
-          foregroundColor: colorTheme.onSurface,
           backgroundColor: colorTheme.surface,
           overlayColor: colorTheme.onSurface,
         ),
         ButtonVariant.tonal: ButtonStyle(
           backgroundOpacity: .3,
-          foregroundColor: colorTheme.onSurface,
           backgroundColor: colorTheme.surfaceVariant,
           overlayColor: colorTheme.onSurface,
         ),
@@ -266,9 +244,88 @@ class ButtonThemeM3 extends ButtonThemeData with ThemePreset {
           backgroundColor: colorTheme.surface,
         ),
         ButtonVariant.outlined: ButtonStyle(
-          foregroundColor: colorTheme.onSurface,
           backgroundColor: colorTheme.surface,
           overlayColor: colorTheme.onSurface,
         ),
       }.merge(super.variantStyle);
+
+  @override
+  get dangerStyle => {
+        ButtonVariant.text: ButtonStyle(
+          foregroundColor: colorTheme.danger,
+        ),
+        ButtonVariant.tonal: ButtonStyle(
+          foregroundColor: colorTheme.danger,
+        ),
+        ButtonVariant.filled: ButtonStyle(
+          foregroundColor: colorTheme.danger,
+        ),
+        ButtonVariant.elevated: ButtonStyle(
+          foregroundColor: colorTheme.danger,
+        ),
+        ButtonVariant.outlined: ButtonStyle(
+          foregroundColor: colorTheme.danger,
+          borderColor: colorTheme.danger,
+        ),
+      }.merge(super.dangerStyle);
+
+  @override
+  get warningStyle => {
+        ButtonVariant.text: ButtonStyle(
+          foregroundColor: colorTheme.warning,
+        ),
+        ButtonVariant.tonal: ButtonStyle(
+          foregroundColor: colorTheme.warning,
+        ),
+        ButtonVariant.filled: ButtonStyle(
+          foregroundColor: colorTheme.warning,
+        ),
+        ButtonVariant.elevated: ButtonStyle(
+          foregroundColor: colorTheme.warning,
+        ),
+        ButtonVariant.outlined: ButtonStyle(
+          foregroundColor: colorTheme.warning,
+          borderColor: colorTheme.warning,
+        ),
+      }.merge(super.warningStyle);
+
+  @override
+  get successStyle => {
+        ButtonVariant.text: ButtonStyle(
+          foregroundColor: colorTheme.success,
+        ),
+        ButtonVariant.tonal: ButtonStyle(
+          foregroundColor: colorTheme.success,
+        ),
+        ButtonVariant.filled: ButtonStyle(
+          foregroundColor: colorTheme.success,
+        ),
+        ButtonVariant.elevated: ButtonStyle(
+          foregroundColor: colorTheme.success,
+        ),
+        ButtonVariant.outlined: ButtonStyle(
+          foregroundColor: colorTheme.success,
+          borderColor: colorTheme.success,
+        ),
+      }.merge(super.successStyle);
+
+  @override
+  get infoStyle => {
+        ButtonVariant.text: ButtonStyle(
+          foregroundColor: colorTheme.info,
+        ),
+        ButtonVariant.tonal: ButtonStyle(
+          foregroundColor: colorTheme.info,
+        ),
+        ButtonVariant.filled: ButtonStyle(
+          foregroundColor: colorTheme.info,
+        ),
+        ButtonVariant.elevated: ButtonStyle(
+          foregroundColor: colorTheme.info,
+        ),
+        ButtonVariant.outlined: ButtonStyle(
+          foregroundColor: colorTheme.info,
+          borderColor: colorTheme.info,
+        ),
+      }.merge(super.infoStyle);
 }
