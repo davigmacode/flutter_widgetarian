@@ -12,6 +12,10 @@ class SheetCircleUsage extends StatelessWidget {
       title: 'Circle Shape',
       script: script,
       children: [
+        Sheet.circle(
+          radius: 50,
+          child: Center(child: Text('Text')),
+        ),
         TonalSheet.circle(
           radius: 50,
           child: Center(child: Text('Tonal')),

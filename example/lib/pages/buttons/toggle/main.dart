@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../template.dart';
 import 'basic.dart';
-import 'checkmark.dart';
-import 'avatar.dart';
-import 'delete.dart';
 import 'severity.dart';
+import 'icon.dart';
+import 'block.dart';
 
-class ChipPage extends StatelessWidget {
-  const ChipPage({
+class ToggleButtonPage extends StatelessWidget {
+  const ToggleButtonPage({
     Key? key,
     required this.title,
   }) : super(key: key);
@@ -22,11 +21,10 @@ class ChipPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(25),
         children: const [
-          ChipBasicUsage(),
-          ChipCheckmarkUsage(),
-          ChipAvatarUsage(),
-          ChipDeleteUsage(),
-          ChipSeverityUsage(),
+          ToggleButtonBasicUsage(),
+          ToggleButtonSeverityUsage(),
+          ToggleButtonIconUsage(),
+          ToggleButtonBlockUsage(),
         ],
       ),
     );

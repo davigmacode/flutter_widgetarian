@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../template.dart';
+import '../../template.dart';
 import 'basic.dart';
+import 'severity.dart';
 import 'child.dart';
 import 'event.dart';
 import 'icon.dart';
 import 'block.dart';
 import 'loading.dart';
-import 'toggle.dart';
 
 class ButtonPage extends StatelessWidget {
   const ButtonPage({
@@ -25,12 +25,12 @@ class ButtonPage extends StatelessWidget {
         padding: const EdgeInsets.all(25),
         children: const [
           ButtonBasicUsage(),
+          ButtonSeverityUsage(),
           ButtonChildUsage(),
           ButtonEventUsage(),
           ButtonIconUsage(),
           ButtonBlockUsage(),
           ButtonLoadingUsage(),
-          ButtonToggleUsage(),
         ],
       ),
     );

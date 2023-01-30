@@ -12,6 +12,11 @@ class SheetRectangleUsage extends StatelessWidget {
       title: 'Rectangle Shape',
       script: script,
       children: [
+        Sheet.square(
+          size: 100,
+          variant: SheetVariant.text,
+          child: Center(child: Text('Text')),
+        ),
         TonalSheet.square(
           size: 100,
           child: Center(child: Text('Tonal')),

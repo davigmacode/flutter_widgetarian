@@ -105,7 +105,8 @@ class _ChoiceBasicSingleUsageState extends State<ChoiceBasicSingleUsage> {
               spacing: 15,
               children: List<Widget>.generate(
                 strChoices.length,
-                (i) => Chip(
+                (i) => TonalChip(
+                  selectedStyle: const ChipStyle(variant: ChipVariant.filled),
                   label: Text(strChoices[i]),
                   selected: group.has(strChoices[i]),
                   onSelected: group.select(strChoices[i]),

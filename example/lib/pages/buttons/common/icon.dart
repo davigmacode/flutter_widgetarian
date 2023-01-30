@@ -2,7 +2,7 @@ import 'package:flutter/material.dart'
     hide ButtonStyle, TextButton, ElevatedButton, OutlinedButton;
 import 'package:widgetarian/button.dart';
 
-import '../sample.dart';
+import '../../sample.dart';
 
 class ButtonIconUsage extends StatelessWidget {
   const ButtonIconUsage({Key? key}) : super(key: key);
@@ -38,10 +38,9 @@ class ButtonIconUsage extends StatelessWidget {
         ),
         Button(
           onPressed: () {},
-          style: DrivenButtonStyle.outlined(
-            hoveredStyle: ButtonStyle(
-              borderRadius: BorderRadius.circular(5),
-            ),
+          style: const DrivenButtonStyle.outlined(
+            borderRadius: BorderRadius.all(Radius.circular(4)),
+            hoveredStyle: ButtonStyle(shape: BoxShape.circle),
           ).icon(shape: BoxShape.rectangle),
           child: const Icon(Icons.settings),
         ),

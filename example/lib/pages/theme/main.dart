@@ -77,7 +77,7 @@ class ThemePage extends StatelessWidget {
                 spacing: 5,
                 children: [
                   TextButton(
-                    onPressed: () => ThemePatrol.of(context).selectPrev(),
+                    onPressed: () => ThemeProvider.of(context).selectPrev(),
                     child: const Text('Prev Theme'),
                   ),
                   FilledButton(
@@ -92,7 +92,7 @@ class ThemePage extends StatelessWidget {
               ),
               const Gap(10),
               OutlinedButton(
-                onPressed: () => ThemePatrol.of(context).selectRandom(),
+                onPressed: () => ThemeProvider.of(context).selectRandom(),
                 child: const Text('Random Theme'),
               ),
               const Gap(30),
@@ -133,12 +133,12 @@ class ThemePage extends StatelessWidget {
               }),
               const Gap(10),
               TextButton(
-                onPressed: () => ThemePatrol.of(context).resetColor(),
+                onPressed: () => ThemeProvider.of(context).resetColor(),
                 child: const Text('Reset Color to Theme Color'),
               ),
               const Gap(30),
               FilledButton(
-                onPressed: () => ThemePatrol.of(context).reset(),
+                onPressed: () => ThemeProvider.of(context).reset(),
                 child: const Text('Reset All to Initial Values'),
               )
             ],

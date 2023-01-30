@@ -42,7 +42,6 @@ class _SwitchVariantUsageState extends State<SwitchVariantUsage> {
                 SwitchTile(
                   overlayDisabled: true,
                   spacing: 12,
-                  switchStyle: DrivenSwitchStyle.m3(),
                   selected: group.has('m3'),
                   onChanged: group.select('m3'),
                   child: const Text('M3'),
@@ -50,7 +49,6 @@ class _SwitchVariantUsageState extends State<SwitchVariantUsage> {
                 SwitchTile(
                   overlayDisabled: true,
                   spacing: 12,
-                  switchStyle: DrivenSwitchStyle.ios(),
                   selected: group.has('ios'),
                   onChanged: group.select('ios'),
                   child: const Text('IOS'),

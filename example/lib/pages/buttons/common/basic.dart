@@ -2,7 +2,7 @@ import 'package:flutter/material.dart'
     hide TextButton, ElevatedButton, OutlinedButton;
 import 'package:widgetarian/button.dart';
 
-import '../sample.dart';
+import '../../sample.dart';
 
 class ButtonBasicUsage extends StatelessWidget {
   const ButtonBasicUsage({Key? key}) : super(key: key);

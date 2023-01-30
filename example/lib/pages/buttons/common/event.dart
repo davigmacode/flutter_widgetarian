@@ -3,7 +3,7 @@ import 'package:flutter/material.dart'
 import 'package:widgetarian/animation.dart';
 import 'package:widgetarian/button.dart';
 import 'package:widgetarian/event.dart';
-import '../sample.dart';
+import '../../sample.dart';
 
 class ButtonEventUsage extends StatelessWidget {
   const ButtonEventUsage({Key? key}) : super(key: key);
@@ -45,7 +45,7 @@ class ButtonEventUsage extends StatelessWidget {
         Button(
           onPressed: () {},
           style: DrivenButtonStyle.from(
-            DrivenButtonStyle.outlined(
+            ButtonStyle.outlined(
               color: Colors.blue,
               borderRadius: BorderRadius.circular(5),
             ),
@@ -53,12 +53,12 @@ class ButtonEventUsage extends StatelessWidget {
               borderColor: Colors.red,
               foregroundColor: Colors.red,
             ),
-            hoveredStyle: DrivenButtonStyle.tonal(
+            hoveredStyle: ButtonStyle.tonal(
               color: Colors.orange,
               foregroundSpacing: 20,
               borderRadius: BorderRadius.circular(25),
             ),
-            pressedStyle: DrivenButtonStyle.filled(
+            pressedStyle: ButtonStyle.filled(
               color: Colors.red,
               backgroundOpacity: 1,
               foregroundColor: Colors.white,

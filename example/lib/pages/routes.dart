@@ -3,12 +3,13 @@ import 'package:flutter/widgets.dart';
 import 'input/checkbox/main.dart';
 import 'input/radio/main.dart';
 import 'input/switch/main.dart';
-import 'button/main.dart';
+import 'buttons/common/main.dart';
+import 'buttons/toggle/main.dart';
 import 'display/avatar/main.dart';
 import 'display/badge/main.dart';
 import 'display/chip/main.dart';
 import 'display/spoiler/main.dart';
-import 'feedback/checkmark.dart';
+// import 'feedback/checkmark.dart';
 import 'feedback/alert/main.dart';
 import 'feedback/toggle_icon/main.dart';
 import 'choice/basic/main.dart';
@@ -31,11 +32,22 @@ final Map<String, MenuItem> menu = {
       title: 'Widgetarian',
     ),
   ),
-  '/button': MenuLeaf(
+  '/buttons': MenuNest(
     name: 'Button',
-    builder: (context) => const ButtonPage(
-      title: 'Widgetarian Button',
-    ),
+    items: {
+      '/buttons/common': MenuLeaf(
+        name: 'Common',
+        builder: (context) => const ButtonPage(
+          title: 'Widgetarian Common Button',
+        ),
+      ),
+      '/buttons/toggle': MenuLeaf(
+        name: 'Toggle',
+        builder: (context) => const ToggleButtonPage(
+          title: 'Widgetarian Toggle Button',
+        ),
+      ),
+    },
   ),
   '/input': MenuNest(
     name: 'Input',
@@ -126,12 +138,12 @@ final Map<String, MenuItem> menu = {
   '/feedback': MenuNest(
     name: 'Feedback',
     items: {
-      '/feedback/marks': MenuLeaf(
-        name: 'Marks',
-        builder: (context) => const CheckmarkPage(
-          title: 'Widgetarian Marks',
-        ),
-      ),
+      // '/feedback/marks': MenuLeaf(
+      //   name: 'Marks',
+      //   builder: (context) => const CheckmarkPage(
+      //     title: 'Widgetarian Marks',
+      //   ),
+      // ),
       '/feedback/alert': MenuLeaf(
         name: 'Alert',
         builder: (context) => const AlertPage(

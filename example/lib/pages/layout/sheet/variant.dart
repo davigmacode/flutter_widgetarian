@@ -17,6 +17,57 @@ class SheetVariantUsage extends StatelessWidget {
           spacing: 15,
           runSpacing: 15,
           children: const [
+            Sheet.square(
+              size: 100,
+              severity: SheetSeverity.danger,
+              child: Center(
+                child: TextTile(
+                  align: TextTileAlign.center,
+                  title: Text('Text'),
+                  subtitle: Text('Danger'),
+                ),
+              ),
+            ),
+            Sheet.square(
+              size: 100,
+              severity: SheetSeverity.warning,
+              child: Center(
+                child: TextTile(
+                  align: TextTileAlign.center,
+                  title: Text('Text'),
+                  subtitle: Text('Warning'),
+                ),
+              ),
+            ),
+            Sheet.square(
+              size: 100,
+              severity: SheetSeverity.success,
+              child: Center(
+                child: TextTile(
+                  align: TextTileAlign.center,
+                  title: Text('Text'),
+                  subtitle: Text('Success'),
+                ),
+              ),
+            ),
+            Sheet.square(
+              size: 100,
+              severity: SheetSeverity.info,
+              child: Center(
+                child: TextTile(
+                  align: TextTileAlign.center,
+                  title: Text('Text'),
+                  subtitle: Text('Info'),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const Gap(20),
+        Wrap(
+          spacing: 15,
+          runSpacing: 15,
+          children: const [
             TonalSheet.square(
               size: 100,
               severity: SheetSeverity.danger,

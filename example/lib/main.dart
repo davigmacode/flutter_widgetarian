@@ -1,5 +1,11 @@
 import 'dart:developer';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
+    hide
+        ButtonThemeData,
+        ChipThemeData,
+        CheckboxThemeData,
+        RadioThemeData,
+        SwitchThemeData;
 import 'package:widgetarian/theme.dart';
 import 'pages/routes.dart';
 
@@ -14,20 +20,23 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ThemePatrol(
-      onAvailableChanged: (_) => log('available themes changed'),
-      onThemeChanged: (theme) => log('theme changed to ${theme.selected}'),
-      onModeChanged: (theme) => log('theme mode changed to ${theme.mode.name}'),
-      onColorChanged: (theme) =>
-          log('theme color changed to ${theme.color.toString()}'),
-      onChanged: (theme) => log('value changed'),
-      themes: {
-        'basic': ThemeConfig.fromColor(Colors.green),
-        'pro': ThemeConfig.fromColor(Colors.red),
-        'premium': ThemeConfig.fromColor(Colors.amber),
-      },
-      // light: ThemeData.light(),
-      // dark: ThemeData.dark(),
+    return ThemeProvider.builder(
+      controller: ThemeController(
+        onAvailableChanged: (_) => log('available themes changed'),
+        onThemeChanged: (theme) => log('theme changed to ${theme.selected}'),
+        onModeChanged: (theme) =>
+            log('theme mode changed to ${theme.mode.name}'),
+        onColorChanged: (theme) =>
+            log('theme color changed to ${theme.color.toString()}'),
+        onChanged: (theme) => log('value changed'),
+        themes: {
+          'basic': ThemeConfig.fromColor(Colors.green),
+          'pro': ThemeConfig.fromColor(Colors.red),
+          'premium': ThemeConfig.fromColor(Colors.amber),
+        },
+        // light: ThemeData.light(),
+        // dark: ThemeData.dark(),
+      ),
       builder: (context, theme) {
         return MaterialApp(
           title: 'Widgetarian',
@@ -36,6 +45,14 @@ class MyApp extends StatelessWidget {
           themeMode: theme.mode,
           initialRoute: '/',
           routes: routes,
+          builder: (context, child) {
+            return Theme(
+              data: Theme.of(context).copyWith(
+                extensions: ThemePreset.m3(context),
+              ),
+              child: child ?? const SizedBox.shrink(),
+            );
+          },
         );
       },
     );

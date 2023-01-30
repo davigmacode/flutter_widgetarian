@@ -1,38 +1,43 @@
-import 'package:flutter/material.dart' hide TextButton, OutlinedButton;
+import 'package:flutter/material.dart'
+    hide ButtonStyle, TextButton, OutlinedButton;
 import 'package:widgetarian/button.dart';
 
-import '../sample.dart';
+import '../../sample.dart';
 
-class ButtonChildUsage extends StatelessWidget {
-  const ButtonChildUsage({Key? key}) : super(key: key);
+class ButtonBlockUsage extends StatelessWidget {
+  const ButtonBlockUsage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Sample(
-      title: 'Button Children',
+      title: 'Block Button',
       script: script,
       children: [
-        TextButton(
+        TextButton.block(
           onPressed: () {},
-          leading: const Icon(Icons.calendar_month),
           child: const Text('Text Button'),
         ),
-        TonalButton(
+        TonalButton.block(
           onPressed: () {},
           trailing: const Icon(Icons.close),
           child: const Text('Tonal Button'),
         ),
-        OutlinedButton(
+        OutlinedButton.block(
+          expanded: false,
+          justifyChildren: MainAxisAlignment.spaceBetween,
           onPressed: () {},
           leading: const Icon(Icons.calendar_month),
           trailing: const Icon(Icons.close),
           child: const Text('Outlined Button'),
         ),
-        FilledButton(
+        Button(
           onPressed: () {},
+          style: const DrivenButtonStyle.filled().block(expanded: false),
           leading: const SizedBox.square(
             dimension: 18,
-            child: CircularProgressIndicator(color: Colors.white),
+            child: CircularProgressIndicator(
+              color: Colors.white,
+            ),
           ),
           child: const Text('Filled Button'),
         ),
@@ -41,35 +46,33 @@ class ButtonChildUsage extends StatelessWidget {
   }
 }
 
-const script = '''Wrap(
-  spacing: 15,
-  runSpacing: 15,
+const script = '''Column(
   children: [
-    Button(
+    TextButton.block(
       onPressed: () {},
-      style: DrivenButtonStyle.text(),
-      leading: const Icon(Icons.calendar_month),
       child: const Text('Text Button'),
     ),
-    Button(
+    TonalButton.block(
       onPressed: () {},
-      style: DrivenButtonStyle.tonal(),
       trailing: const Icon(Icons.close),
       child: const Text('Tonal Button'),
     ),
-    Button(
+    OutlinedButton.block(
+      expanded: false,
+      justifyChildren: MainAxisAlignment.spaceBetween,
       onPressed: () {},
-      style: DrivenButtonStyle.outlined(),
       leading: const Icon(Icons.calendar_month),
       trailing: const Icon(Icons.close),
       child: const Text('Outlined Button'),
     ),
     Button(
       onPressed: () {},
-      style: DrivenButtonStyle.filled(),
+      style: DrivenButtonStyle.filled().block(expanded: false),
       leading: const SizedBox.square(
         dimension: 18,
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          color: Colors.white,
+        ),
       ),
       child: const Text('Filled Button'),
     ),

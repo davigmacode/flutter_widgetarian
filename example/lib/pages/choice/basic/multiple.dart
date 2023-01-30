@@ -102,12 +102,18 @@ class _ChoiceBasicMultipleUsageState extends State<ChoiceBasicMultipleUsage> {
                 strChoices.length,
                 (i) => Chip(
                   checkmark: true,
+                  style: const DrivenChipStyle(
+                    selectedStyle: ChipStyle(
+                      variant: ChipVariant.outlined,
+                    ),
+                  ),
                   label: Text(strChoices[i]),
                   selected: group.has(strChoices[i]),
                   onSelected: group.select(strChoices[i]),
                 ),
-              )..add(Chip(
+              )..add(TonalChip(
                   checkmark: true,
+                  selectedStyle: const ChipStyle(variant: ChipVariant.filled),
                   label: const Text('Select All'),
                   selected: group.isChecked,
                   onSelected: group.selectAll(),

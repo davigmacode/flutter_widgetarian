@@ -2,7 +2,7 @@ import 'package:flutter/material.dart' hide ButtonStyle, TextButton;
 import 'package:widgetarian/button.dart';
 import 'package:widgetarian/event.dart';
 
-import '../sample.dart';
+import '../../sample.dart';
 
 class ButtonLoadingUsage extends StatefulWidget {
   const ButtonLoadingUsage({Key? key}) : super(key: key);
