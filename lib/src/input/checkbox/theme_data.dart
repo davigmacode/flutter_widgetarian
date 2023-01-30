@@ -54,6 +54,10 @@ class CheckboxThemeData extends ThemeExtension<CheckboxThemeData>
   factory CheckboxThemeData.m3(BuildContext context) =>
       CheckboxThemeM3(context);
 
+  /// A [CheckboxThemeData] with ios default values.
+  factory CheckboxThemeData.ios(BuildContext context) =>
+      CheckboxThemeIos(context);
+
   /// Creates a copy of this [CheckboxThemeData] but with
   /// the given fields replaced with the new values.
   @override

@@ -151,10 +151,11 @@ class CheckboxRenderState extends State<CheckboxRender>
     Widget result = AnimatedCheckmark(
       duration: duration,
       curve: curve,
+      fill: backgroundColor,
       color: checkmarkColor,
       weight: style.checkmarkWeight,
+      padding: style.checkmarkInset,
       size: style.size,
-      fill: backgroundColor,
       shape: border,
       value: widget.indeterminate ? null : widget.selected,
     );

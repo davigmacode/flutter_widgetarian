@@ -184,7 +184,7 @@ class CheckmarkPainter extends CustomPainter {
   })  : progress = progress ?? 1.0,
         color = color ?? const Color(0xFF000000),
         weight = weight ?? 1.0,
-        padding = padding ?? 0.0,
+        padding = padding ?? 1.0,
         shape = shape ?? const RoundedRectangleBorder(),
         style = style ?? StrokeStyle.sharp;
 
@@ -221,7 +221,7 @@ class CheckmarkPainter extends CustomPainter {
   }
 
   void _drawBox(Canvas canvas, Size size) {
-    final outer = (Offset.zero & size).deflate(-padding);
+    final outer = Offset.zero & size;
 
     // draw fill
     if (fill != null) {
@@ -237,9 +237,15 @@ class CheckmarkPainter extends CustomPainter {
     // animate the two check mark strokes
     // from the short side to the long side.
     final path = Path();
-    final start = Offset(size.width * 0.15, size.height * 0.45);
-    final mid = Offset(size.width * 0.4, size.height * 0.7);
-    final end = Offset(size.width * 0.85, size.height * 0.25);
+    final width = size.width;
+    final height = size.height;
+    final inset = padding;
+    final widthInset = inset < 1 ? width * inset : inset;
+    final heightInset = inset < 1 ? height * inset : inset;
+    final start = Offset((width * 0.15) + widthInset, height * 0.45);
+    final mid = Offset(width * 0.4, (height * 0.72) - heightInset);
+    final end =
+        Offset((width * 0.85) - widthInset, (height * 0.25) + heightInset);
     if (progress < 0.5) {
       final strokeT = progress * 2.0;
       final drawMid = Offset.lerp(start, mid, strokeT)!;
@@ -260,9 +266,12 @@ class CheckmarkPainter extends CustomPainter {
     // animate the horizontal line
     // from the mid point outwards.
     final center = size.center(Offset.zero);
-    final start = Offset(size.width * 0.2, center.dy);
-    final mid = Offset(size.width * 0.5, center.dy);
-    final end = Offset(size.width * 0.8, center.dy);
+    final width = size.width;
+    final inset = padding;
+    final effectiveInset = inset < 1 ? width * inset : inset;
+    final start = Offset((width * 0.2) + effectiveInset, center.dy);
+    final mid = Offset(width * 0.5, center.dy);
+    final end = Offset((width * 0.8) - effectiveInset, center.dy);
     final drawStart = Offset.lerp(start, mid, 1.0 - (-progress))!;
     final drawEnd = Offset.lerp(mid, end, -progress)!;
     canvas.drawLine(drawStart, drawEnd, paint);

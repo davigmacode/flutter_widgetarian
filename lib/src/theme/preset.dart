@@ -62,16 +62,17 @@ abstract class ThemePreset {
   static Iterable<ThemeExtension> ios(BuildContext context) => [
         // ColorThemeData.defaults(context),
         SheetThemeData.m3(context),
+        ToggleButtonThemeData.m3(context),
         ButtonThemeData.m3(context),
         // AvatarThemeData.defaults(context),
         // BadgeThemeData.defaults(context),
         ChipThemeData.m3(context),
         // AlertThemeData.defaults(context),
-        CheckboxThemeData.m3(context),
+        CheckboxThemeData.ios(context),
         // CheckboxTileThemeData.defaults(context),
         RadioThemeData.m3(context),
         // RadioTileThemeData.defaults(context),
         SwitchThemeData.ios(context),
-        // SwitchTileThemeData.defaults(context),
+        SwitchTileThemeData.m3(context),
       ];
 }

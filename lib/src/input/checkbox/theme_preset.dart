@@ -77,3 +77,28 @@ class CheckboxThemeM3 extends CheckboxThemeData with ThemePreset {
         ),
       ).merge(super.style);
 }
+
+@immutable
+class CheckboxThemeIos extends CheckboxThemeData with ThemePreset {
+  CheckboxThemeIos(this.context, [CheckboxThemeData? other])
+      : super.from(other);
+
+  @override
+  final BuildContext context;
+
+  @override
+  get style => DrivenCheckboxStyle(
+        shape: BoxShape.circle,
+        borderColor: appTheme.colorScheme.outline,
+        selectedStyle: CheckboxStyle(
+          backgroundColor: isLight
+              ? appTheme.colorScheme.primary
+              : appTheme.colorScheme.inversePrimary,
+        ),
+        indeterminateStyle: CheckboxStyle(
+          backgroundColor: isLight
+              ? appTheme.colorScheme.primary
+              : appTheme.colorScheme.inversePrimary,
+        ),
+      ).merge(super.style);
+}
