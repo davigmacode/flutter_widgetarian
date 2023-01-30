@@ -94,7 +94,10 @@ class ToggleButtonThemeData extends ThemeExtension<ToggleButtonThemeData>
 
   /// Return [ButtonStyle] that depends on [variant] and [severity]
   ButtonStyle resolve({ButtonVariant? variant, ButtonSeverity? severity}) {
-    return ButtonStyle.from(style)
+    variant ??= style.variant;
+    severity ??= style.severity;
+    return const ButtonStyle()
+        .merge(style)
         .merge(variantStyle[variant])
         .merge(severityStyle[severity]?[variant]);
   }

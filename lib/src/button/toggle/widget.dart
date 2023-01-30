@@ -11,6 +11,7 @@ class ToggleButton extends StatelessWidget {
   /// Create a toggle button
   const ToggleButton({
     super.key,
+    this.variant,
     this.severity,
     this.selected = false,
     this.loading = false,
@@ -26,11 +27,12 @@ class ToggleButton extends StatelessWidget {
     this.leading,
     this.trailing,
     required this.child,
-  });
+  }) : additionalStyle = null;
 
   /// Create a block toggle button
   ToggleButton.block({
     super.key,
+    this.variant,
     this.severity,
     CrossAxisAlignment? alignChildren,
     MainAxisAlignment? justifyChildren,
@@ -44,12 +46,12 @@ class ToggleButton extends StatelessWidget {
     this.eventsController,
     this.curve,
     this.duration,
-    ButtonStyle? style,
+    this.style,
     this.tooltip,
     this.leading,
     this.trailing,
     required this.child,
-  }) : style = DrivenButtonStyle.from(style).block(
+  }) : additionalStyle = const ButtonStyle().block(
           alignChildren: alignChildren,
           justifyChildren: justifyChildren,
           expanded: expanded,
@@ -58,6 +60,7 @@ class ToggleButton extends StatelessWidget {
   /// Create an icon toggle button
   ToggleButton.icon({
     super.key,
+    this.variant,
     this.severity,
     BoxShape shape = BoxShape.circle,
     double? size,
@@ -70,12 +73,12 @@ class ToggleButton extends StatelessWidget {
     this.eventsController,
     this.curve,
     this.duration,
-    ButtonStyle? style,
+    this.style,
     this.tooltip,
     this.leading,
     this.trailing,
     required this.child,
-  }) : style = DrivenButtonStyle.from(style).icon(
+  }) : additionalStyle = const ButtonStyle().icon(
           shape: shape,
           size: size,
         );
@@ -92,7 +95,10 @@ class ToggleButton extends StatelessWidget {
   /// {@macro widgetarian.button.tooltip}
   final String? tooltip;
 
-  /// {@macro widgetarian.button.tooltip}
+  /// {@macro widgetarian.button.variant}
+  final ButtonVariant? variant;
+
+  /// {@macro widgetarian.button.severity}
   final ButtonSeverity? severity;
 
   /// {@macro widgetarian.button.selected}
@@ -125,13 +131,21 @@ class ToggleButton extends StatelessWidget {
   /// {@macro widgetarian.button.duration}
   final Duration? duration;
 
+  /// Additional style to be merge with [style]
+  final ButtonStyle? additionalStyle;
+
+  /// The [style] merged with [additionalStyle]
+  get effectiveStyle =>
+      const DrivenButtonStyle().merge(style).merge(additionalStyle);
+
   @override
   Widget build(BuildContext context) {
     final buttonTheme = ToggleButtonTheme.of(context);
-    final buttonStyle = buttonTheme.style.merge(style);
+    final buttonStyle = effectiveStyle;
     return ButtonRender(
       curve: curve,
       duration: duration,
+      variant: variant,
       severity: severity,
       theme: ButtonThemeData(
         curve: buttonTheme.curve,
