@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:widgetarian/event.dart';
-import 'overlay/widget.dart';
+import 'overlay.dart';
 import 'style.dart';
 import 'theme.dart';
 

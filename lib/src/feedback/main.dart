@@ -9,11 +9,6 @@ export 'alert/theme.dart';
 export 'alert/widget.dart';
 export 'alert/variant.dart';
 
-export 'overlay/style.dart';
-export 'overlay/theme.dart';
-export 'overlay/tween.dart';
-export 'overlay/widget.dart';
-
 export 'toggle_icon/event.dart';
 export 'toggle_icon/style.dart';
 export 'toggle_icon/theme_data.dart';

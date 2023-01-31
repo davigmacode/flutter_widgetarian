@@ -29,9 +29,6 @@ export 'package:widgetarian/src/feedback/alert/theme_data.dart';
 export 'package:widgetarian/src/feedback/alert/theme_preset.dart';
 export 'package:widgetarian/src/feedback/alert/theme.dart';
 
-export 'package:widgetarian/src/feedback/overlay/style.dart';
-export 'package:widgetarian/src/feedback/overlay/theme.dart';
-
 export 'package:widgetarian/src/feedback/toggle_icon/style.dart';
 export 'package:widgetarian/src/feedback/toggle_icon/theme_data.dart';
 export 'package:widgetarian/src/feedback/toggle_icon/theme_preset.dart';
