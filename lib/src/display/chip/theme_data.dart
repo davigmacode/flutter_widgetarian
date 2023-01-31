@@ -124,6 +124,9 @@ class ChipThemeData extends ThemeExtension<ChipThemeData> with Diagnosticable {
   /// A [ChipThemeData] with material 3 default values.
   factory ChipThemeData.m3(BuildContext context) => ChipThemeM3(context);
 
+  /// A [ChipThemeData] with ios default values.
+  factory ChipThemeData.ios(BuildContext context) => ChipThemeIos(context);
+
   /// Return [ChipStyle] that depends on [variant] and [severity]
   ChipStyle resolve({ChipVariant? variant, ChipSeverity? severity}) {
     variant ??= style.variant;

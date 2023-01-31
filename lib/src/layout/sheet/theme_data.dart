@@ -116,6 +116,9 @@ class SheetThemeData extends ThemeExtension<SheetThemeData>
   /// A [SheetThemeData] with material 3 default values.
   static SheetThemeData m3(BuildContext context) => SheetThemeM3(context);
 
+  /// A [SheetThemeData] with ios default values.
+  static SheetThemeData ios(BuildContext context) => SheetThemeIos(context);
+
   /// Return [SheetStyle] that depends on [variant] and [severity]
   SheetStyle resolve({SheetVariant? variant, SheetSeverity? severity}) {
     return SheetStyle.from(style)

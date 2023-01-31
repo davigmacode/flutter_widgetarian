@@ -60,9 +60,17 @@ class SwitchTileThemeData extends ThemeExtension<SwitchTileThemeData>
   factory SwitchTileThemeData.defaults(BuildContext context) =>
       SwitchTileThemeDefaults(context);
 
+  /// A [SwitchTileThemeData] with material 2 default values.
+  factory SwitchTileThemeData.m2(BuildContext context) =>
+      SwitchTileThemeM2(context);
+
   /// A [SwitchTileThemeData] with material 3 default values.
   factory SwitchTileThemeData.m3(BuildContext context) =>
       SwitchTileThemeM3(context);
+
+  /// A [SwitchTileThemeData] with ios default values.
+  factory SwitchTileThemeData.ios(BuildContext context) =>
+      SwitchTileThemeIos(context);
 
   /// Creates a copy of this [SwitchTileThemeData] but with
   /// the given fields replaced with the new values.

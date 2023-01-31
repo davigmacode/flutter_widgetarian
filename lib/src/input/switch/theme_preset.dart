@@ -28,13 +28,11 @@ class SwitchThemeM2 extends SwitchThemeData with ThemePreset {
         trackHeight: 14,
         thumbSize: 20,
         thumbElevation: 2,
-        trackColor: appTheme.unselectedWidgetColor,
+        trackColor: colorTheme.unselectedWidgetColor,
         thumbColor: Colors.white,
         selectedStyle: SwitchStyle(
           thumbSize: 20,
-          trackColor: isLight
-              ? appTheme.colorScheme.primary
-              : appTheme.colorScheme.inversePrimary,
+          trackColor: colorTheme.primary,
         ),
         hoveredStyle: const SwitchStyle(overlayRadius: 20.0),
         pressedStyle: const SwitchStyle(overlayRadius: 10.0),
@@ -60,14 +58,14 @@ class SwitchThemeM3 extends SwitchThemeData with ThemePreset {
         trackHeight: 32,
         thumbSize: 16,
         thumbElevation: 2,
-        trackBorderColor: appTheme.colorScheme.outline,
-        trackColor: appTheme.colorScheme.surfaceVariant,
-        thumbColor: appTheme.colorScheme.onSurfaceVariant,
+        trackBorderColor: colorTheme.outline,
+        trackColor: colorTheme.surfaceVariant,
+        thumbColor: colorTheme.onSurfaceVariant,
         selectedStyle: SwitchStyle(
           thumbSize: 24,
           trackBorderWidth: 0,
-          trackColor: appTheme.colorScheme.primary,
-          thumbColor: appTheme.colorScheme.onPrimary,
+          trackColor: colorTheme.primary,
+          thumbColor: colorTheme.onPrimary,
         ),
         hoveredStyle: const SwitchStyle(
           overlayRadius: 20.0,
@@ -99,13 +97,12 @@ class SwitchThemeIos extends SwitchThemeData with ThemePreset {
         trackHeight: 32,
         thumbSize: 26,
         thumbElevation: 2,
-        trackColor: appTheme.colorScheme.surfaceVariant,
-        thumbColor:
-            isLight ? Colors.white : appTheme.colorScheme.onSurfaceVariant,
+        trackColor: colorTheme.surfaceVariant,
+        thumbColor: isLight ? Colors.white : colorTheme.onSurfaceVariant,
         selectedStyle: SwitchStyle(
           thumbSize: 26,
-          trackColor: appTheme.colorScheme.primary,
-          thumbColor: appTheme.colorScheme.onPrimary,
+          trackColor: colorTheme.primary,
+          thumbColor: colorTheme.onPrimary,
         ),
         hoveredStyle: const SwitchStyle(
           overlayRadius: 20.0,

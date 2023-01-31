@@ -52,6 +52,9 @@ class RadioThemeData extends ThemeExtension<RadioThemeData>
   /// A [RadioThemeData] with material 3 default values.
   factory RadioThemeData.m3(BuildContext context) => RadioThemeM3(context);
 
+  /// A [RadioThemeData] with ios default values.
+  factory RadioThemeData.ios(BuildContext context) => RadioThemeIos(context);
+
   /// Creates a copy of this [RadioThemeData] but with
   /// the given fields replaced with the new values.
   @override

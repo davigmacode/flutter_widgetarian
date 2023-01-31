@@ -43,15 +43,11 @@ class RadioThemeM2 extends RadioThemeData with ThemePreset {
 
   @override
   get style => DrivenRadioStyle(
-        borderColor: appTheme.colorScheme.outline,
+        borderColor: colorTheme.outline,
         thumbColor: Colors.transparent,
         selectedStyle: RadioStyle(
-          borderColor: isLight
-              ? appTheme.colorScheme.primary
-              : appTheme.colorScheme.inversePrimary,
-          thumbColor: isLight
-              ? appTheme.colorScheme.primary
-              : appTheme.colorScheme.inversePrimary,
+          borderColor: colorTheme.primary,
+          thumbColor: colorTheme.primary,
         ),
       ).merge(super.style);
 }
@@ -65,15 +61,29 @@ class RadioThemeM3 extends RadioThemeData with ThemePreset {
 
   @override
   get style => DrivenRadioStyle(
-        borderColor: appTheme.colorScheme.outline,
+        borderColor: colorTheme.outline,
         thumbColor: Colors.transparent,
         selectedStyle: RadioStyle(
-          borderColor: isLight
-              ? appTheme.colorScheme.primary
-              : appTheme.colorScheme.inversePrimary,
-          thumbColor: isLight
-              ? appTheme.colorScheme.primary
-              : appTheme.colorScheme.inversePrimary,
+          borderColor: colorTheme.primary,
+          thumbColor: colorTheme.primary,
+        ),
+      ).merge(super.style);
+}
+
+@immutable
+class RadioThemeIos extends RadioThemeData with ThemePreset {
+  RadioThemeIos(this.context, [RadioThemeData? other]) : super.from(other);
+
+  @override
+  final BuildContext context;
+
+  @override
+  get style => DrivenRadioStyle(
+        borderColor: colorTheme.outline,
+        thumbColor: Colors.transparent,
+        selectedStyle: RadioStyle(
+          borderColor: colorTheme.primary,
+          thumbColor: colorTheme.primary,
         ),
       ).merge(super.style);
 }

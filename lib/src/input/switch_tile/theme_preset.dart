@@ -15,8 +15,29 @@ class SwitchTileThemeDefaults extends SwitchTileThemeData with ThemePreset {
 }
 
 @immutable
+class SwitchTileThemeM2 extends SwitchTileThemeData with ThemePreset {
+  SwitchTileThemeM2(this.context, [SwitchTileThemeData? other])
+      : super.from(other);
+
+  @override
+  final BuildContext context;
+}
+
+@immutable
 class SwitchTileThemeM3 extends SwitchTileThemeData with ThemePreset {
   SwitchTileThemeM3(this.context, [SwitchTileThemeData? other])
+      : super.from(other);
+
+  @override
+  final BuildContext context;
+
+  @override
+  get buttonStyle => const ButtonStyle(overlayDisabled: true);
+}
+
+@immutable
+class SwitchTileThemeIos extends SwitchTileThemeData with ThemePreset {
+  SwitchTileThemeIos(this.context, [SwitchTileThemeData? other])
       : super.from(other);
 
   @override

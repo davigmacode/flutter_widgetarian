@@ -461,3 +461,202 @@ class ToggleButtonThemeM3 extends ToggleButtonThemeData with ThemePreset {
         ),
       }.merge(super.infoStyle);
 }
+
+@immutable
+class ToggleButtonThemeIos extends ToggleButtonThemeData with ThemePreset {
+  ToggleButtonThemeIos(this.context, [ToggleButtonThemeData? other])
+      : super.from(other);
+
+  @override
+  final BuildContext context;
+
+  @override
+  get style => ButtonStyle(
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        height: 44.0,
+        iconSize: 18.0,
+        foregroundSpacing: 8.0,
+        foregroundStyle: textTheme.labelLarge?.copyWith(height: 1),
+        borderColor: colorTheme.outline,
+        shadowColor: colorTheme.shadow,
+      ).merge(super.style);
+
+  @override
+  get variantStyle => {
+        ButtonVariant.text: DrivenButtonStyle(
+          foregroundColor: colorTheme.onSurface,
+          backgroundColor: colorTheme.surface,
+          overlayColor: colorTheme.onSurface,
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.primary,
+            backgroundColor: colorTheme.primary,
+          ),
+        ),
+        ButtonVariant.tonal: DrivenButtonStyle(
+          foregroundColor: colorTheme.onSurface,
+          backgroundColor: colorTheme.unselectedWidgetColor,
+          overlayColor: colorTheme.onSurface,
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.primary,
+            backgroundColor: colorTheme.primary,
+          ),
+        ),
+        ButtonVariant.elevated: DrivenButtonStyle(
+          backgroundColor: colorTheme.surface,
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.primary,
+            backgroundColor: colorTheme.surface,
+          ),
+        ),
+        ButtonVariant.filled: DrivenButtonStyle(
+          backgroundColor: colorTheme.unselectedWidgetColor,
+          selectedStyle: ButtonStyle(
+            backgroundColor: colorTheme.primary,
+          ),
+        ),
+        ButtonVariant.outlined: DrivenButtonStyle(
+          backgroundColor: Colors.transparent,
+          foregroundColor: colorTheme.onSurface,
+          borderColor: colorTheme.outline,
+          overlayColor: colorTheme.onSurface,
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.primary,
+            borderColor: colorTheme.primary,
+            overlayColor: colorTheme.primary,
+          ),
+        ),
+      }.merge(super.variantStyle);
+
+  @override
+  get dangerStyle => {
+        ButtonVariant.text: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.danger,
+            backgroundColor: colorTheme.danger,
+          ),
+        ),
+        ButtonVariant.tonal: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.danger,
+            backgroundColor: colorTheme.danger,
+          ),
+        ),
+        ButtonVariant.elevated: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.danger,
+          ),
+        ),
+        ButtonVariant.filled: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            backgroundColor: colorTheme.danger,
+          ),
+        ),
+        ButtonVariant.outlined: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.danger,
+            borderColor: colorTheme.danger,
+            overlayColor: colorTheme.danger,
+          ),
+        ),
+      }.merge(super.dangerStyle);
+
+  @override
+  get warningStyle => {
+        ButtonVariant.text: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.warning,
+            backgroundColor: colorTheme.warning,
+          ),
+        ),
+        ButtonVariant.tonal: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.warning,
+            backgroundColor: colorTheme.warning,
+          ),
+        ),
+        ButtonVariant.elevated: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.warning,
+          ),
+        ),
+        ButtonVariant.filled: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            backgroundColor: colorTheme.warning,
+          ),
+        ),
+        ButtonVariant.outlined: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.warning,
+            borderColor: colorTheme.warning,
+            overlayColor: colorTheme.warning,
+          ),
+        ),
+      }.merge(super.warningStyle);
+
+  @override
+  get successStyle => {
+        ButtonVariant.text: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.success,
+            backgroundColor: colorTheme.success,
+          ),
+        ),
+        ButtonVariant.tonal: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.success,
+            backgroundColor: colorTheme.success,
+          ),
+        ),
+        ButtonVariant.elevated: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.success,
+          ),
+        ),
+        ButtonVariant.filled: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            backgroundColor: colorTheme.success,
+          ),
+        ),
+        ButtonVariant.outlined: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.success,
+            borderColor: colorTheme.success,
+            overlayColor: colorTheme.success,
+          ),
+        ),
+      }.merge(super.successStyle);
+
+  @override
+  get infoStyle => {
+        ButtonVariant.text: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.info,
+            backgroundColor: colorTheme.info,
+          ),
+        ),
+        ButtonVariant.tonal: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.info,
+            backgroundColor: colorTheme.info,
+          ),
+        ),
+        ButtonVariant.elevated: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.info,
+          ),
+        ),
+        ButtonVariant.filled: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            backgroundColor: colorTheme.info,
+          ),
+        ),
+        ButtonVariant.outlined: DrivenButtonStyle(
+          selectedStyle: ButtonStyle(
+            foregroundColor: colorTheme.info,
+            borderColor: colorTheme.info,
+            overlayColor: colorTheme.info,
+          ),
+        ),
+      }.merge(super.infoStyle);
+}

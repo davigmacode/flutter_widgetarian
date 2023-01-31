@@ -116,11 +116,9 @@ class ButtonStyle extends SheetStyle {
 
   /// An [ButtonStyle] with some reasonable default values.
   static const defaults = ButtonStyle(
-    variant: ButtonVariant.text,
     clipBehavior: Clip.antiAlias,
-    margin: EdgeInsets.zero,
-    foregroundLoosen: true,
     foregroundJustify: MainAxisAlignment.center,
+    foregroundLoosen: true,
   );
 
   static const disabledForegroundAlpha = 0x61; // 38%

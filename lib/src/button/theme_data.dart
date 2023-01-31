@@ -90,6 +90,9 @@ class ButtonThemeData extends ThemeExtension<ButtonThemeData>
   /// A [ButtonThemeData] with material 3 default values.
   factory ButtonThemeData.m3(BuildContext context) => ButtonThemeM3(context);
 
+  /// A [ButtonThemeData] with ios default values.
+  factory ButtonThemeData.ios(BuildContext context) => ButtonThemeIos(context);
+
   /// Return [ButtonStyle] that depends on [variant] and [severity]
   ButtonStyle resolve({ButtonVariant? variant, ButtonSeverity? severity}) {
     variant ??= style.variant;

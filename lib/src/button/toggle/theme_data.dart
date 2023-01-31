@@ -92,6 +92,10 @@ class ToggleButtonThemeData extends ThemeExtension<ToggleButtonThemeData>
   factory ToggleButtonThemeData.m3(BuildContext context) =>
       ToggleButtonThemeM3(context);
 
+  /// A [ToggleButtonThemeData] with ios default values.
+  factory ToggleButtonThemeData.ios(BuildContext context) =>
+      ToggleButtonThemeIos(context);
+
   /// Return [ButtonStyle] that depends on [variant] and [severity]
   ButtonStyle resolve({ButtonVariant? variant, ButtonSeverity? severity}) {
     variant ??= style.variant;

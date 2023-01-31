@@ -41,16 +41,12 @@ class CheckboxThemeM2 extends CheckboxThemeData with ThemePreset {
 
   @override
   get style => DrivenCheckboxStyle(
-        borderColor: appTheme.colorScheme.outline,
+        borderColor: colorTheme.outline,
         selectedStyle: CheckboxStyle(
-          backgroundColor: isLight
-              ? appTheme.colorScheme.primary
-              : appTheme.colorScheme.inversePrimary,
+          backgroundColor: colorTheme.primary,
         ),
         indeterminateStyle: CheckboxStyle(
-          backgroundColor: isLight
-              ? appTheme.colorScheme.primary
-              : appTheme.colorScheme.inversePrimary,
+          backgroundColor: colorTheme.primary,
         ),
       ).merge(super.style);
 }
@@ -64,16 +60,12 @@ class CheckboxThemeM3 extends CheckboxThemeData with ThemePreset {
 
   @override
   get style => DrivenCheckboxStyle(
-        borderColor: appTheme.colorScheme.outline,
+        borderColor: colorTheme.outline,
         selectedStyle: CheckboxStyle(
-          backgroundColor: isLight
-              ? appTheme.colorScheme.primary
-              : appTheme.colorScheme.inversePrimary,
+          backgroundColor: colorTheme.primary,
         ),
         indeterminateStyle: CheckboxStyle(
-          backgroundColor: isLight
-              ? appTheme.colorScheme.primary
-              : appTheme.colorScheme.inversePrimary,
+          backgroundColor: colorTheme.primary,
         ),
       ).merge(super.style);
 }
@@ -89,16 +81,12 @@ class CheckboxThemeIos extends CheckboxThemeData with ThemePreset {
   @override
   get style => DrivenCheckboxStyle(
         shape: BoxShape.circle,
-        borderColor: appTheme.colorScheme.outline,
+        borderColor: colorTheme.outline,
         selectedStyle: CheckboxStyle(
-          backgroundColor: isLight
-              ? appTheme.colorScheme.primary
-              : appTheme.colorScheme.inversePrimary,
+          backgroundColor: colorTheme.primary,
         ),
         indeterminateStyle: CheckboxStyle(
-          backgroundColor: isLight
-              ? appTheme.colorScheme.primary
-              : appTheme.colorScheme.inversePrimary,
+          backgroundColor: colorTheme.primary,
         ),
       ).merge(super.style);
 }
