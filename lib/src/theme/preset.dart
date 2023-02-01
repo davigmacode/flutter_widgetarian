@@ -22,8 +22,8 @@ abstract class ThemePreset {
   @protected
   bool get isDark => appTheme.brightness == Brightness.dark;
 
-  /// An [Iterable<ThemeExtension>] with material 2 default values.
-  static Iterable<ThemeExtension> m2(BuildContext context) => [
+  /// An [ThemeExtensionIterable] with material 2 default values.
+  static ThemeExtensionIterable m2(BuildContext context) => [
         ColorThemeData.defaults(context),
         SheetThemeData.m2(context),
         ToggleButtonThemeData.m2(context),
@@ -40,8 +40,8 @@ abstract class ThemePreset {
         SwitchTileThemeData.defaults(context),
       ];
 
-  /// An [Iterable<ThemeExtension>] with material 3 default values.
-  static Iterable<ThemeExtension> m3(BuildContext context) => [
+  /// An [ThemeExtensionIterable] with material 3 default values.
+  static ThemeExtensionIterable m3(BuildContext context) => [
         ColorThemeData.defaults(context),
         SheetThemeData.m3(context),
         ToggleButtonThemeData.m3(context),
@@ -58,8 +58,8 @@ abstract class ThemePreset {
         SwitchTileThemeData.m3(context),
       ];
 
-  /// An [Iterable<ThemeExtension>] with ios default values.
-  static Iterable<ThemeExtension> ios(BuildContext context) => [
+  /// An [ThemeExtensionIterable] with ios default values.
+  static ThemeExtensionIterable ios(BuildContext context) => [
         ColorThemeData.defaults(context),
         SheetThemeData.ios(context),
         ToggleButtonThemeData.ios(context),

@@ -10,13 +10,20 @@ class ThemeController extends ChangeNotifier {
     required this.modeIcons,
     this.initialMode = ThemeMode.system,
     this.initialTheme = 'default',
-    this.onAvailableChanged,
-    this.onThemeChanged,
-    this.onModeChanged,
-    this.onColorChanged,
-    this.onChanged,
+    ThemeExtensionBuilder? extensionBuilder,
+    ThemeChanged? onAvailableChanged,
+    ThemeChanged? onThemeChanged,
+    ThemeChanged? onModeChanged,
+    ThemeChanged? onColorChanged,
+    ThemeChanged? onChanged,
   })  : mode = initialMode,
-        selected = initialTheme;
+        selected = initialTheme,
+        _extensionBuilder = extensionBuilder,
+        _onAvailableChanged = onAvailableChanged,
+        _onThemeChanged = onThemeChanged,
+        _onModeChanged = onModeChanged,
+        _onColorChanged = onColorChanged,
+        _onChanged = onChanged;
 
   /// Controller which handles updating and controlling current theme.
   ///
@@ -45,6 +52,7 @@ class ThemeController extends ChangeNotifier {
     ThemeMode initialMode = ThemeMode.system,
     String? initialTheme,
     ThemeModeIcons? modeIcons,
+    ThemeExtensionBuilder? extensionBuilder,
     ThemeChanged? onAvailableChanged,
     ThemeChanged? onThemeChanged,
     ThemeChanged? onModeChanged,
@@ -76,6 +84,7 @@ class ThemeController extends ChangeNotifier {
       initialMode: initialMode,
       available: availableTheme,
       modeIcons: modeIcons ?? defaultModeIcons,
+      extensionBuilder: extensionBuilder,
       onAvailableChanged: onAvailableChanged,
       onThemeChanged: onThemeChanged,
       onModeChanged: onModeChanged,
@@ -84,40 +93,43 @@ class ThemeController extends ChangeNotifier {
     );
   }
 
+  /// Default builder that returns iterable of [ThemeExtension]
+  final ThemeExtensionBuilder? _extensionBuilder;
+
   /// {@template widgetarian.theme.controller.onAvailableChanged}
   /// Called when available themes changed
   /// {@endtemplate}
-  ThemeChanged? onAvailableChanged;
+  final ThemeChanged? _onAvailableChanged;
 
   /// {@template widgetarian.theme.controller.onThemeChanged}
   /// Called when selected theme changed
   /// {@endtemplate}
-  ThemeChanged? onThemeChanged;
+  final ThemeChanged? _onThemeChanged;
 
   /// {@template widgetarian.theme.controller.onModeChanged}
   /// Called when theme mode changed
   /// {@endtemplate}
-  ThemeChanged? onModeChanged;
+  final ThemeChanged? _onModeChanged;
 
   /// {@template widgetarian.theme.controller.onColorChanged}
   /// Called when theme color changed
   /// {@endtemplate}
-  ThemeChanged? onColorChanged;
+  final ThemeChanged? _onColorChanged;
 
   /// {@template widgetarian.theme.controller.onChanged}
   /// Called when selected theme or theme mode or theme color changed
   /// {@endtemplate}
-  ThemeChanged? onChanged;
+  final ThemeChanged? _onChanged;
 
   /// {@template widgetarian.theme.controller.initialTheme}
   /// Initial provided theme name/key
   /// {@endtemplate}
-  String initialTheme;
+  final String initialTheme;
 
   /// {@template widgetarian.theme.controller.initialMode}
   /// Initial provided theme mode
   /// {@endtemplate}
-  ThemeMode initialMode;
+  final ThemeMode initialMode;
 
   /// {@template widgetarian.theme.controller.selected}
   /// Current selected theme name/key
@@ -196,6 +208,12 @@ class ThemeController extends ChangeNotifier {
   /// {@endtemplate}
   ThemeData get darkData => config.darkData;
 
+  /// {@template widgetarian.theme.controller.darkData}
+  /// Builder that returns iterable of [ThemeExtension]
+  /// {@endtemplate}
+  ThemeExtensionBuilder? get extensionBuilder =>
+      config.extensionBuilder ?? _extensionBuilder;
+
   /// {@template widgetarian.theme.controller.isLightMode}
   /// Whether the theme mode is [ThemeMode.light] or not
   /// {@endtemplate}
@@ -218,21 +236,21 @@ class ThemeController extends ChangeNotifier {
   void setThemes(ThemeMap themes) {
     available = themes;
     notifyListeners();
-    onAvailableChanged?.call(this);
+    _onAvailableChanged?.call(this);
   }
 
   /// Update or insert one or multiple theme(s) to the available themes
   void mergeThemes(ThemeMap themes) {
     available.addAll(themes);
     notifyListeners();
-    onAvailableChanged?.call(this);
+    _onAvailableChanged?.call(this);
   }
 
   /// Remove a theme by it's key from the available themes
   void removeTheme(String name) {
     available.remove(name);
     notifyListeners();
-    onAvailableChanged?.call(this);
+    _onAvailableChanged?.call(this);
   }
 
   /// Set the current selected theme
@@ -243,8 +261,8 @@ class ThemeController extends ChangeNotifier {
     );
     selected = name;
     notifyListeners();
-    onThemeChanged?.call(this);
-    onChanged?.call(this);
+    _onThemeChanged?.call(this);
+    _onChanged?.call(this);
   }
 
   void selectIndex(int index) {
@@ -278,16 +296,16 @@ class ThemeController extends ChangeNotifier {
   void toColor(Color? color) {
     this.color = color;
     notifyListeners();
-    onColorChanged?.call(this);
-    onChanged?.call(this);
+    _onColorChanged?.call(this);
+    _onChanged?.call(this);
   }
 
   /// Set the theme mode
   void toMode(ThemeMode mode) {
     this.mode = mode;
     notifyListeners();
-    onModeChanged?.call(this);
-    onChanged?.call(this);
+    _onModeChanged?.call(this);
+    _onChanged?.call(this);
   }
 
   /// Set theme mode to [ThemeMode.light]
@@ -318,10 +336,10 @@ class ThemeController extends ChangeNotifier {
     mode = initialMode;
     color = null;
     notifyListeners();
-    onThemeChanged?.call(this);
-    onModeChanged?.call(this);
-    onColorChanged?.call(this);
-    onChanged?.call(this);
+    _onThemeChanged?.call(this);
+    _onModeChanged?.call(this);
+    _onColorChanged?.call(this);
+    _onChanged?.call(this);
   }
 
   /// Reset the selected theme to the initial provided value

@@ -1,6 +1,16 @@
 import 'dart:ui' show Brightness;
+import 'package:flutter/material.dart' show ThemeExtension;
 export 'package:flutter/material.dart'
-    show Theme, ThemeData, ThemeExtension, TextTheme, Brightness;
+    show
+        Theme,
+        ThemeData,
+        ThemeMode,
+        ThemeExtension,
+        TextTheme,
+        ColorScheme,
+        Brightness;
+
+typedef ThemeExtensionIterable = Iterable<ThemeExtension<dynamic>>;
 
 extension BrightnessFlag on Brightness {
   /// Whether or not this is light

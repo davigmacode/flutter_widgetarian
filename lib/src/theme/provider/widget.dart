@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'controller.dart';
 import 'types.dart';
 
-class ThemeProvider extends InheritedNotifier<ThemeController> {
+class ThemeProvider extends InheritedNotifier<ThemeController>
+    with Diagnosticable {
   const ThemeProvider({
     Key? key,
     required ThemeController controller,
@@ -23,6 +25,12 @@ class ThemeProvider extends InheritedNotifier<ThemeController> {
     final result = context.dependOnInheritedWidgetOfExactType<ThemeProvider>();
     assert(result != null, 'No ThemeProvider found in context');
     return result!.notifier!;
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<ThemeController>('notifier', notifier));
   }
 }
 

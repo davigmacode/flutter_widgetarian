@@ -1,11 +1,14 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:widgetarian/src/theme/material.dart';
+import 'types.dart';
 
 /// The theme config contains light and dark theme data
 class ThemeConfig with Diagnosticable {
   /// Create a theme config
   ThemeConfig({
     ThemeData? data,
+    this.extensionBuilder,
     this.description,
   })  : data = data ?? ThemeData.light(),
         darkData = ThemeData.dark();
@@ -14,6 +17,7 @@ class ThemeConfig with Diagnosticable {
   ThemeConfig.mode({
     ThemeData? light,
     ThemeData? dark,
+    this.extensionBuilder,
     this.description,
   })  : data = light ?? ThemeData.light(),
         darkData = dark ?? ThemeData.dark();
@@ -21,6 +25,7 @@ class ThemeConfig with Diagnosticable {
   /// Create a theme config from color
   ThemeConfig.fromColor(
     Color color, {
+    this.extensionBuilder,
     this.description,
   })  : data = ThemeData(
           brightness: Brightness.light,
@@ -52,6 +57,9 @@ class ThemeConfig with Diagnosticable {
   /// The dark theme data
   final ThemeData darkData;
 
+  /// Builder that returns iterable of [ThemeExtension]
+  final ThemeExtensionBuilder? extensionBuilder;
+
   /// Short description which describes the theme
   final String? description;
 
@@ -61,11 +69,13 @@ class ThemeConfig with Diagnosticable {
     ThemeData? data,
     ThemeData? light,
     ThemeData? dark,
+    ThemeExtensionBuilder? extensionBuilder,
     String? description,
   }) {
     return ThemeConfig.mode(
       light: data ?? light ?? lightData,
       dark: dark ?? darkData,
+      extensionBuilder: extensionBuilder ?? this.extensionBuilder,
       description: description ?? this.description,
     );
   }
@@ -79,6 +89,7 @@ class ThemeConfig with Diagnosticable {
     return copyWith(
       light: other.lightData,
       dark: other.darkData,
+      extensionBuilder: other.extensionBuilder,
       description: other.description,
     );
   }
@@ -124,6 +135,8 @@ class ThemeConfig with Diagnosticable {
     properties.add(DiagnosticsProperty<ThemeData>('lightData', lightData));
     properties.add(DiagnosticsProperty<ThemeData>('darkData', darkData));
     properties.add(StringProperty('description', description));
+    properties.add(ObjectFlagProperty<ThemeExtensionBuilder?>.has(
+        'extensionBuilder', extensionBuilder));
   }
 }
 
