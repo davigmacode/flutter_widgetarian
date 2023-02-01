@@ -108,21 +108,20 @@ const script = '''Wrap(
     Button(
       onPressed: () {},
       style: DrivenButtonStyle.from(
-        DrivenButtonStyle.outlined(
+        ButtonStyle.outlined(
           color: Colors.blue,
           borderRadius: BorderRadius.circular(5),
         ),
         focusedStyle: const ButtonStyle(
-          backgroundColor: Colors.red,
+          borderColor: Colors.red,
           foregroundColor: Colors.red,
         ),
-        hoveredStyle: DrivenButtonStyle.tonal(
-          backgroundColor: Colors.orange,
-          foregroundColor: Colors.orange,
+        hoveredStyle: ButtonStyle.tonal(
+          color: Colors.orange,
           foregroundSpacing: 20,
           borderRadius: BorderRadius.circular(25),
         ),
-        pressedStyle: DrivenButtonStyle.filled(
+        pressedStyle: ButtonStyle.filled(
           color: Colors.red,
           backgroundOpacity: 1,
           foregroundColor: Colors.white,

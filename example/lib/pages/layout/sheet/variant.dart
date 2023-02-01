@@ -272,25 +272,262 @@ class SheetVariantUsage extends StatelessWidget {
   }
 }
 
-const script = '''Wrap(
-  spacing: 15,
-  runSpacing: 15,
+const script = '''ListView(
+  shrinkwrap: true,
   children: [
-    TonalSheet.circle(
-      radius: 50,
-      child: Center(child: Text('Tonal')),
+    Wrap(
+      spacing: 15,
+      runSpacing: 15,
+      children: const [
+        Sheet.square(
+          size: 100,
+          severity: SheetSeverity.danger,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Text'),
+              subtitle: Text('Danger'),
+            ),
+          ),
+        ),
+        Sheet.square(
+          size: 100,
+          severity: SheetSeverity.warning,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Text'),
+              subtitle: Text('Warning'),
+            ),
+          ),
+        ),
+        Sheet.square(
+          size: 100,
+          severity: SheetSeverity.success,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Text'),
+              subtitle: Text('Success'),
+            ),
+          ),
+        ),
+        Sheet.square(
+          size: 100,
+          severity: SheetSeverity.info,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Text'),
+              subtitle: Text('Info'),
+            ),
+          ),
+        ),
+      ],
     ),
-    ElevatedSheet.circle(
-      radius: 50,
-      child: Center(child: Text('Elevated')),
+    const Gap(20),
+    Wrap(
+      spacing: 15,
+      runSpacing: 15,
+      children: const [
+        TonalSheet.square(
+          size: 100,
+          severity: SheetSeverity.danger,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Tonal'),
+              subtitle: Text('Danger'),
+            ),
+          ),
+        ),
+        TonalSheet.square(
+          size: 100,
+          severity: SheetSeverity.warning,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Tonal'),
+              subtitle: Text('Warning'),
+            ),
+          ),
+        ),
+        TonalSheet.square(
+          size: 100,
+          severity: SheetSeverity.success,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Tonal'),
+              subtitle: Text('Success'),
+            ),
+          ),
+        ),
+        TonalSheet.square(
+          size: 100,
+          severity: SheetSeverity.info,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Tonal'),
+              subtitle: Text('Info'),
+            ),
+          ),
+        ),
+      ],
     ),
-    FilledSheet.circle(
-      radius: 50,
-      child: Center(child: Text('Filled')),
+    const Gap(20),
+    Wrap(
+      spacing: 15,
+      runSpacing: 15,
+      children: const [
+        ElevatedSheet.square(
+          size: 100,
+          severity: SheetSeverity.danger,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Elevated'),
+              subtitle: Text('Danger'),
+            ),
+          ),
+        ),
+        ElevatedSheet.square(
+          size: 100,
+          severity: SheetSeverity.warning,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Elevated'),
+              subtitle: Text('Warning'),
+            ),
+          ),
+        ),
+        ElevatedSheet.square(
+          size: 100,
+          severity: SheetSeverity.success,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Elevated'),
+              subtitle: Text('Success'),
+            ),
+          ),
+        ),
+        ElevatedSheet.square(
+          size: 100,
+          severity: SheetSeverity.info,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Elevated'),
+              subtitle: Text('Info'),
+            ),
+          ),
+        ),
+      ],
     ),
-    OutlinedSheet.circle(
-      radius: 50,
-      child: Center(child: Text('Outlined')),
+    const Gap(20),
+    Wrap(
+      spacing: 15,
+      runSpacing: 15,
+      children: const [
+        FilledSheet.square(
+          size: 100,
+          severity: SheetSeverity.danger,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Filled'),
+              subtitle: Text('Danger'),
+            ),
+          ),
+        ),
+        FilledSheet.square(
+          size: 100,
+          severity: SheetSeverity.warning,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Filled'),
+              subtitle: Text('Warning'),
+            ),
+          ),
+        ),
+        FilledSheet.square(
+          size: 100,
+          severity: SheetSeverity.success,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Filled'),
+              subtitle: Text('Success'),
+            ),
+          ),
+        ),
+        FilledSheet.square(
+          size: 100,
+          severity: SheetSeverity.info,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Filled'),
+              subtitle: Text('Info'),
+            ),
+          ),
+        ),
+      ],
+    ),
+    const Gap(20),
+    Wrap(
+      spacing: 15,
+      runSpacing: 15,
+      children: const [
+        OutlinedSheet.square(
+          size: 100,
+          severity: SheetSeverity.danger,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Outlined'),
+              subtitle: Text('Danger'),
+            ),
+          ),
+        ),
+        OutlinedSheet.square(
+          size: 100,
+          severity: SheetSeverity.warning,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Outlined'),
+              subtitle: Text('Warning'),
+            ),
+          ),
+        ),
+        OutlinedSheet.square(
+          size: 100,
+          severity: SheetSeverity.success,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Outlined'),
+              subtitle: Text('Success'),
+            ),
+          ),
+        ),
+        OutlinedSheet.square(
+          size: 100,
+          severity: SheetSeverity.info,
+          child: Center(
+            child: TextTile(
+              align: TextTileAlign.center,
+              title: Text('Outlined'),
+              subtitle: Text('Info'),
+            ),
+          ),
+        ),
+      ],
     ),
   ],
 )''';

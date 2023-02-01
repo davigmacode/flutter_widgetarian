@@ -42,6 +42,11 @@ const script = '''Wrap(
   spacing: 15,
   runSpacing: 15,
   children: [
+    Sheet.square(
+      size: 100,
+      variant: SheetVariant.text,
+      child: Center(child: Text('Text')),
+    ),
     TonalSheet.square(
       size: 100,
       child: Center(child: Text('Tonal')),

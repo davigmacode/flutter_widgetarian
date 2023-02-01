@@ -30,12 +30,23 @@ class MyApp extends StatelessWidget {
             log('theme color changed to ${theme.color.toString()}'),
         onChanged: (theme) => log('value changed'),
         themes: {
-          'basic': ThemeConfig.fromColor(Colors.green),
-          'pro': ThemeConfig.fromColor(Colors.red),
-          'premium': ThemeConfig.fromColor(Colors.amber),
+          'm2': ThemeConfig.fromColor(
+            Colors.blue,
+            description: 'Material 2',
+            extensionBuilder: ThemePreset.m2,
+          ),
+          'm3': ThemeConfig.fromColor(
+            Colors.purple,
+            description: 'Material 3',
+            extensionBuilder: ThemePreset.m3,
+          ),
+          'ios': ThemeConfig.fromColor(
+            Colors.pink,
+            description: 'IOS',
+            extensionBuilder: ThemePreset.ios,
+          ),
         },
-        // light: ThemeData.light(),
-        // dark: ThemeData.dark(),
+        extensionBuilder: ThemePreset.m2,
       ),
       builder: (context, theme) {
         return MaterialApp(
@@ -48,7 +59,7 @@ class MyApp extends StatelessWidget {
           builder: (context, child) {
             return Theme(
               data: Theme.of(context).copyWith(
-                extensions: ThemePreset.m3(context),
+                extensions: theme.extensionBuilder?.call(context),
               ),
               child: child ?? const SizedBox.shrink(),
             );

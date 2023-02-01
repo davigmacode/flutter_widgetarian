@@ -64,14 +64,18 @@ Choice<String>(
   value: selected,
   onChanged: setSelected,
   builder: (context, group, _) {
-    return Wrap(
-      children: List<Widget>.generate(
-        choices.length,
-        (i) => SwitchTile.list(
-          controlAffinity: ControlAffinity.trailing,
-          selected: group.has(choices[i]),
-          onChanged: group.select(choices[i]),
-          child: Text(choices[i]),
+    return SizedBox(
+      width: 200,
+      child: ListView(
+        shrinkWrap: true,
+        children: List<Widget>.generate(
+          choices.length,
+          (i) => SwitchTile.list(
+            controlAffinity: ControlAffinity.trailing,
+            selected: group.has(choices[i]),
+            onChanged: group.select(choices[i]),
+            child: Text(choices[i]),
+          ),
         ),
       ),
     );

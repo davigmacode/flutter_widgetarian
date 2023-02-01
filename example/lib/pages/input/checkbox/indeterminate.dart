@@ -95,7 +95,7 @@ Choice<String>(
         (i) => CheckboxTile(
           selected: group.has(choices[i]),
           onChanged: group.select(choices[i]),
-          buttonStyle: DrivenButtonStyle.outlined(
+          buttonStyle: const DrivenButtonStyle.outlined(
             foregroundSpacing: 10,
           ),
           child: Text(choices[i]),
@@ -104,7 +104,7 @@ Choice<String>(
           selected: group.isChecked,
           indeterminate: group.isIndeterminate,
           onChanged: group.selectAll(),
-          buttonStyle: DrivenButtonStyle.filled(
+          buttonStyle: const DrivenButtonStyle.filled(
             foregroundSpacing: 10,
           ),
           checkboxStyle: DrivenCheckboxStyle(
@@ -112,6 +112,7 @@ Choice<String>(
             backgroundColor: Colors.white,
             borderStyle: BorderStyle.none,
             selectedStyle: CheckboxStyle(
+              backgroundColor: Colors.white,
               checkmarkColor: Theme.of(context).primaryColor,
             ),
           ),

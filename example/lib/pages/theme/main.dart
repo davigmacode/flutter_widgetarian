@@ -56,17 +56,11 @@ class ThemePage extends StatelessWidget {
                   return Wrap(
                     spacing: 5,
                     children: theme.availableEntries
-                        .map((e) => Chip(
-                              label: Text(e.key),
-                              onSelected: (_) => theme.select(e.key),
+                        .map((e) => TonalChip(
+                              label: Text('${e.value.description}'),
+                              onPressed: () => theme.select(e.key),
                               selected: theme.selected == e.key,
                               checkmark: true,
-                              style: DrivenChipStyle.tonal(
-                                avatarStyle: AvatarStyle(
-                                  backgroundColor:
-                                      e.value.colorSchemeOf(context).primary,
-                                ),
-                              ),
                             ))
                         .toList(),
                   );

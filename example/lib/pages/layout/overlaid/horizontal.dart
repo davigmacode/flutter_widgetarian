@@ -24,7 +24,7 @@ class _OverlaidHorizontalUsageState extends State<OverlaidHorizontalUsage> {
   @override
   Widget build(BuildContext context) {
     return Sample(
-      title: 'Grouped Usage',
+      title: 'With Avatar',
       script: script,
       children: [
         Center(

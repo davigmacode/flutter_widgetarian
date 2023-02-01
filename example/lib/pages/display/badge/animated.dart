@@ -32,9 +32,8 @@ class _BadgeAnimatedUsageState extends State<BadgeAnimatedUsage> {
       title: 'Animated Usage',
       script: script,
       children: [
-        Anchor(
+        Anchor.circle(
           radius: 20,
-          shape: BoxShape.circle,
           onTap: decrement,
           child: const Icon(Icons.remove_circle_outline),
         ),
@@ -52,9 +51,8 @@ class _BadgeAnimatedUsageState extends State<BadgeAnimatedUsage> {
           transitionBuilder: BadgeTransition.scale,
           child: const Icon(Icons.chat),
         ),
-        Anchor(
+        Anchor.circle(
           radius: 20,
-          shape: BoxShape.circle,
           onTap: increment,
           child: const Icon(Icons.add_circle_outline),
         ),
@@ -81,9 +79,8 @@ Wrap(
   spacing: 15,
   runSpacing: 15,
   children: [
-    Anchor(
+    Anchor.circle(
       radius: 20,
-      shape: BoxShape.circle,
       onTap: decrement,
       child: const Icon(Icons.remove_circle_outline),
     ),
@@ -101,9 +98,8 @@ Wrap(
       transitionBuilder: BadgeTransition.scale,
       child: const Icon(Icons.chat),
     ),
-    Anchor(
+    Anchor.circle(
       radius: 20,
-      shape: BoxShape.circle,
       onTap: increment,
       child: const Icon(Icons.add_circle_outline),
     ),

@@ -41,6 +41,10 @@ const script = '''Wrap(
   spacing: 15,
   runSpacing: 15,
   children: [
+    Sheet.circle(
+      radius: 50,
+      child: Center(child: Text('Text')),
+    ),
     TonalSheet.circle(
       radius: 50,
       child: Center(child: Text('Tonal')),

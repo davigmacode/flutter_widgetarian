@@ -32,7 +32,7 @@ class ButtonBlockUsage extends StatelessWidget {
         ),
         Button(
           onPressed: () {},
-          style: const DrivenButtonStyle.filled().block(expanded: false),
+          style: const ButtonStyle.filled().block(expanded: false),
           leading: const SizedBox.square(
             dimension: 18,
             child: CircularProgressIndicator(
@@ -67,7 +67,7 @@ const script = '''Column(
     ),
     Button(
       onPressed: () {},
-      style: DrivenButtonStyle.filled().block(expanded: false),
+      style: const ButtonStyle.filled().block(expanded: false),
       leading: const SizedBox.square(
         dimension: 18,
         child: CircularProgressIndicator(

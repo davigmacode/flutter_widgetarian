@@ -72,9 +72,6 @@ Choice<String>(
           choices.length,
           (i) => RadioTile.list(
             controlAffinity: ControlAffinity.trailing,
-            buttonStyle: const ButtonStyle(
-              foregroundLoosen: false,
-            ),
             selected: group.has(choices[i]),
             onChanged: group.select(choices[i]),
             child: Text(choices[i]),

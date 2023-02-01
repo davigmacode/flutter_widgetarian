@@ -12,9 +12,8 @@ class AnchorCircleUsage extends StatelessWidget {
       title: 'Circle Shape',
       script: script,
       children: [
-        Anchor(
+        Anchor.circle(
           onTap: () {},
-          shape: BoxShape.circle,
           radius: 20,
           child: const Icon(Icons.chat),
         ),
@@ -23,9 +22,8 @@ class AnchorCircleUsage extends StatelessWidget {
   }
 }
 
-const script = '''Anchor(
+const script = '''Anchor.circle(
   onTap: () {},
-  shape: BoxShape.circle,
   radius: 20,
   child: const Icon(Icons.chat),
 )''';

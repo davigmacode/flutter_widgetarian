@@ -148,27 +148,128 @@ class _ChoiceBasicSingleUsageState extends State<ChoiceBasicSingleUsage> {
   }
 }
 
-const script = '''List<String> choices = ['Flutter', 'React', 'Ionic'];
-List<String> selected = [];
+const script = '''List<String> strChoices = ['Flutter', 'React', 'Ionic'];
+List<String> strSelected = [];
 
-void setSelected(List<String> value) {
-  setState(() => selected = value);
+void setStrSelected(List<String> value) {
+  setState(() => strSelected = value);
 }
 
-ChoiceGroup<String>(
-  exclusive: true,
-  value: selected,
-  onChanged: setSelected,
-  builder: (context, group, _) {
-    return Wrap(
-      children: List<Widget>.generate(
-        choices.length,
-        (i) => Checkbox<String>(
-          label: Text(choices[i]),
-          checked: group.has(choices[i]),
-          onChanged: group.select(choices[i]),
-        ),
-      ),
-    );
-  },
+List<IconData> iconChoices = [
+  Icons.format_align_left,
+  Icons.format_align_center,
+  Icons.format_align_right,
+  Icons.format_align_justify,
+];
+List<IconData> iconSelected = [];
+
+void setIconSelected(List<IconData> value) {
+  setState(() => iconSelected = value);
+}
+
+ListView(
+  shrinkwrap: true,
+  children: [
+    Choice<String>(
+      mandatory: true,
+      value: strSelected,
+      onChanged: setStrSelected,
+      builder: (context, group, _) {
+        return Wrap(
+          children: List<Widget>.generate(
+            strChoices.length,
+            (i) => CheckboxTile(
+              selected: group.has(strChoices[i]),
+              onChanged: group.select(strChoices[i]),
+              child: Text(strChoices[i]),
+            ),
+          ),
+        );
+      },
+    ),
+    const Gap(20),
+    Choice<String>(
+      mandatory: true,
+      value: strSelected,
+      onChanged: setStrSelected,
+      builder: (context, group, _) {
+        return Wrap(
+          children: List<Widget>.generate(
+            strChoices.length,
+            (i) => RadioTile(
+              selected: group.has(strChoices[i]),
+              onChanged: group.select(strChoices[i]),
+              child: Text(strChoices[i]),
+            ),
+          ),
+        );
+      },
+    ),
+    const Gap(20),
+    Choice<String>(
+      mandatory: true,
+      value: strSelected,
+      onChanged: setStrSelected,
+      builder: (context, group, _) {
+        return Wrap(
+          children: List<Widget>.generate(
+            strChoices.length,
+            (i) => SwitchTile(
+              selected: group.has(strChoices[i]),
+              onChanged: group.select(strChoices[i]),
+              child: Text(strChoices[i]),
+            ),
+          ),
+        );
+      },
+    ),
+    const Gap(20),
+    Choice<String>(
+      mandatory: true,
+      value: strSelected,
+      onChanged: setStrSelected,
+      builder: (context, group, _) {
+        return Wrap(
+          spacing: 15,
+          children: List<Widget>.generate(
+            strChoices.length,
+            (i) => TonalChip(
+              selectedStyle: const ChipStyle(variant: ChipVariant.filled),
+              label: Text(strChoices[i]),
+              selected: group.has(strChoices[i]),
+              onSelected: group.select(strChoices[i]),
+            ),
+          ),
+        );
+      },
+    ),
+    const Gap(20),
+    Choice<IconData>(
+      mandatory: true,
+      value: iconSelected,
+      onChanged: setIconSelected,
+      builder: (context, group, _) {
+        return Wrap(
+          spacing: 15,
+          children: List<Widget>.generate(
+            iconChoices.length,
+            (i) => ToggleButton.icon(
+              selected: group.has(iconChoices[i]),
+              onSelected: group.select(iconChoices[i]),
+              style: DrivenButtonStyle.text(
+                hoveredStyle: ButtonStyle(
+                  foregroundColor: Theme.of(context).colorScheme.primary,
+                ),
+                selectedStyle: DrivenButtonStyle.filled(
+                  color: Theme.of(context).colorScheme.primary,
+                  hoveredStyle: const ButtonStyle(backgroundOpacity: .3),
+                ),
+              ),
+              child: Icon(iconChoices[i]),
+            ),
+          ),
+        );
+      },
+    ),
+  ],
 )''';

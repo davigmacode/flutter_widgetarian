@@ -26,13 +26,11 @@ class ButtonIconUsage extends StatelessWidget {
           onPressed: () {},
           child: const Icon(Icons.settings),
         ),
-        Button.icon(
+        FilledButton.icon(
           onPressed: () {},
-          style: DrivenButtonStyle.filled(
-            pressedStyle: ButtonStyle(
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(5),
-            ),
+          pressedStyle: ButtonStyle(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(5),
           ),
           child: const Icon(Icons.settings),
         ),
@@ -66,22 +64,19 @@ const script = '''Wrap(
       onPressed: () {},
       child: const Icon(Icons.settings),
     ),
-    Button.icon(
+    FilledButton.icon(
       onPressed: () {},
-      style: DrivenButtonStyle.filled(
-        pressedStyle: ButtonStyle(
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(5),
-        ),
+      pressedStyle: ButtonStyle(
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(5),
       ),
       child: const Icon(Icons.settings),
     ),
     Button(
       onPressed: () {},
-      style: DrivenButtonStyle.outlined(
-        hoveredStyle: ButtonStyle(
-          borderRadius: BorderRadius.circular(5),
-        ),
+      style: const DrivenButtonStyle.outlined(
+        borderRadius: BorderRadius.all(Radius.circular(4)),
+        hoveredStyle: ButtonStyle(shape: BoxShape.circle),
       ).icon(shape: BoxShape.rectangle),
       child: const Icon(Icons.settings),
     ),

@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide TextButton, ButtonStyle;
 import 'package:widgetarian/theme.dart';
+import 'package:widgetarian/button.dart';
 import 'menu.dart';
 
 class PageTemplate extends StatelessWidget {
@@ -14,20 +15,31 @@ class PageTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        actions: <Widget>[
-          ThemeConsumer(builder: ((context, theme) {
-            return IconButton(
+    return ThemeConsumer(builder: ((context, theme) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+          actions: <Widget>[
+            TextButton(
+              enabledStyle: const ButtonStyle(
+                foregroundColor: Colors.white,
+                borderRadius: BorderRadius.zero,
+              ),
+              onPressed: () => ThemeProvider.of(context).selectNext(),
+              child: Text('${theme.description}'),
+            ),
+            TextButton.icon(
+              enabledStyle: const ButtonStyle(
+                foregroundColor: Colors.white,
+              ),
               onPressed: () => theme.toggleMode(),
-              icon: Icon(theme.modeIcon),
-            );
-          })),
-        ],
-      ),
-      drawer: const Drawer(child: PageMenu()),
-      body: body,
-    );
+              child: Icon(theme.modeIcon),
+            ),
+          ],
+        ),
+        drawer: const Drawer(child: PageMenu()),
+        body: body,
+      );
+    }));
   }
 }

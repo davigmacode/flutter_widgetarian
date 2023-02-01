@@ -45,31 +45,27 @@ const script = '''Wrap(
   spacing: 15,
   runSpacing: 15,
   children: [
-    Button(
+    TextButton(
       onPressed: () {},
-      style: DrivenButtonStyle.text(),
       leading: const Icon(Icons.calendar_month),
       child: const Text('Text Button'),
     ),
-    Button(
+    TonalButton(
       onPressed: () {},
-      style: DrivenButtonStyle.tonal(),
       trailing: const Icon(Icons.close),
       child: const Text('Tonal Button'),
     ),
-    Button(
+    OutlinedButton(
       onPressed: () {},
-      style: DrivenButtonStyle.outlined(),
       leading: const Icon(Icons.calendar_month),
       trailing: const Icon(Icons.close),
       child: const Text('Outlined Button'),
     ),
-    Button(
+    FilledButton(
       onPressed: () {},
-      style: DrivenButtonStyle.filled(),
       leading: const SizedBox.square(
         dimension: 18,
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(color: Colors.white),
       ),
       child: const Text('Filled Button'),
     ),

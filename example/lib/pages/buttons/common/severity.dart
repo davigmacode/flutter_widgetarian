@@ -147,29 +147,135 @@ class ButtonSeverityUsage extends StatelessWidget {
   }
 }
 
-const script = '''Wrap(
-  spacing: 15,
-  runSpacing: 15,
+const script = '''ListView(
+  shrinkwrap: true
   children: [
-    TextButton(
-      onPressed: () {},
-      child: const Text('Text Button'),
+    Wrap(
+      spacing: 15,
+      runSpacing: 15,
+      children: [
+        TextButton(
+          severity: ButtonSeverity.danger,
+          onPressed: () {},
+          child: const Text('Danger Text'),
+        ),
+        TonalButton(
+          severity: ButtonSeverity.danger,
+          onPressed: () {},
+          child: const Text('Danger Tonal'),
+        ),
+        ElevatedButton(
+          severity: ButtonSeverity.danger,
+          onPressed: () {},
+          child: const Text('Danger Elevated'),
+        ),
+        FilledButton(
+          severity: ButtonSeverity.danger,
+          onPressed: () {},
+          child: const Text('Danger Filled'),
+        ),
+        OutlinedButton(
+          severity: ButtonSeverity.danger,
+          onPressed: () {},
+          child: const Text('Danger Outlined'),
+        ),
+      ],
     ),
-    TonalButton(
-      onPressed: () {},
-      child: const Text('Tonal Button'),
+    const Gap(15),
+    Wrap(
+      spacing: 15,
+      runSpacing: 15,
+      children: [
+        TextButton(
+          severity: ButtonSeverity.warning,
+          onPressed: () {},
+          child: const Text('Warning Text'),
+        ),
+        TonalButton(
+          severity: ButtonSeverity.warning,
+          onPressed: () {},
+          child: const Text('Warning Tonal'),
+        ),
+        ElevatedButton(
+          severity: ButtonSeverity.warning,
+          onPressed: () {},
+          child: const Text('Warning Elevated'),
+        ),
+        FilledButton(
+          severity: ButtonSeverity.warning,
+          onPressed: () {},
+          child: const Text('Warning Filled'),
+        ),
+        OutlinedButton(
+          severity: ButtonSeverity.warning,
+          onPressed: () {},
+          child: const Text('Warning Outlined'),
+        ),
+      ],
     ),
-    ElevatedButton(
-      onPressed: () {},
-      child: const Text('Elevated Button'),
+    const Gap(15),
+    Wrap(
+      spacing: 15,
+      runSpacing: 15,
+      children: [
+        TextButton(
+          severity: ButtonSeverity.success,
+          onPressed: () {},
+          child: const Text('Success Text'),
+        ),
+        TonalButton(
+          severity: ButtonSeverity.success,
+          onPressed: () {},
+          child: const Text('Success Tonal'),
+        ),
+        ElevatedButton(
+          severity: ButtonSeverity.success,
+          onPressed: () {},
+          child: const Text('Success Elevated'),
+        ),
+        FilledButton(
+          severity: ButtonSeverity.success,
+          onPressed: () {},
+          child: const Text('Success Filled'),
+        ),
+        OutlinedButton(
+          severity: ButtonSeverity.success,
+          onPressed: () {},
+          child: const Text('Success Outlined'),
+        ),
+      ],
     ),
-    FilledButton(
-      onPressed: () {},
-      child: const Text('Filled Button'),
-    ),
-    OutlinedButton(
-      onPressed: () {},
-      child: const Text('Outlined Button'),
+    const Gap(15),
+    Wrap(
+      spacing: 15,
+      runSpacing: 15,
+      children: [
+        TextButton(
+          severity: ButtonSeverity.info,
+          onPressed: () {},
+          child: const Text('Info Text'),
+        ),
+        TonalButton(
+          severity: ButtonSeverity.info,
+          onPressed: () {},
+          child: const Text('Info Tonal'),
+        ),
+        ElevatedButton(
+          severity: ButtonSeverity.info,
+          onPressed: () {},
+          child: const Text('Info Elevated'),
+        ),
+        FilledButton(
+          severity: ButtonSeverity.info,
+          onPressed: () {},
+          child: const Text('Info Filled'),
+        ),
+        OutlinedButton(
+          severity: ButtonSeverity.info,
+          onPressed: () {},
+          child: const Text('Info Outlined'),
+        ),
+      ],
     ),
   ],
 )''';
