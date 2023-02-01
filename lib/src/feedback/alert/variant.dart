@@ -1,10 +1,12 @@
-import 'package:flutter/widgets.dart';
 import 'style.dart';
 import 'widget.dart';
 
 class TonalAlert extends Alert {
+  @override
+  get variant => AlertVariant.tonal;
+
   const TonalAlert({
-    Key? key,
+    super.key,
     super.visible = true,
     super.onChanged,
     super.transitionBuilder = AlertTransition.crossFade,
@@ -13,7 +15,6 @@ class TonalAlert extends Alert {
     super.message,
     super.icon,
     super.action,
-    super.variant,
     super.severity,
     super.margin,
     super.padding,
@@ -24,19 +25,18 @@ class TonalAlert extends Alert {
     super.style,
     super.curve,
     super.duration,
-  }) : super(key: key);
+  });
 
   const TonalAlert.danger({
-    Key? key,
+    super.key,
     super.visible = true,
     super.onChanged,
     super.transitionBuilder = AlertTransition.crossFade,
     super.layoutBuilder = AlertLayout.defaults,
     super.title,
     super.message,
-    super.icon = const Icon(IconData(0xe237, fontFamily: 'MaterialIcons')),
+    super.icon = AlertIcons.danger,
     super.action,
-    super.variant,
     super.margin,
     super.padding,
     super.spacing,
@@ -46,22 +46,18 @@ class TonalAlert extends Alert {
     super.style,
     super.curve,
     super.duration,
-  }) : super(
-          key: key,
-          severity: AlertSeverity.danger,
-        );
+  }) : super.danger();
 
   const TonalAlert.warning({
-    Key? key,
+    super.key,
     super.visible = true,
     super.onChanged,
     super.transitionBuilder = AlertTransition.crossFade,
     super.layoutBuilder = AlertLayout.defaults,
     super.title,
     super.message,
-    super.icon = const Icon(IconData(0xe6cb, fontFamily: 'MaterialIcons')),
+    super.icon = AlertIcons.warning,
     super.action,
-    super.variant,
     super.margin,
     super.padding,
     super.spacing,
@@ -71,22 +67,18 @@ class TonalAlert extends Alert {
     super.style,
     super.curve,
     super.duration,
-  }) : super(
-          key: key,
-          severity: AlertSeverity.warning,
-        );
+  }) : super.warning();
 
   const TonalAlert.success({
-    Key? key,
+    super.key,
     super.visible = true,
     super.onChanged,
     super.transitionBuilder = AlertTransition.crossFade,
     super.layoutBuilder = AlertLayout.defaults,
     super.title,
     super.message,
-    super.icon = const Icon(IconData(0xe159, fontFamily: 'MaterialIcons')),
+    super.icon = AlertIcons.success,
     super.action,
-    super.variant,
     super.margin,
     super.padding,
     super.spacing,
@@ -96,22 +88,18 @@ class TonalAlert extends Alert {
     super.style,
     super.curve,
     super.duration,
-  }) : super(
-          key: key,
-          severity: AlertSeverity.success,
-        );
+  }) : super.success();
 
   const TonalAlert.info({
-    Key? key,
+    super.key,
     super.visible = true,
     super.onChanged,
     super.transitionBuilder = AlertTransition.crossFade,
     super.layoutBuilder = AlertLayout.defaults,
     super.title,
     super.message,
-    super.icon = const Icon(IconData(0xe33c, fontFamily: 'MaterialIcons')),
+    super.icon = AlertIcons.info,
     super.action,
-    super.variant,
     super.margin,
     super.padding,
     super.spacing,
@@ -121,29 +109,15 @@ class TonalAlert extends Alert {
     super.style,
     super.curve,
     super.duration,
-  }) : super(
-          key: key,
-          severity: AlertSeverity.info,
-        );
-
-  @override
-  AlertStyle get effectiveStyle {
-    return const AlertStyle.tonal().merge(style).copyWith(
-          variant: variant,
-          severity: severity,
-          margin: margin,
-          padding: padding,
-          foregroundSpacing: spacing,
-          elevation: elevation,
-          borderRadius: borderRadius,
-          iconSize: iconSize,
-        );
-  }
+  }) : super.info();
 }
 
 class FilledAlert extends Alert {
+  @override
+  get variant => AlertVariant.filled;
+
   const FilledAlert({
-    Key? key,
+    super.key,
     super.visible = true,
     super.onChanged,
     super.transitionBuilder = AlertTransition.crossFade,
@@ -152,7 +126,6 @@ class FilledAlert extends Alert {
     super.message,
     super.icon,
     super.action,
-    super.variant,
     super.severity,
     super.margin,
     super.padding,
@@ -163,19 +136,18 @@ class FilledAlert extends Alert {
     super.style,
     super.curve,
     super.duration,
-  }) : super(key: key);
+  });
 
   const FilledAlert.danger({
-    Key? key,
+    super.key,
     super.visible = true,
     super.onChanged,
     super.transitionBuilder = AlertTransition.crossFade,
     super.layoutBuilder = AlertLayout.defaults,
     super.title,
     super.message,
-    super.icon = const Icon(IconData(0xe237, fontFamily: 'MaterialIcons')),
+    super.icon = AlertIcons.danger,
     super.action,
-    super.variant,
     super.margin,
     super.padding,
     super.spacing,
@@ -185,22 +157,18 @@ class FilledAlert extends Alert {
     super.style,
     super.curve,
     super.duration,
-  }) : super(
-          key: key,
-          severity: AlertSeverity.danger,
-        );
+  }) : super.danger();
 
   const FilledAlert.warning({
-    Key? key,
+    super.key,
     super.visible = true,
     super.onChanged,
     super.transitionBuilder = AlertTransition.crossFade,
     super.layoutBuilder = AlertLayout.defaults,
     super.title,
     super.message,
-    super.icon = const Icon(IconData(0xe6cb, fontFamily: 'MaterialIcons')),
+    super.icon = AlertIcons.warning,
     super.action,
-    super.variant,
     super.margin,
     super.padding,
     super.spacing,
@@ -210,22 +178,18 @@ class FilledAlert extends Alert {
     super.style,
     super.curve,
     super.duration,
-  }) : super(
-          key: key,
-          severity: AlertSeverity.warning,
-        );
+  }) : super.warning();
 
   const FilledAlert.success({
-    Key? key,
+    super.key,
     super.visible = true,
     super.onChanged,
     super.transitionBuilder = AlertTransition.crossFade,
     super.layoutBuilder = AlertLayout.defaults,
     super.title,
     super.message,
-    super.icon = const Icon(IconData(0xe159, fontFamily: 'MaterialIcons')),
+    super.icon = AlertIcons.success,
     super.action,
-    super.variant,
     super.margin,
     super.padding,
     super.spacing,
@@ -235,22 +199,18 @@ class FilledAlert extends Alert {
     super.style,
     super.curve,
     super.duration,
-  }) : super(
-          key: key,
-          severity: AlertSeverity.success,
-        );
+  }) : super.success();
 
   const FilledAlert.info({
-    Key? key,
+    super.key,
     super.visible = true,
     super.onChanged,
     super.transitionBuilder = AlertTransition.crossFade,
     super.layoutBuilder = AlertLayout.defaults,
     super.title,
     super.message,
-    super.icon = const Icon(IconData(0xe33c, fontFamily: 'MaterialIcons')),
+    super.icon = AlertIcons.info,
     super.action,
-    super.variant,
     super.margin,
     super.padding,
     super.spacing,
@@ -260,29 +220,15 @@ class FilledAlert extends Alert {
     super.style,
     super.curve,
     super.duration,
-  }) : super(
-          key: key,
-          severity: AlertSeverity.info,
-        );
-
-  @override
-  AlertStyle get effectiveStyle {
-    return const AlertStyle.filled().merge(style).copyWith(
-          variant: variant,
-          severity: severity,
-          margin: margin,
-          padding: padding,
-          foregroundSpacing: spacing,
-          elevation: elevation,
-          borderRadius: borderRadius,
-          iconSize: iconSize,
-        );
-  }
+  }) : super.info();
 }
 
 class OutlinedAlert extends Alert {
+  @override
+  get variant => AlertVariant.outlined;
+
   const OutlinedAlert({
-    Key? key,
+    super.key,
     super.visible = true,
     super.onChanged,
     super.transitionBuilder = AlertTransition.crossFade,
@@ -291,7 +237,6 @@ class OutlinedAlert extends Alert {
     super.message,
     super.icon,
     super.action,
-    super.variant,
     super.severity,
     super.margin,
     super.padding,
@@ -302,19 +247,18 @@ class OutlinedAlert extends Alert {
     super.style,
     super.curve,
     super.duration,
-  }) : super(key: key);
+  });
 
   const OutlinedAlert.danger({
-    Key? key,
+    super.key,
     super.visible = true,
     super.onChanged,
     super.transitionBuilder = AlertTransition.crossFade,
     super.layoutBuilder = AlertLayout.defaults,
     super.title,
     super.message,
-    super.icon = const Icon(IconData(0xe237, fontFamily: 'MaterialIcons')),
+    super.icon = AlertIcons.danger,
     super.action,
-    super.variant,
     super.margin,
     super.padding,
     super.spacing,
@@ -324,22 +268,18 @@ class OutlinedAlert extends Alert {
     super.style,
     super.curve,
     super.duration,
-  }) : super(
-          key: key,
-          severity: AlertSeverity.danger,
-        );
+  }) : super.danger();
 
   const OutlinedAlert.warning({
-    Key? key,
+    super.key,
     super.visible = true,
     super.onChanged,
     super.transitionBuilder = AlertTransition.crossFade,
     super.layoutBuilder = AlertLayout.defaults,
     super.title,
     super.message,
-    super.icon = const Icon(IconData(0xe6cb, fontFamily: 'MaterialIcons')),
+    super.icon = AlertIcons.warning,
     super.action,
-    super.variant,
     super.margin,
     super.padding,
     super.spacing,
@@ -349,22 +289,18 @@ class OutlinedAlert extends Alert {
     super.style,
     super.curve,
     super.duration,
-  }) : super(
-          key: key,
-          severity: AlertSeverity.warning,
-        );
+  }) : super.warning();
 
   const OutlinedAlert.success({
-    Key? key,
+    super.key,
     super.visible = true,
     super.onChanged,
     super.transitionBuilder = AlertTransition.crossFade,
     super.layoutBuilder = AlertLayout.defaults,
     super.title,
     super.message,
-    super.icon = const Icon(IconData(0xe159, fontFamily: 'MaterialIcons')),
+    super.icon = AlertIcons.success,
     super.action,
-    super.variant,
     super.margin,
     super.padding,
     super.spacing,
@@ -374,22 +310,18 @@ class OutlinedAlert extends Alert {
     super.style,
     super.curve,
     super.duration,
-  }) : super(
-          key: key,
-          severity: AlertSeverity.success,
-        );
+  }) : super.success();
 
   const OutlinedAlert.info({
-    Key? key,
+    super.key,
     super.visible = true,
     super.onChanged,
     super.transitionBuilder = AlertTransition.crossFade,
     super.layoutBuilder = AlertLayout.defaults,
     super.title,
     super.message,
-    super.icon = const Icon(IconData(0xe33c, fontFamily: 'MaterialIcons')),
+    super.icon = AlertIcons.info,
     super.action,
-    super.variant,
     super.margin,
     super.padding,
     super.spacing,
@@ -399,22 +331,5 @@ class OutlinedAlert extends Alert {
     super.style,
     super.curve,
     super.duration,
-  }) : super(
-          key: key,
-          severity: AlertSeverity.info,
-        );
-
-  @override
-  AlertStyle get effectiveStyle {
-    return const AlertStyle.outlined().merge(style).copyWith(
-          variant: variant,
-          severity: severity,
-          margin: margin,
-          padding: padding,
-          foregroundSpacing: spacing,
-          elevation: elevation,
-          borderRadius: borderRadius,
-          iconSize: iconSize,
-        );
-  }
+  }) : super.info();
 }

@@ -13,6 +13,13 @@ typedef AlertButtonCallback = ExpansionButtonCallback;
 typedef AlertButtonAction = ExpansionButtonAction;
 typedef AlertClose = ExpansionCollapse;
 
+abstract class AlertIcons {
+  static const danger = Icon(IconData(0xe237, fontFamily: 'MaterialIcons'));
+  static const warning = Icon(IconData(0xe6cb, fontFamily: 'MaterialIcons'));
+  static const success = Icon(IconData(0xe159, fontFamily: 'MaterialIcons'));
+  static const info = Icon(IconData(0xe33c, fontFamily: 'MaterialIcons'));
+}
+
 /// Attract user attention with important static message
 class Alert extends StatelessWidget {
   /// {@template widgetarian.alert.collapsed}
@@ -154,7 +161,7 @@ class Alert extends StatelessWidget {
   final Duration? duration;
 
   const Alert({
-    Key? key,
+    super.key,
     this.visible = true,
     this.onChanged,
     this.transitionBuilder = AlertTransition.crossFade,
@@ -174,17 +181,17 @@ class Alert extends StatelessWidget {
     this.style,
     this.curve,
     this.duration,
-  }) : super(key: key);
+  });
 
   const Alert.danger({
-    Key? key,
+    super.key,
     this.visible = true,
     this.onChanged,
     this.transitionBuilder = AlertTransition.crossFade,
     this.layoutBuilder = AlertLayout.defaults,
     this.title,
     this.message,
-    this.icon = const Icon(IconData(0xe237, fontFamily: 'MaterialIcons')),
+    this.icon = AlertIcons.danger,
     this.action,
     this.variant,
     this.margin,
@@ -196,18 +203,17 @@ class Alert extends StatelessWidget {
     this.style,
     this.curve,
     this.duration,
-  })  : severity = AlertSeverity.danger,
-        super(key: key);
+  }) : severity = AlertSeverity.danger;
 
   const Alert.warning({
-    Key? key,
+    super.key,
     this.visible = true,
     this.onChanged,
     this.transitionBuilder = AlertTransition.crossFade,
     this.layoutBuilder = AlertLayout.defaults,
     this.title,
     this.message,
-    this.icon = const Icon(IconData(0xe6cb, fontFamily: 'MaterialIcons')),
+    this.icon = AlertIcons.warning,
     this.action,
     this.variant,
     this.margin,
@@ -219,18 +225,17 @@ class Alert extends StatelessWidget {
     this.style,
     this.curve,
     this.duration,
-  })  : severity = AlertSeverity.warning,
-        super(key: key);
+  }) : severity = AlertSeverity.warning;
 
   const Alert.success({
-    Key? key,
+    super.key,
     this.visible = true,
     this.onChanged,
     this.transitionBuilder = AlertTransition.crossFade,
     this.layoutBuilder = AlertLayout.defaults,
     this.title,
     this.message,
-    this.icon = const Icon(IconData(0xe159, fontFamily: 'MaterialIcons')),
+    this.icon = AlertIcons.success,
     this.action,
     this.variant,
     this.margin,
@@ -242,18 +247,17 @@ class Alert extends StatelessWidget {
     this.style,
     this.curve,
     this.duration,
-  })  : severity = AlertSeverity.success,
-        super(key: key);
+  }) : severity = AlertSeverity.success;
 
   const Alert.info({
-    Key? key,
+    super.key,
     this.visible = true,
     this.onChanged,
     this.transitionBuilder = AlertTransition.crossFade,
     this.layoutBuilder = AlertLayout.defaults,
     this.title,
     this.message,
-    this.icon = const Icon(IconData(0xe33c, fontFamily: 'MaterialIcons')),
+    this.icon = AlertIcons.info,
     this.action,
     this.variant,
     this.margin,
@@ -265,8 +269,7 @@ class Alert extends StatelessWidget {
     this.style,
     this.curve,
     this.duration,
-  })  : severity = AlertSeverity.info,
-        super(key: key);
+  }) : severity = AlertSeverity.info;
 
   AlertStyle get effectiveStyle {
     return AlertStyle.from(style).copyWith(
