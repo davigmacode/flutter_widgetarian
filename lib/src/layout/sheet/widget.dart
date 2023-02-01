@@ -8,7 +8,7 @@ import 'render.dart';
 /// The sheet widget is the baseline for numerous components.
 class Sheet extends StatelessWidget {
   const Sheet({
-    Key? key,
+    super.key,
     this.duration,
     this.curve,
     this.variant,
@@ -43,10 +43,10 @@ class Sheet extends StatelessWidget {
     this.style,
     this.tooltip,
     this.child,
-  }) : super(key: key);
+  });
 
   const Sheet.square({
-    Key? key,
+    super.key,
     double? size,
     this.duration,
     this.curve,
@@ -81,11 +81,10 @@ class Sheet extends StatelessWidget {
     this.tooltip,
     this.child,
   })  : width = size,
-        height = size,
-        super(key: key);
+        height = size;
 
   const Sheet.circle({
-    Key? key,
+    super.key,
     double? radius,
     this.duration,
     this.curve,
@@ -120,11 +119,10 @@ class Sheet extends StatelessWidget {
     this.child,
   })  : shape = BoxShape.circle,
         width = radius != null ? radius * 2 : null,
-        height = radius != null ? radius * 2 : null,
-        super(key: key);
+        height = radius != null ? radius * 2 : null;
 
   const Sheet.danger({
-    Key? key,
+    super.key,
     this.duration,
     this.curve,
     this.variant,
@@ -158,11 +156,10 @@ class Sheet extends StatelessWidget {
     this.style,
     this.tooltip,
     this.child,
-  })  : severity = SheetSeverity.danger,
-        super(key: key);
+  }) : severity = SheetSeverity.danger;
 
   const Sheet.warning({
-    Key? key,
+    super.key,
     this.duration,
     this.curve,
     this.variant,
@@ -196,11 +193,10 @@ class Sheet extends StatelessWidget {
     this.style,
     this.tooltip,
     this.child,
-  })  : severity = SheetSeverity.warning,
-        super(key: key);
+  }) : severity = SheetSeverity.warning;
 
   const Sheet.success({
-    Key? key,
+    super.key,
     this.duration,
     this.curve,
     this.variant,
@@ -234,11 +230,10 @@ class Sheet extends StatelessWidget {
     this.style,
     this.tooltip,
     this.child,
-  })  : severity = SheetSeverity.success,
-        super(key: key);
+  }) : severity = SheetSeverity.success;
 
   const Sheet.info({
-    Key? key,
+    super.key,
     this.duration,
     this.curve,
     this.variant,
@@ -272,8 +267,7 @@ class Sheet extends StatelessWidget {
     this.style,
     this.tooltip,
     this.child,
-  })  : severity = SheetSeverity.info,
-        super(key: key);
+  }) : severity = SheetSeverity.info;
 
   /// The curve to apply when animating the parameters of this widget.
   final Curve? curve;
@@ -433,12 +427,14 @@ class Sheet extends StatelessWidget {
 }
 
 class TonalSheet extends Sheet {
+  @override
+  get variant => SheetVariant.tonal;
+
   const TonalSheet({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
-    super.variant,
     super.severity,
     super.width,
     super.height,
@@ -468,19 +464,16 @@ class TonalSheet extends Sheet {
     super.tooltip,
     super.child,
   }) : super(
-          key: key,
-          style: const SheetStyle.tonal(),
           backgroundColor: color,
           foregroundColor: color,
         );
 
   const TonalSheet.square({
-    Key? key,
+    super.key,
     Color? color,
-    double? size,
+    super.size,
     super.duration,
     super.curve,
-    super.variant,
     super.severity,
     super.margin,
     super.padding,
@@ -507,22 +500,17 @@ class TonalSheet extends Sheet {
     super.shape,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.tonal(),
-          width: size,
-          height: size,
+  }) : super.square(
           backgroundColor: color,
           foregroundColor: color,
         );
 
   const TonalSheet.circle({
-    Key? key,
+    super.key,
     Color? color,
-    double? radius,
+    super.radius,
     super.duration,
     super.curve,
-    super.variant,
     super.severity,
     super.margin,
     super.padding,
@@ -548,22 +536,16 @@ class TonalSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.tonal(),
-          shape: BoxShape.circle,
-          width: radius != null ? radius * 2 : null,
-          height: radius != null ? radius * 2 : null,
+  }) : super.circle(
           backgroundColor: color,
           foregroundColor: color,
         );
 
   const TonalSheet.danger({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
-    super.variant,
     super.width,
     super.height,
     super.margin,
@@ -591,16 +573,13 @@ class TonalSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.tonal(),
-          severity: SheetSeverity.danger,
+  }) : super.danger(
           backgroundColor: color,
           foregroundColor: color,
         );
 
   const TonalSheet.warning({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -632,16 +611,13 @@ class TonalSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.tonal(),
-          severity: SheetSeverity.warning,
+  }) : super.warning(
           backgroundColor: color,
           foregroundColor: color,
         );
 
   const TonalSheet.success({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -673,16 +649,13 @@ class TonalSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.tonal(),
-          severity: SheetSeverity.success,
+  }) : super.success(
           backgroundColor: color,
           foregroundColor: color,
         );
 
   const TonalSheet.info({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -714,22 +687,21 @@ class TonalSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.tonal(),
-          severity: SheetSeverity.info,
+  }) : super.info(
           backgroundColor: color,
           foregroundColor: color,
         );
 }
 
 class ElevatedSheet extends Sheet {
+  @override
+  get variant => SheetVariant.elevated;
+
   const ElevatedSheet({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
-    super.variant,
     super.severity,
     super.width,
     super.height,
@@ -759,16 +731,12 @@ class ElevatedSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.elevated(),
-          backgroundColor: color,
-        );
+  }) : super(backgroundColor: color);
 
   const ElevatedSheet.square({
-    Key? key,
+    super.key,
     Color? color,
-    double? size,
+    super.size,
     super.duration,
     super.curve,
     super.variant,
@@ -799,18 +767,12 @@ class ElevatedSheet extends Sheet {
     super.shape,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.elevated(),
-          width: size,
-          height: size,
-          backgroundColor: color,
-        );
+  }) : super.square(backgroundColor: color);
 
   const ElevatedSheet.circle({
-    Key? key,
+    super.key,
     Color? color,
-    double? radius,
+    super.radius,
     super.duration,
     super.curve,
     super.variant,
@@ -840,17 +802,10 @@ class ElevatedSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.elevated(),
-          shape: BoxShape.circle,
-          width: radius != null ? radius * 2 : null,
-          height: radius != null ? radius * 2 : null,
-          backgroundColor: color,
-        );
+  }) : super.circle(backgroundColor: color);
 
   const ElevatedSheet.danger({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -883,15 +838,10 @@ class ElevatedSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.elevated(),
-          severity: SheetSeverity.danger,
-          backgroundColor: color,
-        );
+  }) : super.danger(backgroundColor: color);
 
   const ElevatedSheet.warning({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -924,15 +874,10 @@ class ElevatedSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.elevated(),
-          severity: SheetSeverity.warning,
-          backgroundColor: color,
-        );
+  }) : super.warning(backgroundColor: color);
 
   const ElevatedSheet.success({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -965,15 +910,10 @@ class ElevatedSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.elevated(),
-          severity: SheetSeverity.success,
-          backgroundColor: color,
-        );
+  }) : super.success(backgroundColor: color);
 
   const ElevatedSheet.info({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -1006,17 +946,15 @@ class ElevatedSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.elevated(),
-          severity: SheetSeverity.info,
-          backgroundColor: color,
-        );
+  }) : super.info(backgroundColor: color);
 }
 
 class FilledSheet extends Sheet {
+  @override
+  get variant => SheetVariant.filled;
+
   const FilledSheet({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -1050,16 +988,12 @@ class FilledSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.filled(),
-          backgroundColor: color,
-        );
+  }) : super(backgroundColor: color);
 
   const FilledSheet.square({
-    Key? key,
+    super.key,
     Color? color,
-    double? size,
+    super.size,
     super.duration,
     super.curve,
     super.variant,
@@ -1090,18 +1024,12 @@ class FilledSheet extends Sheet {
     super.shape,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.filled(),
-          width: size,
-          height: size,
-          backgroundColor: color,
-        );
+  }) : super.square(backgroundColor: color);
 
   const FilledSheet.circle({
-    Key? key,
+    super.key,
     Color? color,
-    double? radius,
+    super.radius,
     super.duration,
     super.curve,
     super.variant,
@@ -1131,17 +1059,10 @@ class FilledSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.filled(),
-          shape: BoxShape.circle,
-          width: radius != null ? radius * 2 : null,
-          height: radius != null ? radius * 2 : null,
-          backgroundColor: color,
-        );
+  }) : super.circle(backgroundColor: color);
 
   const FilledSheet.danger({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -1174,15 +1095,10 @@ class FilledSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.filled(),
-          severity: SheetSeverity.danger,
-          backgroundColor: color,
-        );
+  }) : super.danger(backgroundColor: color);
 
   const FilledSheet.warning({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -1215,15 +1131,10 @@ class FilledSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.filled(),
-          severity: SheetSeverity.warning,
-          backgroundColor: color,
-        );
+  }) : super.warning(backgroundColor: color);
 
   const FilledSheet.success({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -1256,15 +1167,10 @@ class FilledSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.filled(),
-          severity: SheetSeverity.success,
-          backgroundColor: color,
-        );
+  }) : super.success(backgroundColor: color);
 
   const FilledSheet.info({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -1297,17 +1203,15 @@ class FilledSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.filled(),
-          severity: SheetSeverity.info,
-          backgroundColor: color,
-        );
+  }) : super.info(backgroundColor: color);
 }
 
 class OutlinedSheet extends Sheet {
+  @override
+  get variant => SheetVariant.outlined;
+
   const OutlinedSheet({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -1341,16 +1245,12 @@ class OutlinedSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.outlined(),
-          backgroundColor: color,
-        );
+  }) : super(backgroundColor: color);
 
   const OutlinedSheet.square({
-    Key? key,
+    super.key,
     Color? color,
-    double? size,
+    super.size,
     super.duration,
     super.curve,
     super.variant,
@@ -1381,18 +1281,12 @@ class OutlinedSheet extends Sheet {
     super.shape,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.outlined(),
-          width: size,
-          height: size,
-          backgroundColor: color,
-        );
+  }) : super.square(backgroundColor: color);
 
   const OutlinedSheet.circle({
-    Key? key,
+    super.key,
     Color? color,
-    double? radius,
+    super.radius,
     super.duration,
     super.curve,
     super.variant,
@@ -1422,17 +1316,10 @@ class OutlinedSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.outlined(),
-          shape: BoxShape.circle,
-          width: radius != null ? radius * 2 : null,
-          height: radius != null ? radius * 2 : null,
-          backgroundColor: color,
-        );
+  }) : super.circle(backgroundColor: color);
 
   const OutlinedSheet.danger({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -1465,15 +1352,10 @@ class OutlinedSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.outlined(),
-          severity: SheetSeverity.danger,
-          backgroundColor: color,
-        );
+  }) : super.danger(backgroundColor: color);
 
   const OutlinedSheet.warning({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -1506,15 +1388,10 @@ class OutlinedSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.outlined(),
-          severity: SheetSeverity.warning,
-          backgroundColor: color,
-        );
+  }) : super.warning(backgroundColor: color);
 
   const OutlinedSheet.success({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -1547,15 +1424,10 @@ class OutlinedSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.outlined(),
-          severity: SheetSeverity.success,
-          backgroundColor: color,
-        );
+  }) : super.success(backgroundColor: color);
 
   const OutlinedSheet.info({
-    Key? key,
+    super.key,
     Color? color,
     super.duration,
     super.curve,
@@ -1588,10 +1460,5 @@ class OutlinedSheet extends Sheet {
     super.iconSize,
     super.tooltip,
     super.child,
-  }) : super(
-          key: key,
-          style: const SheetStyle.outlined(),
-          severity: SheetSeverity.info,
-          backgroundColor: color,
-        );
+  }) : super.info(backgroundColor: color);
 }
