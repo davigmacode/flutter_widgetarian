@@ -114,7 +114,6 @@ class ThemeConfig with Diagnosticable {
                 brightness: Brightness.dark,
                 seedColor: color,
               ),
-              toggleableActiveColor: color,
             )
           : null,
     );

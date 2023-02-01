@@ -40,6 +40,37 @@ class Anchor extends StatelessWidget {
     this.child,
   }) : super(key: key);
 
+  /// Creates a circle shaped area that responds to touch.
+  const Anchor.circle({
+    Key? key,
+    this.curve,
+    this.duration,
+    this.onTap,
+    this.onTapUp,
+    this.onTapDown,
+    this.onTapCancel,
+    this.onDoubleTap,
+    this.onLongPress,
+    this.onHover,
+    this.onFocus,
+    this.overlayDisabled,
+    this.overlayColor,
+    this.overlayOpacity,
+    this.mouseCursor,
+    this.radius,
+    this.padding,
+    this.margin,
+    this.style,
+    this.eventsController,
+    this.focusNode,
+    this.autofocus = false,
+    this.canRequestFocus = true,
+    this.disabled = false,
+    this.child,
+  })  : shape = BoxShape.circle,
+        borderRadius = null,
+        super(key: key);
+
   /// The curve to apply when animating
   /// the parameters of this widget.
   final Curve? curve;
