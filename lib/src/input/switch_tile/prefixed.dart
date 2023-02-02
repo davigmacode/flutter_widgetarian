@@ -1,6 +1,5 @@
 import 'main.dart';
 
-typedef WxSwitchTileTheme = SwitchTileTheme;
-typedef WxSwitchTileThemeData = SwitchTileThemeData;
-typedef WxSwitchTileThemeDefaults = SwitchTileThemeDefaults;
+export 'prefixed_theme.dart';
+
 typedef WxSwitchTile = SwitchTile;

@@ -1,6 +1,5 @@
 import 'main.dart';
 
-typedef WxRadioTileTheme = RadioTileTheme;
-typedef WxRadioTileThemeData = RadioTileThemeData;
-typedef WxRadioTileThemeDefaults = RadioTileThemeDefaults;
+export 'prefixed_theme.dart';
+
 typedef WxRadioTile = RadioTile;

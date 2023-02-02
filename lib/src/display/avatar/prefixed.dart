@@ -1,7 +1,5 @@
 import 'main.dart';
 
-typedef WxAvatarStyle = AvatarStyle;
-typedef WxAvatarTheme = AvatarTheme;
-typedef WxAvatarThemeData = AvatarThemeData;
-typedef WxAvatarThemeDefaults = AvatarThemeDefaults;
+export 'prefixed_theme.dart';
+
 typedef WxAvatar = Avatar;

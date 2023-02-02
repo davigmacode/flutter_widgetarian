@@ -1,12 +1,6 @@
 import 'main.dart';
 
-typedef WxBadgeVariant = BadgeVariant;
-typedef WxBadgeSeverity = BadgeSeverity;
-typedef WxBadgeStyle = BadgeStyle;
-
-typedef WxBadgeTheme = BadgeTheme;
-typedef WxBadgeThemeData = BadgeThemeData;
-typedef WxBadgeThemeDefaults = BadgeThemeDefaults;
+export 'prefixed_theme.dart';
 
 typedef WxBadgeTransitionBuilder = BadgeTransitionBuilder;
 typedef WxBadgeLayoutBuilder = BadgeLayoutBuilder;

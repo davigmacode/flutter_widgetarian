@@ -1,6 +1,5 @@
 import 'main.dart';
 
-typedef WxCheckboxTileTheme = CheckboxTileTheme;
-typedef WxCheckboxTileThemeData = CheckboxTileThemeData;
-typedef WxCheckboxTileThemeDefaults = CheckboxTileThemeDefaults;
+export 'prefixed_theme.dart';
+
 typedef WxCheckboxTile = CheckboxTile;
