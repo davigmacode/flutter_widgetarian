@@ -28,7 +28,7 @@ class _AlertClosableUsageState extends State<AlertClosableUsage> {
           builder: (context, group, _) {
             return Column(
               children: [
-                Alert.danger(
+                OutlinedAlert.danger(
                   visible: group.has('danger'),
                   onChanged: group.select('danger'),
                   title: const Text('Danger'),
@@ -39,7 +39,7 @@ class _AlertClosableUsageState extends State<AlertClosableUsage> {
                   ),
                 ),
                 const Gap(20),
-                Alert.warning(
+                OutlinedAlert.warning(
                   visible: group.has('warning'),
                   onChanged: group.select('warning'),
                   transitionBuilder: AlertTransition.fade,
@@ -52,7 +52,7 @@ class _AlertClosableUsageState extends State<AlertClosableUsage> {
                   ),
                 ),
                 const Gap(20),
-                Alert.success(
+                OutlinedAlert.success(
                   visible: group.has('success'),
                   onChanged: group.select('success'),
                   transitionBuilder: AlertTransition.scale,
@@ -65,7 +65,7 @@ class _AlertClosableUsageState extends State<AlertClosableUsage> {
                   ),
                 ),
                 const Gap(20),
-                Alert.info(
+                OutlinedAlert.info(
                   visible: group.has('info'),
                   onChanged: group.select('info'),
                   title: const Text('Info'),
@@ -105,7 +105,7 @@ const script = '''Choice<String>(
   builder: (context, group, _) {
     return Column(
       children: [
-        Alert.danger(
+        OutlinedAlert.danger(
           visible: group.has('danger'),
           onChanged: group.select('danger'),
           title: const Text('Danger'),
@@ -116,7 +116,7 @@ const script = '''Choice<String>(
           ),
         ),
         const Gap(20),
-        Alert.warning(
+        OutlinedAlert.warning(
           visible: group.has('warning'),
           onChanged: group.select('warning'),
           transitionBuilder: AlertTransition.fade,
@@ -129,7 +129,7 @@ const script = '''Choice<String>(
           ),
         ),
         const Gap(20),
-        Alert.success(
+        OutlinedAlert.success(
           visible: group.has('success'),
           onChanged: group.select('success'),
           transitionBuilder: AlertTransition.scale,
@@ -142,7 +142,7 @@ const script = '''Choice<String>(
           ),
         ),
         const Gap(20),
-        Alert.info(
+        OutlinedAlert.info(
           visible: group.has('info'),
           onChanged: group.select('info'),
           title: const Text('Info'),
