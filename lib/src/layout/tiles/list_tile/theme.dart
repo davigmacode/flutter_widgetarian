@@ -103,10 +103,10 @@ class AnimatedListTileTheme extends ImplicitlyAnimatedWidget {
 
   @override
   AnimatedWidgetBaseState<AnimatedListTileTheme> createState() =>
-      _AnimatedIconThemeState();
+      _AnimatedListTileThemeState();
 }
 
-class _AnimatedIconThemeState
+class _AnimatedListTileThemeState
     extends AnimatedWidgetBaseState<AnimatedListTileTheme> {
   ListTileThemeDataTween? _dataTween;
 

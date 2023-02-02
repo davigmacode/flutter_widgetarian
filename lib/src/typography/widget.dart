@@ -7,7 +7,7 @@ enum TypographySize { small, medium, large }
 abstract class Typography extends StatelessWidget {
   const Typography(
     this.data, {
-    Key? key,
+    super.key,
     this.style,
     this.strutStyle,
     this.textAlign,
@@ -20,7 +20,7 @@ abstract class Typography extends StatelessWidget {
     this.semanticsLabel,
     this.textWidthBasis,
     this.textHeightBehavior,
-  }) : super(key: key);
+  });
 
   /// The text to display.
   ///
