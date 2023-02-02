@@ -1,5 +1,5 @@
 name: widgetarian
-description: UI kit that is not hardcoded to any specific platform or design system, customization by extensible theme preset and event-driven style mechanism, and comes with tons of cool stuff and intuitive API.
+description: UI kit that is not hardcoded to any specific platform or design system, customization by extensible theme preset and intuitive event-driven style mechanism.
 version: 0.0.1-dev.2
 homepage: https://github.com/davigmacode/flutter_widgetarian
 
