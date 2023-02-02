@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/tween.dart';
+import 'package:widgetarian/utils.dart';
 
 enum StrokeStyle { round, sharp }
 

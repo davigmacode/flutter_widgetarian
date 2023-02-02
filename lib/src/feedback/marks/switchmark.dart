@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:widgetarian/tween.dart';
+import 'package:widgetarian/utils.dart';
 
 class AnimatedSwitchmark extends ImplicitlyAnimatedWidget {
   const AnimatedSwitchmark({
