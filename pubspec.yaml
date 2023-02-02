@@ -1,6 +1,6 @@
 name: widgetarian
-description: Widgetarian is a UI kit that simplifies common widget usage.
-version: 0.0.1-dev.1
+description: UI kit that is not hardcoded to any specific platform or design system, customization by extensible theme preset and event-driven style mechanism, and comes with tons of cool stuff and intuitive API.
+version: 0.0.1-dev.2
 homepage: https://github.com/davigmacode/flutter_widgetarian
 
 environment:
