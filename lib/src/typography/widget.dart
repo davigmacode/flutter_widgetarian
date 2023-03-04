@@ -226,8 +226,7 @@ class HeadlineText extends Typography {
     super.semanticsLabel,
     super.textWidthBasis,
     super.textHeightBehavior,
-  })  : variant = TypographySize.medium,
-        size = null;
+  }) : variant = TypographySize.medium;
 
   const HeadlineText.large(
     super.data, {
@@ -244,8 +243,7 @@ class HeadlineText extends Typography {
     super.semanticsLabel,
     super.textWidthBasis,
     super.textHeightBehavior,
-  })  : variant = TypographySize.large,
-        size = null;
+  }) : variant = TypographySize.large;
 
   const HeadlineText.small(
     super.data, {
@@ -262,119 +260,9 @@ class HeadlineText extends Typography {
     super.semanticsLabel,
     super.textWidthBasis,
     super.textHeightBehavior,
-  })  : variant = TypographySize.small,
-        size = null;
+  }) : variant = TypographySize.small;
 
-  const HeadlineText.h1(
-    super.data, {
-    super.key,
-    super.style,
-    super.strutStyle,
-    super.textAlign,
-    super.textDirection,
-    super.locale,
-    super.softWrap,
-    super.overflow,
-    super.textScaleFactor,
-    super.maxLines,
-    super.semanticsLabel,
-    super.textWidthBasis,
-    super.textHeightBehavior,
-  })  : variant = null,
-        size = 1;
-
-  const HeadlineText.h2(
-    super.data, {
-    super.key,
-    super.style,
-    super.strutStyle,
-    super.textAlign,
-    super.textDirection,
-    super.locale,
-    super.softWrap,
-    super.overflow,
-    super.textScaleFactor,
-    super.maxLines,
-    super.semanticsLabel,
-    super.textWidthBasis,
-    super.textHeightBehavior,
-  })  : variant = null,
-        size = 2;
-
-  const HeadlineText.h3(
-    super.data, {
-    super.key,
-    super.style,
-    super.strutStyle,
-    super.textAlign,
-    super.textDirection,
-    super.locale,
-    super.softWrap,
-    super.overflow,
-    super.textScaleFactor,
-    super.maxLines,
-    super.semanticsLabel,
-    super.textWidthBasis,
-    super.textHeightBehavior,
-  })  : variant = null,
-        size = 3;
-
-  const HeadlineText.h4(
-    super.data, {
-    super.key,
-    super.style,
-    super.strutStyle,
-    super.textAlign,
-    super.textDirection,
-    super.locale,
-    super.softWrap,
-    super.overflow,
-    super.textScaleFactor,
-    super.maxLines,
-    super.semanticsLabel,
-    super.textWidthBasis,
-    super.textHeightBehavior,
-  })  : variant = null,
-        size = 4;
-
-  const HeadlineText.h5(
-    super.data, {
-    super.key,
-    super.style,
-    super.strutStyle,
-    super.textAlign,
-    super.textDirection,
-    super.locale,
-    super.softWrap,
-    super.overflow,
-    super.textScaleFactor,
-    super.maxLines,
-    super.semanticsLabel,
-    super.textWidthBasis,
-    super.textHeightBehavior,
-  })  : variant = null,
-        size = 5;
-
-  const HeadlineText.h6(
-    super.data, {
-    super.key,
-    super.style,
-    super.strutStyle,
-    super.textAlign,
-    super.textDirection,
-    super.locale,
-    super.softWrap,
-    super.overflow,
-    super.textScaleFactor,
-    super.maxLines,
-    super.semanticsLabel,
-    super.textWidthBasis,
-    super.textHeightBehavior,
-  })  : variant = null,
-        size = 6;
-
-  final TypographySize? variant;
-  final int? size;
+  final TypographySize variant;
 
   @override
   TextStyle? getStyle(TextTheme theme) {
@@ -385,14 +273,6 @@ class HeadlineText extends Typography {
         return theme.headlineMedium;
       case TypographySize.small:
         return theme.headlineSmall;
-      default:
-        if (size == 1) return theme.headline1;
-        if (size == 2) return theme.headline2;
-        if (size == 3) return theme.headline3;
-        if (size == 4) return theme.headline4;
-        if (size == 5) return theme.headline5;
-        if (size == 6) return theme.headline6;
-        return const TextStyle();
     }
   }
 }
@@ -596,118 +476,4 @@ class TitleText extends Typography {
         return theme.titleSmall;
     }
   }
-}
-
-class SubtitleText extends Typography {
-  const SubtitleText(
-    super.data, {
-    super.key,
-    super.style,
-    super.strutStyle,
-    super.textAlign,
-    super.textDirection,
-    super.locale,
-    super.softWrap,
-    super.overflow,
-    super.textScaleFactor,
-    super.maxLines,
-    super.semanticsLabel,
-    super.textWidthBasis,
-    super.textHeightBehavior,
-  }) : variant = TypographySize.medium;
-
-  const SubtitleText.small(
-    super.data, {
-    super.key,
-    super.style,
-    super.strutStyle,
-    super.textAlign,
-    super.textDirection,
-    super.locale,
-    super.softWrap,
-    super.overflow,
-    super.textScaleFactor,
-    super.maxLines,
-    super.semanticsLabel,
-    super.textWidthBasis,
-    super.textHeightBehavior,
-  }) : variant = TypographySize.small;
-
-  final TypographySize variant;
-
-  @override
-  TextStyle? getStyle(TextTheme theme) {
-    switch (variant) {
-      case TypographySize.small:
-        return theme.subtitle2;
-      default:
-        return theme.subtitle1;
-    }
-  }
-}
-
-class ButtonText extends Typography {
-  const ButtonText(
-    super.data, {
-    super.key,
-    super.style,
-    super.strutStyle,
-    super.textAlign,
-    super.textDirection,
-    super.locale,
-    super.softWrap,
-    super.overflow,
-    super.textScaleFactor,
-    super.maxLines,
-    super.semanticsLabel,
-    super.textWidthBasis,
-    super.textHeightBehavior,
-  });
-
-  @override
-  TextStyle? getStyle(TextTheme theme) => theme.button;
-}
-
-class CaptionText extends Typography {
-  const CaptionText(
-    super.data, {
-    super.key,
-    super.style,
-    super.strutStyle,
-    super.textAlign,
-    super.textDirection,
-    super.locale,
-    super.softWrap,
-    super.overflow,
-    super.textScaleFactor,
-    super.maxLines,
-    super.semanticsLabel,
-    super.textWidthBasis,
-    super.textHeightBehavior,
-  });
-
-  @override
-  TextStyle? getStyle(TextTheme theme) => theme.caption;
-}
-
-class OverlineText extends Typography {
-  const OverlineText(
-    super.data, {
-    super.key,
-    super.style,
-    super.strutStyle,
-    super.textAlign,
-    super.textDirection,
-    super.locale,
-    super.softWrap,
-    super.overflow,
-    super.textScaleFactor,
-    super.maxLines,
-    super.semanticsLabel,
-    super.textWidthBasis,
-    super.textHeightBehavior,
-  });
-
-  @override
-  TextStyle? getStyle(TextTheme theme) => theme.overline;
 }

@@ -7,7 +7,3 @@ typedef WxHeadlineText = HeadlineText;
 typedef WxBodyText = BodyText;
 typedef WxLabelText = LabelText;
 typedef WxTitleText = TitleText;
-typedef WxSubtitleText = SubtitleText;
-typedef WxButtonText = ButtonText;
-typedef WxCaptionText = CaptionText;
-typedef WxOverlineText = OverlineText;
