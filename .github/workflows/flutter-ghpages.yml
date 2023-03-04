@@ -41,7 +41,7 @@ jobs:
       run: flutter pub get
     - name: Build Example
       working-directory: ./example
-      run: flutter build web --release --base-href="${{ github.event.repository.name }}"
+      run: flutter build web --release --base-href="/${{ github.event.repository.name }}/"
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v1
       with:
