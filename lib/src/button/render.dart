@@ -218,7 +218,10 @@ class ButtonRenderState extends State<ButtonRender>
   Curve get curve => widget.curve ?? widget.theme.curve;
   Duration get duration => widget.duration ?? widget.theme.duration;
 
-  ButtonStyle get style {
+  ButtonStyle style = const ButtonStyle();
+
+  @protected
+  void setStyle() {
     final fromProps = ButtonStyle(
       variant: widget.variant,
       severity: widget.severity,
@@ -231,7 +234,9 @@ class ButtonRenderState extends State<ButtonRender>
     );
     final withFallback = fallback.merge(raw);
     final result = DrivenButtonStyle.evaluate(withFallback, widgetEvents.value);
-    return ButtonStyle.from(result);
+
+    style = ButtonStyle.from(result);
+    setState(() {});
   }
 
   Color? get defaultForegroundColor {
@@ -302,6 +307,7 @@ class ButtonRenderState extends State<ButtonRender>
     widgetEvents.toggle(ButtonEvent.selected, widget.selected);
     widgetEvents.toggle(ButtonEvent.loading, widget.loading);
     widgetEvents.toggle(ButtonEvent.disabled, widget.disabled);
+    setStyle();
     super.initState();
   }
 
@@ -312,6 +318,7 @@ class ButtonRenderState extends State<ButtonRender>
       widgetEvents.toggle(ButtonEvent.selected, widget.selected);
       widgetEvents.toggle(ButtonEvent.loading, widget.loading);
       widgetEvents.toggle(ButtonEvent.disabled, widget.disabled);
+      setStyle();
       super.didUpdateWidget(oldWidget);
     }
   }

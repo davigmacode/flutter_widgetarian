@@ -50,15 +50,18 @@ class CheckboxRender extends StatefulWidget {
 class CheckboxRenderState extends State<CheckboxRender>
     with WidgetEventMixin<CheckboxRender> {
   Curve get curve => widget.curve ?? widget.theme.curve;
-
   Duration get duration => widget.duration ?? widget.theme.duration;
 
-  CheckboxStyle get style {
+  CheckboxStyle style = const CheckboxStyle();
+
+  void setStyle() {
     final raw = widget.style;
     final fallback = widget.theme.style;
     final driven = fallback.merge(raw);
     final evaluated = DrivenCheckboxStyle.evaluate(driven, widgetEvents.value);
-    return CheckboxStyle.from(evaluated);
+
+    style = CheckboxStyle.from(evaluated);
+    setState(() {});
   }
 
   Color? get checkmarkColor => Colors.withTransparency(
@@ -125,6 +128,7 @@ class CheckboxRenderState extends State<CheckboxRender>
     widgetEvents.toggle(CheckboxEvent.indeterminate, widget.indeterminate);
     widgetEvents.toggle(CheckboxEvent.selected, widget.selected);
     widgetEvents.toggle(CheckboxEvent.disabled, widget.disabled);
+    setStyle();
     super.initState();
   }
 
@@ -135,6 +139,7 @@ class CheckboxRenderState extends State<CheckboxRender>
       widgetEvents.toggle(CheckboxEvent.indeterminate, widget.indeterminate);
       widgetEvents.toggle(CheckboxEvent.selected, widget.selected);
       widgetEvents.toggle(CheckboxEvent.disabled, widget.disabled);
+      setStyle();
       super.didUpdateWidget(oldWidget);
     }
   }
@@ -143,6 +148,7 @@ class CheckboxRenderState extends State<CheckboxRender>
   void didChangeWidgetEvents() {
     if (mounted) {
       super.didChangeWidgetEvents();
+      didUpdateWidget(widget);
     }
   }
 

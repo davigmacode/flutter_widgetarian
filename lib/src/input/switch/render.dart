@@ -53,15 +53,18 @@ class SwitchRender extends StatefulWidget {
 class SwitchRenderState extends State<SwitchRender>
     with WidgetEventMixin<SwitchRender> {
   Curve get curve => widget.curve ?? widget.theme.curve;
-
   Duration get duration => widget.duration ?? widget.theme.duration;
 
-  SwitchStyle get style {
+  SwitchStyle style = const SwitchStyle();
+
+  void setStyle() {
     final raw = widget.style;
     final fallback = widget.theme.style;
     final driven = fallback.merge(raw);
     final evaluated = DrivenSwitchStyle.evaluate(driven, widgetEvents.value);
-    return SwitchStyle.from(evaluated);
+
+    style = SwitchStyle.from(evaluated);
+    setState(() {});
   }
 
   Color? get trackBorderColor => Colors.withTransparency(
@@ -113,6 +116,7 @@ class SwitchRenderState extends State<SwitchRender>
     widgetEvents.toggle(SwitchEvent.indeterminate, widget.indeterminate);
     widgetEvents.toggle(SwitchEvent.selected, widget.selected);
     widgetEvents.toggle(SwitchEvent.disabled, widget.disabled);
+    setStyle();
     super.initState();
   }
 
@@ -123,6 +127,7 @@ class SwitchRenderState extends State<SwitchRender>
       widgetEvents.toggle(SwitchEvent.indeterminate, widget.indeterminate);
       widgetEvents.toggle(SwitchEvent.selected, widget.selected);
       widgetEvents.toggle(SwitchEvent.disabled, widget.disabled);
+      setStyle();
       super.didUpdateWidget(oldWidget);
     }
   }
@@ -131,6 +136,7 @@ class SwitchRenderState extends State<SwitchRender>
   void didChangeWidgetEvents() {
     if (mounted) {
       super.didChangeWidgetEvents();
+      didUpdateWidget(widget);
     }
   }
 

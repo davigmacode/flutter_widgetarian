@@ -33,16 +33,19 @@ class SheetRender extends StatefulWidget {
 
 class _SheetRenderState extends State<SheetRender> {
   Curve get curve => widget.curve ?? widget.theme.curve;
-
   Duration get duration => widget.duration ?? widget.theme.duration;
 
-  SheetStyle get style {
+  SheetStyle style = const SheetStyle();
+
+  void setStyle() {
     final raw = SheetStyle.defaults.merge(widget.style);
     final fallback = widget.theme.resolve(
       variant: raw.variant,
       severity: raw.severity,
     );
-    return fallback.merge(raw);
+
+    style = fallback.merge(raw);
+    setState(() {});
   }
 
   Color? get defaultForegroundColor {
@@ -103,8 +106,15 @@ class _SheetRenderState extends State<SheetRender> {
   }
 
   @override
+  void initState() {
+    setStyle();
+    super.initState();
+  }
+
+  @override
   void didUpdateWidget(SheetRender oldWidget) {
     if (mounted) {
+      setStyle();
       super.didUpdateWidget(oldWidget);
     }
   }

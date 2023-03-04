@@ -262,7 +262,9 @@ class ChipRenderState extends AnimatedWidgetBaseState<ChipRender>
   Curve get curve => widget.curve;
   Duration get duration => widget.duration;
 
-  ChipStyle get style {
+  ChipStyle style = const ChipStyle();
+
+  void setStyle() {
     final fromProps = ChipStyle(
       variant: widget.variant,
       severity: widget.severity,
@@ -275,7 +277,9 @@ class ChipRenderState extends AnimatedWidgetBaseState<ChipRender>
     );
     final withFallback = fallback.merge(raw);
     final result = DrivenChipStyle.evaluate(withFallback, widgetEvents.value);
-    return ChipStyle.from(result);
+
+    style = ChipStyle.from(result);
+    setState(() {});
   }
 
   Color? get defaultForegroundColor {
@@ -446,6 +450,7 @@ class ChipRenderState extends AnimatedWidgetBaseState<ChipRender>
     initWidgetEvents(widget.eventsController);
     widgetEvents.toggle(ChipEvent.disabled, widget.disabled);
     widgetEvents.toggle(ChipEvent.selected, widget.selected);
+    setStyle();
     super.initState();
   }
 
@@ -461,8 +466,15 @@ class ChipRenderState extends AnimatedWidgetBaseState<ChipRender>
       updateWidgetEvents(oldWidget.eventsController, widget.eventsController);
       widgetEvents.toggle(ChipEvent.disabled, widget.disabled);
       widgetEvents.toggle(ChipEvent.selected, widget.selected);
+      setStyle();
       super.didUpdateWidget(oldWidget);
     }
+  }
+
+  @override
+  void didChangeWidgetEvents() {
+    super.didChangeWidgetEvents();
+    didUpdateWidget(widget);
   }
 
   @override
@@ -490,12 +502,6 @@ class ChipRenderState extends AnimatedWidgetBaseState<ChipRender>
       style.checkmarkWeight!,
       (value) => Tween<double>(begin: value),
     ) as Tween<double>?;
-  }
-
-  @override
-  void didChangeWidgetEvents() {
-    super.didChangeWidgetEvents();
-    didUpdateWidget(widget);
   }
 
   @override

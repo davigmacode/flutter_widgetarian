@@ -51,15 +51,18 @@ class RadioRender extends StatefulWidget {
 class RadioRenderState extends State<RadioRender>
     with WidgetEventMixin<RadioRender> {
   Curve get curve => widget.curve ?? widget.theme.curve;
-
   Duration get duration => widget.duration ?? widget.theme.duration;
 
-  RadioStyle get style {
+  RadioStyle style = const RadioStyle();
+
+  void setStyle() {
     final raw = widget.style;
     final fallback = widget.theme.style;
     final driven = fallback.merge(raw);
     final evaluated = DrivenRadioStyle.evaluate(driven, widgetEvents.value);
-    return RadioStyle.from(evaluated);
+
+    style = RadioStyle.from(evaluated);
+    setState(() {});
   }
 
   Color? get thumbColor => Colors.withTransparency(
@@ -123,6 +126,7 @@ class RadioRenderState extends State<RadioRender>
     initWidgetEvents(widget.eventsController);
     widgetEvents.toggle(RadioEvent.selected, widget.selected);
     widgetEvents.toggle(RadioEvent.disabled, widget.disabled);
+    setStyle();
     super.initState();
   }
 
@@ -132,6 +136,7 @@ class RadioRenderState extends State<RadioRender>
       updateWidgetEvents(oldWidget.eventsController, widget.eventsController);
       widgetEvents.toggle(RadioEvent.selected, widget.selected);
       widgetEvents.toggle(RadioEvent.disabled, widget.disabled);
+      setStyle();
       super.didUpdateWidget(oldWidget);
     }
   }
@@ -140,6 +145,7 @@ class RadioRenderState extends State<RadioRender>
   void didChangeWidgetEvents() {
     if (mounted) {
       super.didChangeWidgetEvents();
+      didUpdateWidget(widget);
     }
   }
 
