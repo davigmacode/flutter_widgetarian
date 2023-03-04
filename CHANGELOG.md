@@ -1,3 +1,7 @@
+## 0.0.1-dev.3
+
+- Improved style evaluation using cache
+- Removed deprecated typography
 
 ## 0.0.1-dev.2
 
