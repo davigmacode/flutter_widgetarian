@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide ButtonStyle;
+import 'package:flutter/material.dart' hide ButtonStyle, Badge;
 import 'package:widgetarian/display.dart';
 
 import '../../sample.dart';

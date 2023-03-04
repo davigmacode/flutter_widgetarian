@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart'
-    hide TextButton, ElevatedButton, OutlinedButton;
+    hide TextButton, FilledButton, ElevatedButton, OutlinedButton;
 import 'package:widgetarian/button.dart';
 
 import '../../sample.dart';

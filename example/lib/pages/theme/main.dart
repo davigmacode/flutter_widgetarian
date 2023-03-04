@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart' hide Chip, TextButton, OutlinedButton;
+import 'package:flutter/material.dart'
+    hide Chip, TextButton, FilledButton, OutlinedButton;
 import 'package:widgetarian/theme.dart';
 import 'package:widgetarian/anchor.dart';
 import 'package:widgetarian/button.dart';

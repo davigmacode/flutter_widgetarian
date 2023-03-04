@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Badge;
 import 'package:widgetarian/display.dart';
 import 'package:widgetarian/navigation.dart';
 
