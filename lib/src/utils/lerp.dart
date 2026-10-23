@@ -33,6 +33,8 @@ int? lerpInt(int? a, int? b, double t) {
   return (a + (b - a) * t).round();
 }
 
+/// Linearly interpolate between two boolean.
 bool? lerpBool(bool? a, bool? b, double t) => t < 0.5 ? a : b;
 
+/// Linearly interpolate between two enum.
 T? lerpEnum<T>(T? a, T? b, double t) => t < 0.5 ? a : b;
