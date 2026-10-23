@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> **Repository Moved to Monorepo**: Active development of $pkg has migrated to the official [**davigmacode/flutter_wx**](https://github.com/davigmacode/flutter_wx) monorepo under [packages/widgetarian](https://github.com/davigmacode/flutter_wx/tree/main/packages/widgetarian).
+
 ![Pub Version](https://img.shields.io/pub/v/widgetarian) ![GitHub](https://img.shields.io/github/license/davigmacode/flutter_widgetarian)
 
 
